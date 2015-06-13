@@ -20,7 +20,7 @@ public class CocktailShaker {
                 if(array[j]>array[j+1])
                     swap(array, j, j+1, j%40/39);
             }
-            for(int j = array.length-i-1; j > 1; j--){
+            for(int j = array.length-i-1; j > i; j--){
                 comps++;
                 if(array[j]<array[j-1])
                     swap(array, j, j-1, j%40/39);

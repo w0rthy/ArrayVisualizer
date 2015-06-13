@@ -18,8 +18,8 @@ public class SelectionSort {
             for (int j = i + 1; j < array.length; j++) {
                 if (array[j] < array[lowestindex]){
                     lowestindex = j;
-                    comps++;
                 }
+                comps++;
             }
             swap(array, i, lowestindex);
                 sleep(sleepTime(0.01));

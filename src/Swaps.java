@@ -23,7 +23,7 @@ public class Swaps {
         marked.set(1, i);
         marked.set(2, j);
         aa+=2;
-            sleep(pause);
+        sleep(pause);
         // TODO Auto-generated method stub
         int temp = a[i];
         a[i] = a[j];
@@ -39,8 +39,12 @@ public class Swaps {
     }
         
     public static void swapUpTo(int pos, int to){
+        if(to - pos > 0)
          for(int i = pos; i < to; i++)
             swapnm(array, i, i+1, i%240/239);
+        else
+            for(int i = pos; i > to; i--)
+                swapnm(array, i, i-1, i%240/239);
      }
     
     public static void swapUp(int pos) {

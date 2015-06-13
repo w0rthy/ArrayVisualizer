@@ -6,7 +6,6 @@ import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.util.ArrayList;
-import java.util.Arrays;
 import javax.sound.midi.MidiChannel;
 import javax.sound.midi.MidiSystem;
 import javax.sound.midi.Synthesizer;
@@ -30,8 +29,14 @@ import static array.visualizer.SelectionSort.*;
 import static array.visualizer.ShatterSorts.*;
 import static array.visualizer.Swaps.*;
 import static array.visualizer.TimeSort.*;
+import static array.visualizer.WeaveMerge.*;
 import static array.visualizer.RadixLSDInPlace.*;
+import static array.visualizer.BogoSort.*;
 import static java.lang.Thread.sleep;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.sound.midi.Instrument;
+import javax.swing.JOptionPane;
 
 public class ArrayVisualizer {
 
@@ -46,9 +51,23 @@ public class ArrayVisualizer {
     static int comps = 0;
     static long nanos;
     static Font fon = new Font("TimesRoman",Font.PLAIN,(int)(640/1280.0*25));
-    static boolean CIRCLEDRAW = false;
+    static boolean CIRCLEDRAW = true;
     static boolean COLORONLY = false;
-    static boolean PIXELDRAW = false;
+    static boolean PIXELDRAW = true;
+    static boolean SOUND = false;
+    static double SLEEPRATIO = 1.0;
+    static UtilFrame uf;
+    static ViewPrompt v;
+    static Synthesizer synth;
+    static MidiChannel chan;
+    static Thread sortingThread;
+    static boolean SHUFFLEANIM = true;
+    
+    static String[] ComparativeSorts = "Selection!Bubble!Insertion!Double Selection!Cocktail Shaker!Quick!Merge!Merge OOP!Weave Merge".split("!");
+    static String[] DistributiveSorts = "Radix LSD!Radix MSD!Radix LSD In-Place!Gravity!Shatter".split("!");
+    
+    static int cx = 0;
+    static int cy = 0;
     
     public static double calcVel(){
         double count = 1;
@@ -58,15 +77,23 @@ public class ArrayVisualizer {
         return count;
     }
     
-    static boolean add = false;
-    public static void sleep(long milis){
+    public static synchronized void SetSound(boolean val){
+        SOUND = val;
+    }
+    
+    static double addamt = 0.0;
+    public static void sleep(double milis){
         if(milis <= 0)
             return;
-        long amt = (long)(milis/(array.length/1000.0));
-        if(amt == 0)
-            amt+=add ? 1 : 0;
-        add = !add;
-        amt = (long)(amt*2);
+        double tmp = (milis*(1000.0/array.length));
+        tmp = tmp * (1/SLEEPRATIO);
+        addamt += tmp - (int)tmp;
+        long amt = (long)tmp;
+        if(addamt >= 1){
+            amt+=(int)addamt;
+            addamt -= (int)addamt;
+        }
+       
         try{
             Thread.sleep(amt);
         }catch(Throwable t){}
@@ -74,12 +101,22 @@ public class ArrayVisualizer {
     
     public static void main(String[] args) throws Exception {
 
-        final Synthesizer synth = MidiSystem.getSynthesizer();
+        synth = MidiSystem.getSynthesizer();
         synth.open();
         synth.loadAllInstruments(synth.getDefaultSoundbank());
-        final MidiChannel chan = synth.getChannels()[0];
-        chan.programChange(synth.getLoadedInstruments()[18].getPatch().getProgram());
-        chan.setSolo(true);
+//        int s = 0;
+//        for(Instrument i : synth.getAvailableInstruments()){
+//            System.out.println(s+" "+i.getName());
+//            s++;
+//        }
+        chan = synth.getChannels()[0];
+        for(Instrument i : synth.getLoadedInstruments())
+            if(i.getName().toLowerCase().trim().contains("sine"))
+                chan.programChange(i.getPatch().getProgram());
+        
+        if(chan.getProgram() == 0)
+            JOptionPane.showMessageDialog(null, "Could not find a valid instrument. Sound is disabled");
+        //chan.programChange(synth.getLoadedInstruments()[197].getPatch().getProgram());
         
         for(int i = 0; i < array.length; i++)
             marked.add(-5);
@@ -90,19 +127,27 @@ public class ArrayVisualizer {
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         window.setTitle("Array Visualizer");
         
+        uf = new UtilFrame(window);
+        
         //AUDIO THREAD
         new Thread(){
+            @Override
             public void run(){
                 while(true){
                 chan.allNotesOff();
+                if(SOUND == false){
+                    continue;
+                }
+                
                 int tmp = 1;
                     for(int i : marked)
                         if(i != -5)
                             tmp++;
                     for(int i : marked)
                         if(i != -5){
-                            int pitch = (int)Math.round((double)array[Math.min(Math.max(i, 0),array.length-1)]/array.length*97+15);
-                            int vel = (int)(((128-pitch)/192.0+0.333)   *   (64.0/Math.pow(tmp,0.58)));
+                            int pitch = (int)Math.round((double)array[Math.min(Math.max(i, 0),array.length-1)]/array.length*96+16);
+                            //int vel = (int)(((128-pitch)/320.0+0.4)   *   (128.0/Math.pow(tmp,0.33)));
+                            int vel = (int)(64.0/Math.pow(tmp,0.5));
                             chan.noteOn(pitch, vel);
                         }
                             //((int)((127-(array[Math.min(Math.max(i, 0),array.length-1)]/16.0))/Math.sqrt(calcVel())))*5
@@ -139,12 +184,21 @@ public class ArrayVisualizer {
                 double xscl, yscl;
                 while(true){
                     
+                    if(window.getWidth()!=cw|| window.getHeight()!=ch || window.getX() != cx || window.getY() != cy){
+                        uf.reposition();
+                        if(v != null && v.isVisible())
+                            v.reposition();
+                        cx = window.getX();
+                        cy  = window.getY();
+                    }
+                    
                     if(window.getWidth()!=cw|| window.getHeight()!=ch){
                         cw = window.getWidth();
                         ch = window.getHeight();
                         img = window.createVolatileImage(cw, ch);
                         fon = new Font("TimesRoman",Font.PLAIN,(int)(cw/1280.0*25));
                         g = img.getGraphics();
+                        
                     }
                     int gamt = 32;//(int)(frames/1000.0%64);
                     g.setColor(new Color(gamt,gamt,gamt));
@@ -156,7 +210,7 @@ public class ArrayVisualizer {
                     frames++;
                     if(CIRCLEDRAW)
                         for(int i = 0; i < array.length; i++){
-                            if(i == 0 || marked.contains(i)||marked.contains(i-1)||marked.contains(i-2)||marked.contains(i-3))
+                            if(marked.contains(i)||marked.contains(i-1)||marked.contains(i-2)||marked.contains(i-3))
                                 g.setColor(Color.BLACK);
                             else
                                 g.setColor(getIntColor(array[i]));
@@ -165,10 +219,10 @@ public class ArrayVisualizer {
                                 g.drawLine(window.getWidth()/2, window.getHeight()/2, window.getWidth()/2+(int)(Math.sin(i*Math.PI/circamt)*(window.getWidth()-64)/2.0), window.getHeight()/2-(int)(Math.cos(i*Math.PI/circamt)*(window.getHeight()-96)/2.0));
                             
                             else if(PIXELDRAW)
-                                g.drawRect(window.getWidth()/2+(int)(Math.sin(i*Math.PI/circamt)*((window.getWidth()-64)/2.0*(array[i]/(double)array.length))), window.getHeight()/2-(int)(Math.cos(i*Math.PI/circamt)*((window.getHeight()-96)/2.0*(array[i]/1000.0))), 1, 1);
+                                g.fillRect(window.getWidth()/2+(int)(Math.sin(i*Math.PI/circamt)*((window.getWidth()-64)/2.0*(array[i]/(double)array.length))), window.getHeight()/2-(int)(Math.cos(i*Math.PI/circamt)*((window.getHeight()-96)/2.0*(array[i]/(double)array.length))), (int)(2*(window.getWidth()/640.0)), (int)(2*(window.getHeight()/480.0)));
                             //LENGTH AND COLOR
                             else
-                                g.drawLine(window.getWidth()/2, window.getHeight()/2, window.getWidth()/2+(int)(Math.sin(i*Math.PI/circamt)*((window.getWidth()-64)/2.0*(array[i]/(double)array.length))), window.getHeight()/2-(int)(Math.cos(i*Math.PI/circamt)*((window.getHeight()-96)/2.0*(array[i]/1000.0))));
+                                g.drawLine(window.getWidth()/2, window.getHeight()/2, window.getWidth()/2+(int)(Math.sin(i*Math.PI/circamt)*((window.getWidth()-64)/2.0*(array[i]/(double)array.length))), window.getHeight()/2-(int)(Math.cos(i*Math.PI/circamt)*((window.getHeight()-96)/2.0*(array[i]/(double)array.length))));
                         }
                     else
                         for(int i = 0; i < array.length; i++){
@@ -215,36 +269,225 @@ public class ArrayVisualizer {
             }
             
             public Color getIntColor(int i) {
-                return Color.getHSBColor(((float)i/array.length), 1.0F, 1.0F);
+                return Color.getHSBColor(((float)i/array.length), 1.0F, 0.8F);
             }
             public Color getRevColor(){
                 return getIntColor((int)(Math.sin(frames/66.67)*array.length));
             }
         }.start();
         
-        while(true){
-            clearmarked();
-            
-            //heading = "Linear Search";
-            
-            //Arrays.sort(array);
-            //marked.set(1,730);
-            //linearSearch(730);
-            //refresharray();
-            
-            //heading = "Binary Search";
-            
-            //Arrays.sort(array);
-            //marked.set(1, 730);
-            //binarySearch(730);
-            
-            //heading = "Shatter-Time Sort";
+        uf.setVisible(false);
+        v = new ViewPrompt(window);
+        while(v.isVisible()) Thread.sleep(1);
+        uf.setVisible(true);
+        
+        //bogoSort();
+//        while(true){
+//            clearmarked();
+//            
+//            //heading = "Linear Search";
+//            
+//            //Arrays.sort(array);
+//            //marked.set(1,730);
+//            //linearSearch(730);
+//            //refresharray();
+//            
+//            //heading = "Binary Search";
+//            
+//            //Arrays.sort(array);
+//            //marked.set(1, 730);
+//            //binarySearch(730);
+//            
+//            //heading = "Shatter-Time Sort";
+//
+//            //timeSort();
+//
+//            //chan.allNotesOff();
+//            //refresharray();
+//            weaveMergeSort(0, array.length-1);
+//            refresharray();
+//            cocktailShakerSort();
+//            refresharray();
+//            radixLSDsort(4);
+//            refresharray()
+//  ;RadixLSDInPlace.inPlaceRadixLSDSort(10);refresharray();
+//            
+//            heading = "Insertion Sort";
+//
+//            insertionSort();
+//
+//            chan.allNotesOff();
+//            refresharray();
+//            heading = "Bubble Sort";
+//
+//            bubbleSort();
+//
+//            chan.allNotesOff();
+//            refresharray();
+//            heading = "Selection Sort";
+//
+//            selectionSort();
+//
+//            chan.allNotesOff();
+//            refresharray();
+//            heading = "Cocktail Shaker Sort";
+//
+//            cocktailShakerSort();
+//
+//            chan.allNotesOff();
+//            refresharray();
+//            heading = "Double Selection Sort";
+//
+//            doubleSelectionSort(array);
+//            
+//            chan.allNotesOff();
+//            refresharray();
+//            heading = "Merge Sort In-Place";
+//
+//            mergeSort(0, array.length - 1);
+//
+//            chan.allNotesOff();
+//            refresharray();
+//            heading = "Merge Sort Out-of-Place";
+//            
+//            mergeSortOP();
+//            
+//            chan.allNotesOff();
+//            refresharray();
+//            
+//            heading = "Gravity Sort (Abacus/Bead)";
+//            
+//            gravitySort();
+//            
+//            chan.allNotesOff();
+//            refresharray();
+//
+//            heading = "Quick Sort";
+//
+//            quickSort(array, 0, array.length-1);
+//
+//            chan.allNotesOff();
+//            refresharray();
+//            heading = "Counting Sort";
+//            
+//            countingSort();
+//            
+//            chan.allNotesOff();
+//            refresharray();
+//            heading = "Radix LSD Sort";
+//
+//            radixLSDsort(4);
+//
+//            chan.allNotesOff();
+//            refresharray();
+//            heading = "Radix LSD In-Place Sort";
+//
+//            inPlaceRadixLSDSort(10);
+//
+//            chan.allNotesOff();
+//            refresharray();
+//            heading = "Radix MSD Sort";
+//            
+//            radixMSDSort(4);
+//            refresharray();
+//            //heading = "Shatter Partition";
+//
+//            //shatterPartition(1);
+//
+//            //chan.allNotesOff();
+//            //refresharray();
+//            heading = "Shatter Sort";
+//
+//            shatterSort(128);
+//
+//            chan.allNotesOff();
+//            refresharray();
+//            //heading = "Simple Shatter Sort";
+//
+//            //simpleShatterSort(128, 4);
+//
+//            //chan.allNotesOff();
+//            //refresharray();
+//        
+        //keep on keeping on
+        while(window.isActive())Thread.sleep(1);
+    }
+    
+    public static void refresharray() throws Exception {
+        clearmarked();
+        boolean solved = true;
+        for(int i = 0; i < array.length; i++){
+            if(array[i]!=i)
+                solved = false;
+            marked.set(0,i);
+        }
+        for(int i = 0; i < array.length; i++)
+            array[i] = i;
+        System.out.println(solved);
+        marked.set(0, -5);
+        heading = "";
+        shuffle(array);
+        aa = 0;
+        comps = 0;
+        clearmarked();
+    }
+    
+    public static int getDigit(int a, int power, int radix){
+        return (int) (a / Math.pow(radix, power)) % radix;
+    }
+    
+    public static int[] rianr(int [] arr) {
+        for (int i = 0; i < arr.length; i++)
+            arr[i] = i;
+        shuffle(arr);
+        return arr;
+    }
+    
+    public static void clearmarked(){
+        for(int i = 0; i < array.length; i++)
+            marked.set(i, -5);
+    }
 
-            //timeSort();
+    public static void shuffle(int[] array) {
+        for(int i = 0; i < array.length; i++){
+            swap(array, i, (int)(Math.random()*array.length));
+            if(SHUFFLEANIM)
+                sleep(1);
+        }
+    }
+    
+    /*public static void insertionSort(int slp) {
+        int pos;
+        for(int i = 1; i < array.length; i++){
+            pos = i;
+            marked.set(0, i);
+            while(pos>0&&array[pos]<=array[pos-1]){
+                    swap(array, pos, pos-1,slp);
+                    pos--;
+            }
+        }
+    }*/
 
-            //chan.allNotesOff();
-            //refresharray();
+    public static int sleepTime(double d) {
+        return (int)(array.length*d)/4;
+    }
+    
+    public synchronized static void RunAllSorts(){
+        if(sortingThread != null)
+            while(sortingThread.isAlive()) try {
+            Thread.sleep(1);
+        } catch (InterruptedException ex) {
+            Logger.getLogger(ArrayVisualizer.class.getName()).log(Level.SEVERE, null, ex);
+        }
 
+        SetSound(true);
+        sortingThread = new Thread(){
+            @Override
+            public void run(){
+        try{
+            
+            refresharray();
+            
             heading = "Insertion Sort";
 
             insertionSort();
@@ -267,6 +510,12 @@ public class ArrayVisualizer {
 
             cocktailShakerSort();
 
+            chan.allNotesOff();
+            refresharray();
+            heading = "Double Selection Sort";
+
+            doubleSelectionSort(array);
+            
             chan.allNotesOff();
             refresharray();
             heading = "Merge Sort In-Place";
@@ -329,67 +578,88 @@ public class ArrayVisualizer {
 
             chan.allNotesOff();
             refresharray();
-            //heading = "Simple Shatter Sort";
-
-            //simpleShatterSort(128, 4);
-
-            //chan.allNotesOff();
-            //refresharray();
-        }
-    }
-    
-    public static void refresharray() throws Exception {
-        clearmarked();
-        boolean solved = true;
-        for(int i = 0; i < array.length; i++){
-            if(array[i]!=i)
-                solved = false;
-            marked.set(0,i);
-            sleep(sleepTime(0.001));
-        }
-        System.out.println(solved);
-        marked.set(0, -5);
-        Thread.sleep(1000);
-        shuffle(array);
-        aa = 0;
-        comps = 0;
-        clearmarked();
-    }
-    
-    public static int getDigit(int a, int power, int radix){
-        return (int) (a / Math.pow(radix, power)) % radix;
-    }
-    
-    public static int[] rianr(int [] arr) {
-        for (int i = 0; i < arr.length; i++)
-            arr[i] = i;
-        shuffle(arr);
-        return arr;
-    }
-    
-    public static void clearmarked(){
-        for(int i = 0; i < array.length; i++)
-            marked.set(i, -5);
-    }
-
-    public static void shuffle(int[] array) {
-        for(int i = 0; i < array.length; i++)
-            swap(array, i, (int)(Math.random()*array.length));
-    }
-    
-    /*public static void insertionSort(int slp) {
-        int pos;
-        for(int i = 1; i < array.length; i++){
-            pos = i;
-            marked.set(0, i);
-            while(pos>0&&array[pos]<=array[pos-1]){
-                    swap(array, pos, pos-1,slp);
-                    pos--;
+        }catch (Exception e){}
+        SetSound(false);
             }
+        };
+        sortingThread.start();
+    }
+    
+    public static void ReportComparativeSort(int n){
+        if(sortingThread != null && sortingThread.isAlive())
+            return;
+        
+        final int num = n;
+        SetSound(true);
+        sortingThread = new Thread(){
+            @Override
+            public void run(){
+                try{
+                    
+                    refresharray();
+                    heading = ComparativeSorts[num]+" Sort";
+                switch (num){
+                    case 0:
+                        selectionSort();break;
+                    case 1:
+                        bubbleSort();break;
+                    case 2:
+                        insertionSort();break;
+                    case 3:
+                        doubleSelectionSort(array);break;
+                    case 4:
+                        cocktailShakerSort();break;
+                    case 5:
+                        quickSort(array, 0, array.length-1);break;
+                    case 6:
+                        mergeSort(0, array.length-1);break;
+                    case 7:
+                        mergeSortOP();break;
+                    case 8:
+                        weaveMergeSort(0, array.length-1);break;
+                }
+                }catch(Exception e){}
+                SetSound(false);
+            }
+        };
+        sortingThread.start();
+    }
+    
+    public static void ReportDistributiveSort(int n){
+        if(sortingThread != null && sortingThread.isAlive())
+            return;
+        int bas = 10;
+        if(n != 3 && !(n >= 5))
+            if(n != 4)
+                try{bas = Integer.parseInt(JOptionPane.showInputDialog(null, "Enter Base for Sort"));}catch(Exception e){}
+            else
+                try{bas = Integer.parseInt(JOptionPane.showInputDialog(null, "Enter Size of Partitions"));}catch(Exception e){}
+        
+        final int base = Math.max(bas,2);
+        final int num = n;
+        SetSound(true);
+        sortingThread = new Thread(){
+            @Override
+            public void run(){
+        try{
+            refresharray();
+            heading = DistributiveSorts[num]+" Sort";
+        switch (num){
+            case 0:
+                radixLSDsort(base);break;
+            case 1:
+                radixMSDSort(base);break;
+            case 2:
+                RadixLSDInPlace.inPlaceRadixLSDSort(base);break;
+            case 3:
+                gravitySort();break;
+            case 4:
+                shatterSort(base);break;
         }
-    }*/
-
-    public static int sleepTime(double d) {
-        return (int)(array.length*d)/4;
+        }catch(Exception e){}
+        SetSound(false);
+            }
+        };
+        sortingThread.start();
     }
 }

@@ -24,4 +24,18 @@ public class InsertionSort {
             }
         }
     }
+    
+    public static void insertionSort(int start, int end, double slpamt) {
+        int pos;
+        for(int i = start; i < end; i++){
+            pos = i;
+            marked.set(0, i);
+            while(pos>start&&array[pos]<=array[pos-1]){
+                    comps+=2;
+                    swap(array, pos, pos-1);
+                    sleep(slpamt);
+                    pos--;
+            }
+        }
+    }
 }
