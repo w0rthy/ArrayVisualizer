@@ -32,6 +32,7 @@ import static array.visualizer.TimeSort.*;
 import static array.visualizer.WeaveMerge.*;
 import static array.visualizer.RadixLSDInPlace.*;
 import static array.visualizer.BogoSort.*;
+import java.awt.Polygon;
 import static java.lang.Thread.sleep;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -54,6 +55,7 @@ public class ArrayVisualizer {
     static boolean CIRCLEDRAW = true;
     static boolean COLORONLY = false;
     static boolean PIXELDRAW = true;
+    static boolean LINKEDPIXELDRAW = true;
     static boolean SOUND = false;
     static double SLEEPRATIO = 1.0;
     static UtilFrame uf;
@@ -64,7 +66,7 @@ public class ArrayVisualizer {
     static boolean SHUFFLEANIM = true;
     
     static String[] ComparativeSorts = "Selection!Bubble!Insertion!Double Selection!Cocktail Shaker!Quick!Merge!Merge OOP!Weave Merge".split("!");
-    static String[] DistributiveSorts = "Radix LSD!Radix MSD!Radix LSD In-Place!Gravity!Shatter".split("!");
+    static String[] DistributiveSorts = "Radix LSD!Radix MSD!Radix LSD In-Place!Gravity!Shatter!Time".split("!");
     
     static int cx = 0;
     static int cy = 0;
@@ -111,8 +113,10 @@ public class ArrayVisualizer {
 //        }
         chan = synth.getChannels()[0];
         for(Instrument i : synth.getLoadedInstruments())
-            if(i.getName().toLowerCase().trim().contains("sine"))
+            if(i.getName().toLowerCase().trim().contains("sine")){
                 chan.programChange(i.getPatch().getProgram());
+                break;
+            }
         
         if(chan.getProgram() == 0)
             JOptionPane.showMessageDialog(null, "Could not find a valid instrument. Sound is disabled");
@@ -207,7 +211,10 @@ public class ArrayVisualizer {
                     yscl = (double)(window.getHeight()-30)/array.length;
                     int amt = 0;
                     int circamt = array.length/2;
+                    int linkedpixdrawx = 0;
+                    int linkedpixdrawy = 0;
                     frames++;
+                    
                     if(CIRCLEDRAW)
                         for(int i = 0; i < array.length; i++){
                             if(marked.contains(i)||marked.contains(i-1)||marked.contains(i-2)||marked.contains(i-3))
@@ -215,14 +222,33 @@ public class ArrayVisualizer {
                             else
                                 g.setColor(getIntColor(array[i]));
                             //COLOR ONLY NO LENGTH
-                            if(COLORONLY)
-                                g.drawLine(window.getWidth()/2, window.getHeight()/2, window.getWidth()/2+(int)(Math.sin(i*Math.PI/circamt)*(window.getWidth()-64)/2.0), window.getHeight()/2-(int)(Math.cos(i*Math.PI/circamt)*(window.getHeight()-96)/2.0));
-                            
-                            else if(PIXELDRAW)
+                            if(COLORONLY){
+                                Polygon p = new Polygon();
+                                p.addPoint(window.getWidth()/2, window.getHeight()/2);
+                                p.addPoint(window.getWidth()/2+(int)(Math.sin(i*Math.PI/circamt)*(window.getWidth()-64)/2.0), window.getHeight()/2-(int)(Math.cos(i*Math.PI/circamt)*(window.getHeight()-96)/2.0));
+                                p.addPoint(window.getWidth()/2+(int)(Math.sin((i+1)*Math.PI/circamt)*(window.getWidth()-64)/2.0), window.getHeight()/2-(int)(Math.cos((i+1)*Math.PI/circamt)*(window.getHeight()-96)/2.0));
+                                g.fillPolygon(p);
+                                //g.drawLine(window.getWidth()/2, window.getHeight()/2, window.getWidth()/2+(int)(Math.sin(i*Math.PI/circamt)*(window.getWidth()-64)/2.0), window.getHeight()/2-(int)(Math.cos(i*Math.PI/circamt)*(window.getHeight()-96)/2.0));
+                            }
+                            //PIXELS ONLY
+                            else if(PIXELDRAW){
                                 g.fillRect(window.getWidth()/2+(int)(Math.sin(i*Math.PI/circamt)*((window.getWidth()-64)/2.0*(array[i]/(double)array.length))), window.getHeight()/2-(int)(Math.cos(i*Math.PI/circamt)*((window.getHeight()-96)/2.0*(array[i]/(double)array.length))), (int)(2*(window.getWidth()/640.0)), (int)(2*(window.getHeight()/480.0)));
+                                if(LINKEDPIXELDRAW){
+                                    if(i>0)
+                                        g.drawLine(window.getWidth()/2+(int)(Math.sin(i*Math.PI/circamt)*((window.getWidth()-64)/2.0*(array[i]/(double)array.length))), window.getHeight()/2-(int)(Math.cos(i*Math.PI/circamt)*((window.getHeight()-96)/2.0*(array[i]/(double)array.length))), linkedpixdrawx, linkedpixdrawy);
+                                    linkedpixdrawx = window.getWidth()/2+(int)(Math.sin(i*Math.PI/circamt)*((window.getWidth()-64)/2.0*(array[i]/(double)array.length)));
+                                    linkedpixdrawy = window.getHeight()/2-(int)(Math.cos(i*Math.PI/circamt)*((window.getHeight()-96)/2.0*(array[i]/(double)array.length)));
+                                }
+                            }
                             //LENGTH AND COLOR
-                            else
-                                g.drawLine(window.getWidth()/2, window.getHeight()/2, window.getWidth()/2+(int)(Math.sin(i*Math.PI/circamt)*((window.getWidth()-64)/2.0*(array[i]/(double)array.length))), window.getHeight()/2-(int)(Math.cos(i*Math.PI/circamt)*((window.getHeight()-96)/2.0*(array[i]/(double)array.length))));
+                            else{
+                                Polygon p = new Polygon();
+                                p.addPoint(window.getWidth()/2, window.getHeight()/2);
+                                p.addPoint(window.getWidth()/2+(int)(Math.sin((i)*Math.PI/circamt)*((window.getWidth()-64)/2.0*(array[i]/(double)array.length))), window.getHeight()/2-(int)(Math.cos((i)*Math.PI/circamt)*((window.getHeight()-96)/2.0*(array[i]/(double)array.length))));
+                                p.addPoint(window.getWidth()/2+(int)(Math.sin((i+1)*Math.PI/circamt)*((window.getWidth()-64)/2.0*(array[Math.min(i+1,array.length-1)]/(double)array.length))), window.getHeight()/2-(int)(Math.cos((i+1)*Math.PI/circamt)*((window.getHeight()-96)/2.0*(array[Math.min(i+1,array.length-1)]/(double)array.length))));
+                                g.fillPolygon(p);
+                                //g.drawLine(window.getWidth()/2, window.getHeight()/2, window.getWidth()/2+(int)(Math.sin(i*Math.PI/circamt)*((window.getWidth()-64)/2.0*(array[i]/(double)array.length))), window.getHeight()/2-(int)(Math.cos(i*Math.PI/circamt)*((window.getHeight()-96)/2.0*(array[i]/(double)array.length))));
+                            }
                         }
                     else
                         for(int i = 0; i < array.length; i++){
@@ -244,6 +270,12 @@ public class ArrayVisualizer {
                                 else if(PIXELDRAW){
                                     y = (int)(window.getHeight()-array[i]*yscl);
                                     g.fillRect(amt, y, width, 3);
+                                    if(LINKEDPIXELDRAW){
+                                        if(i>0)
+                                            g.drawLine(amt, y, linkedpixdrawx, linkedpixdrawy);
+                                        linkedpixdrawx = amt;
+                                        linkedpixdrawy = y;
+                                    }
                                 }
                                 else{
                                     y = (int)(window.getHeight()-array[i]*yscl);
@@ -280,141 +312,14 @@ public class ArrayVisualizer {
         v = new ViewPrompt(window);
         while(v.isVisible()) Thread.sleep(1);
         uf.setVisible(true);
-        
-        //bogoSort();
-//        while(true){
-//            clearmarked();
-//            
-//            //heading = "Linear Search";
-//            
-//            //Arrays.sort(array);
-//            //marked.set(1,730);
-//            //linearSearch(730);
-//            //refresharray();
-//            
-//            //heading = "Binary Search";
-//            
-//            //Arrays.sort(array);
-//            //marked.set(1, 730);
-//            //binarySearch(730);
-//            
-//            //heading = "Shatter-Time Sort";
-//
-//            //timeSort();
-//
-//            //chan.allNotesOff();
-//            //refresharray();
-//            weaveMergeSort(0, array.length-1);
-//            refresharray();
-//            cocktailShakerSort();
-//            refresharray();
-//            radixLSDsort(4);
-//            refresharray()
-//  ;RadixLSDInPlace.inPlaceRadixLSDSort(10);refresharray();
-//            
-//            heading = "Insertion Sort";
-//
-//            insertionSort();
-//
-//            chan.allNotesOff();
-//            refresharray();
-//            heading = "Bubble Sort";
-//
-//            bubbleSort();
-//
-//            chan.allNotesOff();
-//            refresharray();
-//            heading = "Selection Sort";
-//
-//            selectionSort();
-//
-//            chan.allNotesOff();
-//            refresharray();
-//            heading = "Cocktail Shaker Sort";
-//
-//            cocktailShakerSort();
-//
-//            chan.allNotesOff();
-//            refresharray();
-//            heading = "Double Selection Sort";
-//
-//            doubleSelectionSort(array);
-//            
-//            chan.allNotesOff();
-//            refresharray();
-//            heading = "Merge Sort In-Place";
-//
-//            mergeSort(0, array.length - 1);
-//
-//            chan.allNotesOff();
-//            refresharray();
-//            heading = "Merge Sort Out-of-Place";
-//            
-//            mergeSortOP();
-//            
-//            chan.allNotesOff();
-//            refresharray();
-//            
-//            heading = "Gravity Sort (Abacus/Bead)";
-//            
-//            gravitySort();
-//            
-//            chan.allNotesOff();
-//            refresharray();
-//
-//            heading = "Quick Sort";
-//
-//            quickSort(array, 0, array.length-1);
-//
-//            chan.allNotesOff();
-//            refresharray();
-//            heading = "Counting Sort";
-//            
-//            countingSort();
-//            
-//            chan.allNotesOff();
-//            refresharray();
-//            heading = "Radix LSD Sort";
-//
-//            radixLSDsort(4);
-//
-//            chan.allNotesOff();
-//            refresharray();
-//            heading = "Radix LSD In-Place Sort";
-//
-//            inPlaceRadixLSDSort(10);
-//
-//            chan.allNotesOff();
-//            refresharray();
-//            heading = "Radix MSD Sort";
-//            
-//            radixMSDSort(4);
-//            refresharray();
-//            //heading = "Shatter Partition";
-//
-//            //shatterPartition(1);
-//
-//            //chan.allNotesOff();
-//            //refresharray();
-//            heading = "Shatter Sort";
-//
-//            shatterSort(128);
-//
-//            chan.allNotesOff();
-//            refresharray();
-//            //heading = "Simple Shatter Sort";
-//
-//            //simpleShatterSort(128, 4);
-//
-//            //chan.allNotesOff();
-//            //refresharray();
-//        
+ 
         //keep on keeping on
-        while(window.isActive())Thread.sleep(1);
+        while(window.isActive())Thread.sleep(100);
     }
     
     public static void refresharray() throws Exception {
         clearmarked();
+        Thread.sleep(1000);
         boolean solved = true;
         for(int i = 0; i < array.length; i++){
             if(array[i]!=i)
@@ -423,13 +328,14 @@ public class ArrayVisualizer {
         }
         for(int i = 0; i < array.length; i++)
             array[i] = i;
-        System.out.println(solved);
+        //System.out.println(solved);
         marked.set(0, -5);
         heading = "";
-        shuffle(array);
         aa = 0;
         comps = 0;
+        shuffle(array);
         clearmarked();
+        Thread.sleep(500);
     }
     
     public static int getDigit(int a, int power, int radix){
@@ -449,24 +355,16 @@ public class ArrayVisualizer {
     }
 
     public static void shuffle(int[] array) {
+        String tmp = heading;
+        heading = "Shuffling...";
         for(int i = 0; i < array.length; i++){
             swap(array, i, (int)(Math.random()*array.length));
+            aa-=2;
             if(SHUFFLEANIM)
                 sleep(1);
         }
+        heading = tmp;
     }
-    
-    /*public static void insertionSort(int slp) {
-        int pos;
-        for(int i = 1; i < array.length; i++){
-            pos = i;
-            marked.set(0, i);
-            while(pos>0&&array[pos]<=array[pos-1]){
-                    swap(array, pos, pos-1,slp);
-                    pos--;
-            }
-        }
-    }*/
 
     public static int sleepTime(double d) {
         return (int)(array.length*d)/4;
@@ -475,7 +373,7 @@ public class ArrayVisualizer {
     public synchronized static void RunAllSorts(){
         if(sortingThread != null)
             while(sortingThread.isAlive()) try {
-            Thread.sleep(1);
+            Thread.sleep(100);
         } catch (InterruptedException ex) {
             Logger.getLogger(ArrayVisualizer.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -488,10 +386,10 @@ public class ArrayVisualizer {
             
             refresharray();
             
-            heading = "Insertion Sort";
+            heading = "Selection Sort";
 
-            insertionSort();
-
+            selectionSort();
+            
             chan.allNotesOff();
             refresharray();
             heading = "Bubble Sort";
@@ -500,9 +398,9 @@ public class ArrayVisualizer {
 
             chan.allNotesOff();
             refresharray();
-            heading = "Selection Sort";
+            heading = "Insertion Sort";
 
-            selectionSort();
+            insertionSort();
 
             chan.allNotesOff();
             refresharray();
@@ -530,17 +428,23 @@ public class ArrayVisualizer {
             
             chan.allNotesOff();
             refresharray();
+            heading = "Weave Merge Sort";
             
-            heading = "Gravity Sort (Abacus/Bead)";
-            
-            gravitySort();
+            weaveMergeSort(0, array.length-1);
             
             chan.allNotesOff();
             refresharray();
-
+            
             heading = "Quick Sort";
 
             quickSort(array, 0, array.length-1);
+                        
+            chan.allNotesOff();
+            refresharray();
+
+            heading = "Gravity Sort (Abacus/Bead)";
+            
+            gravitySort();
 
             chan.allNotesOff();
             refresharray();
@@ -566,18 +470,19 @@ public class ArrayVisualizer {
             
             radixMSDSort(4);
             refresharray();
-            //heading = "Shatter Partition";
-
-            //shatterPartition(1);
-
-            //chan.allNotesOff();
-            //refresharray();
             heading = "Shatter Sort";
 
             shatterSort(128);
 
             chan.allNotesOff();
             refresharray();
+            heading = "Time Sort";
+            
+            timeSort(4);
+            
+            chan.allNotesOff();
+            refresharray();
+            
         }catch (Exception e){}
         SetSound(false);
             }
@@ -629,7 +534,7 @@ public class ArrayVisualizer {
         if(sortingThread != null && sortingThread.isAlive())
             return;
         int bas = 10;
-        if(n != 3 && !(n >= 5))
+        if(n != 3 && !(n >= 6))
             if(n != 4)
                 try{bas = Integer.parseInt(JOptionPane.showInputDialog(null, "Enter Base for Sort"));}catch(Exception e){}
             else
@@ -655,6 +560,8 @@ public class ArrayVisualizer {
                 gravitySort();break;
             case 4:
                 shatterSort(base);break;
+            case 5:
+                timeSort(base);break;
         }
         }catch(Exception e){}
         SetSound(false);

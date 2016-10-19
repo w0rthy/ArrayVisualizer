@@ -7,7 +7,6 @@ package array.visualizer;
 
 import static array.visualizer.ArrayVisualizer.*;
 import static array.visualizer.BubbleSort.*;
-import static array.visualizer.ShatterSorts.*;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -16,10 +15,9 @@ import java.util.logging.Logger;
  * @author S630690
  */
 public class TimeSort {
-    public static void timeSort() throws Exception {
-        final int A = 2;
+    public static void timeSort(int magnitude) throws Exception {
+        final int A = magnitude;
         next = 0;
-        shatterPartition(4);
         ArrayList<Thread> threads = new ArrayList<Thread>();
         final int[] tmp = array.clone();
         for(int i = 0; i < array.length; i++){

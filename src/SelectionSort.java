@@ -12,6 +12,7 @@ import static array.visualizer.Swaps.*;
  * @author S630690
  */
 public class SelectionSort {
+       
     public static void selectionSort() throws Exception {
         for (int i = 0; i < array.length - 1; i++) {
             int lowestindex = i;
@@ -19,10 +20,10 @@ public class SelectionSort {
                 if (array[j] < array[lowestindex]){
                     lowestindex = j;
                 }
+                sleep(0.01);
                 comps++;
             }
             swap(array, i, lowestindex);
-                sleep(sleepTime(0.01));
         }
     }
 }
