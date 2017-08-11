@@ -46,6 +46,8 @@ public class ViewPrompt extends javax.swing.JFrame implements AAFrame {
         jButton5 = new javax.swing.JButton();
         jButton6 = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
+        jButton7 = new javax.swing.JButton();
+        jButton8 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
@@ -96,6 +98,20 @@ public class ViewPrompt extends javax.swing.JFrame implements AAFrame {
 
         jLabel1.setText("Select View Type");
 
+        jButton7.setText("D. Circle");
+        jButton7.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton7ActionPerformed(evt);
+            }
+        });
+
+        jButton8.setText("D. C. Dots");
+        jButton8.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton8ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -105,12 +121,14 @@ public class ViewPrompt extends javax.swing.JFrame implements AAFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                     .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jButton3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jButton3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jButton7, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jButton4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jButton5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jButton6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jButton6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jButton8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(24, 24, 24))
             .addGroup(layout.createSequentialGroup()
                 .addGap(65, 65, 65)
@@ -134,7 +152,11 @@ public class ViewPrompt extends javax.swing.JFrame implements AAFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jButton6)
                     .addComponent(jButton3))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButton7)
+                    .addComponent(jButton8))
+                .addContainerGap(16, Short.MAX_VALUE))
         );
 
         pack();
@@ -145,6 +167,7 @@ public class ViewPrompt extends javax.swing.JFrame implements AAFrame {
         CIRCLEDRAW = false;
         COLORONLY = false;
         PIXELDRAW = false;
+        DISPARITYDRAW = false;
         dispose();
     }//GEN-LAST:event_jButton1ActionPerformed
 
@@ -153,6 +176,7 @@ public class ViewPrompt extends javax.swing.JFrame implements AAFrame {
         CIRCLEDRAW = true;
         COLORONLY = true;
         PIXELDRAW = false;
+        DISPARITYDRAW = false;
         dispose();
     }//GEN-LAST:event_jButton2ActionPerformed
 
@@ -161,6 +185,7 @@ public class ViewPrompt extends javax.swing.JFrame implements AAFrame {
         CIRCLEDRAW = true;
         COLORONLY = false;
         PIXELDRAW = false;
+        DISPARITYDRAW = false;
         dispose();
     }//GEN-LAST:event_jButton3ActionPerformed
 
@@ -169,6 +194,7 @@ public class ViewPrompt extends javax.swing.JFrame implements AAFrame {
         CIRCLEDRAW = false;
         COLORONLY = true;
         PIXELDRAW = false;
+        DISPARITYDRAW = false;
         dispose();
     }//GEN-LAST:event_jButton4ActionPerformed
 
@@ -177,6 +203,7 @@ public class ViewPrompt extends javax.swing.JFrame implements AAFrame {
         CIRCLEDRAW = false;
         COLORONLY = false;
         PIXELDRAW = true;
+        DISPARITYDRAW = false;
         dispose();
     }//GEN-LAST:event_jButton5ActionPerformed
 
@@ -185,8 +212,27 @@ public class ViewPrompt extends javax.swing.JFrame implements AAFrame {
         CIRCLEDRAW = true;
         COLORONLY = false;
         PIXELDRAW = true;
+        DISPARITYDRAW = false;
         dispose();
     }//GEN-LAST:event_jButton6ActionPerformed
+
+    private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
+        // TODO add your handling code here:
+        CIRCLEDRAW = true;
+        COLORONLY = false;
+        PIXELDRAW = false;
+        DISPARITYDRAW = true;
+        dispose();
+    }//GEN-LAST:event_jButton7ActionPerformed
+
+    private void jButton8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton8ActionPerformed
+        // TODO add your handling code here:
+        CIRCLEDRAW = true;
+        COLORONLY = false;
+        PIXELDRAW = true;
+        DISPARITYDRAW = true;
+        dispose();
+    }//GEN-LAST:event_jButton8ActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
@@ -195,6 +241,8 @@ public class ViewPrompt extends javax.swing.JFrame implements AAFrame {
     private javax.swing.JButton jButton4;
     private javax.swing.JButton jButton5;
     private javax.swing.JButton jButton6;
+    private javax.swing.JButton jButton7;
+    private javax.swing.JButton jButton8;
     private javax.swing.JLabel jLabel1;
     // End of variables declaration//GEN-END:variables
 }

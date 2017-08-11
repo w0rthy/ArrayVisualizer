@@ -33,7 +33,7 @@ public class WeaveMerge {
         } catch (Exception ex) {
             Logger.getLogger(ArrayVisualizer.class.getName()).log(Level.SEVERE, null, ex);
         }
-	}
+    }
     
     static void push(int s,int e){
         
@@ -45,7 +45,7 @@ public class WeaveMerge {
 		}
                 
                 
-	}
+    }
     
     static void weaveMergeSort(int min,int max){
 	if(max-min==0){//only one element.

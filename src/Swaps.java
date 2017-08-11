@@ -41,11 +41,20 @@ public class Swaps {
     public static void swapUpTo(int pos, int to){
         if(to - pos > 0)
          for(int i = pos; i < to; i++)
+            swap(array, i, i+1, i%240/239);
+        else
+            for(int i = pos; i > to; i--)
+                swap(array, i, i-1, i%240/239);
+    }
+    
+    public static void swapUpToNM(int pos, int to){
+        if(to - pos > 0)
+         for(int i = pos; i < to; i++)
             swapnm(array, i, i+1, i%240/239);
         else
             for(int i = pos; i > to; i--)
                 swapnm(array, i, i-1, i%240/239);
-     }
+    }
     
     public static void swapUp(int pos) {
         for(int i = pos; i < array.length; i++)

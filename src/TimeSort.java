@@ -6,7 +6,7 @@ package array.visualizer;
 
 
 import static array.visualizer.ArrayVisualizer.*;
-import static array.visualizer.BubbleSort.*;
+import static array.visualizer.InsertionSort.*;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -36,8 +36,8 @@ public class TimeSort {
         }
         for(Thread t : threads)
             t.start();
-        sleep(array.length * A);
-        bubbleSort();
+        Thread.sleep(array.length * A);
+        insertionSort(0,array.length,0.2d);
         
     }
     static volatile int next = 0;

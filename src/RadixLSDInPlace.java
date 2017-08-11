@@ -21,7 +21,7 @@ public class RadixLSDInPlace {
                 } else {
                     for(int j = 0; j<vregs.length;j++)
                         marked.set(j+1,vregs[j]);
-                    swapUpTo(pos,vregs[digit-1]);
+                    swapUpToNM(pos,vregs[digit-1]);
                     for(int j = digit-1; j > 0; j--)
                         vregs[j-1]--;
                 }
