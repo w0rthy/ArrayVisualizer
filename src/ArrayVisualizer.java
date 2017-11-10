@@ -33,6 +33,7 @@ import static array.visualizer.WeaveMerge.*;
 import static array.visualizer.RadixLSDInPlace.*;
 import static array.visualizer.BogoSort.*;
 import static array.visualizer.HeapSort.*;
+import static array.visualizer.ShellSort.*;
 import java.awt.BasicStroke;
 import java.awt.Graphics2D;
 import java.awt.Polygon;
@@ -55,23 +56,31 @@ public class ArrayVisualizer {
     static int comps = 0;
     static long nanos;
     static Font fon = new Font("TimesRoman",Font.PLAIN,(int)(640/1280.0*25));
-    static boolean CIRCLEDRAW = true;
+    
+    static boolean CIRCLEDRAW = false;
     static boolean COLORONLY = false;
-    static boolean PIXELDRAW = true;
+    static boolean PIXELDRAW = false;
     static boolean DISPARITYDRAW = false;
-    static boolean LINKEDPIXELDRAW = true;
+    static boolean LINKEDPIXELDRAW = false;
+    static boolean MESHDRAW = false;
+    static boolean PYRAMIDDRAW = false;
+        static boolean PYRAMIDVERT = true;
+    
     static boolean SOUND = false;
+    static int NUMCHANNELS = 10; //Number of Audio Channels
+    static double PITCHMIN = 23d; //Minimum Pitch
+    static double PITCHMAX = 112d; //Maximum Pitch (up to 112)
     static double SOUNDMUL = 1.0;
     static double SLEEPRATIO = 1.0;
     static UtilFrame uf;
     static ViewPrompt v;
     static Synthesizer synth;
-    static MidiChannel chan;
+    static MidiChannel[] chan;
     static Thread sortingThread;
     static boolean SHUFFLEANIM = true;
     
-    static String[] ComparativeSorts = "Selection!Bubble!Insertion!Double Selection!Cocktail Shaker!Quick!Merge!Merge OOP!Weave Merge!Max Heap".split("!");
-    static String[] DistributiveSorts = "Radix LSD!Radix MSD!Radix LSD In-Place!Gravity!Shatter!Time".split("!");
+    static String[] ComparativeSorts = "Selection!Bubble!Insertion!Double Selection!Cocktail Shaker!Quick!Merge!Merge OOP!Weave Merge!Max Heap!Shell".split("!");
+    static String[] DistributiveSorts = "Radix LSD!Radix MSD!Radix LSD In-Place!Gravity!Shatter!Time!Bogo".split("!");
     
     static int cx = 0;
     static int cy = 0;
@@ -107,7 +116,6 @@ public class ArrayVisualizer {
     }
     
     public static void main(String[] args) throws Exception {
-
         synth = MidiSystem.getSynthesizer();
         synth.open();
         synth.loadAllInstruments(synth.getDefaultSoundbank());
@@ -116,14 +124,18 @@ public class ArrayVisualizer {
 //            System.out.println(s+" "+i.getName());
 //            s++;
 //        }
-        chan = synth.getChannels()[0];
+        chan = new MidiChannel[NUMCHANNELS];
+        for(int i = 0; i < NUMCHANNELS; i++)
+            chan[i] = synth.getChannels()[i];
         for(Instrument i : synth.getLoadedInstruments())
-            if(i.getName().toLowerCase().trim().contains("sine")){
-                chan.programChange(i.getPatch().getProgram());
+            if(i.getName().toLowerCase().contains("sine")){ //organ
+                for(int j = 0; j < NUMCHANNELS; j++)
+                    if(chan[j]!=null)
+                        chan[j].programChange(i.getPatch().getProgram());
                 break;
             }
         
-        if(chan.getProgram() == 0)
+        if(chan[0].getProgram() == 0)
             JOptionPane.showMessageDialog(null, "Could not find a valid instrument. Sound is disabled");
         //chan.programChange(synth.getLoadedInstruments()[197].getPatch().getProgram());
         
@@ -143,23 +155,42 @@ public class ArrayVisualizer {
             @Override
             public void run(){
                 while(true){
-                chan.allNotesOff();
-                if(SOUND == false){
-                    continue;
-                }
-                
-                int tmp = 1;
-                    for(int i : marked)
-                        if(i != -5)
-                            tmp++;
-                    for(int i : marked)
-                        if(i != -5){
-                            int pitch = (int)Math.round((double)array[Math.min(Math.max(i, 0),array.length-1)]/array.length*96+16);
-                            //int vel = (int)(((128-pitch)/320.0+0.4)   *   (128.0/Math.pow(tmp,0.33)));
-                            //int vel = (int)(64.0/Math.pow(tmp,0.25));
-                            int vel = (int)((64.0-Math.pow((tmp-1)*10,0.25d))*SOUNDMUL);
-                            chan.noteOn(pitch, vel);
-                        }
+
+                    for(MidiChannel c : chan)
+                        c.allNotesOff();
+                    if(SOUND == false){
+                        continue;
+                    }
+
+                    int tmp = 0;
+                    int cchan = 0;
+                        for(int i : marked)
+                            if(i != -5)
+                                tmp++;
+                        
+                        tmp = Math.min(tmp, NUMCHANNELS);
+                        
+                        for(int i : marked)
+                            if(i != -5){
+                                //PITCH
+                                double pitch = (double)array[Math.min(Math.max(i, 0),array.length-1)]/array.length*(PITCHMAX-PITCHMIN)+PITCHMIN;
+                                int pitchmajor = (int)pitch;
+                                int pitchminor = (int)((pitch-(double)((int)pitch))*8192d)+8192;
+
+                                //int vel = (int)(((128-pitch)/320.0+0.4)   *   (128.0/Math.pow(tmp,0.33)));
+                                //int vel = (int)(64.0/Math.pow(tmp,0.25));
+                                //int vel = (int)((64.0-Math.pow((tmp-1)*10,0.25d))*SOUNDMUL);
+
+                                //VELOCITY/VOLUME
+                                //              PITCH ADJUSTMENT                            AMOUNT OF TONES ADJUSTMENT
+                                //int vel = (int)(Math.pow(112d/pitchmajor,1.0)   *   (1d/(Math.log(tmp+1)/0.69314718056))   *   64d*SOUNDMUL);
+                                int vel = (int)(Math.pow(113d-pitchmajor,2d)   *   (Math.pow(tmp, -0.25))   *   64d*SOUNDMUL); //I'VE SOLVED IT!!
+                                
+                                chan[cchan].noteOn(pitchmajor, vel);
+                                chan[cchan].setPitchBend(pitchminor);
+                                if(++cchan%NUMCHANNELS==0)
+                                    break;
+                            }
                             //((int)((127-(array[Math.min(Math.max(i, 0),array.length-1)]/16.0))/Math.sqrt(calcVel())))*5
                             //double tmp = (array[Math.min(Math.max(i, 0),array.length-1)]/32.0+47);
                             //chan.setPitchBend(8192*2-(int)((tmp-Math.floor(tmp))*8192*2));
@@ -226,11 +257,135 @@ public class ArrayVisualizer {
                     int halfheight = window.getHeight()/2;
                     int dotw = (int)(2*(window.getWidth()/640.0));
                     int doth = (int)(2*(window.getHeight()/480.0));
+                    int dots = (dotw+doth)/2;
                     
                     g.setStroke(new BasicStroke(3f*(window.getWidth()/1920f)));
                     
-                    
-                    if(CIRCLEDRAW)
+                    //PYRAMID DRAW METHOD
+                    if(PYRAMIDDRAW){
+                        double x = 0;
+                        double y = 34;
+                        
+                        double perx = (double)window.getWidth()/array.length;
+                        double pery = (double)(window.getHeight()-34)/array.length;
+                        
+                        if(PYRAMIDVERT)
+                            x = window.getWidth()/2;
+                        else
+                            y = (window.getHeight()-34)/2+34;
+                        
+                        int sz = 0;
+                        for(int i = 0; i < array.length; i++){
+                            if(marked.contains(i)||marked.contains(i-1)||marked.contains(i-2)||marked.contains(i-3))
+                                g.setColor(Color.BLACK);
+                            else
+                                g.setColor(getIntColor(array[i]));
+                            
+                            if(DISPARITYDRAW){
+                                int tmp = Math.abs(i-array[i]);
+                                sz = Math.max(Math.min(tmp,Math.abs(tmp-array.length)),1);
+                                if(PYRAMIDVERT)
+                                    sz = (int)((double)sz/500d*window.getWidth());
+                                else
+                                    sz = (int)((double)sz/500d*(window.getHeight()-34));
+                            }else{
+                                if(PYRAMIDVERT)
+                                    sz = (int)((double)array[i]/array.length*window.getWidth());
+                                else
+                                    sz = (int)((double)array[i]/array.length*(window.getHeight()-34));
+                            }
+                            
+                            if(PYRAMIDVERT){
+                                double tmp = y;
+                                y+=pery;
+                                if(PIXELDRAW)
+                                    if(LINKEDPIXELDRAW){
+                                        g.drawLine((int)x, (int)tmp, (int)x+sz/2, (int)y);
+                                        g.drawLine((int)x, (int)tmp, (int)x-sz/2, (int)y);
+                                    }
+                                    else{
+                                        g.fillRect((int)x+sz/2, (int)tmp, dots, dots);
+                                        g.fillRect((int)x-sz/2, (int)tmp, dots, dots);
+                                    }
+                                else
+                                    g.fillRect((int)x-sz/2, (int)tmp, sz, (int)y-(int)tmp);
+                            }else{
+                                double tmp = x;
+                                x+=perx;
+                                if(PIXELDRAW)
+                                    if(LINKEDPIXELDRAW){
+                                        g.drawLine((int)tmp, (int)y, (int)x, (int)y+sz/2);
+                                        g.drawLine((int)tmp, (int)y, (int)x, (int)y-sz/2);
+                                    }
+                                    else{
+                                        g.fillRect((int)tmp, (int)y+sz/2, dots, dots);
+                                        g.fillRect((int)tmp, (int)y-sz/2, dots, dots);
+                                    }
+                                else
+                                    g.fillRect((int)tmp, (int)y-sz/2, (int)x-(int)tmp, sz);
+                            }
+                        }
+                    }
+                    //MESH DRAW METHOD
+                    else if(MESHDRAW){
+                        
+                        int trih = window.getHeight()/20; //Height of triangles to use, Width will be scaled accordingly
+                        
+                        int tripercol = window.getHeight()/trih*2; //Triangles per vertical column
+                        int triperrow = Math.max(array.length/tripercol,1); //Triangles per horizontal row
+                        double triw = (double)window.getWidth()/triperrow; //Width of triangles to use
+                        
+                        double curx = 0;
+                        int cury = 0;
+                        
+                        int[] triptsx = new int[3];
+                        int[] triptsy = new int[3];
+                        
+                        for(int i = 0; i < array.length; i++){
+                            if(marked.contains(i)/*||marked.contains(i-1)||marked.contains(i-2)||marked.contains(i-3)*/)
+                                g.setColor(Color.BLACK);
+                            else
+                                g.setColor(getIntColor(array[i]));
+                            
+                            //If i/triperrow is even, then triangle points right, else left
+                            boolean direction = false;
+                            if((i/triperrow)%2==0)
+                                direction = true;
+                            
+                            //Make the triangle
+                            if(!direction){
+                                //Pointing right
+                                triptsx[0] = (int)curx;
+                                triptsx[1] = (int)curx;
+                                curx+=triw;
+                                triptsx[2] = (int)curx;
+                                
+                                triptsy[0] = cury;
+                                triptsy[2] = cury + trih/2;
+                                triptsy[1] = cury + trih;
+                            }else{
+                                //Pointing left
+                                triptsx[2] = (int)curx;
+                                curx+=triw;
+                                triptsx[0] = (int)curx;
+                                triptsx[1] = (int)curx;
+                                
+                                triptsy[0] = cury;
+                                triptsy[2] = cury + trih/2;
+                                triptsy[1] = cury + trih;
+                            }
+                            
+                            //Draw it
+                            g.fillPolygon(triptsx,triptsy,triptsx.length);
+                            
+                            //If at the end of a row, reset curx
+                            if(i != 0 && i%triperrow == 0){
+                                curx = 0d;
+                                cury+=trih/2;
+                            }
+                        }
+                    }
+                    else if(CIRCLEDRAW)
                         for(int i = 0; i < array.length; i++){
                             if(marked.contains(i)||marked.contains(i-1)||marked.contains(i-2)||marked.contains(i-3))
                                 g.setColor(Color.BLACK);
@@ -251,14 +406,14 @@ public class ArrayVisualizer {
                             }
                             //DISPARITY
                             else if (DISPARITYDRAW){
-                                double len = (500d-Math.min(Math.min(Math.abs(i-array[i]), Math.abs(i-array[i]+1000)),Math.abs(i-array[i]-1000)))/500d;
+                                double len = (500d-Math.min(Math.min(Math.abs(i-array[i]), Math.abs(i-array[i]+array.length)),Math.abs(i-array[i]-array.length)))/(array.length/2d);
                                 
                                 if(PIXELDRAW){
-                                    int linkedpixX = halfwidth+(int)(sinval*((window.getWidth()-64)/2.0*len)) + dotw/2;
-                                    int linkedpixY = halfheight-(int)(cosval*((window.getHeight()-96)/2.0*len)) + doth/2;
+                                    int linkedpixX = halfwidth+(int)(sinval*((window.getWidth()-64)/2.0*len)) + dots/2;
+                                    int linkedpixY = halfheight-(int)(cosval*((window.getHeight()-96)/2.0*len)) + dots/2;
                                     
                                     if(!LINKEDPIXELDRAW)
-                                        g.fillRect(linkedpixX - dotw/2, linkedpixY - doth/2, dotw, doth);
+                                        g.fillRect(linkedpixX - dots/2, linkedpixY - dots/2, dots, dots);
                                     else{
                                         if(i>0)
                                             g.drawLine(linkedpixX, linkedpixY, linkedpixdrawx, linkedpixdrawy);
@@ -277,12 +432,14 @@ public class ArrayVisualizer {
                             }
                             //PIXELS ONLY
                             else if(PIXELDRAW){
-                                g.fillRect(halfwidth+(int)(sinval*((window.getWidth()-64)/2.0*(array[i]/(double)array.length))), halfheight-(int)(cosval*((window.getHeight()-96)/2.0*(array[i]/(double)array.length))), dotw, doth);
                                 if(LINKEDPIXELDRAW){
                                     if(i>0)
                                         g.drawLine(halfwidth+(int)(sinval*((window.getWidth()-64)/2.0*(array[i]/(double)array.length))), halfheight-(int)(cosval*((window.getHeight()-96)/2.0*(array[i]/(double)array.length))), linkedpixdrawx, linkedpixdrawy);
                                     linkedpixdrawx = halfwidth+(int)(sinval*((window.getWidth()-64)/2.0*(array[i]/(double)array.length)));
                                     linkedpixdrawy = halfheight-(int)(cosval*((window.getHeight()-96)/2.0*(array[i]/(double)array.length)));
+                                }
+                                else{//NORMAL CIRCLE PIXEL DRAW
+                                    g.fillRect(halfwidth+(int)(sinval*((window.getWidth()-64)/2.0*(array[i]/(double)array.length))), halfheight-(int)(cosval*((window.getHeight()-96)/2.0*(array[i]/(double)array.length))), dots, dots);
                                 }
                             }
                             //LENGTH AND COLOR
@@ -295,7 +452,7 @@ public class ArrayVisualizer {
                                 //g.drawLine(halfwidth, halfheight, halfwidth+(int)(sinval*((window.getWidth()-64)/2.0*(array[i]/(double)array.length))), halfheight-(int)(cosval*((window.getHeight()-96)/2.0*(array[i]/(double)array.length))));
                             }
                         }
-                    else
+                    else{
                         for(int i = 0; i < array.length; i++){
                             if(marked.contains(i)||marked.contains(i-1)||marked.contains(i-2)||marked.contains(i-3))
                                 g.setColor(Color.BLACK);
@@ -314,12 +471,14 @@ public class ArrayVisualizer {
                                 }
                                 else if(PIXELDRAW){
                                     y = (int)(window.getHeight()-array[i]*yscl);
-                                    g.fillRect(amt, y, width, 3);
                                     if(LINKEDPIXELDRAW){
                                         if(i>0)
                                             g.drawLine(amt, y, linkedpixdrawx, linkedpixdrawy);
                                         linkedpixdrawx = amt;
                                         linkedpixdrawy = y;
+                                    }
+                                    else{ //Normal Pixel Draw
+                                        g.fillRect(amt, y, dots, dots);
                                     }
                                 }
                                 else{
@@ -331,13 +490,14 @@ public class ArrayVisualizer {
                             }
                             amt+=width;
                         }
+                    }
                     
                     int coltmp = 255;//(int)Math.abs(Math.sin(frames*0.01)*255);
                     g.setColor(new Color(coltmp,coltmp,coltmp));
                     Font f = g.getFont();
                     g.setFont(fon);
                     g.drawString(heading, 10, (int)(cw/1280.0*20)+30);
-                    //g.drawString("Comparisons: "+comps+" Array Accesses: "+aa, 10, (int)(cw/1280.0*40)+30);
+                    g.drawString("Comparisons: "+comps+" Array Accesses: "+aa, 10, (int)(cw/1280.0*40)+30);
                     g.setFont(f);
                     Graphics g2 = window.getGraphics();
                     g2.setColor(Color.BLACK);
@@ -433,89 +593,89 @@ public class ArrayVisualizer {
             heading = "Selection Sort";
             selectionSort();
             
-            chan.allNotesOff();
+            
             refresharray();
             heading = "Bubble Sort";
             bubbleSort();
 
-            chan.allNotesOff();
+            
             refresharray();
             heading = "Insertion Sort";
             insertionSort();
 
-            chan.allNotesOff();
+            
             refresharray();
             heading = "Cocktail Shaker Sort";
             cocktailShakerSort();
 
-            chan.allNotesOff();
+            
             refresharray();
             heading = "Double Selection Sort";
             doubleSelectionSort(array);
             
-            chan.allNotesOff();
+            
             refresharray();
             heading = "Merge Sort In-Place";
             mergeSort(0, array.length - 1);
 
-            chan.allNotesOff();
+            
             refresharray();
             heading = "Merge Sort Out-of-Place";
             mergeSortOP();
             
-            chan.allNotesOff();
+            
             refresharray();
             heading = "Weave Merge Sort (Merge/Insertion)";
             weaveMergeSort(0, array.length-1);
             
-            chan.allNotesOff();
+            
             refresharray();
             heading = "Quick Sort";
             quickSort(array, 0, array.length-1);
                         
-            chan.allNotesOff();
+            
             refresharray();
             heading = "Max Heap Sort";
             maxheapsort();
             
-            chan.allNotesOff();
+            
             refresharray();
             heading = "Gravity Sort";
             gravitySort();
 
-            chan.allNotesOff();
+            
             refresharray();
             heading = "Counting Sort";
             countingSort();
             
-            chan.allNotesOff();
+            
             refresharray();
             heading = "Radix LSD Sort (Base 4)";
             radixLSDsort(4);
 
             SOUNDMUL = 0.5;
-            chan.allNotesOff();
+            
             refresharray();
             heading = "Radix LSD In-Place Sort (Base 10)";
             inPlaceRadixLSDSort(10);
             SOUNDMUL = 1.0;
             
-            chan.allNotesOff();
+            
             refresharray();
             heading = "Radix LSD In-Place Sort (Base 2)";
             inPlaceRadixLSDSort(2);
             
-            chan.allNotesOff();
+            
             refresharray();
             heading = "Radix MSD Sort (Base 4)";
             radixMSDSort(4);
             
-            chan.allNotesOff();
+            
             refresharray();
             heading = "Time Sort (Mul 4) + Insertion Sort";
             timeSort(4);
             
-            chan.allNotesOff();
+            
             refresharray();
             
         }catch (Exception e){}
@@ -560,7 +720,7 @@ public class ArrayVisualizer {
                     case 9:
                         maxheapsort();break;
                     case 10:
-                        minheapsort();break;
+                        shellSort(array.length, 2);break;
                 }
                 }catch(Exception e){e.printStackTrace();}
                 SetSound(false);
@@ -601,6 +761,8 @@ public class ArrayVisualizer {
                 shatterSort(base);break;
             case 5:
                 timeSort(base);break;
+            case 6:
+                bogoSort(); break;
         }
         }catch(Exception e){}
         SetSound(false);
