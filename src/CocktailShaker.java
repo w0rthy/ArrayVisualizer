@@ -18,12 +18,12 @@ public class CocktailShaker {
             for(int j = i; j < array.length-i-1; j++){
                 comps++;
                 if(array[j]>array[j+1])
-                    swap(array, j, j+1, j%40/39);
+                    swap(array, j, j+1, 0.022);
             }
             for(int j = array.length-i-1; j > i; j--){
                 comps++;
                 if(array[j]<array[j-1])
-                    swap(array, j, j-1, j%40/39);
+                    swap(array, j, j-1, 0.022);
             }
             i++;
         }

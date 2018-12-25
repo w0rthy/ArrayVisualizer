@@ -9,6 +9,7 @@ public class RadixLSDInPlace {
         int pos = 0;
         int[] vregs = new int[radix-1];
         int maxpower = analyze(radix);
+        double smul = Math.sqrt(radix);
         for(int p = 0; p <= maxpower; p++){
             for(int i = 0; i < vregs.length; i++)
                 vregs[i]=array.length-1;
@@ -21,7 +22,7 @@ public class RadixLSDInPlace {
                 } else {
                     for(int j = 0; j<vregs.length;j++)
                         marked.set(j+1,vregs[j]);
-                    swapUpToNM(pos,vregs[digit-1]);
+                    swapUpToNM(pos,vregs[digit-1], 0.0011*smul);
                     for(int j = digit-1; j > 0; j--)
                         vregs[j-1]--;
                 }

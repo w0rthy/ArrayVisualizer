@@ -40,7 +40,7 @@ public class Analysis {
                 a=array[i];
             marked.set(1,i);
             aa++;
-            sleep(1);
+            sleep(1.0);
         }
         return a;
     }

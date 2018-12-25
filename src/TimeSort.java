@@ -21,6 +21,8 @@ public class TimeSort {
         ArrayList<Thread> threads = new ArrayList<Thread>();
         final int[] tmp = array.clone();
         for(int i = 0; i < array.length; i++){
+            marked.set(0,i);
+            sleep(1);
             final int c = i;
             threads.add(new Thread(){
                 public void run() {

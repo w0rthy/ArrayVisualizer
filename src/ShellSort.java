@@ -13,10 +13,13 @@ public class ShellSort {
                     int prev = pos-gap;
                     while(prev>=0){
                         if(array[pos] < array[prev]){
+                            comps++;
                             swap(array, pos, prev);
                             sleep(sleepamt);
-                        }else
+                        }else{
+                            aa+=2;
                             break;
+                        }
                         pos = prev;
                         prev = pos-gap;
                     }

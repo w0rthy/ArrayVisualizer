@@ -23,9 +23,9 @@ public class MergeSort {
                     while(i<=mid){
                             if(array[i]>array[mid+1]){
                                     comps++;
-                                    swap(array,i,mid+1,sleepTime(0.005));
+                                    swap(array,i,mid+1,1.5);
                                     push(mid+1,max);
-                            }			
+                            }
                             i++;
                     }		
                     
@@ -39,7 +39,7 @@ public class MergeSort {
 		for(int i=s;i<e;i++){
 			if(array[i]>array[i+1]){
                             comps++;
-                            swap(array,i,i+1);
+                            swap(array,i,i+1,0.0175);
                         }
 		}
                 

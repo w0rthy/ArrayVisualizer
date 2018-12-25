@@ -55,8 +55,8 @@ public class MergeSortOOP {
             aa++;
             marked.set(1,low);
             marked.set(2, high);
-            if(end-start>=array.length/10)
-                sleep(1);
+            //if(end-start>=array.length/10)
+                sleep(0.65);
         }
         //System.arraycopy(tmp, 0, array, start, tmp.length);
         marked.set(2, -5);
@@ -65,7 +65,7 @@ public class MergeSortOOP {
             aa++;
             marked.set(1, start+i);
             if(end-start>=array.length/100)
-                sleep(1);
+                sleep(0.5);
         }
     }
 }

@@ -19,7 +19,7 @@ public class Swaps {
         a[j] = temp;
     }
     
-    public static void swap(int[] a, int i, int j, int pause) {
+    public static void swap(int[] a, int i, int j, double pause) {
         marked.set(1, i);
         marked.set(2, j);
         aa+=2;
@@ -30,34 +30,34 @@ public class Swaps {
         a[j] = temp;
     }
     
-        public static void swapnm(int[] a, int i, int j, int pause) {
-            sleep(pause);
+    public static void swapnm(int[] a, int i, int j, double pause) {
+        sleep(pause);
         aa+=2;
         int temp = a[i];
         a[i] = a[j];
         a[j] = temp;
     }
         
-    public static void swapUpTo(int pos, int to){
+    public static void swapUpTo(int pos, int to, double pause){
         if(to - pos > 0)
-         for(int i = pos; i < to; i++)
-            swap(array, i, i+1, i%240/239);
+            for(int i = pos; i < to; i++)
+                swap(array, i, i+1, pause);
         else
             for(int i = pos; i > to; i--)
-                swap(array, i, i-1, i%240/239);
+                swap(array, i, i-1, pause);
     }
     
-    public static void swapUpToNM(int pos, int to){
+    public static void swapUpToNM(int pos, int to, double pause){
         if(to - pos > 0)
          for(int i = pos; i < to; i++)
-            swapnm(array, i, i+1, i%240/239);
+            swapnm(array, i, i+1, pause);
         else
             for(int i = pos; i > to; i--)
-                swapnm(array, i, i-1, i%240/239);
+                swapnm(array, i, i-1, pause);
     }
     
-    public static void swapUp(int pos) {
+    public static void swapUp(int pos, double pause) {
         for(int i = pos; i < array.length; i++)
-            swap(array, i, i+1,i%180/179);
+            swap(array, i, i+1, pause);
     }
 }

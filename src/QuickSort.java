@@ -30,15 +30,19 @@ public class QuickSort {
         int j = r+1 ;
 
         while (true) {
-            sleep(sleepTime(0.005));
+            //sleep(0.);
             i++;
             while ( i< r && a[i] < x){
                 i++;
+                marked.set(1, i);
+                sleep(0.45);
                 comps+=2;
             }
             j--;
             while (j>p && a[j] > x){
                 j--;
+                marked.set(2,j);
+                sleep(0.45);
                 comps+=2;
             }
 

@@ -18,17 +18,17 @@ public class WeaveMerge {
     static void weaveMerge(int min,int max,int mid){
         try {
             //radixLSDsortnd(2, min, max);
-                
-            
-                    int i=min;
-                    while(i<=mid){
-                            swapUpTo(mid+(i-min), min+(i-min)*2);
-                            i++;
-                            sleep(2.5);
-                    }
+
+            int i=1;
+            int target = (mid-min);
+            while(i<=target){
+                    //swapUpTo(mid+(i-min), min+(i-min)*2, 0.01);
+                    swapUpTo(mid+i, min+i*2-1, 0.01);
+                    i++;
                     sleep(1);
-                    insertionSort(min, max+1,0.15);
-                    //sleep(100);
+            }
+            insertionSort(min, max+1,0.15);
+            //sleep(100);
                     
         } catch (Exception ex) {
             Logger.getLogger(ArrayVisualizer.class.getName()).log(Level.SEVERE, null, ex);
@@ -37,14 +37,12 @@ public class WeaveMerge {
     
     static void push(int s,int e){
         
-		for(int i=s;i<e;i++){
-			if(array[i]>array[i+1]){
-                            comps++;
-                            swap(array,i,i+1);
-                        }
-		}
-                
-                
+        for(int i=s;i<e;i++){
+            if(array[i]>array[i+1]){
+                comps++;
+                swap(array,i,i+1);
+            }
+        } 
     }
     
     static void weaveMergeSort(int min,int max){

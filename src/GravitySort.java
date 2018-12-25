@@ -41,7 +41,9 @@ public class GravitySort {
                 for(int y = 0; y < abacus[0].length; y++)
                     count+=abacus[x][y];
                 array[x] = count;
+                sleep(0.002);
             }
+            marked.set(1,array.length-i-1);
             sleep(2);
         }
     }

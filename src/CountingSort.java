@@ -17,7 +17,7 @@ public class CountingSort {
         int[] counts = new int[max+1];
         for(int i = 0; i < array.length; i++){
             marked.set(1,i);
-            sleep(1);
+            sleep(2);
             counts[array[i]]++;
             aa++;
         }
@@ -29,7 +29,7 @@ public class CountingSort {
             aa++;
             counts[x]--;
             marked.set(1, i);
-            sleep(1);
+            sleep(2);
         }
     }
 }
