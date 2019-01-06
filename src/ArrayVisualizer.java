@@ -390,7 +390,7 @@ public class ArrayVisualizer {
                             
                             //If i/triperrow is even, then triangle points right, else left
                             boolean direction = false;
-                            if((i/triperrow)%2==0)
+                            if(((i-1)/triperrow)%2==0)
                                 direction = true;
                             
                             //Make the triangle

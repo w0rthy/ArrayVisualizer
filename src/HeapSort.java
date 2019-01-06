@@ -20,6 +20,7 @@ public class HeapSort {
         if(child2>=array.length){
             if(child1>=array.length)
                 return; //Done, no children
+            comps++;
             if(array[child1]>array[pos])
                 swap(array,pos,child1,SLP);
             return;
@@ -27,10 +28,12 @@ public class HeapSort {
         
         //Find largest child
         int lrg = child1;
+        comps++;
         if(array[child2]>array[child1])
             lrg = child2;
         
         //Swap with largest child
+        comps++;
         if(array[lrg]>array[pos]){
             swap(array, pos, lrg,SLP);
             percdwn(lrg, true, array.length);
@@ -47,12 +50,14 @@ public class HeapSort {
                 return;
             else{
                 //Single Child
+                comps++;
                 if((max && (array[child1]>array[pos])) || (!max && (array[child1]<array[pos])))
                     swap(array, pos, child1, SLP);
                 return;
             }
         }
         
+        comps++;
         if(array[child1]>array[child2]){
             //Ensure child1 is the smallest for easy programming
             int tmp = child1;
@@ -60,6 +65,7 @@ public class HeapSort {
             child2 = tmp;
         }
         
+        comps++;
         if(max && (array[child2]>array[pos])){
             swap(array, pos, child2,SLP);
             percdwn(child2,max,len);
