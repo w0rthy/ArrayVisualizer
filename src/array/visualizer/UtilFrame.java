@@ -6,6 +6,8 @@ package array.visualizer;
 
 import static array.visualizer.ArrayVisualizer.*;
 import java.awt.Toolkit;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 

@@ -13,8 +13,8 @@ import static array.visualizer.utils.Analysis.*;
  *
  * @author S630690
  */
-public class CountingSort {
-    public static void countingSort(final ArrayController ac) throws Exception {
+public class CountingSort implements Sort {
+    public static void countingSort(final ArrayController ac) {
         int max = analyzemax(ac);
         int[] counts = new int[max+1];
         for(int i = 0; i < ac.length; i++){
@@ -33,5 +33,17 @@ public class CountingSort {
             ac.marked.set(1, i);
             sleep(2);
         }
+    }
+
+    @Override
+    public String name()
+    {
+        return "Counting Sort";
+    }
+
+    @Override
+    public void sort(ArrayController ac)
+    {
+        countingSort(ac);
     }
 }

@@ -1,6 +1,6 @@
 package array.visualizer;
 
-import array.visualizer.sort.RadixLSDInPlace;
+import array.visualizer.sort.*;
 
 import java.awt.Color;
 import java.awt.Font;
@@ -13,29 +13,9 @@ import javax.sound.midi.Synthesizer;
 import javax.swing.JFrame;
 
 import static array.visualizer.utils.Swaps.*;
-import static array.visualizer.sort.BubbleSort.*;
-import static array.visualizer.sort.CocktailShaker.*;
-import static array.visualizer.sort.CountingSort.*;
-import static array.visualizer.sort.DoubleSelection.*;
-import static array.visualizer.sort.GravitySort.*;
-import static array.visualizer.sort.InsertionSort.*;
-import static array.visualizer.sort.MergeSort.*;
-import static array.visualizer.sort.MergeSortOOP.*;
-import static array.visualizer.sort.QuickSort.*;
-import static array.visualizer.sort.RadixLSD.*;
-import static array.visualizer.sort.RadixMSD.*;
-import static array.visualizer.sort.SelectionSort.*;
-import static array.visualizer.sort.ShatterSorts.*;
-import static array.visualizer.sort.TimeSort.*;
-import static array.visualizer.sort.WeaveMerge.*;
-import static array.visualizer.sort.RadixLSDInPlace.*;
-import static array.visualizer.sort.BogoSort.*;
-import static array.visualizer.sort.HeapSort.*;
-import static array.visualizer.sort.ShellSort.*;
 import java.awt.BasicStroke;
 import java.awt.Graphics2D;
 import java.awt.Polygon;
-import static java.lang.Thread.sleep;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.sound.midi.Instrument;
@@ -119,7 +99,9 @@ public class ArrayVisualizer {
             addamt-=(double)actual/1000000.0;
             if(running)
                 sleeptime+=actual;
-        }catch(Throwable t){}
+        }catch(Exception ex){
+            Logger.getLogger(ArrayVisualizer.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     
     public static void main(String[] args) throws Exception {
@@ -202,7 +184,9 @@ public class ArrayVisualizer {
                         double tmpd = (array[Math.min(Math.max(i, 0), array.length-1)]/32.0+47);
                         chan.setPitchBend(8192*2-(int)((tmpd-Math.floor(tmpd))*8192*2));
                         }while(false);}*/
-                    try{sleep(1);}catch(Exception e){}
+                    try{sleep(1);}catch(Exception ex){
+                        Logger.getLogger(ArrayVisualizer.class.getName()).log(Level.SEVERE, null, ex);
+                    }
                 }
             }
         }.start();
@@ -657,97 +641,34 @@ public class ArrayVisualizer {
             @Override
             public void run(){
                 try{
-
-                    refresharray();
-                    heading = "Selection Sort";
-                    selectionSort(arrayController);
-                    
-                    chan.allNotesOff();
-                    refresharray();
-                    heading = "Bubble Sort";
-                    bubbleSort(arrayController);
-
-                    chan.allNotesOff();
-                    refresharray();
-                    heading = "Insertion Sort";
-                    insertionSort(arrayController);
-
-                    chan.allNotesOff();
-                    refresharray();
-                    heading = "Cocktail Shaker Sort";
-                    cocktailShakerSort(arrayController);
-
-                    chan.allNotesOff();
-                    refresharray();
-                    heading = "Double Selection Sort";
-                    doubleSelectionSort(arrayController);
-                    
-                    chan.allNotesOff();
-                    refresharray();
-                    heading = "Shell Sort";
-                    shellSort(arrayController, arrayController.length, 2);
-                    
-                    chan.allNotesOff();
-                    refresharray();
-                    heading = "Merge Sort";
-                    mergeSortOP(arrayController);
-                    
-                    chan.allNotesOff();
-                    refresharray();
-                    heading = "Merge Sort In-Place";
-                    mergeSort(arrayController, 0, arrayController.length - 1);
-
-                    chan.allNotesOff();
-                    refresharray();
-                    heading = "Merge+Insertion Sort";
-                    weaveMergeSort(arrayController, 0, arrayController.length-1);
-
-                    chan.allNotesOff();
-                    refresharray();
-                    heading = "Max Heap Sort";
-                    maxheapsort(arrayController);
-                    
-                    chan.allNotesOff();
-                    refresharray();
-                    heading = "Quick Sort";
-                    quickSort(arrayController, 0, arrayController.length-1);
-
-                    chan.allNotesOff();
-                    refresharray();
-                    heading = "Counting Sort";
-                    countingSort(arrayController);
-                    
-                    chan.allNotesOff();
-                    refresharray();
-                    heading = "Time+Insertion Sort (Mul 4)";
-                    timeSort(arrayController, 4);
-                    
-                    chan.allNotesOff();
-                    refresharray();
-                    heading = "Gravity Sort";
-                    gravitySort(arrayController);
-
-                    chan.allNotesOff();
-                    refresharray();
-                    heading = "Radix LSD Sort (Base 4)";
-                    radixLSDsort(arrayController, 4);
-
-                    chan.allNotesOff();
-                    refresharray();
-                    heading = "Radix MSD Sort (Base 4)";
-                    radixMSDSort(arrayController, 4);
-                    
-                    chan.allNotesOff();
-                    refresharray();
-                    heading = "Radix LSD In-Place Sort (Base 2)";
-                    inPlaceRadixLSDSort(arrayController, 2);
-                    
-                    chan.allNotesOff();
-                    refresharray();
-                    heading = "Radix LSD In-Place Sort (Base 10)";
-                    inPlaceRadixLSDSort(arrayController, 10);
-                    
-                }catch (Exception e){}
+                    for (Sort sort : new Sort[]{
+                            new SelectionSort(),
+                            new BubbleSort(),
+                            new InsertionSort(),
+                            new CocktailShaker(),
+                            new ShellSort(),
+                            new MergeSortOOP(),
+                            new MergeSort(),
+                            new WeaveMerge(),
+                            new MaxHeapSort(),
+                            new QuickSort(),
+                            new CountingSort(),
+                            new TimeSort(4),
+                            new GravitySort(),
+                            new RadixLSD(4),
+                            new RadixMSD(4),
+                            new RadixLSDInPlace(2),
+                            new RadixLSDInPlace(10)}
+                        )
+                    {
+                        chan.allNotesOff();
+                        refresharray();
+                        heading = sort.name();
+                        sort.sort(arrayController);
+                    }
+                }catch (Exception ex){
+                    Logger.getLogger(ArrayVisualizer.class.getName()).log(Level.SEVERE, null, ex);
+                }
                 SetSound(false);
                 stoptime = System.nanoTime();
                 running = false;
@@ -768,34 +689,44 @@ public class ArrayVisualizer {
             @Override
             public void run(){
                 try{
-                    
                     refresharray();
-                    heading = ComparativeSorts[num]+" Sort";
-                switch (num){
-                    case 0:
-                        selectionSort(arrayController);break;
-                    case 1:
-                        bubbleSort(arrayController);break;
-                    case 2:
-                        insertionSort(arrayController);break;
-                    case 3:
-                        doubleSelectionSort(arrayController);break;
-                    case 4:
-                        cocktailShakerSort(arrayController);break;
-                    case 5:
-                        quickSort(arrayController, 0, arrayController.length-1);break;
-                    case 6:
-                        mergeSort(arrayController, 0, arrayController.length-1);break;
-                    case 7:
-                        mergeSortOP(arrayController);break;
-                    case 8:
-                        weaveMergeSort(arrayController, 0, arrayController.length-1);break;
-                    case 9:
-                        maxheapsort(arrayController);break;
-                    case 10:
-                        shellSort(arrayController, arrayController.length, 2);break;
+                    Sort sort;
+                    switch (num)
+                    {
+                        case 0:
+                            sort = new SelectionSort();break;
+                        case 1:
+                            sort = new BubbleSort();break;
+                        case 2:
+                            sort = new InsertionSort();break;
+                        case 3:
+                            sort = new DoubleSelection();break;
+                        case 4:
+                            sort = new CocktailShaker();break;
+                        case 5:
+                            sort = new QuickSort();break;
+                        case 6:
+                            sort = new MergeSort();break;
+                        case 7:
+                            sort = new MergeSortOOP();break;
+                        case 8:
+                            sort = new WeaveMerge();break;
+                        case 9:
+                            sort = new MaxHeapSort();break;
+                        case 10:
+                            sort = new ShellSort();break;
+                        default:
+                            sort = null; break;
+                    }
+                    if (sort != null)
+                    {
+                        heading = sort.name();
+                        sort.sort(arrayController);
+                    }
+                }catch(Exception ex)
+                {
+                    Logger.getLogger(ArrayVisualizer.class.getName()).log(Level.SEVERE, null, ex);
                 }
-                }catch(Exception e){e.printStackTrace();}
                 SetSound(false);
                 stoptime = System.nanoTime();
                 running = false;
@@ -810,9 +741,13 @@ public class ArrayVisualizer {
         int bas = 10;
         if(n != 3 && n != 5 && n != 7)
             if(n != 4)
-                try{bas = Integer.parseInt(JOptionPane.showInputDialog(null, "Enter Base for Sort"));}catch(Exception e){}
+                try{bas = Integer.parseInt(JOptionPane.showInputDialog(null, "Enter Base for Sort"));}catch(Exception ex){
+                    Logger.getLogger(ArrayVisualizer.class.getName()).log(Level.SEVERE, null, ex);
+                }
             else
-                try{bas = Integer.parseInt(JOptionPane.showInputDialog(null, "Enter Size of Partitions"));}catch(Exception e){}
+                try{bas = Integer.parseInt(JOptionPane.showInputDialog(null, "Enter Size of Partitions"));}catch(Exception ex){
+                    Logger.getLogger(ArrayVisualizer.class.getName()).log(Level.SEVERE, null, ex);
+                }
         
         final int base = Math.max(bas, 2);
         final int num = n;
@@ -822,26 +757,35 @@ public class ArrayVisualizer {
             public void run(){
         try{
             refresharray();
-            heading = DistributiveSorts[num]+" Sort";
-        switch (num){
-            case 0:
-                radixLSDsort(arrayController, base);break;
-            case 1:
-                radixMSDSort(arrayController, base);break;
-            case 2:
-                RadixLSDInPlace.inPlaceRadixLSDSort(arrayController, base);break;
-            case 3:
-                gravitySort(arrayController);break;
-            case 4:
-                shatterSort(arrayController, base);break;
-            case 5:
-                countingSort(arrayController);break;
-            case 6:
-                timeSort(arrayController, base);break;
-            case 7:
-                bogoSort(arrayController);break;
+            Sort sort;
+            switch (num) {
+                case 0:
+                    sort = new RadixLSD(base);break;
+                case 1:
+                    sort = new RadixMSD(base);break;
+                case 2:
+                    sort = new RadixLSDInPlace(base);break;
+                case 3:
+                    sort = new GravitySort();break;
+                case 4:
+                    sort = new ShatterSorts(base);break;
+                case 5:
+                    sort = new CountingSort();break;
+                case 6:
+                    sort = new TimeSort(base);break;
+                case 7:
+                    sort = new BogoSort();break;
+                default:
+                    sort = null; break;
+            }
+            if (sort != null)
+            {
+                heading = sort.name();
+                sort.sort(arrayController);
+            }
+        }catch(Exception ex){
+            Logger.getLogger(ArrayVisualizer.class.getName()).log(Level.SEVERE, null, ex);
         }
-        }catch(Exception e){}
         SetSound(false);
         stoptime = System.nanoTime();
         running = false;

@@ -13,8 +13,8 @@ import static array.visualizer.utils.Analysis.*;
  *
  * @author S630690
  */
-public class GravitySort {
-    public static void gravitySort(final ArrayController ac) throws Exception {
+public class GravitySort implements Sort {
+    public static void gravitySort(final ArrayController ac) {
         int max = analyzemax(ac);
         int[][] abacus = new int[ac.length][max];
         for(int i = 0; i < ac.length; i++){
@@ -48,5 +48,17 @@ public class GravitySort {
             ac.marked.set(1, ac.length-i-1);
             sleep(2);
         }
+    }
+
+    @Override
+    public String name()
+    {
+        return "Gravity Sort";
+    }
+
+    @Override
+    public void sort(ArrayController ac)
+    {
+        gravitySort(ac);
     }
 }

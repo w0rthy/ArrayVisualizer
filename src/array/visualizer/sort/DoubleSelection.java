@@ -13,7 +13,7 @@ import static array.visualizer.utils.Swaps.*;
  *
  * @author S630690
  */
-public class DoubleSelection {
+public class DoubleSelection implements Sort {
     public static void doubleSelectionSort(final ArrayController ac) {
         
         int left = 0;
@@ -39,5 +39,17 @@ public class DoubleSelection {
             smallest = left;
             biggest = right;
         }
+    }
+
+    @Override
+    public String name()
+    {
+        return "Double Selection Sort";
+    }
+
+    @Override
+    public void sort(ArrayController ac)
+    {
+        doubleSelectionSort(ac);
     }
 }

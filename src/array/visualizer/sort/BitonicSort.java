@@ -10,7 +10,8 @@ import array.visualizer.ArrayController;
  *
  * @author S630690
  */
-public class BitonicSort {
+public class BitonicSort implements Sort
+{
     public static void bitonicSort(final ArrayController ac){
         bitonicMerge(ac, 0, ac.length, true);
     }
@@ -27,5 +28,17 @@ public class BitonicSort {
         
         if(dir)
             for(int i = 0; i < end-start; i++);
+    }
+
+    @Override
+    public String name()
+    {
+        return "Bitonic Sort";
+    }
+
+    @Override
+    public void sort(ArrayController ac)
+    {
+        bitonicSort(ac);
     }
 }

@@ -13,8 +13,8 @@ import static array.visualizer.utils.Swaps.*;
  *
  * @author S630690
  */
-public class QuickSort {
-    public static void quickSort(final ArrayController ac, int p, int r) throws InterruptedException
+public class QuickSort implements Sort {
+    public static void quickSort(final ArrayController ac, int p, int r)
     {
         if(p<r)
         {
@@ -25,7 +25,7 @@ public class QuickSort {
         }
     }
 
-    public static int partition(final ArrayController ac, int p, int r) throws InterruptedException {
+    public static int partition(final ArrayController ac, int p, int r) {
 
         int x = ac.array[p];
         int i = p-1 ;
@@ -53,5 +53,17 @@ public class QuickSort {
             else
                 return j;
         }
+    }
+
+    @Override
+    public String name()
+    {
+        return "Quick Sort";
+    }
+
+    @Override
+    public void sort(ArrayController ac)
+    {
+        quickSort(ac,  0, ac.length-1);
     }
 }

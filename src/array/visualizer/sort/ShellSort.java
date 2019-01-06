@@ -5,7 +5,7 @@ import array.visualizer.ArrayController;
 import static array.visualizer.ArrayVisualizer.*;
 import static array.visualizer.utils.Swaps.*;
 
-public class ShellSort {
+public class ShellSort implements Sort {
     public static void shellSort(final ArrayController ac, int gap, int divrate){
         double sleepamt = 1d;
         while(gap>0){
@@ -34,5 +34,17 @@ public class ShellSort {
             gap = Math.max(gap/divrate, 1); //Ensure that we do gap 1
             //sleepamt /= divrate;
         }
+    }
+
+    @Override
+    public String name()
+    {
+        return "Shell Sort";
+    }
+
+    @Override
+    public void sort(ArrayController ac)
+    {
+        shellSort(ac, ac.length, 2);
     }
 }

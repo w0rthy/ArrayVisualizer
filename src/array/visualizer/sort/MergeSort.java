@@ -15,7 +15,7 @@ import java.util.logging.Logger;
  *
  * @author S630690
  */
-public class MergeSort {
+public class MergeSort implements Sort {
     static void merge(final ArrayController ac, int min, int max, int mid){
         try {
             //radixLSDsortnd(2, min, max);
@@ -63,5 +63,17 @@ public class MergeSort {
             mergeSort(ac, mid+1, max);//sort the right side
             merge(ac, min, max, mid);//combines them
         }
+    }
+
+    @Override
+    public String name()
+    {
+        return "Merge Sort In-Place";
+    }
+
+    @Override
+    public void sort(ArrayController ac)
+    {
+        mergeSort(ac, 0, ac.length - 1);
     }
 }

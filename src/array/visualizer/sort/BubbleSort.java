@@ -13,8 +13,8 @@ import static array.visualizer.utils.Swaps.*;
  *
  * @author S630690
  */
-public class BubbleSort {
-    public static void bubbleSort(final ArrayController ac) throws Exception{
+public class BubbleSort implements Sort {
+    public static void bubbleSort(final ArrayController ac) {
         for(int i = ac.length-1; i > 0; i--){
             for(int j = 0; j < i; j++){
                 sleep(0.005);
@@ -28,5 +28,17 @@ public class BubbleSort {
             }
             //marked.set(0, i);
         }
+    }
+
+    @Override
+    public String name()
+    {
+        return "Bubble Sort";
+    }
+
+    @Override
+    public void sort(ArrayController ac)
+    {
+        bubbleSort(ac);
     }
 }

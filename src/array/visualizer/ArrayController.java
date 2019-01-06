@@ -19,7 +19,7 @@ public class ArrayController
         comps = 0;
     }
 
-     void clearMarked()
+    public void clearMarked()
     {
         for(int i = 0; i < length; i++)
             marked.set(i, -5);

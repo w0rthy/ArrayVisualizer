@@ -13,9 +13,9 @@ import static array.visualizer.utils.Swaps.*;
  *
  * @author S630690
  */
-public class SelectionSort {
+public class SelectionSort implements Sort {
        
-    public static void selectionSort(final ArrayController ac) throws Exception {
+    public static void selectionSort(final ArrayController ac) {
         for (int i = 0; i < ac.length - 1; i++) {
             int lowestindex = i;
             for (int j = i + 1; j < ac.length; j++) {
@@ -27,5 +27,18 @@ public class SelectionSort {
             }
             swap(ac, i, lowestindex);
         }
+    }
+
+
+    @Override
+    public String name()
+    {
+        return "Selection Sort";
+    }
+
+    @Override
+    public void sort(ArrayController ac)
+    {
+        selectionSort(ac);
     }
 }

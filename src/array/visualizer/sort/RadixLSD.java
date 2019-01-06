@@ -15,8 +15,16 @@ import java.util.ArrayList;
  *
  * @author S630690
  */
-public class RadixLSD {
-    public static void radixLSDsort_(final ArrayController ac, int radix)throws Exception {
+public class RadixLSD implements Sort {
+
+    private final int radix;
+
+    public RadixLSD(int radix)
+    {
+        this.radix = radix;
+    }
+
+    public static void radixLSDsort_(final ArrayController ac, int radix) {
         clearmarked();
         int highestpower = analyze(ac, radix);
         ArrayList<Integer>[] registers = new ArrayList[radix];
@@ -33,7 +41,7 @@ public class RadixLSD {
         }
     }
     
-    public static void radixLSDsort(final ArrayController ac, int radix)throws Exception{
+    public static void radixLSDsort(final ArrayController ac, int radix){
         clearmarked();
         int highestpower = analyze(ac, radix);
         ArrayList<Integer>[] registers = new ArrayList[radix];
@@ -51,7 +59,7 @@ public class RadixLSD {
         }
     }
     
-    public static void radixLSDsortnd(final ArrayController ac, int radix, int min, int max)throws Exception {
+    public static void radixLSDsortnd(final ArrayController ac, int radix, int min, int max) {
         clearmarked();
         int highestpower = analyze(ac, radix);
         ArrayList<Integer>[] registers = new ArrayList[radix];
@@ -64,5 +72,17 @@ public class RadixLSD {
             //transcribe(registers, array);
             transcribend(ac, registers, min);
         }
+    }
+
+    @Override
+    public String name()
+    {
+        return "Radix LSD Sort (Base " + radix + ")";
+    }
+
+    @Override
+    public void sort(ArrayController ac)
+    {
+        radixLSDsort(ac, radix);
     }
 }

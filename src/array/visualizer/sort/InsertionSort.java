@@ -13,7 +13,7 @@ import static array.visualizer.utils.Swaps.*;
  *
  * @author S630690
  */
-public class InsertionSort {
+public class InsertionSort implements Sort {
     public static void insertionSort(final ArrayController ac) {
         int pos;
         for(int i = 1; i < ac.length; i++){
@@ -41,5 +41,17 @@ public class InsertionSort {
                     pos--;
             }
         }
+    }
+
+    @Override
+    public String name()
+    {
+        return "Insertion Sort";
+    }
+
+    @Override
+    public void sort(ArrayController ac)
+    {
+        insertionSort(ac);
     }
 }

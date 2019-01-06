@@ -17,8 +17,16 @@ import java.util.logging.Logger;
  *
  * @author S630690
  */
-public class TimeSort {
-    public static void timeSort(final ArrayController ac, int magnitude) throws Exception {
+public class TimeSort implements Sort {
+    private final int magnitude;
+
+    public TimeSort(int magnitude)
+    {
+        this.magnitude = magnitude;
+    }
+
+    public static void timeSort(final ArrayController ac, int magnitude)
+    {
         final int A = magnitude;
         next = 0;
         ArrayList<Thread> threads = new ArrayList<Thread>();
@@ -41,7 +49,7 @@ public class TimeSort {
         }
         for(Thread t : threads)
             t.start();
-        Thread.sleep(ac.length * A);
+        sleep(ac.length * A);
         insertionSort(ac, 0, ac.length, 0.2d);
         
     }
@@ -51,5 +59,17 @@ public class TimeSort {
         ac.array[next] = a;
         ac.aa++;
         next++;
+    }
+
+    @Override
+    public String name()
+    {
+        return "Time+Insertion Sort (Mul " + magnitude + ")";
+    }
+
+    @Override
+    public void sort(ArrayController ac)
+    {
+        timeSort(ac, magnitude);
     }
 }

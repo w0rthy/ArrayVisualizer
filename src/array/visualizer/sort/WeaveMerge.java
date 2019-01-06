@@ -17,7 +17,7 @@ import java.util.logging.Logger;
  *
  * @author S630690
  */
-public class WeaveMerge {
+public class WeaveMerge implements Sort {
     static void weaveMerge(final ArrayController ac, int min, int max, int mid){
         try {
             //radixLSDsortnd(2, min, max);
@@ -63,5 +63,17 @@ public class WeaveMerge {
             weaveMergeSort(ac, mid+1, max);//sort the right side
             weaveMerge(ac, min, max, mid);//combines them
         }
+    }
+
+    @Override
+    public String name()
+    {
+        return "Merge+Insertion Sort";
+    }
+
+    @Override
+    public void sort(ArrayController ac)
+    {
+        weaveMergeSort(ac, 0, ac.length - 1);
     }
 }

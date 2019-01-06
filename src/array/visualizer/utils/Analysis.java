@@ -13,7 +13,7 @@ import static array.visualizer.ArrayVisualizer.*;
  * @author S630690
  */
 public class Analysis {
-    public static int analyze(final ArrayController ac, int base)throws Exception {
+    public static int analyze(final ArrayController ac, int base) {
         int a = 0;
         for(int i = 0; i < ac.length; i++){
             ac.marked.set(1, i);
@@ -35,7 +35,7 @@ public class Analysis {
         return a;
     }
     
-    public static int analyzemax(final ArrayController ac) throws Exception{
+    public static int analyzemax(final ArrayController ac) {
         int a = 0;
         for(int i = 0; i < ac.length; i++){
             if(ac.array[i]>a)

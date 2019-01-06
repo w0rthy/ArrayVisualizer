@@ -15,8 +15,15 @@ import java.util.ArrayList;
  *
  * @author S630690
  */
-public class RadixMSD {
-    public static void radixMSDSort(final ArrayController ac, int radix) throws Exception {
+public class RadixMSD implements Sort {
+    private final int radix;
+
+    public RadixMSD(int radix)
+    {
+        this.radix = radix;
+    }
+
+    public static void radixMSDSort(final ArrayController ac, int radix) {
         clearmarked();
         int highestpower = analyze(ac, radix);
         int[] tmp = new int[ac.length];
@@ -24,7 +31,7 @@ public class RadixMSD {
         radixMSDRec(ac, 0, ac.length, radix, highestpower);
     }
     
-    public static void radixMSDRec(final ArrayController ac, int min, int max, int radix, int pow)throws Exception{
+    public static void radixMSDRec(final ArrayController ac, int min, int max, int radix, int pow){
         if(min >= max || pow < 0)
             return;
         ac.marked.set(2, max);
@@ -45,5 +52,17 @@ public class RadixMSD {
             sum+=registers[i].size();
             registers[i].clear();
         }
+    }
+
+    @Override
+    public String name()
+    {
+        return "Radix MSD Sort (Base " + radix + ")";
+    }
+
+    @Override
+    public void sort(ArrayController ac)
+    {
+        radixMSDSort(ac, radix);
     }
 }

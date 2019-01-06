@@ -12,7 +12,7 @@ import static array.visualizer.utils.Swaps.*;
  *
  * @author S630690
  */
-public class CocktailShaker {
+public class CocktailShaker implements Sort {
     public static void cocktailShakerSort(final ArrayController ac){
         int i = 0;
         while(i< ac.length/2){
@@ -28,5 +28,17 @@ public class CocktailShaker {
             }
             i++;
         }
+    }
+
+    @Override
+    public String name()
+    {
+        return "Cocktail Shaker Sort";
+    }
+
+    @Override
+    public void sort(ArrayController ac)
+    {
+        cocktailShakerSort(ac);
     }
 }

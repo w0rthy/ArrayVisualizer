@@ -15,7 +15,7 @@ import java.util.ArrayList;
  * @author S630690
  */
 public class Transcriptions {
-    public static void transcribe(ArrayList<Integer>[] registers, final ArrayController ac)throws Exception {
+    public static void transcribe(ArrayList<Integer>[] registers, final ArrayController ac) {
         int total = 0;
         for(int ai = 0; ai < registers.length; ai++){
             for(int i = 0; i < registers[ai].size(); i++){
@@ -29,7 +29,7 @@ public class Transcriptions {
         }
     }
     
-    public static void transcribenm(ArrayList<Integer>[] registers, int[] array)throws Exception {
+    public static void transcribenm(ArrayList<Integer>[] registers, int[] array) {
         int total = 0;
         for(int ai = 0; ai < registers.length; ai++){
             for(int i = 0; i < registers[ai].size(); i++){
@@ -40,7 +40,7 @@ public class Transcriptions {
         }
     }
     
-    public static void transcribend(final ArrayController ac, ArrayList<Integer>[] registers, int min)throws Exception {
+    public static void transcribend(final ArrayController ac, ArrayList<Integer>[] registers, int min) {
         int total = 0;
         for(int ai = 0; ai < registers.length; ai++){
             for(int i = 0; i < registers[ai].size(); i++){
@@ -54,7 +54,7 @@ public class Transcriptions {
         }
     }
     
-    public static void transcribermsd(final ArrayController ac, ArrayList<Integer>[] registers, int min)throws Exception {
+    public static void transcribermsd(final ArrayController ac, ArrayList<Integer>[] registers, int min) {
         int total = 0;
         for(ArrayList<Integer> ai : registers)
             total+=ai.size();
@@ -70,7 +70,7 @@ public class Transcriptions {
         }
     }
     
-    public static void transcribe(ArrayList<Integer>[] registers, final ArrayController ac, int start) throws Exception {
+    public static void transcribe(ArrayList<Integer>[] registers, final ArrayController ac, int start)  {
         int total = start;
         for(int ai = 0; ai < registers.length; ai++){
             for(int i = 0; i < registers[ai].size(); i++){
@@ -84,7 +84,7 @@ public class Transcriptions {
         }
     }
 
-    public static void fancyTranscribe(final ArrayController ac, ArrayList<Integer>[] registers) throws Exception {
+    public static void fancyTranscribe(final ArrayController ac, ArrayList<Integer>[] registers) {
         int[] tmp = new int[ac.length];
         boolean[] tmpwrite = new boolean[ac.length];
         int radix = registers.length;

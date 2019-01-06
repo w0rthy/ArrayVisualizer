@@ -6,8 +6,15 @@ import static array.visualizer.utils.Analysis.*;
 import static array.visualizer.ArrayVisualizer.*;
 import static array.visualizer.utils.Swaps.*;
 
-public class RadixLSDInPlace {
-    public static void inPlaceRadixLSDSort(final ArrayController ac, int radix)throws Exception{
+public class RadixLSDInPlace implements Sort {
+    private final int radix;
+
+    public RadixLSDInPlace(int radix)
+    {
+        this.radix = radix;
+    }
+
+    public static void inPlaceRadixLSDSort(final ArrayController ac, int radix){
         int pos = 0;
         int[] vregs = new int[radix-1];
         int maxpower = analyze(ac, radix);
@@ -31,5 +38,17 @@ public class RadixLSDInPlace {
             }
                 
         }
+    }
+
+    @Override
+    public String name()
+    {
+        return "Radix LSD In-Place Sort (Base " + radix + ")";
+    }
+
+    @Override
+    public void sort(ArrayController ac)
+    {
+        inPlaceRadixLSDSort(ac, radix);
     }
 }

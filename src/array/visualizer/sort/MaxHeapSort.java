@@ -4,7 +4,7 @@ import array.visualizer.ArrayController;
 
 import static array.visualizer.utils.Swaps.*;
 
-public class HeapSort {
+public class MaxHeapSort implements Sort {
     
     static int SLP = 1;
     
@@ -85,6 +85,15 @@ public class HeapSort {
         }
     }
 
-    static void minheapsort(){
+    @Override
+    public String name()
+    {
+        return "Max Heap Sort";
+    }
+
+    @Override
+    public void sort(ArrayController ac)
+    {
+        maxheapsort(ac);
     }
 }

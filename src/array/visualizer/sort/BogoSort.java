@@ -5,7 +5,7 @@ import array.visualizer.ArrayController;
 import static array.visualizer.ArrayVisualizer.*;
 import static array.visualizer.utils.Swaps.*;
 
-public class BogoSort {
+public class BogoSort implements Sort {
     public static boolean bogoIsSorted(final ArrayController ac){
         for(int i = 1; i < ac.length; i++){
             ac.comps++;
@@ -30,5 +30,17 @@ public class BogoSort {
     
     public static void bogobogoSort(){
         
+    }
+
+    @Override
+    public String name()
+    {
+        return "Bogo Sort";
+    }
+
+    @Override
+    public void sort(ArrayController ac)
+    {
+        bogoSort(ac);
     }
 }
