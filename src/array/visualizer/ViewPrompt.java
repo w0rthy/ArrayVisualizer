@@ -22,12 +22,12 @@ public class ViewPrompt extends javax.swing.JFrame implements AAFrame {
         setAlwaysOnTop(true);
         setUndecorated(true);
         initComponents();
-        setLocation(f.getX()+(f.getWidth()-getWidth())/2,f.getY()+(f.getHeight()-getHeight())/2);
+        setLocation(f.getX()+(f.getWidth()-getWidth())/2, f.getY()+(f.getHeight()-getHeight())/2);
         setVisible(true);
     }
     
     public void reposition(){
-        setLocation(f.getX()+(f.getWidth()-getWidth())/2,f.getY()+(f.getHeight()-getHeight())/2);
+        setLocation(f.getX()+(f.getWidth()-getWidth())/2, f.getY()+(f.getHeight()-getHeight())/2);
     }
 
     /**

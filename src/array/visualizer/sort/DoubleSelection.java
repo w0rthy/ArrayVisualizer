@@ -4,6 +4,8 @@
  */
 package array.visualizer.sort;
 
+import array.visualizer.ArrayController;
+
 import static array.visualizer.ArrayVisualizer.*;
 import static array.visualizer.utils.Swaps.*;
 
@@ -12,26 +14,26 @@ import static array.visualizer.utils.Swaps.*;
  * @author S630690
  */
 public class DoubleSelection {
-    public static void doubleSelectionSort(int[] arr) {
+    public static void doubleSelectionSort(final ArrayController ac) {
         
         int left = 0;
-        int right = arr.length-1;
+        int right = ac.length-1;
         int smallest = 0;
         int biggest = 0;
         while(left<=right){
             for(int i = left; i <= right; i++){
-                marked.set(1,i);
-                if(arr[i]>arr[biggest])
+                ac.marked.set(1, i);
+                if(ac.array[i]>ac.array[biggest])
                     biggest = i;
-                if(arr[i]<arr[smallest])
+                if(ac.array[i]<ac.array[smallest])
                     smallest = i;
-                comps+=2;
+                ac.comps+=2;
                 sleep(0.02);
             }
             if(biggest==left)
                 biggest = smallest;
-            swap(arr, left, smallest, 0.01);
-            swap(arr, right, biggest, 0.01);
+            swap(ac, left, smallest, 0.01);
+            swap(ac, right, biggest, 0.01);
             left++;
             right--;
             smallest = left;

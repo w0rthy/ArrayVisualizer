@@ -4,6 +4,8 @@
  */
 package array.visualizer.utils;
 
+import array.visualizer.ArrayController;
+
 import static array.visualizer.ArrayVisualizer.*;
 
 /**
@@ -11,35 +13,35 @@ import static array.visualizer.ArrayVisualizer.*;
  * @author S630690
  */
 public class Analysis {
-    public static int analyze(int base)throws Exception {
+    public static int analyze(final ArrayController ac, int base)throws Exception {
         int a = 0;
-        for(int i = 0; i < array.length; i++){
-            marked.set(1, i);
-            aa++;
+        for(int i = 0; i < ac.length; i++){
+            ac.marked.set(1, i);
+            ac.aa++;
             sleep(1);
-            if((int)(Math.log(array[i])/Math.log(base))>a){
-                a=(int)(Math.log(array[i])/Math.log(base));
+            if((int)(Math.log(ac.array[i])/Math.log(base))>a){
+                a=(int)(Math.log(ac.array[i])/Math.log(base));
             }
         }
         return a;
     }
 
-    public static int analyze(int[] ar, int base) {
+    public static int analyze_sneaky(int[] array, int base) {
         int a = 0;
-        for(int i = 0; i < ar.length; i++)
-            if((int)(Math.log(ar[i])/Math.log(base))>a){
-                a=(int)(Math.log(ar[i])/Math.log(base));
+        for(int i = 0; i < array.length; i++)
+            if((int)(Math.log(array[i])/Math.log(base))>a){
+                a=(int)(Math.log(array[i])/Math.log(base));
             }
         return a;
     }
     
-    public static int analyzemax() throws Exception{
+    public static int analyzemax(final ArrayController ac) throws Exception{
         int a = 0;
-        for(int i = 0; i < array.length; i++){
-            if(array[i]>a)
-                a=array[i];
-            marked.set(1, i);
-            aa++;
+        for(int i = 0; i < ac.length; i++){
+            if(ac.array[i]>a)
+                a=ac.array[i];
+            ac.marked.set(1, i);
+            ac.aa++;
             sleep(1.0);
         }
         return a;

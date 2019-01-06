@@ -4,23 +4,23 @@
  */
 package array.visualizer.sort;
 
-import static array.visualizer.ArrayVisualizer.*;
+import array.visualizer.ArrayController;
 
 /**
  *
  * @author S630690
  */
 public class BitonicSort {
-    public static void bitonicSort(){
-        bitonicMerge(0,array.length,true);
+    public static void bitonicSort(final ArrayController ac){
+        bitonicMerge(ac, 0, ac.length, true);
     }
     
-    public static void bitonicMerge(int start, int end, boolean dir){
+    public static void bitonicMerge(final ArrayController ac, int start, int end, boolean dir){
         int mid = (start+end)/2;
         if(start==mid)
             return;
-        bitonicMerge(start, mid, true);
-        bitonicMerge(mid, end, false);
+        bitonicMerge(ac, start, mid, true);
+        bitonicMerge(ac, mid, end, false);
         
         int low = start;
         int high = end;

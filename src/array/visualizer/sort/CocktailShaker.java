@@ -4,7 +4,8 @@
  */
 package array.visualizer.sort;
 
-import static array.visualizer.ArrayVisualizer.*;
+import array.visualizer.ArrayController;
+
 import static array.visualizer.utils.Swaps.*;
 
 /**
@@ -12,18 +13,18 @@ import static array.visualizer.utils.Swaps.*;
  * @author S630690
  */
 public class CocktailShaker {
-    public static void cocktailShakerSort(){
+    public static void cocktailShakerSort(final ArrayController ac){
         int i = 0;
-        while(i<array.length/2){
-            for(int j = i; j < array.length-i-1; j++){
-                comps++;
-                if(array[j]>array[j+1])
-                    swap(array, j, j+1, 0.022);
+        while(i< ac.length/2){
+            for(int j = i; j < ac.length-i-1; j++){
+                ac.comps++;
+                if(ac.array[j]>ac.array[j+1])
+                    swap(ac, j, j+1, 0.022);
             }
-            for(int j = array.length-i-1; j > i; j--){
-                comps++;
-                if(array[j]<array[j-1])
-                    swap(array, j, j-1, 0.022);
+            for(int j = ac.length-i-1; j > i; j--){
+                ac.comps++;
+                if(ac.array[j]<ac.array[j-1])
+                    swap(ac, j, j-1, 0.022);
             }
             i++;
         }

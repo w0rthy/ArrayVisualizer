@@ -4,6 +4,8 @@
  */
 package array.visualizer.sort;
 
+import array.visualizer.ArrayController;
+
 import static array.visualizer.ArrayVisualizer.*;
 import static array.visualizer.utils.Swaps.*;
 
@@ -12,19 +14,19 @@ import static array.visualizer.utils.Swaps.*;
  * @author S630690
  */
 public class BubbleSort {
-    public static void bubbleSort() throws Exception{
-        for(int i = array.length-1; i > 0; i--){
+    public static void bubbleSort(final ArrayController ac) throws Exception{
+        for(int i = ac.length-1; i > 0; i--){
             for(int j = 0; j < i; j++){
                 sleep(0.005);
-                if(array[j]>array[j+1]){
-                    comps++;
-                    swap(array, j, j+1,0.01);
+                if(ac.array[j]>ac.array[j+1]){
+                    ac.comps++;
+                    swap(ac, j, j+1, 0.01);
                 }else{
-                    marked.set(1,j+1);
-                    marked.set(2,-5);
+                    ac.marked.set(1, j+1);
+                    ac.marked.set(2, -5);
                 }
             }
-            //marked.set(0,i);
+            //marked.set(0, i);
         }
     }
 }

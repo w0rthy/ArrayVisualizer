@@ -24,14 +24,14 @@ public class UtilFrame extends javax.swing.JFrame {
         this.f = f;
         setUndecorated(true);
         initComponents();
-        setLocation(f.getX()+f.getWidth(),f.getY()+29);
+        setLocation(f.getX()+f.getWidth(), f.getY()+29);
         setAlwaysOnTop(true);
         setVisible(true);
     }
     
     public void reposition(){
         toFront();
-        setLocation(Math.min((int)Toolkit.getDefaultToolkit().getScreenSize().getWidth()-getWidth(),f.getX()+f.getWidth()),f.getY()+29);
+        setLocation(Math.min((int)Toolkit.getDefaultToolkit().getScreenSize().getWidth()-getWidth(), f.getX()+f.getWidth()), f.getY()+29);
         if(v!= null && v.isVisible())
             v.reposition();
     }

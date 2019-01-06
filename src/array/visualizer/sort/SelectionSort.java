@@ -4,6 +4,8 @@
  */
 package array.visualizer.sort;
 
+import array.visualizer.ArrayController;
+
 import static array.visualizer.ArrayVisualizer.*;
 import static array.visualizer.utils.Swaps.*;
 
@@ -13,17 +15,17 @@ import static array.visualizer.utils.Swaps.*;
  */
 public class SelectionSort {
        
-    public static void selectionSort() throws Exception {
-        for (int i = 0; i < array.length - 1; i++) {
+    public static void selectionSort(final ArrayController ac) throws Exception {
+        for (int i = 0; i < ac.length - 1; i++) {
             int lowestindex = i;
-            for (int j = i + 1; j < array.length; j++) {
-                if (array[j] < array[lowestindex]){
+            for (int j = i + 1; j < ac.length; j++) {
+                if (ac.array[j] < ac.array[lowestindex]){
                     lowestindex = j;
                 }
                 sleep(0.01);
-                comps++;
+                ac.comps++;
             }
-            swap(array, i, lowestindex);
+            swap(ac, i, lowestindex);
         }
     }
 }

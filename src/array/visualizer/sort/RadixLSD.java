@@ -4,6 +4,8 @@
  */
 package array.visualizer.sort;
 
+import array.visualizer.ArrayController;
+
 import static array.visualizer.ArrayVisualizer.*;
 import static array.visualizer.utils.Analysis.*;
 import static array.visualizer.utils.Transcriptions.*;
@@ -14,53 +16,53 @@ import java.util.ArrayList;
  * @author S630690
  */
 public class RadixLSD {
-    public static void radixLSDsort(int[] a, int radix)throws Exception {
+    public static void radixLSDsort_(final ArrayController ac, int radix)throws Exception {
         clearmarked();
-        int highestpower = analyze(a, radix);
+        int highestpower = analyze(ac, radix);
         ArrayList<Integer>[] registers = new ArrayList[radix];
         for(int i = 0; i < radix; i++)
             registers[i] = new ArrayList<Integer>();
         for(int p = 0; p <= highestpower; p++){
-            for(int i = 0; i < a.length; i++){
-                marked.set(1, i);
+            for(int i = 0; i < ac.length; i++){
+                ac.marked.set(1, i);
                 sleep(1);
-                registers[getDigit(a[i],p,radix)].add(a[i]);
+                registers[getDigit(ac.array[i], p, radix)].add(ac.array[i]);
             }
-            //transcribe(registers,array);
-            transcribe(registers, a);
+            //transcribe(registers, array);
+            transcribe(registers, ac);
         }
     }
     
-    public static void radixLSDsort(int radix)throws Exception{
+    public static void radixLSDsort(final ArrayController ac, int radix)throws Exception{
         clearmarked();
-        int highestpower = analyze(array,radix);
+        int highestpower = analyze(ac, radix);
         ArrayList<Integer>[] registers = new ArrayList[radix];
         for(int i = 0; i < radix; i++)
             registers[i] = new ArrayList<Integer>();
         for(int p = 0; p <= highestpower; p++){
-            for(int i = 0; i < array.length; i++){
-                aa++;
-                marked.set(1, i);
+            for(int i = 0; i < ac.length; i++){
+                ac.aa++;
+                ac.marked.set(1, i);
                 if(i%2==0)
                     sleep(1);
-                registers[getDigit(array[i],p,radix)].add(array[i]);
+                registers[getDigit(ac.array[i], p, radix)].add(ac.array[i]);
             }
-            fancyTranscribe(registers);
+            fancyTranscribe(ac, registers);
         }
     }
     
-    public static void radixLSDsortnd(int radix, int min, int max)throws Exception {
+    public static void radixLSDsortnd(final ArrayController ac, int radix, int min, int max)throws Exception {
         clearmarked();
-        int highestpower = analyze(array, radix);
+        int highestpower = analyze(ac, radix);
         ArrayList<Integer>[] registers = new ArrayList[radix];
         for(int i = 0; i < radix; i++)
             registers[i] = new ArrayList<Integer>();
         for(int p = 0; p <= highestpower; p++){
             for(int i = min; i < max; i++){
-                registers[getDigit(array[i],p,radix)].add(array[i]);
+                registers[getDigit(ac.array[i], p, radix)].add(ac.array[i]);
             }
-            //transcribe(registers,array);
-            transcribend(registers, min);
+            //transcribe(registers, array);
+            transcribend(ac, registers, min);
         }
     }
 }

@@ -4,6 +4,8 @@
  */
 package array.visualizer.sort;
 
+import array.visualizer.ArrayController;
+
 import static array.visualizer.ArrayVisualizer.*;
 
 /**
@@ -11,18 +13,18 @@ import static array.visualizer.ArrayVisualizer.*;
  * @author S630690
  */
 public class MergeSortOOP {
-    public static void mergeSortOP()throws Exception {
+    public static void mergeSortOP(final ArrayController ac)throws Exception {
         int start = 0;
-        int end = array.length;
+        int end = ac.length;
         int mid = (end+start)/2;
-        mergeOP(start,mid,end);
+        mergeOP(ac, start, mid, end);
     }
 
-    public static void mergeOP(int start, int mid, int end)throws Exception{
+    public static void mergeOP(final ArrayController ac, int start, int mid, int end)throws Exception{
         if(start==mid)
             return;
-        mergeOP(start, (mid+start)/2, mid);
-        mergeOP(mid, (mid+end)/2, end);
+        mergeOP(ac, start, (mid+start)/2, mid);
+        mergeOP(ac, mid, (mid+end)/2, end);
         
         int[] tmp = new int[end-start];
         
@@ -32,38 +34,38 @@ public class MergeSortOOP {
             if(low >= mid && high >= end)
                 break;
             if(low < mid && high >= end){
-                tmp[nxt]=array[low];
+                tmp[nxt]=ac.array[low];
                 low++;
-                comps+=2;
+                ac.comps+=2;
             }
             else if(low >= mid && high < end){
-                tmp[nxt]=array[high];
+                tmp[nxt]=ac.array[high];
                 high++;
-                comps+=2;
+                ac.comps+=2;
             }
-            else if(array[low]<array[high]){
-                tmp[nxt]=array[low];
+            else if(ac.array[low]<ac.array[high]){
+                tmp[nxt]=ac.array[low];
                 low++;
-                comps+=3;
+                ac.comps+=3;
             }
             else{
-                tmp[nxt]=array[high];
+                tmp[nxt]=ac.array[high];
                 high++;
-                comps+=3;
+                ac.comps+=3;
             }
-            aa++;
-            marked.set(1,low);
-            marked.set(2, high);
+            ac.aa++;
+            ac.marked.set(1, low);
+            ac.marked.set(2, high);
             //if(end-start>=array.length/10)
                 sleep(0.65);
         }
         //System.arraycopy(tmp, 0, array, start, tmp.length);
-        marked.set(2, -5);
+        ac.marked.set(2, -5);
         for(int i = 0; i < tmp.length; i++){
-            array[start+i]=tmp[i];
-            aa++;
-            marked.set(1, start+i);
-            if(end-start>=array.length/100)
+            ac.array[start+i]=tmp[i];
+            ac.aa++;
+            ac.marked.set(1, start+i);
+            if(end-start>= ac.length/100)
                 sleep(0.5);
         }
     }

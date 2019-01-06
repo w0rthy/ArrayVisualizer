@@ -24,11 +24,11 @@ public class SortPrompt extends javax.swing.JFrame implements AAFrame{
         initComponents();
         jList2.setListData(ComparativeSorts);
         jList1.setListData(DistributiveSorts);
-        setLocation(f.getX()+(f.getWidth()-getWidth())/2,f.getY()+(f.getHeight()-getHeight())/2);
+        setLocation(f.getX()+(f.getWidth()-getWidth())/2, f.getY()+(f.getHeight()-getHeight())/2);
         setVisible(true);
     }
     public void reposition(){
-        setLocation(f.getX()+(f.getWidth()-getWidth())/2,f.getY()+(f.getHeight()-getHeight())/2);
+        setLocation(f.getX()+(f.getWidth()-getWidth())/2, f.getY()+(f.getHeight()-getHeight())/2);
     }
     
 
