@@ -2,10 +2,12 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package array.visualizer;
+package array.visualizer.sort;
+
+import array.visualizer.ArrayVisualizer;
 
 import static array.visualizer.ArrayVisualizer.*;
-import static array.visualizer.Swaps.*;
+import static array.visualizer.utils.Swaps.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -46,7 +48,7 @@ public class MergeSort {
                 
 	}
     
-    static void mergeSort(int min,int max){
+    public static void mergeSort(int min, int max){
 	if(max-min==0){//only one element.
 		//no swap
 	}

@@ -2,11 +2,10 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package array.visualizer;
+package array.visualizer.utils;
 
 import static array.visualizer.ArrayVisualizer.*;
-import static array.visualizer.Swaps.*;
-import static array.visualizer.Analysis.*;
+
 import java.util.ArrayList;
 
 /**
@@ -98,7 +97,7 @@ public class Transcriptions {
                 aa++;
                 tmpwrite[pos] = true;
             }
-            marked.set(register,pos);
+            marked.set(register, pos);
         }
         for(int i = 0; i < tmpwrite.length; i++)
             if(tmpwrite[i]==false){

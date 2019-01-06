@@ -2,10 +2,10 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package array.visualizer;
+package array.visualizer.sort;
 
 import static array.visualizer.ArrayVisualizer.*;
-import static array.visualizer.Swaps.*;
+import static array.visualizer.utils.Swaps.*;
 
 /**
  *

@@ -1,8 +1,8 @@
-package array.visualizer;
+package array.visualizer.sort;
 
-import static array.visualizer.Analysis.*;
+import static array.visualizer.utils.Analysis.*;
 import static array.visualizer.ArrayVisualizer.*;
-import static array.visualizer.Swaps.*;
+import static array.visualizer.utils.Swaps.*;
 
 public class RadixLSDInPlace {
     public static void inPlaceRadixLSDSort(int radix)throws Exception{

@@ -1,4 +1,4 @@
-package array.visualizer;
+package array.visualizer.utils;
 
 import static array.visualizer.ArrayVisualizer.*;
 

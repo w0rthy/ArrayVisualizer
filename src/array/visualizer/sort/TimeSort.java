@@ -2,11 +2,13 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package array.visualizer;
+package array.visualizer.sort;
 
+
+import array.visualizer.ArrayVisualizer;
 
 import static array.visualizer.ArrayVisualizer.*;
-import static array.visualizer.InsertionSort.*;
+import static array.visualizer.sort.InsertionSort.*;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;

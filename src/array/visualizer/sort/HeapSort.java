@@ -1,7 +1,7 @@
-package array.visualizer;
+package array.visualizer.sort;
 
 import static array.visualizer.ArrayVisualizer.*;
-import static array.visualizer.Swaps.*;
+import static array.visualizer.utils.Swaps.*;
 
 public class HeapSort {
     
@@ -76,7 +76,7 @@ public class HeapSort {
         }
     }
     
-    static void maxheapsort(){
+    public static void maxheapsort(){
         maxheapifyrec(0,true);
         for(int i = array.length-1; i > 0; i--){
             swap(array, 0, i, SLP);

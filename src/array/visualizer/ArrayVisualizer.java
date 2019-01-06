@@ -1,7 +1,8 @@
 package array.visualizer;
 
+import array.visualizer.sort.RadixLSDInPlace;
+
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Image;
@@ -11,29 +12,26 @@ import javax.sound.midi.MidiSystem;
 import javax.sound.midi.Synthesizer;
 import javax.swing.JFrame;
 
-import static array.visualizer.Swaps.*;
-import static array.visualizer.BitonicSort.*;
-import static array.visualizer.BubbleSort.*;
-import static array.visualizer.CocktailShaker.*;
-import static array.visualizer.CountingSort.*;
-import static array.visualizer.DoubleSelection.*;
-import static array.visualizer.GravitySort.*;
-import static array.visualizer.InsertionSort.*;
-import static array.visualizer.MergeSort.*;
-import static array.visualizer.MergeSortOOP.*;
-import static array.visualizer.QuickSort.*;
-import static array.visualizer.RadixLSD.*;
-import static array.visualizer.RadixMSD.*;
-import static array.visualizer.Searches.*;
-import static array.visualizer.SelectionSort.*;
-import static array.visualizer.ShatterSorts.*;
-import static array.visualizer.Swaps.*;
-import static array.visualizer.TimeSort.*;
-import static array.visualizer.WeaveMerge.*;
-import static array.visualizer.RadixLSDInPlace.*;
-import static array.visualizer.BogoSort.*;
-import static array.visualizer.HeapSort.*;
-import static array.visualizer.ShellSort.*;
+import static array.visualizer.utils.Swaps.*;
+import static array.visualizer.sort.BubbleSort.*;
+import static array.visualizer.sort.CocktailShaker.*;
+import static array.visualizer.sort.CountingSort.*;
+import static array.visualizer.sort.DoubleSelection.*;
+import static array.visualizer.sort.GravitySort.*;
+import static array.visualizer.sort.InsertionSort.*;
+import static array.visualizer.sort.MergeSort.*;
+import static array.visualizer.sort.MergeSortOOP.*;
+import static array.visualizer.sort.QuickSort.*;
+import static array.visualizer.sort.RadixLSD.*;
+import static array.visualizer.sort.RadixMSD.*;
+import static array.visualizer.sort.SelectionSort.*;
+import static array.visualizer.sort.ShatterSorts.*;
+import static array.visualizer.sort.TimeSort.*;
+import static array.visualizer.sort.WeaveMerge.*;
+import static array.visualizer.sort.RadixLSDInPlace.*;
+import static array.visualizer.sort.BogoSort.*;
+import static array.visualizer.sort.HeapSort.*;
+import static array.visualizer.sort.ShellSort.*;
 import java.awt.BasicStroke;
 import java.awt.Graphics2D;
 import java.awt.Polygon;
@@ -45,15 +43,15 @@ import javax.swing.JOptionPane;
 
 public class ArrayVisualizer {
 
-    static final int [] array = new int[1000];
+    public static final int [] array = new int[1000];
     static final JFrame window = new JFrame();
     
     static String heading = "";
-    static final ArrayList<Integer> marked = new ArrayList();
+    public static final ArrayList<Integer> marked = new ArrayList();
     static int frames;
-    static long aa = 0;
+    public static long aa = 0;
     static int snd = 0;
-    static long comps = 0;
+    public static long comps = 0;
     static long nanos;
     static Font fon = new Font("TimesRoman",Font.PLAIN,(int)(640/1280.0*25));
     
@@ -157,7 +155,7 @@ public class ArrayVisualizer {
             marked.add(-5);
         rianr(array);
         
-        window.setSize(new Dimension(640,480));
+        window.setSize(640, 480);
         window.setLocation(0, 0);
         window.setVisible(true);
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

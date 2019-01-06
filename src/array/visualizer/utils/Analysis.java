@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package array.visualizer;
+package array.visualizer.utils;
 
 import static array.visualizer.ArrayVisualizer.*;
 
@@ -23,7 +23,7 @@ public class Analysis {
         }
         return a;
     }
-    
+
     public static int analyze(int[] ar, int base) {
         int a = 0;
         for(int i = 0; i < ar.length; i++)
@@ -38,7 +38,7 @@ public class Analysis {
         for(int i = 0; i < array.length; i++){
             if(array[i]>a)
                 a=array[i];
-            marked.set(1,i);
+            marked.set(1, i);
             aa++;
             sleep(1.0);
         }

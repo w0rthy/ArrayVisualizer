@@ -1,7 +1,7 @@
-package array.visualizer;
+package array.visualizer.sort;
 
 import static array.visualizer.ArrayVisualizer.*;
-import static array.visualizer.Swaps.*;
+import static array.visualizer.utils.Swaps.*;
 
 public class BogoSort {
     public static boolean bogoIsSorted(int[] arr){
