@@ -6,6 +6,8 @@ package array.visualizer;
 
 import static array.visualizer.ArrayVisualizer.*;
 import java.awt.Toolkit;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
@@ -24,14 +26,14 @@ public class UtilFrame extends javax.swing.JFrame {
         this.f = f;
         setUndecorated(true);
         initComponents();
-        setLocation(f.getX()+f.getWidth(),f.getY()+29);
+        setLocation(f.getX()+f.getWidth(), f.getY()+29);
         setAlwaysOnTop(true);
         setVisible(true);
     }
     
     public void reposition(){
         toFront();
-        setLocation(Math.min((int)Toolkit.getDefaultToolkit().getScreenSize().getWidth()-getWidth(),f.getX()+f.getWidth()),f.getY()+29);
+        setLocation(Math.min((int)Toolkit.getDefaultToolkit().getScreenSize().getWidth()-getWidth(), f.getX()+f.getWidth()), f.getY()+29);
         if(v!= null && v.isVisible())
             v.reposition();
     }

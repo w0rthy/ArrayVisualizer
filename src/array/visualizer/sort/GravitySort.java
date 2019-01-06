@@ -2,21 +2,23 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package array.visualizer;
+package array.visualizer.sort;
+
+import array.visualizer.ArrayController;
 
 import static array.visualizer.ArrayVisualizer.*;
-import static array.visualizer.Analysis.*;
+import static array.visualizer.utils.Analysis.*;
 
 /**
  *
  * @author S630690
  */
-public class GravitySort {
-    public static void gravitySort() throws Exception {
-        int max = analyzemax();
-        int[][] abacus = new int[array.length][max];
-        for(int i = 0; i < array.length; i++){
-            for(int j = 0; j < array[i]; j++)
+public class GravitySort implements Sort {
+    public static void gravitySort(final ArrayController ac) {
+        int max = analyzemax(ac);
+        int[][] abacus = new int[ac.length][max];
+        for(int i = 0; i < ac.length; i++){
+            for(int j = 0; j < ac.array[i]; j++)
                 abacus[i][abacus[0].length-j-1] = 1;
         }
         //apply gravity
@@ -30,7 +32,7 @@ public class GravitySort {
                     if(abacus[droppos][i]==0){
                         abacus[j][i]=0;
                         abacus[droppos][i]=1;
-                        aa+=2;
+                        ac.aa+=2;
                     }
                 }
             }
@@ -40,11 +42,23 @@ public class GravitySort {
                 count = 0;
                 for(int y = 0; y < abacus[0].length; y++)
                     count+=abacus[x][y];
-                array[x] = count;
+                ac.array[x] = count;
                 sleep(0.002);
             }
-            marked.set(1,array.length-i-1);
+            ac.marked.set(1, ac.length-i-1);
             sleep(2);
         }
+    }
+
+    @Override
+    public String name()
+    {
+        return "Gravity Sort";
+    }
+
+    @Override
+    public void sort(ArrayController ac)
+    {
+        gravitySort(ac);
     }
 }
