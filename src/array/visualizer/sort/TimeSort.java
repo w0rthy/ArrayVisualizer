@@ -27,11 +27,11 @@ public class TimeSort implements Sort
         this.magnitude = magnitude;
     }
 
-    public static void timeSort(final ArrayController ac, int magnitude)
+    private static void timeSort(final ArrayController ac, int magnitude)
     {
         final int A = magnitude;
         next = 0;
-        ArrayList<Thread> threads = new ArrayList<Thread>();
+        ArrayList<Thread> threads = new ArrayList<>();
         final int[] tmp = ac.array.clone();
         for (int i = 0; i < ac.length; i++)
         {
@@ -55,15 +55,17 @@ public class TimeSort implements Sort
             });
         }
         for (Thread t : threads)
+        {
             t.start();
+        }
         sleep(ac.length * A);
         insertionSort(ac, 0, ac.length, 0.2d);
 
     }
 
-    static volatile int next = 0;
+    private static volatile int next = 0;
 
-    public static synchronized void report(final ArrayController ac, int a)
+    private static synchronized void report(final ArrayController ac, int a)
     {
         ac.marked.set(0, next);
         ac.array[next] = a;

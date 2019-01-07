@@ -14,7 +14,7 @@ import static array.visualizer.utils.Analysis.*;
  */
 public class CountingSort implements Sort
 {
-    public static void countingSort(final ArrayController ac)
+    private static void countingSort(final ArrayController ac)
     {
         int max = analyzemax(ac);
         int[] counts = new int[max + 1];
@@ -29,7 +29,9 @@ public class CountingSort implements Sort
         for (int i = 0; i < ac.length; i++)
         {
             if (counts[x] == 0)
+            {
                 x++;
+            }
             ac.array[i] = x;
             ac.aa++;
             counts[x]--;

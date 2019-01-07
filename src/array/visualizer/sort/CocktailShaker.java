@@ -13,7 +13,7 @@ import static array.visualizer.utils.Swaps.*;
  */
 public class CocktailShaker implements Sort
 {
-    public static void cocktailShakerSort(final ArrayController ac)
+    private static void cocktailShakerSort(final ArrayController ac)
     {
         int i = 0;
         while (i < ac.length / 2)
@@ -22,13 +22,17 @@ public class CocktailShaker implements Sort
             {
                 ac.comps++;
                 if (ac.array[j] > ac.array[j + 1])
+                {
                     swap(ac, j, j + 1, 0.022);
+                }
             }
             for (int j = ac.length - i - 1; j > i; j--)
             {
                 ac.comps++;
                 if (ac.array[j] < ac.array[j - 1])
+                {
                     swap(ac, j, j - 1, 0.022);
+                }
             }
             i++;
         }

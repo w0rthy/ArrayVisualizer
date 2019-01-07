@@ -46,26 +46,42 @@ public class Swaps
     public static void swapUpTo(final ArrayController ac, int pos, int to, double pause)
     {
         if (to - pos > 0)
+        {
             for (int i = pos; i < to; i++)
+            {
                 swap(ac, i, i + 1, pause);
-        else
+            }
+        } else
+        {
             for (int i = pos; i > to; i--)
+            {
                 swap(ac, i, i - 1, pause);
+            }
+        }
     }
 
     public static void swapUpToNM(final ArrayController ac, int pos, int to, double pause)
     {
         if (to - pos > 0)
+        {
             for (int i = pos; i < to; i++)
+            {
                 swapnm(ac, i, i + 1, pause);
-        else
+            }
+        } else
+        {
             for (int i = pos; i > to; i--)
+            {
                 swapnm(ac, i, i - 1, pause);
+            }
+        }
     }
 
     public static void swapUp(final ArrayController ac, int pos, double pause)
     {
         for (int i = pos; i < ac.length; i++)
+        {
             swap(ac, i, i + 1, pause);
+        }
     }
 }

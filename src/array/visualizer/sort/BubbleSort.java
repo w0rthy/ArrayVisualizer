@@ -14,7 +14,7 @@ import static array.visualizer.utils.Swaps.*;
  */
 public class BubbleSort implements Sort
 {
-    public static void bubbleSort(final ArrayController ac)
+    private static void bubbleSort(final ArrayController ac)
     {
         for (int i = ac.length - 1; i > 0; i--)
         {

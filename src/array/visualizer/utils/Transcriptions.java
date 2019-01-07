@@ -18,48 +18,48 @@ public class Transcriptions
     public static void transcribe(ArrayList<Integer>[] registers, final ArrayController ac)
     {
         int total = 0;
-        for (int ai = 0; ai < registers.length; ai++)
+        for (ArrayList<Integer> register : registers)
         {
-            for (int i = 0; i < registers[ai].size(); i++)
+            for (Integer aRegister : register)
             {
                 sleep(1);
-                ac.array[total] = registers[ai].get(i);
+                ac.array[total] = aRegister;
                 ac.marked.set(1, total);
                 total++;
                 ac.aa++;
             }
-            registers[ai].clear();
+            register.clear();
         }
     }
 
     public static void transcribenm(ArrayList<Integer>[] registers, int[] array)
     {
         int total = 0;
-        for (int ai = 0; ai < registers.length; ai++)
+        for (ArrayList<Integer> register : registers)
         {
-            for (int i = 0; i < registers[ai].size(); i++)
+            for (Integer aRegister : register)
             {
-                array[total] = registers[ai].get(i);
+                array[total] = aRegister;
                 total++;
             }
-            registers[ai].clear();
+            register.clear();
         }
     }
 
     public static void transcribend(final ArrayController ac, ArrayList<Integer>[] registers, int min)
     {
         int total = 0;
-        for (int ai = 0; ai < registers.length; ai++)
+        for (ArrayList<Integer> register : registers)
         {
-            for (int i = 0; i < registers[ai].size(); i++)
+            for (int i = 0; i < register.size(); i++)
             {
                 sleep((min + i) % 5 / 4);
-                ac.array[total + min] = registers[ai].get(i);
+                ac.array[total + min] = register.get(i);
                 ac.marked.set(1, total + min);
                 total++;
                 ac.aa++;
             }
-            registers[ai].clear();
+            register.clear();
         }
     }
 
@@ -67,7 +67,9 @@ public class Transcriptions
     {
         int total = 0;
         for (ArrayList<Integer> ai : registers)
+        {
             total += ai.size();
+        }
         int tmp = 0;
         for (int ai = registers.length - 1; ai >= 0; ai--)
         {
@@ -85,17 +87,17 @@ public class Transcriptions
     public static void transcribe(ArrayList<Integer>[] registers, final ArrayController ac, int start)
     {
         int total = start;
-        for (int ai = 0; ai < registers.length; ai++)
+        for (ArrayList<Integer> register : registers)
         {
-            for (int i = 0; i < registers[ai].size(); i++)
+            for (Integer aRegister : register)
             {
                 sleep(1);
-                ac.array[total] = registers[ai].get(i);
+                ac.array[total] = aRegister;
                 ac.marked.set(1, total);
                 total++;
                 ac.aa++;
             }
-            registers[ai].clear();
+            register.clear();
         }
     }
 
@@ -109,9 +111,11 @@ public class Transcriptions
         {
             int register = i % radix;
             if (register == 0)
+            {
                 sleep(radix);//radix
+            }
             int pos = (int) (((double) register * ((double) tmp.length / radix)) + ((double) i / radix));
-            if (tmpwrite[pos] == false)
+            if (!tmpwrite[pos])
             {
                 ac.array[pos] = tmp[pos];
                 ac.aa++;
@@ -120,11 +124,13 @@ public class Transcriptions
             ac.marked.set(register, pos);
         }
         for (int i = 0; i < tmpwrite.length; i++)
-            if (tmpwrite[i] == false)
+        {
+            if (!tmpwrite[i])
             {
                 ac.array[i] = tmp[i];
                 ac.aa++;
             }
+        }
         clearmarked();
     }
 }

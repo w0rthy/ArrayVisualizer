@@ -32,11 +32,13 @@ public class Analysis
     public static int analyze_sneaky(int[] array, int base)
     {
         int a = 0;
-        for (int i = 0; i < array.length; i++)
-            if ((int) (Math.log(array[i]) / Math.log(base)) > a)
+        for (int anArray : array)
+        {
+            if ((int) (Math.log(anArray) / Math.log(base)) > a)
             {
-                a = (int) (Math.log(array[i]) / Math.log(base));
+                a = (int) (Math.log(anArray) / Math.log(base));
             }
+        }
         return a;
     }
 
@@ -46,7 +48,9 @@ public class Analysis
         for (int i = 0; i < ac.length; i++)
         {
             if (ac.array[i] > a)
+            {
                 a = ac.array[i];
+            }
             ac.marked.set(1, i);
             ac.aa++;
             sleep(1.0);

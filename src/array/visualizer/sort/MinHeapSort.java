@@ -2,12 +2,10 @@ package array.visualizer.sort;
 
 import array.visualizer.ArrayController;
 
-import static array.visualizer.utils.Swaps.swap;
-
 public class MinHeapSort implements Sort
 {
 
-    static void minheapsort(ArrayController ac)
+    private static void minheapsort(ArrayController ac)
     {
     }
 

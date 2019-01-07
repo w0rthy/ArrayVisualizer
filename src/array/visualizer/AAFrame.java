@@ -9,9 +9,9 @@ package array.visualizer;
  */
 interface AAFrame
 {
-    abstract void reposition();
+    void reposition();
 
-    abstract boolean isVisible();
+    boolean isVisible();
 
-    abstract void dispose();
+    void dispose();
 }

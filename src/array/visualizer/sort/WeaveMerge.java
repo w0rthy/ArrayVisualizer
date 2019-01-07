@@ -19,7 +19,7 @@ import java.util.logging.Logger;
  */
 public class WeaveMerge implements Sort
 {
-    static void weaveMerge(final ArrayController ac, int min, int max, int mid)
+    private static void weaveMerge(final ArrayController ac, int min, int max, int mid)
     {
         try
         {
@@ -56,7 +56,7 @@ public class WeaveMerge implements Sort
         }
     }
 
-    public static void weaveMergeSort(final ArrayController ac, int min, int max)
+    private static void weaveMergeSort(final ArrayController ac, int min, int max)
     {
         if (max - min == 0)
         {//only one element.
@@ -64,10 +64,12 @@ public class WeaveMerge implements Sort
         } else if (max - min == 1)
         {//only two elements and swaps them
             if (ac.array[min] > ac.array[max])
+            {
                 swap(ac, min, max);
+            }
         } else
         {
-            int mid = ((int) Math.floor((min + max) / 2));//The midpoint
+            int mid = (min + max) / 2;//The midpoint
 
             weaveMergeSort(ac, min, mid);//sort the left side
             weaveMergeSort(ac, mid + 1, max);//sort the right side

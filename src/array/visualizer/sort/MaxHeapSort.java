@@ -7,12 +7,14 @@ import static array.visualizer.utils.Swaps.*;
 public class MaxHeapSort implements Sort
 {
 
-    static int SLP = 1;
+    private static int SLP = 1;
 
-    static void maxheapifyrec(final ArrayController ac, int pos, boolean max)
+    private static void maxheapifyrec(final ArrayController ac, int pos, boolean max)
     {
         if (pos >= ac.length)
+        {
             return;
+        }
 
         int child1 = pos * 2 + 1;
         int child2 = pos * 2 + 2;
@@ -23,10 +25,14 @@ public class MaxHeapSort implements Sort
         if (child2 >= ac.length)
         {
             if (child1 >= ac.length)
+            {
                 return; //Done, no children
+            }
             ac.comps++;
             if (ac.array[child1] > ac.array[pos])
+            {
                 swap(ac, pos, child1, SLP);
+            }
             return;
         }
 
@@ -34,7 +40,9 @@ public class MaxHeapSort implements Sort
         int lrg = child1;
         ac.comps++;
         if (ac.array[child2] > ac.array[child1])
+        {
             lrg = child2;
+        }
 
         //Swap with largest child
         ac.comps++;
@@ -42,11 +50,10 @@ public class MaxHeapSort implements Sort
         {
             swap(ac, pos, lrg, SLP);
             percdwn(ac, lrg, true, ac.length);
-            return;
         }
     }
 
-    static void percdwn(final ArrayController ac, int pos, boolean max, int len)
+    private static void percdwn(final ArrayController ac, int pos, boolean max, int len)
     {
         int child1 = pos * 2 + 1;
         int child2 = pos * 2 + 2;
@@ -54,13 +61,16 @@ public class MaxHeapSort implements Sort
         if (child2 >= len)
         {
             if (child1 >= len) //Done
+            {
                 return;
-            else
+            } else
             {
                 //Single Child
                 ac.comps++;
                 if ((max && (ac.array[child1] > ac.array[pos])) || (!max && (ac.array[child1] < ac.array[pos])))
+                {
                     swap(ac, pos, child1, SLP);
+                }
                 return;
             }
         }
@@ -86,7 +96,7 @@ public class MaxHeapSort implements Sort
         }
     }
 
-    public static void maxheapsort(final ArrayController ac)
+    private static void maxheapsort(final ArrayController ac)
     {
         maxheapifyrec(ac, 0, true);
         for (int i = ac.length - 1; i > 0; i--)

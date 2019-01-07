@@ -14,7 +14,7 @@ import javax.swing.JFrame;
 public class SortPrompt extends javax.swing.JFrame implements AAFrame
 {
 
-    JFrame f;
+    private JFrame f;
 
     /**
      * Creates new form SortPrompt

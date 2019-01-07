@@ -7,7 +7,7 @@ import static array.visualizer.utils.Swaps.*;
 
 public class BogoSort implements Sort
 {
-    public static boolean bogoIsSorted(final ArrayController ac)
+    private static boolean bogoIsSorted(final ArrayController ac)
     {
         for (int i = 1; i < ac.length; i++)
         {
@@ -17,12 +17,14 @@ public class BogoSort implements Sort
             ac.marked.set(2, i - 1);
             sleep(1);
             if (ac.array[i] < ac.array[i - 1])
+            {
                 return false;
+            }
         }
         return true;
     }
 
-    public static void bogoSort(final ArrayController ac)
+    private static void bogoSort(final ArrayController ac)
     {
         while (!bogoIsSorted(ac))
         {

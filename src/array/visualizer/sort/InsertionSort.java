@@ -14,7 +14,7 @@ import static array.visualizer.utils.Swaps.*;
  */
 public class InsertionSort implements Sort
 {
-    public static void insertionSort(final ArrayController ac)
+    private static void insertionSort(final ArrayController ac)
     {
         int pos;
         for (int i = 1; i < ac.length; i++)

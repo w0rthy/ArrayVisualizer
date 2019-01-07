@@ -15,7 +15,7 @@ public class RadixLSDInPlace implements Sort
         this.radix = radix;
     }
 
-    public static void inPlaceRadixLSDSort(final ArrayController ac, int radix)
+    private static void inPlaceRadixLSDSort(final ArrayController ac, int radix)
     {
         int pos = 0;
         int[] vregs = new int[radix - 1];
@@ -24,7 +24,9 @@ public class RadixLSDInPlace implements Sort
         for (int p = 0; p <= maxpower; p++)
         {
             for (int i = 0; i < vregs.length; i++)
+            {
                 vregs[i] = ac.length - 1;
+            }
             pos = 0;
             for (int i = 0; i < ac.length; i++)
             {
@@ -36,10 +38,14 @@ public class RadixLSDInPlace implements Sort
                 } else
                 {
                     for (int j = 0; j < vregs.length; j++)
+                    {
                         ac.marked.set(j + 1, vregs[j]);
+                    }
                     swapUpToNM(ac, pos, vregs[digit - 1], 0.0011 * smul);
                     for (int j = digit - 1; j > 0; j--)
+                    {
                         vregs[j - 1]--;
+                    }
                 }
             }
 

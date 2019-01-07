@@ -13,14 +13,16 @@ import static array.visualizer.ArrayVisualizer.*;
  */
 public class Searches
 {
-    public static void linearSearch(final ArrayController ac, int find) throws Exception
+    public static void linearSearch(final ArrayController ac, int find)
     {
         for (int i = 0; i < ac.length; i++)
         {
             ac.aa++;
             ac.comps++;
             if (ac.array[i] == find)
+            {
                 break;
+            }
             ac.marked.set(0, i);
             sleep(5);
         }
@@ -38,9 +40,12 @@ public class Searches
             ac.aa++;
             Thread.sleep(1000);
             if (ac.array[at] < find)
+            {
                 at += change;
-            else
+            } else
+            {
                 at -= change;
+            }
             change /= 2;
         }
         sleep(1000);

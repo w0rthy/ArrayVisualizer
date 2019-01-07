@@ -7,7 +7,7 @@ import static array.visualizer.utils.Swaps.*;
 
 public class ShellSort implements Sort
 {
-    public static void shellSort(final ArrayController ac, int gap, int divrate)
+    private static void shellSort(final ArrayController ac, int gap, int divrate)
     {
         double sleepamt = 1d;
         while (gap > 0)
@@ -37,7 +37,9 @@ public class ShellSort implements Sort
             }
 
             if (gap == 1) //Done
+            {
                 break;
+            }
 
             gap = Math.max(gap / divrate, 1); //Ensure that we do gap 1
             //sleepamt /= divrate;

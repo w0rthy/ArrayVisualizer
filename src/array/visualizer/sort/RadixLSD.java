@@ -31,7 +31,9 @@ public class RadixLSD implements Sort
         int highestpower = analyze(ac, radix);
         ArrayList<Integer>[] registers = new ArrayList[radix];
         for (int i = 0; i < radix; i++)
-            registers[i] = new ArrayList<Integer>();
+        {
+            registers[i] = new ArrayList<>();
+        }
         for (int p = 0; p <= highestpower; p++)
         {
             for (int i = 0; i < ac.length; i++)
@@ -45,13 +47,15 @@ public class RadixLSD implements Sort
         }
     }
 
-    public static void radixLSDsort(final ArrayController ac, int radix)
+    private static void radixLSDsort(final ArrayController ac, int radix)
     {
         clearmarked();
         int highestpower = analyze(ac, radix);
         ArrayList<Integer>[] registers = new ArrayList[radix];
         for (int i = 0; i < radix; i++)
-            registers[i] = new ArrayList<Integer>();
+        {
+            registers[i] = new ArrayList<>();
+        }
         for (int p = 0; p <= highestpower; p++)
         {
             for (int i = 0; i < ac.length; i++)
@@ -59,7 +63,9 @@ public class RadixLSD implements Sort
                 ac.aa++;
                 ac.marked.set(1, i);
                 if (i % 2 == 0)
+                {
                     sleep(1);
+                }
                 registers[getDigit(ac.array[i], p, radix)].add(ac.array[i]);
             }
             fancyTranscribe(ac, registers);
@@ -72,7 +78,9 @@ public class RadixLSD implements Sort
         int highestpower = analyze(ac, radix);
         ArrayList<Integer>[] registers = new ArrayList[radix];
         for (int i = 0; i < radix; i++)
-            registers[i] = new ArrayList<Integer>();
+        {
+            registers[i] = new ArrayList<>();
+        }
         for (int p = 0; p <= highestpower; p++)
         {
             for (int i = min; i < max; i++)

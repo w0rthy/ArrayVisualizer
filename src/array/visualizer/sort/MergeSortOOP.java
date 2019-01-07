@@ -13,7 +13,7 @@ import static array.visualizer.ArrayVisualizer.*;
  */
 public class MergeSortOOP implements Sort
 {
-    public static void mergeSortOP(final ArrayController ac)
+    private static void mergeSortOP(final ArrayController ac)
     {
         int start = 0;
         int end = ac.length;
@@ -21,10 +21,12 @@ public class MergeSortOOP implements Sort
         mergeOP(ac, start, mid, end);
     }
 
-    public static void mergeOP(final ArrayController ac, int start, int mid, int end)
+    private static void mergeOP(final ArrayController ac, int start, int mid, int end)
     {
         if (start == mid)
+        {
             return;
+        }
         mergeOP(ac, start, (mid + start) / 2, mid);
         mergeOP(ac, mid, (mid + end) / 2, end);
 
@@ -35,7 +37,9 @@ public class MergeSortOOP implements Sort
         for (int nxt = 0; nxt < tmp.length; nxt++)
         {
             if (low >= mid && high >= end)
+            {
                 break;
+            }
             if (low < mid && high >= end)
             {
                 tmp[nxt] = ac.array[low];
@@ -71,7 +75,9 @@ public class MergeSortOOP implements Sort
             ac.aa++;
             ac.marked.set(1, start + i);
             if (end - start >= ac.length / 100)
+            {
                 sleep(0.5);
+            }
         }
     }
 

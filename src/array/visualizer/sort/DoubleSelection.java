@@ -14,7 +14,7 @@ import static array.visualizer.utils.Swaps.*;
  */
 public class DoubleSelection implements Sort
 {
-    public static void doubleSelectionSort(final ArrayController ac)
+    private static void doubleSelectionSort(final ArrayController ac)
     {
 
         int left = 0;
@@ -27,14 +27,20 @@ public class DoubleSelection implements Sort
             {
                 ac.marked.set(1, i);
                 if (ac.array[i] > ac.array[biggest])
+                {
                     biggest = i;
+                }
                 if (ac.array[i] < ac.array[smallest])
+                {
                     smallest = i;
+                }
                 ac.comps += 2;
                 sleep(0.02);
             }
             if (biggest == left)
+            {
                 biggest = smallest;
+            }
             swap(ac, left, smallest, 0.01);
             swap(ac, right, biggest, 0.01);
             left++;

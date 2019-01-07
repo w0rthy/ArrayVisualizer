@@ -65,7 +65,7 @@ public class ArrayVisualizer
 
     static int COLORSTRAT = 1; //0 = Solid, 1 = Rainbow, 2 = Segments
     static Color COLORSTRAT0col = new Color(0, 204, 0);
-    static ArrayList<Color> COLORSTRAT2cols = new ArrayList<Color>();
+    static ArrayList<Color> COLORSTRAT2cols = new ArrayList<>();
 
     static String[] ComparativeSorts = "Selection!Bubble!Insertion!Double Selection!Cocktail Shaker!Quick!Merge!Merge OOP!Weave Merge!Max Heap!Shell".split("!");
     static String[] DistributiveSorts = "Radix LSD!Radix MSD!Radix LSD In-Place!Gravity!Shatter!Counting!Time!Bogo".split("!");
@@ -77,8 +77,12 @@ public class ArrayVisualizer
     {
         double count = 1;
         for (int i : arrayController.marked)
+        {
             if (i != -5)
+            {
                 count += 0.75;
+            }
+        }
         return count;
     }
 
@@ -92,12 +96,16 @@ public class ArrayVisualizer
     public static void sleep(double milis)
     {
         if (milis <= 0)
+        {
             return;
+        }
         double tmp = (milis * (1000.0 / arrayController.length));
         tmp = tmp * (1 / SLEEPRATIO);
         addamt += tmp;
         if (addamt < 1.0)
+        {
             return;
+        }
         try
         {
             long actual = System.nanoTime();
@@ -105,7 +113,9 @@ public class ArrayVisualizer
             actual = (System.nanoTime() - actual);
             addamt -= (double) actual / 1000000.0;
             if (running)
+            {
                 sleeptime += actual;
+            }
         } catch (Exception ex)
         {
             Logger.getLogger(ArrayVisualizer.class.getName()).log(Level.SEVERE, null, ex);
@@ -130,18 +140,24 @@ public class ArrayVisualizer
 //        }
         chan = synth.getChannels()[0];
         for (Instrument i : synth.getLoadedInstruments())
+        {
             if (i.getName().toLowerCase().trim().contains("sine"))
             {
                 chan.programChange(i.getPatch().getProgram());
                 break;
             }
+        }
 
         if (chan.getProgram() == 0)
+        {
             JOptionPane.showMessageDialog(null, "Could not find a valid instrument. Sound is disabled");
+        }
         //chan.programChange(synth.getLoadedInstruments()[197].getPatch().getProgram());
 
         for (int i = 0; i < arrayController.length; i++)
+        {
             arrayController.marked.add(-5);
+        }
         rianr(arrayController.array);
 
         window.setSize(640, 480);
@@ -161,16 +177,21 @@ public class ArrayVisualizer
                 while (true)
                 {
                     chan.allNotesOff();
-                    if (SOUND == false)
+                    if (!SOUND)
                     {
                         continue;
                     }
 
                     int tmp = 1;
                     for (int i : arrayController.marked)
+                    {
                         if (i != -5)
+                        {
                             tmp++;
+                        }
+                    }
                     for (int i : arrayController.marked)
+                    {
                         if (i != -5)
                         {
                             int pitch = (int) Math.round((double) arrayController.array[Math.min(Math.max(i, 0), arrayController.length - 1)] / arrayController.length * 96 + 16);
@@ -180,6 +201,7 @@ public class ArrayVisualizer
                             int vel = (int) (64.0 / (Math.pow((double) tmp, 0.6)) * ((128 - pitch) / 64.0 + 1.0) * 0.67 * SOUNDMUL); //one day
                             chan.noteOn(pitch, vel);
                         }
+                    }
                     //((int)((127-(array[Math.min(Math.max(i, 0), array.length-1)]/16.0))/Math.sqrt(calcVel())))*5
                     //double tmp = (array[Math.min(Math.max(i, 0), array.length-1)]/32.0+47);
                     //chan.setPitchBend(8192*2-(int)((tmp-Math.floor(tmp))*8192*2));
@@ -228,7 +250,9 @@ public class ArrayVisualizer
                     {
                         uf.reposition();
                         if (v != null && v.isVisible())
+                        {
                             v.reposition();
+                        }
                         cx = window.getX();
                         cy = window.getY();
                     }
@@ -279,18 +303,25 @@ public class ArrayVisualizer
                         {
                             //Check for sort errors in array
                             if (i > 0 && arrayController.array[i] < arrayController.array[i - 1])
+                            {
                                 sortErrors++;
+                            }
 
                             int j = arrayController.array[i];
 
                             if (arrayController.marked.contains(i) || arrayController.marked.contains(i - 1) || arrayController.marked.contains(i - 2) || arrayController.marked.contains(i - 3))
+                            {
                                 g.setColor(Color.BLACK);
-                            else if (j < ornamentend)
+                            } else if (j < ornamentend)
+                            {
                                 g.setColor(new Color(255, 0, 0));
-                            else if (j > trunkstart)
+                            } else if (j > trunkstart)
+                            {
                                 g.setColor(new Color(102, 34, 0));
-                            else
+                            } else
+                            {
                                 g.setColor(new Color(0, 102, 0));
+                            }
 
                             if (j < ornamentend)
                             { //ORNAMENT
@@ -299,7 +330,9 @@ public class ArrayVisualizer
                             { //TRUNK
                                 width = (int) (cw * 0.2);
                             } else //TREE
+                            {
                                 width = (int) ((((j - ornamentend) % 85) * 0.005 + 0.075) * cw);
+                            }
 
                             int step = (int) (i * yscl + yscl) - (int) (i * yscl);
                             g.fillRect(halfwidth - width / 2, (int) (i * yscl) + 32, width, step);
@@ -312,32 +345,37 @@ public class ArrayVisualizer
 
                         g.setStroke(new BasicStroke(1.0f)); //significantly increased performance
 
-                        double maxdiam = (double) Math.min(cw, ch - 32);
-                        double diameter = maxdiam;
+                        double diameter = (double) Math.min(cw, ch - 32);
                         double diamstep = Math.min(xscl, yscl);
 
                         for (int i = arrayController.length - 1; i >= 0; i--)
                         {
                             //Check for sort errors in array
                             if (i > 0 && arrayController.array[i] < arrayController.array[i - 1])
+                            {
                                 sortErrors++;
+                            }
 
                             //Set Proper Color
                             if (arrayController.marked.contains(i) || arrayController.marked.contains(i - 1) || arrayController.marked.contains(i - 2) || arrayController.marked.contains(i - 3))
+                            {
                                 g.setColor(Color.BLACK);
-                            else
+                            } else
+                            {
                                 g.setColor(getIntColor(arrayController.array[i], sortErrors));
+                            }
 
                             int radius = (int) (diameter / 2.0);
 
                             if (!DISPARITYDRAW)
+                            {
                                 g.drawOval(halfwidth - radius, halfheight - radius + 15, (int) diameter, (int) diameter);
-                            else
+                            } else
                             {
                                 int dist = Math.abs(i - arrayController.array[i]);
                                 double disparity = 1.0 - ((double) Math.min(dist, arrayController.length - dist) / ((double) arrayController.length / 2.0));
                                 int actualdiam = (int) (disparity * diameter);
-                                g.drawOval(halfwidth - actualdiam / 2, halfheight - radius + 15, (int) actualdiam, (int) actualdiam);
+                                g.drawOval(halfwidth - actualdiam / 2, halfheight - radius + 15, actualdiam, actualdiam);
                             }
                             diameter -= diamstep;
                         }
@@ -354,13 +392,18 @@ public class ArrayVisualizer
                         {
                             //Check for sort errors in array
                             if (i > 0 && arrayController.array[i] < arrayController.array[i - 1])
+                            {
                                 sortErrors++;
+                            }
 
                             //Set Proper Color
                             if (arrayController.marked.contains(i) || arrayController.marked.contains(i - 1) || arrayController.marked.contains(i - 2) || arrayController.marked.contains(i - 3))
+                            {
                                 g.setColor(Color.BLACK);
-                            else
+                            } else
+                            {
                                 g.setColor(getIntColor(arrayController.array[i], sortErrors));
+                            }
 
                             //Draw
                             if (!DRAWFLIPPED)
@@ -397,17 +440,24 @@ public class ArrayVisualizer
                         for (int i = 0; i < arrayController.length; i++)
                         {
                             if (i > 0 && arrayController.array[i] < arrayController.array[i - 1])
+                            {
                                 sortErrors++;
+                            }
 
                             if (arrayController.marked.contains(i)/*||marked.contains(i-1)||marked.contains(i-2)||marked.contains(i-3)*/)
+                            {
                                 g.setColor(Color.BLACK);
-                            else
+                            } else
+                            {
                                 g.setColor(getIntColor(arrayController.array[i], sortErrors));
+                            }
 
                             //If i/triperrow is even, then triangle points right, else left
                             boolean direction = false;
                             if (((i - 1) / triperrow) % 2 == 0)
+                            {
                                 direction = true;
+                            }
 
                             //Make the triangle
                             if (!direction)
@@ -419,7 +469,9 @@ public class ArrayVisualizer
                                 triptsx[2] = (int) curx;
 
                                 if (!COLORONLY)
+                                {
                                     triptsx[2] = (int) (triptsx[1] + triw * arrayController.array[i] / arrayController.length);
+                                }
 
                                 triptsy[0] = cury;
                                 triptsy[2] = cury + trih / 2;
@@ -433,7 +485,9 @@ public class ArrayVisualizer
                                 triptsx[1] = (int) curx;
 
                                 if (!COLORONLY)
+                                {
                                     triptsx[2] = (int) (triptsx[0] - triw * arrayController.array[i] / arrayController.length);
+                                }
 
                                 triptsy[0] = cury;
                                 triptsy[2] = cury + trih / 2;
@@ -451,15 +505,21 @@ public class ArrayVisualizer
                             }
                         }
                     } else if (CIRCLEDRAW)
+                    {
                         for (int i = 0; i < arrayController.length; i++)
                         {
                             if (i > 0 && arrayController.array[i] < arrayController.array[i - 1])
+                            {
                                 sortErrors++;
+                            }
 
                             if (arrayController.marked.contains(i) || arrayController.marked.contains(i - 1) || arrayController.marked.contains(i - 2) || arrayController.marked.contains(i - 3))
+                            {
                                 g.setColor(Color.BLACK);
-                            else
+                            } else
+                            {
                                 g.setColor(getIntColor(arrayController.array[i], sortErrors));
+                            }
 
                             double sinval = Math.sin(i * Math.PI / circamt);
                             double cosval = Math.cos(i * Math.PI / circamt);
@@ -488,7 +548,9 @@ public class ArrayVisualizer
                                     if (LINKEDPIXELDRAW)
                                     {
                                         if (i > 0)
+                                        {
                                             g.drawLine(linkedpixX, linkedpixY, linkedpixdrawx, linkedpixdrawy);
+                                        }
                                         linkedpixdrawx = linkedpixX;
                                         linkedpixdrawy = linkedpixY;
                                     }
@@ -509,7 +571,9 @@ public class ArrayVisualizer
                                 if (LINKEDPIXELDRAW)
                                 {
                                     if (i > 0)
+                                    {
                                         g.drawLine(halfwidth + (int) (sinval * ((window.getWidth() - 64) / 2.0 * (arrayController.array[i] / (double) arrayController.length))), halfheight - (int) (cosval * ((window.getHeight() - 96) / 2.0 * (arrayController.array[i] / (double) arrayController.length))), linkedpixdrawx, linkedpixdrawy);
+                                    }
                                     linkedpixdrawx = halfwidth + (int) (sinval * ((window.getWidth() - 64) / 2.0 * (arrayController.array[i] / (double) arrayController.length)));
                                     linkedpixdrawy = halfheight - (int) (cosval * ((window.getHeight() - 96) / 2.0 * (arrayController.array[i] / (double) arrayController.length)));
                                 }
@@ -525,16 +589,22 @@ public class ArrayVisualizer
                                 //g.drawLine(halfwidth, halfheight, halfwidth+(int)(sinval*((window.getWidth()-64)/2.0*(array[i]/(double)array.length))), halfheight-(int)(cosval*((window.getHeight()-96)/2.0*(array[i]/(double)array.length))));
                             }
                         }
-                    else
+                    } else
+                    {
                         for (int i = 0; i < arrayController.length; i++)
                         {
                             if (i > 0 && arrayController.array[i] < arrayController.array[i - 1])
+                            {
                                 sortErrors++;
+                            }
 
                             if (arrayController.marked.contains(i) || arrayController.marked.contains(i - 1) || arrayController.marked.contains(i - 2) || arrayController.marked.contains(i - 3))
+                            {
                                 g.setColor(Color.BLACK);
-                            else
+                            } else
+                            {
                                 g.setColor(getIntColor(arrayController.array[i], sortErrors));
+                            }
 
                             int y = 0;
                             int width = (int) (xscl * i) - amt;
@@ -554,7 +624,9 @@ public class ArrayVisualizer
                                     if (LINKEDPIXELDRAW)
                                     {
                                         if (i > 0)
+                                        {
                                             g.drawLine(amt, y, linkedpixdrawx, linkedpixdrawy);
+                                        }
                                         linkedpixdrawx = amt;
                                         linkedpixdrawy = y;
                                     }
@@ -568,6 +640,7 @@ public class ArrayVisualizer
                             }
                             amt += width;
                         }
+                    }
 
                     int coltmp = 255;//(int)Math.abs(Math.sin(frames*0.01)*255);
                     g.setColor(new Color(coltmp, coltmp, coltmp));
@@ -598,8 +671,9 @@ public class ArrayVisualizer
             public Color getIntColor(int i, int segnum)
             {
                 if (COLORSTRAT == 1)
+                {
                     return Color.getHSBColor(((float) i / arrayController.length), 1.0F, 0.8F);
-                else if (COLORSTRAT == 2)
+                } else if (COLORSTRAT == 2)
                 {
                     return COLORSTRAT2cols.get(segnum % COLORSTRAT2cols.size());
                 }
@@ -614,11 +688,17 @@ public class ArrayVisualizer
 
         uf.setVisible(false);
         v = new ViewPrompt(window);
-        while (v.isVisible()) Thread.sleep(1);
+        while (v.isVisible())
+        {
+            Thread.sleep(1);
+        }
         uf.setVisible(true);
 
         //keep on keeping on
-        while (window.isActive()) Thread.sleep(100);
+        while (window.isActive())
+        {
+            Thread.sleep(100);
+        }
     }
 
     public static void refresharray() throws Exception
@@ -636,11 +716,15 @@ public class ArrayVisualizer
         for (int i = 0; i < arrayController.length; i++)
         {
             if (arrayController.array[i] != i)
+            {
                 solved = false;
+            }
             arrayController.marked.set(0, i);
         }
         for (int i = 0; i < arrayController.length; i++)
+        {
             arrayController.array[i] = i;
+        }
         //System.out.println(solved);
         arrayController.marked.set(0, -5);
         heading = "";
@@ -659,12 +743,13 @@ public class ArrayVisualizer
         return (int) (a / Math.pow(radix, power)) % radix;
     }
 
-    public static int[] rianr(int[] arr)
+    public static void rianr(int[] arr)
     {
         for (int i = 0; i < arr.length; i++)
+        {
             arr[i] = i;
+        }
         shuffle(arr);
-        return arr;
     }
 
     public static void clearmarked()
@@ -681,7 +766,9 @@ public class ArrayVisualizer
             swap(arrayController, i, (int) (Math.random() * array.length));
             arrayController.aa -= 2;
             if (SHUFFLEANIM)
+            {
                 sleep(1);
+            }
         }
         heading = tmp;
     }
@@ -694,13 +781,18 @@ public class ArrayVisualizer
     public synchronized static void RunAllSorts()
     {
         if (sortingThread != null)
-            while (sortingThread.isAlive()) try
+        {
+            while (sortingThread.isAlive())
             {
-                Thread.sleep(100);
-            } catch (InterruptedException ex)
-            {
-                Logger.getLogger(ArrayVisualizer.class.getName()).log(Level.SEVERE, null, ex);
+                try
+                {
+                    Thread.sleep(100);
+                } catch (InterruptedException ex)
+                {
+                    Logger.getLogger(ArrayVisualizer.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
+        }
 
         SetSound(true);
         sortingThread = new Thread()
@@ -752,7 +844,9 @@ public class ArrayVisualizer
     public static void ReportComparativeSort(int n)
     {
         if (sortingThread != null && sortingThread.isAlive())
+        {
             return;
+        }
 
         final int num = n;
         SetSound(true);
@@ -824,10 +918,14 @@ public class ArrayVisualizer
     public static void ReportDistributiveSort(int n)
     {
         if (sortingThread != null && sortingThread.isAlive())
+        {
             return;
+        }
         int bas = 10;
         if (n != 3 && n != 5 && n != 7)
+        {
             if (n != 4)
+            {
                 try
                 {
                     bas = Integer.parseInt(JOptionPane.showInputDialog(null, "Enter Base for Sort"));
@@ -835,7 +933,8 @@ public class ArrayVisualizer
                 {
                     Logger.getLogger(ArrayVisualizer.class.getName()).log(Level.SEVERE, null, ex);
                 }
-            else
+            } else
+            {
                 try
                 {
                     bas = Integer.parseInt(JOptionPane.showInputDialog(null, "Enter Size of Partitions"));
@@ -843,6 +942,8 @@ public class ArrayVisualizer
                 {
                     Logger.getLogger(ArrayVisualizer.class.getName()).log(Level.SEVERE, null, ex);
                 }
+            }
+        }
 
         final int base = Math.max(bas, 2);
         final int num = n;
@@ -906,16 +1007,26 @@ public class ArrayVisualizer
     public static String formatNum(long a)
     {
         if (a < 0)
+        {
             return "OVERFLOW";
+        }
         if (a > 1000L * 1000L * 1000L * 1000L)
+        {
             return String.format("%.2fT", (double) a / 1000000000000.0);
+        }
         if (a > 1000L * 1000L * 1000L)
+        {
             return String.format("%.2fB", (double) a / 1000000000.0);
+        }
         if (a > 1000L * 1000L)
+        {
             return String.format("%.2fM", (double) a / 1000000.0);
-        else if (a > 1000L)
+        } else if (a > 1000L)
+        {
             return String.format("%.2fK", (double) a / 1000.0);
-        else
+        } else
+        {
             return "" + a;
+        }
     }
 }

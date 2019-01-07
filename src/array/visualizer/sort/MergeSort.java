@@ -17,7 +17,7 @@ import java.util.logging.Logger;
  */
 public class MergeSort implements Sort
 {
-    static void merge(final ArrayController ac, int min, int max, int mid)
+    private static void merge(final ArrayController ac, int min, int max, int mid)
     {
         try
         {
@@ -42,7 +42,7 @@ public class MergeSort implements Sort
         }
     }
 
-    static void push(final ArrayController ac, int s, int e)
+    private static void push(final ArrayController ac, int s, int e)
     {
 
         for (int i = s; i < e; i++)
@@ -57,7 +57,7 @@ public class MergeSort implements Sort
 
     }
 
-    public static void mergeSort(final ArrayController ac, int min, int max)
+    private static void mergeSort(final ArrayController ac, int min, int max)
     {
         if (max - min == 0)
         {//only one element.
@@ -65,10 +65,12 @@ public class MergeSort implements Sort
         } else if (max - min == 1)
         {//only two elements and swaps them
             if (ac.array[min] > ac.array[max])
+            {
                 swap(ac, min, max);
+            }
         } else
         {
-            int mid = ((int) Math.floor((min + max) / 2));//The midpoint
+            int mid = (min + max) / 2;//The midpoint
 
             mergeSort(ac, min, mid);//sort the left side
             mergeSort(ac, mid + 1, max);//sort the right side

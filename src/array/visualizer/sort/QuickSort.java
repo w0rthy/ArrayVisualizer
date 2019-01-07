@@ -14,7 +14,7 @@ import static array.visualizer.utils.Swaps.*;
  */
 public class QuickSort implements Sort
 {
-    public static void quickSort(final ArrayController ac, int p, int r)
+    private static void quickSort(final ArrayController ac, int p, int r)
     {
         if (p < r)
         {
@@ -25,7 +25,7 @@ public class QuickSort implements Sort
         }
     }
 
-    public static int partition(final ArrayController ac, int p, int r)
+    private static int partition(final ArrayController ac, int p, int r)
     {
 
         int x = ac.array[p];
@@ -53,9 +53,12 @@ public class QuickSort implements Sort
             }
 
             if (i < j)
+            {
                 swap(ac, i, j);
-            else
+            } else
+            {
                 return j;
+            }
         }
     }
 

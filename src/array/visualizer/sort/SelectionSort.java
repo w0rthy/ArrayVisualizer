@@ -15,7 +15,7 @@ import static array.visualizer.utils.Swaps.*;
 public class SelectionSort implements Sort
 {
 
-    public static void selectionSort(final ArrayController ac)
+    private static void selectionSort(final ArrayController ac)
     {
         for (int i = 0; i < ac.length - 1; i++)
         {

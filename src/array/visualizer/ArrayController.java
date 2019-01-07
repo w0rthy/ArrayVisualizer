@@ -22,7 +22,9 @@ public class ArrayController
     public void clearMarked()
     {
         for (int i = 0; i < length; i++)
+        {
             marked.set(i, -5);
+        }
     }
 
     public int get(int index)

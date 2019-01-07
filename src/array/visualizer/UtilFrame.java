@@ -7,8 +7,6 @@ package array.visualizer;
 import static array.visualizer.ArrayVisualizer.*;
 
 import java.awt.Toolkit;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
@@ -39,7 +37,9 @@ public class UtilFrame extends javax.swing.JFrame
         toFront();
         setLocation(Math.min((int) Toolkit.getDefaultToolkit().getScreenSize().getWidth() - getWidth(), f.getX() + f.getWidth()), f.getY() + 29);
         if (v != null && v.isVisible())
+        {
             v.reposition();
+        }
     }
 
     /**
@@ -153,7 +153,9 @@ public class UtilFrame extends javax.swing.JFrame
             boolean tmp = v instanceof SortPrompt;
             v.dispose();
             if (tmp)
+            {
                 return;
+            }
         }
         v = new SortPrompt(f);
     }//GEN-LAST:event_jButton1ActionPerformed
@@ -167,7 +169,9 @@ public class UtilFrame extends javax.swing.JFrame
             boolean tmp = v instanceof ViewPrompt;
             v.dispose();
             if (tmp)
+            {
                 return;
+            }
         }
         v = new ViewPrompt(f);
     }//GEN-LAST:event_jButton2ActionPerformed

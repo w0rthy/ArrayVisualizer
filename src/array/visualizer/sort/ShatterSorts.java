@@ -23,12 +23,14 @@ public class ShatterSorts implements Sort
         this.base = base;
     }
 
-    public static void shatterPartition(final ArrayController ac, int num)
+    private static void shatterPartition(final ArrayController ac, int num)
     {
         int shatters = (int) Math.ceil(ac.length / (double) num);
         ArrayList<Integer>[] registers = new ArrayList[shatters];
         for (int i = 0; i < shatters; i++)
-            registers[i] = new ArrayList<Integer>();
+        {
+            registers[i] = new ArrayList<>();
+        }
         for (int i = 0; i < ac.length; i++)
         {
             registers[ac.array[i] / num].add(ac.array[i]);
@@ -37,7 +39,7 @@ public class ShatterSorts implements Sort
         transcribe(registers, ac);
     }
 
-    public static void shatterSort(final ArrayController ac, int num)
+    private static void shatterSort(final ArrayController ac, int num)
     {
         int shatters = (int) Math.ceil(ac.length / (double) num);
         shatterPartition(ac, num);
@@ -47,16 +49,20 @@ public class ShatterSorts implements Sort
             for (int j = 0; j < num; j++)
             {
                 if (i * num + j >= ac.length)
+                {
                     tmp[j] = -1;
-                else
+                } else
+                {
                     tmp[j] = ac.array[i * num + j];
+                }
                 ac.aa++;
             }
-            for (int j = 0; j < tmp.length; j++)
+            for (int tmpj : tmp)
             {
-                int tmpj = tmp[j];
                 if (i * num + (tmpj % num) >= ac.length || tmpj == -1)
+                {
                     break;
+                }
                 ac.array[i * num + (tmpj % num)] = tmpj;
                 ac.aa++;
                 ac.marked.set(1, i * num + (tmpj % num));
@@ -68,7 +74,9 @@ public class ShatterSorts implements Sort
     public static void simpleShatterSort(final ArrayController ac, int num, int rate)
     {
         for (int i = num; i > 1; i = i / rate)
+        {
             shatterPartition(ac, i);
+        }
         shatterPartition(ac, 1);
     }
 
