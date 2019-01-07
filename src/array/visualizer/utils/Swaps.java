@@ -34,7 +34,7 @@ public class Swaps
         ac.array[j] = temp;
     }
 
-    public static void swapnm(final ArrayController ac, int i, int j, double pause)
+    public static void swapNm(final ArrayController ac, int i, int j, double pause)
     {
         sleep(pause);
         ac.aa += 2;
@@ -66,13 +66,13 @@ public class Swaps
         {
             for (int i = pos; i < to; i++)
             {
-                swapnm(ac, i, i + 1, pause);
+                swapNm(ac, i, i + 1, pause);
             }
         } else
         {
             for (int i = pos; i > to; i--)
             {
-                swapnm(ac, i, i - 1, pause);
+                swapNm(ac, i, i - 1, pause);
             }
         }
     }

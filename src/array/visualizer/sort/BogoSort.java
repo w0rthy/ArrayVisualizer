@@ -36,11 +36,6 @@ public class BogoSort implements Sort
         }
     }
 
-    public static void bogobogoSort()
-    {
-
-    }
-
     @Override
     public String name()
     {

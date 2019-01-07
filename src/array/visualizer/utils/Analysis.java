@@ -29,20 +29,7 @@ public class Analysis
         return a;
     }
 
-    public static int analyze_sneaky(int[] array, int base)
-    {
-        int a = 0;
-        for (int anArray : array)
-        {
-            if ((int) (Math.log(anArray) / Math.log(base)) > a)
-            {
-                a = (int) (Math.log(anArray) / Math.log(base));
-            }
-        }
-        return a;
-    }
-
-    public static int analyzemax(final ArrayController ac)
+    public static int analyzeMax(final ArrayController ac)
     {
         int a = 0;
         for (int i = 0; i < ac.length; i++)

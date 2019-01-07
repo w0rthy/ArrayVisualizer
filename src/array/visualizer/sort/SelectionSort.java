@@ -19,17 +19,17 @@ public class SelectionSort implements Sort
     {
         for (int i = 0; i < ac.length - 1; i++)
         {
-            int lowestindex = i;
+            int lowestIndex = i;
             for (int j = i + 1; j < ac.length; j++)
             {
-                if (ac.array[j] < ac.array[lowestindex])
+                if (ac.array[j] < ac.array[lowestIndex])
                 {
-                    lowestindex = j;
+                    lowestIndex = j;
                 }
                 sleep(0.01);
                 ac.comps++;
             }
-            swap(ac, i, lowestindex);
+            swap(ac, i, lowestIndex);
         }
     }
 

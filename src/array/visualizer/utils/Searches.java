@@ -29,7 +29,7 @@ public class Searches
         sleep(1000);
     }
 
-    public static void binarySearch(final ArrayController ac, int find) throws Exception
+    public static void binarySearch(final ArrayController ac, int find)
     {
         int at = ac.length / 2;
         int change = ac.length / 4;
@@ -38,7 +38,7 @@ public class Searches
             ac.marked.set(0, ac.array[at]);
             ac.comps += 2;
             ac.aa++;
-            Thread.sleep(1000);
+            sleep(1000);
             if (ac.array[at] < find)
             {
                 at += change;

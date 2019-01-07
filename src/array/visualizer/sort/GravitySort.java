@@ -16,7 +16,7 @@ public class GravitySort implements Sort
 {
     private static void gravitySort(final ArrayController ac)
     {
-        int max = analyzemax(ac);
+        int max = analyzeMax(ac);
         int[][] abacus = new int[ac.length][max];
         for (int i = 0; i < ac.length; i++)
         {
@@ -33,24 +33,23 @@ public class GravitySort implements Sort
                 if (abacus[j][i] == 1)
                 {
                     //Drop it
-                    int droppos = j;
-                    while (droppos + 1 < abacus.length && abacus[droppos][i] == 1)
+                    int dropPos = j;
+                    while (dropPos + 1 < abacus.length && abacus[dropPos][i] == 1)
                     {
-                        droppos++;
+                        dropPos++;
                     }
-                    if (abacus[droppos][i] == 0)
+                    if (abacus[dropPos][i] == 0)
                     {
                         abacus[j][i] = 0;
-                        abacus[droppos][i] = 1;
+                        abacus[dropPos][i] = 1;
                         ac.aa += 2;
                     }
                 }
             }
 
-            int count = 0;
             for (int x = 0; x < abacus.length; x++)
             {
-                count = 0;
+                int count = 0;
                 for (int y = 0; y < abacus[0].length; y++)
                 {
                     count += abacus[x][y];

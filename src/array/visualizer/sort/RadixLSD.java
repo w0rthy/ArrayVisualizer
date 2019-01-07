@@ -25,38 +25,15 @@ public class RadixLSD implements Sort
         this.radix = radix;
     }
 
-    public static void radixLSDsort_(final ArrayController ac, int radix)
+    private static void radixLSDSort(final ArrayController ac, int radix)
     {
-        clearmarked();
-        int highestpower = analyze(ac, radix);
+        int highestPower = analyze(ac, radix);
         ArrayList<Integer>[] registers = new ArrayList[radix];
         for (int i = 0; i < radix; i++)
         {
             registers[i] = new ArrayList<>();
         }
-        for (int p = 0; p <= highestpower; p++)
-        {
-            for (int i = 0; i < ac.length; i++)
-            {
-                ac.marked.set(1, i);
-                sleep(1);
-                registers[getDigit(ac.array[i], p, radix)].add(ac.array[i]);
-            }
-            //transcribe(registers, array);
-            transcribe(registers, ac);
-        }
-    }
-
-    private static void radixLSDsort(final ArrayController ac, int radix)
-    {
-        clearmarked();
-        int highestpower = analyze(ac, radix);
-        ArrayList<Integer>[] registers = new ArrayList[radix];
-        for (int i = 0; i < radix; i++)
-        {
-            registers[i] = new ArrayList<>();
-        }
-        for (int p = 0; p <= highestpower; p++)
+        for (int p = 0; p <= highestPower; p++)
         {
             for (int i = 0; i < ac.length; i++)
             {
@@ -72,23 +49,22 @@ public class RadixLSD implements Sort
         }
     }
 
-    public static void radixLSDsortnd(final ArrayController ac, int radix, int min, int max)
+    public static void radixLSDSortNd(final ArrayController ac, int radix, int min, int max)
     {
-        clearmarked();
-        int highestpower = analyze(ac, radix);
+        int highestPower = analyze(ac, radix);
         ArrayList<Integer>[] registers = new ArrayList[radix];
         for (int i = 0; i < radix; i++)
         {
             registers[i] = new ArrayList<>();
         }
-        for (int p = 0; p <= highestpower; p++)
+        for (int p = 0; p <= highestPower; p++)
         {
             for (int i = min; i < max; i++)
             {
                 registers[getDigit(ac.array[i], p, radix)].add(ac.array[i]);
             }
             //transcribe(registers, array);
-            transcribend(ac, registers, min);
+            transcribeNd(ac, registers, min);
         }
     }
 
@@ -101,6 +77,6 @@ public class RadixLSD implements Sort
     @Override
     public void sort(ArrayController ac)
     {
-        radixLSDsort(ac, radix);
+        radixLSDSort(ac, radix);
     }
 }

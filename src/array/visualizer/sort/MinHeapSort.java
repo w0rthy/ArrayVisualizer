@@ -5,7 +5,7 @@ import array.visualizer.ArrayController;
 public class MinHeapSort implements Sort
 {
 
-    private static void minheapsort(ArrayController ac)
+    private static void minHeapSort(ArrayController ac)
     {
     }
 
@@ -18,6 +18,6 @@ public class MinHeapSort implements Sort
     @Override
     public void sort(ArrayController ac)
     {
-        minheapsort(ac);
+        minHeapSort(ac);
     }
 }

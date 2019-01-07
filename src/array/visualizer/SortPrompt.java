@@ -25,8 +25,8 @@ public class SortPrompt extends javax.swing.JFrame implements AAFrame
         setAlwaysOnTop(true);
         setUndecorated(true);
         initComponents();
-        jList2.setListData(ComparativeSorts);
-        jList1.setListData(DistributiveSorts);
+        jList2.setListData(comparativeSorts);
+        jList1.setListData(distributiveSorts);
         setLocation(f.getX() + (f.getWidth() - getWidth()) / 2, f.getY() + (f.getHeight() - getHeight()) / 2);
         setVisible(true);
     }
@@ -177,7 +177,7 @@ public class SortPrompt extends javax.swing.JFrame implements AAFrame
         {
             public void run()
             {
-                RunAllSorts();
+                runAllSorts();
             }
         }.start();
         dispose();
@@ -191,7 +191,7 @@ public class SortPrompt extends javax.swing.JFrame implements AAFrame
         {
             public void run()
             {
-                ReportDistributiveSort(tmp);
+                reportDistributiveSort(tmp);
             }
         }.start();
         dispose();
@@ -205,7 +205,7 @@ public class SortPrompt extends javax.swing.JFrame implements AAFrame
         {
             public void run()
             {
-                ReportComparativeSort(tmp);
+                reportComparativeSort(tmp);
             }
         }.start();
         dispose();

@@ -7,9 +7,9 @@ import static array.visualizer.utils.Swaps.*;
 
 public class ShellSort implements Sort
 {
-    private static void shellSort(final ArrayController ac, int gap, int divrate)
+    private static void shellSort(final ArrayController ac, int gap, int divRate)
     {
-        double sleepamt = 1d;
+        double sleepAmt = 1d;
         while (gap > 0)
         {
             for (int j = 0; j <= gap - 1; j++)
@@ -24,7 +24,7 @@ public class ShellSort implements Sort
                         {
                             ac.comps++;
                             swap(ac, pos, prev);
-                            sleep(sleepamt);
+                            sleep(sleepAmt);
                         } else
                         {
                             ac.aa += 2;
@@ -41,8 +41,8 @@ public class ShellSort implements Sort
                 break;
             }
 
-            gap = Math.max(gap / divrate, 1); //Ensure that we do gap 1
-            //sleepamt /= divrate;
+            gap = Math.max(gap / divRate, 1); //Ensure that we do gap 1
+            //sleepAmt /= divRate;
         }
     }
 

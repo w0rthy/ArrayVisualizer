@@ -5,12 +5,8 @@
 package array.visualizer.sort;
 
 import array.visualizer.ArrayController;
-import array.visualizer.ArrayVisualizer;
 
 import static array.visualizer.utils.Swaps.*;
-
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * @author S630690
@@ -19,32 +15,20 @@ public class MergeSort implements Sort
 {
     private static void merge(final ArrayController ac, int min, int max, int mid)
     {
-        try
+        //radixLSDSortNd(2, min, max);
+        for (int i = min; i <= mid; i++)
         {
-            //radixLSDsortnd(2, min, max);
-
-
-            int i = min;
-            while (i <= mid)
+            if (ac.array[i] > ac.array[mid + 1])
             {
-                if (ac.array[i] > ac.array[mid + 1])
-                {
-                    ac.comps++;
-                    swap(ac, i, mid + 1, 1.5);
-                    push(ac, mid + 1, max);
-                }
-                i++;
+                ac.comps++;
+                swap(ac, i, mid + 1, 1.5);
+                push(ac, mid + 1, max);
             }
-
-        } catch (Exception ex)
-        {
-            Logger.getLogger(ArrayVisualizer.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
     private static void push(final ArrayController ac, int s, int e)
     {
-
         for (int i = s; i < e; i++)
         {
             if (ac.array[i] > ac.array[i + 1])
@@ -53,8 +37,6 @@ public class MergeSort implements Sort
                 swap(ac, i, i + 1, 0.0175);
             }
         }
-
-
     }
 
     private static void mergeSort(final ArrayController ac, int min, int max)
@@ -71,7 +53,6 @@ public class MergeSort implements Sort
         } else
         {
             int mid = (min + max) / 2;//The midpoint
-
             mergeSort(ac, min, mid);//sort the left side
             mergeSort(ac, mid + 1, max);//sort the right side
             merge(ac, min, max, mid);//combines them

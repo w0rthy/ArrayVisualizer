@@ -9,7 +9,7 @@ public class MaxHeapSort implements Sort
 
     private static int SLP = 1;
 
-    private static void maxheapifyrec(final ArrayController ac, int pos, boolean max)
+    private static void maxHeapifyRec(final ArrayController ac, int pos, boolean max)
     {
         if (pos >= ac.length)
         {
@@ -19,8 +19,8 @@ public class MaxHeapSort implements Sort
         int child1 = pos * 2 + 1;
         int child2 = pos * 2 + 2;
 
-        maxheapifyrec(ac, child1, max);
-        maxheapifyrec(ac, child2, max);
+        maxHeapifyRec(ac, child1, max);
+        maxHeapifyRec(ac, child2, max);
 
         if (child2 >= ac.length)
         {
@@ -49,11 +49,11 @@ public class MaxHeapSort implements Sort
         if (ac.array[lrg] > ac.array[pos])
         {
             swap(ac, pos, lrg, SLP);
-            percdwn(ac, lrg, true, ac.length);
+            percDwn(ac, lrg, true, ac.length);
         }
     }
 
-    private static void percdwn(final ArrayController ac, int pos, boolean max, int len)
+    private static void percDwn(final ArrayController ac, int pos, boolean max, int len)
     {
         int child1 = pos * 2 + 1;
         int child2 = pos * 2 + 2;
@@ -88,21 +88,21 @@ public class MaxHeapSort implements Sort
         if (max && (ac.array[child2] > ac.array[pos]))
         {
             swap(ac, pos, child2, SLP);
-            percdwn(ac, child2, max, len);
+            percDwn(ac, child2, max, len);
         } else if (!max && (ac.array[child1] < ac.array[pos]))
         {
             swap(ac, pos, child1, SLP);
-            percdwn(ac, child1, max, len);
+            percDwn(ac, child1, max, len);
         }
     }
 
-    private static void maxheapsort(final ArrayController ac)
+    private static void maxHeapSort(final ArrayController ac)
     {
-        maxheapifyrec(ac, 0, true);
+        maxHeapifyRec(ac, 0, true);
         for (int i = ac.length - 1; i > 0; i--)
         {
             swap(ac, 0, i, SLP);
-            percdwn(ac, 0, true, i);
+            percDwn(ac, 0, true, i);
         }
     }
 
@@ -115,6 +115,6 @@ public class MaxHeapSort implements Sort
     @Override
     public void sort(ArrayController ac)
     {
-        maxheapsort(ac);
+        maxHeapSort(ac);
     }
 }

@@ -16,7 +16,7 @@ public class CountingSort implements Sort
 {
     private static void countingSort(final ArrayController ac)
     {
-        int max = analyzemax(ac);
+        int max = analyzeMax(ac);
         int[] counts = new int[max + 1];
         for (int i = 0; i < ac.length; i++)
         {

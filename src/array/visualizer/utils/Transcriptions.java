@@ -32,7 +32,7 @@ public class Transcriptions
         }
     }
 
-    public static void transcribenm(ArrayList<Integer>[] registers, int[] array)
+    public static void transcribeNm(ArrayList<Integer>[] registers, int[] array)
     {
         int total = 0;
         for (ArrayList<Integer> register : registers)
@@ -46,7 +46,7 @@ public class Transcriptions
         }
     }
 
-    public static void transcribend(final ArrayController ac, ArrayList<Integer>[] registers, int min)
+    public static void transcribeNd(final ArrayController ac, ArrayList<Integer>[] registers, int min)
     {
         int total = 0;
         for (ArrayList<Integer> register : registers)
@@ -63,7 +63,7 @@ public class Transcriptions
         }
     }
 
-    public static void transcribermsd(final ArrayController ac, ArrayList<Integer>[] registers, int min)
+    public static void transcribeRmsd(final ArrayController ac, ArrayList<Integer>[] registers, int min)
     {
         int total = 0;
         for (ArrayList<Integer> ai : registers)
@@ -104,9 +104,9 @@ public class Transcriptions
     public static void fancyTranscribe(final ArrayController ac, ArrayList<Integer>[] registers)
     {
         int[] tmp = new int[ac.length];
-        boolean[] tmpwrite = new boolean[ac.length];
+        boolean[] tmpWrite = new boolean[ac.length];
         int radix = registers.length;
-        transcribenm(registers, tmp);
+        transcribeNm(registers, tmp);
         for (int i = 0; i < tmp.length; i++)
         {
             int register = i % radix;
@@ -115,22 +115,22 @@ public class Transcriptions
                 sleep(radix);//radix
             }
             int pos = (int) (((double) register * ((double) tmp.length / radix)) + ((double) i / radix));
-            if (!tmpwrite[pos])
+            if (!tmpWrite[pos])
             {
                 ac.array[pos] = tmp[pos];
                 ac.aa++;
-                tmpwrite[pos] = true;
+                tmpWrite[pos] = true;
             }
             ac.marked.set(register, pos);
         }
-        for (int i = 0; i < tmpwrite.length; i++)
+        for (int i = 0; i < tmpWrite.length; i++)
         {
-            if (!tmpwrite[i])
+            if (!tmpWrite[i])
             {
                 ac.array[i] = tmp[i];
                 ac.aa++;
             }
         }
-        clearmarked();
+        clearMarked();
     }
 }

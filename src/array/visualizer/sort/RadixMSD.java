@@ -26,11 +26,8 @@ public class RadixMSD implements Sort
 
     private static void radixMSDSort(final ArrayController ac, int radix)
     {
-        clearmarked();
-        int highestpower = analyze(ac, radix);
-        int[] tmp = new int[ac.length];
-        System.arraycopy(ac.array, 0, tmp, 0, ac.length);
-        radixMSDRec(ac, 0, ac.length, radix, highestpower);
+        int highestPower = analyze(ac, radix);
+        radixMSDRec(ac, 0, ac.length, radix, highestPower);
     }
 
     private static void radixMSDRec(final ArrayController ac, int min, int max, int radix, int pow)
@@ -52,7 +49,7 @@ public class RadixMSD implements Sort
             registers[getDigit(ac.array[i], pow, radix)].add(ac.array[i]);
             ac.aa++;
         }
-        transcribermsd(ac, registers, min);
+        transcribeRmsd(ac, registers, min);
 
         int sum = 0;
         for (ArrayList<Integer> register : registers)
