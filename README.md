@@ -14,3 +14,17 @@ https://www.youtube.com/watch?v=zcO8uxg_Spw
 
 Spiral Dots:
 https://www.youtube.com/watch?v=jrHLeKwMzfI
+
+# How to use
+
+### Build 
+```
+mkdir -p dist target
+javac src/array/visualizer/ArrayVisualizer.java -sourcepath src -d target/
+jar -cvfm dist/ArrayVisualizer.jar manifest.mf -C target/ ./
+```
+
+### Run
+```
+java -jar dist/ArrayVisualizer.jar
+```
