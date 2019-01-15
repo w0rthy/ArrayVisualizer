@@ -1,16 +1,15 @@
 # ArrayVisualizer
 Sorting Visualizer with 6 different views and 14 included sorting algorithms
 
-Outdated videos:
+## Videos
+[Vertical Pyramid](https://www.youtube.com/watch?v=QOYcpGnHH0g)
 
-Classic:
-https://www.youtube.com/watch?v=QmOtL6pPcI0
 
-Color Circle:
-https://www.youtube.com/watch?v=IjIViETya5k
+## Outdated videos
+[Classic](https://www.youtube.com/watch?v=QmOtL6pPcI0)
 
-Dots:
-https://www.youtube.com/watch?v=zcO8uxg_Spw
+[Color Circle](https://www.youtube.com/watch?v=IjIViETya5k)
 
-Spiral Dots:
-https://www.youtube.com/watch?v=jrHLeKwMzfI
+[Dots](https://www.youtube.com/watch?v=zcO8uxg_Spw)
+
+[Spiral Dots](https://www.youtube.com/watch?v=jrHLeKwMzfI)
