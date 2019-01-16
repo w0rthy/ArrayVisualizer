@@ -10,22 +10,26 @@ import static array.visualizer.ArrayVisualizer.*;
 import static array.visualizer.utils.Swaps.*;
 
 /**
- *
  * @author S630690
  */
-public class SelectionSort implements Sort {
-       
-    public static void selectionSort(final ArrayController ac) {
-        for (int i = 0; i < ac.length - 1; i++) {
-            int lowestindex = i;
-            for (int j = i + 1; j < ac.length; j++) {
-                if (ac.array[j] < ac.array[lowestindex]){
-                    lowestindex = j;
+public class SelectionSort implements Sort
+{
+
+    private static void selectionSort(final ArrayController ac)
+    {
+        for (int i = 0; i < ac.length - 1; i++)
+        {
+            int lowestIndex = i;
+            for (int j = i + 1; j < ac.length; j++)
+            {
+                if (ac.array[j] < ac.array[lowestIndex])
+                {
+                    lowestIndex = j;
                 }
                 sleep(0.01);
                 ac.comps++;
             }
-            swap(ac, i, lowestindex);
+            swap(ac, i, lowestIndex);
         }
     }
 

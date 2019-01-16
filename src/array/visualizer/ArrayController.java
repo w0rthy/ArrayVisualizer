@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 public class ArrayController
 {
-    public final int [] array;
+    public final int[] array;
     public final int length;
     public final ArrayList<Integer> marked;
     public long aa;
@@ -21,19 +21,21 @@ public class ArrayController
 
     public void clearMarked()
     {
-        for(int i = 0; i < length; i++)
+        for (int i = 0; i < length; i++)
+        {
             marked.set(i, -5);
+        }
     }
 
     public int get(int index)
     {
-        aa ++;
+        aa++;
         return array[index];
     }
 
     public int compare(int a, int b)
     {
-        comps ++;
+        comps++;
         return Integer.compare(array[a], array[b]);
     }
 }
