@@ -1,15 +1,19 @@
 # ArrayVisualizer
-Sorting Visualizer with 6 different views and 14 included sorting algorithms
+Sorting Visualizer/Audiolizer
 
 ## Videos
 [Vertical Pyramid](https://www.youtube.com/watch?v=QOYcpGnHH0g)
 
+[Dynamic Hoops](https://www.youtube.com/watch?v=S0RtR2Yllzk)
 
-## Outdated videos
-[Classic](https://www.youtube.com/watch?v=QmOtL6pPcI0)
+[TriMesh](https://www.youtube.com/watch?v=Zc__8qaLfJk)
 
-[Color Circle](https://www.youtube.com/watch?v=IjIViETya5k)
+[Horizontal Pyramid](https://www.youtube.com/watch?v=vmT3XUBoxiQ)
 
-[Dots](https://www.youtube.com/watch?v=zcO8uxg_Spw)
+[Static Hoops](https://www.youtube.com/watch?v=jXs1y3tCKQg)
 
-[Spiral Dots](https://www.youtube.com/watch?v=jrHLeKwMzfI)
+[Christmas Tree](https://www.youtube.com/watch?v=xY1tiHzo8mE)
+
+[Variable Width TriMesh](https://www.youtube.com/watch?v=0tr6AtLu4pg)
+
+[Color Circle](https://www.youtube.com/watch?v=sVYtGyPiGik)
