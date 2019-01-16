@@ -17,3 +17,18 @@ Sorting Visualizer/Audiolizer
 [Variable Width TriMesh](https://www.youtube.com/watch?v=0tr6AtLu4pg)
 
 [Color Circle](https://www.youtube.com/watch?v=sVYtGyPiGik)
+
+# How to use
+
+### Build 
+```
+mkdir -p dist target
+javac src/array/visualizer/ArrayVisualizer.java -sourcepath src -d target/
+jar -cvfm dist/ArrayVisualizer.jar manifest.mf -C target/ ./
+```
+
+### Run
+```
+java -jar dist/ArrayVisualizer.jar
+```
+=======
