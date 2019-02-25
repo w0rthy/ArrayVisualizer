@@ -66,7 +66,7 @@ public class ArrayVisualizer {
     static ArrayList<Color> COLORSTRAT2cols = new ArrayList<Color>();
     
     static String[] ComparativeSorts = "Selection!Bubble!Insertion!Double Selection!Cocktail Shaker!Quick!Merge!Merge OOP!Weave Merge!Max Heap!Shell".split("!");
-    static String[] DistributiveSorts = "Radix LSD!Radix MSD!Radix LSD In-Place!Gravity!Shatter!Counting!Time!Bogo".split("!");
+    static String[] DistributiveSorts = "Radix LSD!Radix MSD!Radix LSD In-Place!Binary Quicksort!Gravity!Shatter!Counting!Time!Bogo".split("!");
     
     static int cx = 0;
     static int cy = 0;
@@ -657,6 +657,7 @@ public class ArrayVisualizer {
                             new GravitySort(),
                             new RadixLSD(4),
                             new RadixMSD(4),
+                            new BinaryQuickSort(),
                             new RadixLSDInPlace(2),
                             new RadixLSDInPlace(10)}
                         )
@@ -766,14 +767,16 @@ public class ArrayVisualizer {
                 case 2:
                     sort = new RadixLSDInPlace(base);break;
                 case 3:
-                    sort = new GravitySort();break;
+                    sort = new BinaryQuickSort();break;
                 case 4:
-                    sort = new ShatterSorts(base);break;
+                    sort = new GravitySort();break;
                 case 5:
-                    sort = new CountingSort();break;
+                    sort = new ShatterSorts(base);break;
                 case 6:
-                    sort = new TimeSort(base);break;
+                    sort = new CountingSort();break;
                 case 7:
+                    sort = new TimeSort(base);break;
+                case 8:
                     sort = new BogoSort();break;
                 default:
                     sort = null; break;
