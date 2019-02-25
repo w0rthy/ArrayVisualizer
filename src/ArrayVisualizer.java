@@ -22,6 +22,7 @@ import static array.visualizer.InsertionSort.*;
 import static array.visualizer.MergeSort.*;
 import static array.visualizer.MergeSortOOP.*;
 import static array.visualizer.QuickSort.*;
+import static array.visualizer.BinaryQuickSort.*;
 import static array.visualizer.RadixLSD.*;
 import static array.visualizer.RadixMSD.*;
 import static array.visualizer.Searches.*;
@@ -91,7 +92,7 @@ public class ArrayVisualizer {
     static ArrayList<Color> COLORSTRAT2cols = new ArrayList<Color>();
     
     static String[] ComparativeSorts = "Selection!Bubble!Insertion!Double Selection!Cocktail Shaker!Quick!Merge!Merge OOP!Weave Merge!Max Heap!Shell".split("!");
-    static String[] DistributiveSorts = "Radix LSD!Radix MSD!Radix LSD In-Place!Gravity!Shatter!Counting!Time!Bogo".split("!");
+    static String[] DistributiveSorts = "Radix LSD!Radix MSD!Radix LSD In-Place!Binary Quick!Gravity!Shatter!Counting!Time!Bogo".split("!");
     
     static int cx = 0;
     static int cy = 0;
@@ -710,7 +711,7 @@ public class ArrayVisualizer {
                     refresharray();
                     heading = "Max Heap Sort";
                     maxheapsort();
-                    
+
                     chan.allNotesOff();
                     refresharray();
                     heading = "Quick Sort";
@@ -750,7 +751,12 @@ public class ArrayVisualizer {
                     refresharray();
                     heading = "Radix LSD In-Place Sort (Base 10)";
                     inPlaceRadixLSDSort(10);
-                    
+
+                    chan.allNotesOff();
+                    refresharray();
+                    heading = "Binary Quick Sort";
+                    bquickSort();
+
                 }catch (Exception e){}
                 SetSound(false);
                 stoptime = System.nanoTime();
@@ -835,14 +841,16 @@ public class ArrayVisualizer {
             case 2:
                 RadixLSDInPlace.inPlaceRadixLSDSort(base);break;
             case 3:
-                gravitySort();break;
+                bquickSort();break;
             case 4:
-                shatterSort(base);break;
+                gravitySort();break;
             case 5:
-                countingSort();break;
+                shatterSort(base);break;
             case 6:
-                timeSort(base);break;
+                countingSort();break;
             case 7:
+                timeSort(base);break;
+            case 8:
                 bogoSort();break;
         }
         }catch(Exception e){}
