@@ -9,8 +9,22 @@ import array.visualizer.ArrayController;
 import static array.visualizer.ArrayVisualizer.*;
 import static array.visualizer.utils.Analysis.*;
 import static array.visualizer.utils.Swaps.*;
+import java.util.Queue;
+import java.util.LinkedList;
 
 /**
+ * Binary MSD Radix Sort / Binary Quicksort.
+ *
+ * Implemented as recursive decent, and via task queue, see:
+ * * binaryQuickSortRecursive, and
+ * * binaryQuickSort respectively.
+ *
+ * Both of which are in-place sorting algorithms, with the recursive utilizing
+ * the stack for divide-and-conquer, while the non-recursive utilizes a queue.
+ *
+ * Can be extended to support unsigned integers, by sorting the first bit rin
+ * reverse. Can be made stable at the cost of O(n) memory. Can be parallalized
+ * to O(log2(n)) subtasks / threads.
  *
  * @author Skeen
  */
@@ -33,14 +47,45 @@ public class BinaryQuickSort implements Sort {
         return 31 - Integer.numberOfLeadingZeros(max);
     }
 
-    public static void binaryQuickSort(final ArrayController ac, int p, int r, int bit)
+    public static class Task {
+        public int p;
+        public int r;
+        public int bit;
+
+        public Task(int p, int r, int bit)
+        {
+            this.p = p;
+            this.r = r;
+            this.bit = bit;
+        }
+    }
+
+    public static void binaryQuickSortRecursive(final ArrayController ac, int p, int r, int bit)
     {
         if (p < r && bit >= 0)
         {
             int q=partition(ac, p, r, bit);
             sleep(1);
-            binaryQuickSort(ac, p, q, bit-1);
-            binaryQuickSort(ac, q+1, r, bit-1);
+            binaryQuickSortRecursive(ac, p, q, bit-1);
+            binaryQuickSortRecursive(ac, q+1, r, bit-1);
+        }
+    }
+
+    public static void binaryQuickSort(final ArrayController ac, int p, int r, int bit)
+    {
+        Queue<Task> tasks = new LinkedList<Task>();
+        tasks.add(new Task(p, r, bit));
+
+        while (tasks.isEmpty() == false) 
+        {
+            Task task = tasks.remove();
+            if (task.p < task.r && task.bit >= 0)
+            {
+                int q=partition(ac, task.p, task.r, task.bit);
+                sleep(1);
+                tasks.add(new Task(task.p, q, task.bit-1));
+                tasks.add(new Task(q+1, task.r, task.bit-1));
+            }
         }
     }
 
@@ -85,5 +130,6 @@ public class BinaryQuickSort implements Sort {
     {
         int msb = analyzeBit(ac);
         binaryQuickSort(ac, 0, ac.length-1, msb);
+        // binaryQuickSortRecursive(ac, 0, ac.length-1, msb);
     }
 }
