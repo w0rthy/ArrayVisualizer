@@ -1,16 +1,20 @@
-# ArrayVisualizer
-Sorting Visualizer with 6 different views and 14 included sorting algorithms
+# w0rthy's Array Visualizer - Revamped
+54 sorting algorithms demonstrated through 5 unique graphic designs
 
-Outdated videos:
+This new version of the program features new additions inspired by Timo Bingmann's "The Sound of Sorting" and w0rthy's own original Java app.
 
-Classic:
-https://www.youtube.com/watch?v=QmOtL6pPcI0
+- 40 new sorting algorithms
+- Updated visuals and sound effects
+- The array size is now adjustable
+- New shuffle types, including reversed, mostly similar numbers, almost sorted, and already sorted
+- Skip Sort button
+- Softer sounds toggle
+- A real time in milliseconds estimate
+- Toggle shuffle animation
+- Toggle Timo Bingmann's "end sweep" animation
 
-Color Circle:
-https://www.youtube.com/watch?v=IjIViETya5k
+Have fun!
 
-Dots:
-https://www.youtube.com/watch?v=zcO8uxg_Spw
+Videos this program is featured in:
 
-Spiral Dots:
-https://www.youtube.com/watch?v=jrHLeKwMzfI
+https://www.youtube.com/playlist?list=PL5w_-zMAJC8tSgmfaltMMj7Kn390eRzMq
