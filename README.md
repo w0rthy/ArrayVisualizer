@@ -14,7 +14,7 @@ This new version of the program features new additions inspired by Timo Bingmann
 - Toggle Timo Bingmann's "end sweep" animation
 - Refactored / optimized code
 
-Have fun!
+An executable .jar file is available in the dist folder. Have fun!
 
 Videos this program is featured in:
 
