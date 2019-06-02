@@ -12,6 +12,7 @@ This new version of the program features new additions inspired by Timo Bingmann
 - A real time in milliseconds estimate
 - Toggle shuffle animation
 - Toggle Timo Bingmann's "end sweep" animation
+- Refactored / optimized code
 
 Have fun!
 
