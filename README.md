@@ -5,7 +5,7 @@ This new version of the program features new additions inspired by Timo Bingmann
 
 - 40 new sorting algorithms
 - Updated visuals and sound effects
-- The array size is now adjustable
+- You can select different array sizes now
 - New shuffle types, including reversed, mostly similar numbers, almost sorted, and already sorted
 - Skip Sort button
 - Softer sounds toggle
