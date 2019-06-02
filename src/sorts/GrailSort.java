@@ -36,7 +36,7 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 /* Stable sorting that works in O(N*log(N)) worst time   */
 /* and uses O(1) extra memory                            */
 /*                                                       */
-/* Define int / SortComparator                     	     */
+/* Define int / SortComparator                     	 */
 /* and then call GrailSort() function                    */
 /*                                                       */
 /* For sorting w/ fixed external buffer (512 items)      */
