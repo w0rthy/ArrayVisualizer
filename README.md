@@ -1,34 +1,16 @@
 # ArrayVisualizer
-Sorting Visualizer/Audiolizer
+Sorting Visualizer with 6 different views and 14 included sorting algorithms
 
-## Videos
-[Vertical Pyramid](https://www.youtube.com/watch?v=QOYcpGnHH0g)
+Outdated videos:
 
-[Dynamic Hoops](https://www.youtube.com/watch?v=S0RtR2Yllzk)
+Classic:
+https://www.youtube.com/watch?v=QmOtL6pPcI0
 
-[TriMesh](https://www.youtube.com/watch?v=Zc__8qaLfJk)
+Color Circle:
+https://www.youtube.com/watch?v=IjIViETya5k
 
-[Horizontal Pyramid](https://www.youtube.com/watch?v=vmT3XUBoxiQ)
+Dots:
+https://www.youtube.com/watch?v=zcO8uxg_Spw
 
-[Static Hoops](https://www.youtube.com/watch?v=jXs1y3tCKQg)
-
-[Christmas Tree](https://www.youtube.com/watch?v=xY1tiHzo8mE)
-
-[Variable Width TriMesh](https://www.youtube.com/watch?v=0tr6AtLu4pg)
-
-[Color Circle](https://www.youtube.com/watch?v=sVYtGyPiGik)
-
-# How to use
-
-### Build 
-```
-mkdir -p dist target
-javac src/array/visualizer/ArrayVisualizer.java -sourcepath src -d target/
-jar -cvfm dist/ArrayVisualizer.jar manifest.mf -C target/ ./
-```
-
-### Run
-```
-java -jar dist/ArrayVisualizer.jar
-```
-=======
+Spiral Dots:
+https://www.youtube.com/watch?v=jrHLeKwMzfI
