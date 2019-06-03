@@ -5,15 +5,16 @@ This new version of the program features new additions inspired by Timo Bingmann
 
 - 40 new sorting algorithms
 - Updated visuals and sound effects
-- The array size is now adjustable
+- You can select different array sizes now
 - New shuffle types, including reversed, mostly similar numbers, almost sorted, and already sorted
 - Skip Sort button
 - Softer sounds toggle
 - A real time in milliseconds estimate
 - Toggle shuffle animation
 - Toggle Timo Bingmann's "end sweep" animation
+- Refactored / optimized code
 
-Have fun!
+An executable .jar file is available in the dist folder. Have fun!
 
 Videos this program is featured in:
 
