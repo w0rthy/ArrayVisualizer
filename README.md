@@ -1,7 +1,7 @@
 # w0rthy's Array Visualizer - Revamped
 54 sorting algorithms demonstrated through 5 unique graphic designs
 
-This new version of the program features new additions inspired by Timo Bingmann's "The Sound of Sorting" and w0rthy's own original Java app.
+This new version of the program features new additions inspired by Timo Bingmann's "The Sound of Sorting" and w0rthy's original visualizer.
 
 - 40 new sorting algorithms
 - Updated visuals and sound effects
