@@ -1982,9 +1982,8 @@ public class ArrayVisualizer {
 						radixLSDsort(getArr(), base);
 						break;
 					case 9:
-						SLEEPRATIO = 0.01;
+						SOUNDMUL = 0.01;
 						inPlaceRadixLSDSort(getArr(), base);
-						SLEEPRATIO = 1;
 						break;
 					case 10:
 						radixMSDSort(getArr(), base);

@@ -88,8 +88,11 @@ public class QuickSorts {
             }
 
             if (i <= j) {
-            	if(i == rand + p || j == rand + p) {
-            		marked.set(3, x);
+            	if(i == rand + p) {
+            		marked.set(3, j);
+            	}
+            	if(j == rand + p) {
+            		marked.set(3, i);
             	}
                 swap(a, i, j, 1, true);
                 

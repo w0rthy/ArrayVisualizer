@@ -102,8 +102,8 @@ public class Writes {
         if(calcReal) realTimer += ((System.nanoTime() - time) / 1e+6);
     }
     
-    public static void transcribe(int[] array, ArrayList<Integer>[] registers, int start, boolean msd, int min, boolean mark) 
-    																							throws Exception {
+    public static void transcribe(int[] array, ArrayList<Integer>[] registers, int start, boolean msd,
+    						      int min, boolean mark, boolean auxwrite) throws Exception {
     	int total = start;
         
         if(msd) {
@@ -115,7 +115,7 @@ public class Writes {
         	for(int index = registers.length - 1; index >= 0; index--) {
                 for(int i = registers[index].size() - 1; i >= 0; i--) {
                 	if(mark) sleep(1 + (2 / registers[index].size()));
-                    write(array, total + min - temp++ - 1, registers[index].get(i), 0, mark, false);
+                    write(array, total + min - temp++ - 1, registers[index].get(i), 0, mark, auxwrite);
                 }
             }
         }
@@ -123,7 +123,7 @@ public class Writes {
         	for(int index = 0; index < registers.length; index++) {
                 for(int i = 0; i < registers[index].size(); i++) {
                 	if(mark) sleep(1);
-                	write(array, total++, registers[index].get(i), 0, mark, false);
+                	write(array, total++, registers[index].get(i), 0, mark, auxwrite);
                 }
                 registers[index].clear();
             }
@@ -135,7 +135,8 @@ public class Writes {
         boolean[] tempWrite = new boolean[array.length];
         int radix = registers.length;
 
-        transcribe(tempArray, registers, 0, false, 0, false);
+        transcribe(tempArray, registers, 0, false, 0, false, true);
+        tempStores -= array.length;
         
         for(int i = 0; i < tempArray.length; i++) {
             int register = i % radix;

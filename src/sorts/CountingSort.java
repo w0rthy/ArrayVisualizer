@@ -56,7 +56,6 @@ public class CountingSort {
         for(int i = array.length - 1; i >= 0; i--) {
         	write(array, i, output[i], 1, false, false);
         	marked.set(1, i);
-            tempStores++;
         }
     }
 }

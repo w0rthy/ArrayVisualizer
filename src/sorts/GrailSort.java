@@ -36,7 +36,7 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 /* Stable sorting that works in O(N*log(N)) worst time   */
 /* and uses O(1) extra memory                            */
 /*                                                       */
-/* Define int / SortComparator                     	 */
+/* Define int / SortComparator                     	     */
 /* and then call GrailSort() function                    */
 /*                                                       */
 /* For sorting w/ fixed external buffer (512 items)      */
@@ -157,8 +157,9 @@ public class GrailSort {
 	// aBlockCount are regular blocks from stream A.
 	// lastLen is length of last (irregular) block from stream B, that should go before nblock2 blocks.
 	// lastLen = 0 requires aBlockCount = 0 (no irregular blocks). lastLen > 0, aBlockCount = 0 is possible.
-	private static void grailMergeBuffersLeft(int[] arr, int keysPos, int midkey, int pos, int blockCount, int blockLen, 
-						  boolean havebuf, int aBlockCount, int lastLen) {
+	private static void grailMergeBuffersLeft(int[] arr, int keysPos, int midkey, int pos, 
+											  int blockCount, int blockLen, boolean havebuf, int aBlockCount, 
+							                  int lastLen) {
 
 		if(blockCount == 0) {
 			int aBlocksLen = aBlockCount * blockLen;
@@ -351,8 +352,8 @@ public class GrailSort {
 	// aBlockCount are regular blocks from stream A.
 	// lastLen is length of last (irregular) block from stream B, that should go before aCountBlock blocks.
 	// lastLen = 0 requires aBlockCount = 0 (no irregular blocks). lastLen > 0, aBlockCount = 0 is possible.
-	private static void grailMergeBuffersLeftWithXBuf(int[] arr, int keysPos, int midkey, int pos, int blockCount, 
-							  int regBlockLen, int aBlockCount, int lastLen) {
+	private static void grailMergeBuffersLeftWithXBuf(int[] arr, int keysPos, int midkey, int pos,
+													  int blockCount, int regBlockLen, int aBlockCount, int lastLen) {
 
 		if(blockCount == 0) {
 			int aBlocksLen = aBlockCount * regBlockLen;
@@ -401,7 +402,8 @@ public class GrailSort {
 	// build blocks of length buildLen
 	// input: [-buildLen, -1] elements are buffer
 	// output: first buildLen elements are buffer, blocks 2 * buildLen and last subblock sorted
-	private static void grailBuildBlocks(int[] arr, int pos, int len, int buildLen, int[] extbuf, int bufferPos, int extBufLen) {
+	private static void grailBuildBlocks(int[] arr, int pos, int len, int buildLen, 
+										 int[] extbuf, int bufferPos, int extBufLen) {
 
 		int buildBuf = buildLen < extBufLen ? buildLen : extBufLen;
 		while((buildBuf & (buildBuf - 1)) != 0) buildBuf &= buildBuf - 1;  // max power or 2 - just in case
@@ -476,8 +478,8 @@ public class GrailSort {
 
 	// keys are on the left of arr. Blocks of length buildLen combined. We'll combine them in pairs
 	// buildLen and nkeys are powers of 2. (2 * buildLen / regBlockLen) keys are guaranteed
-	private static void grailCombineBlocks(int[] arr, int keyPos, int pos, int len, int buildLen, int regBlockLen, 
-					       boolean havebuf, int[] buffer, int bufferPos) {
+	private static void grailCombineBlocks(int[] arr, int keyPos, int pos, int len, int buildLen,
+										              int regBlockLen, boolean havebuf, int[] buffer, int bufferPos) {
 
 		int combineLen = len / (2 * buildLen);
 		int leftOver = len % (2 * buildLen);
@@ -567,7 +569,8 @@ public class GrailSort {
 		}
 	}
 
-	private static void grailCommonSort(int[] arr, int pos, int len, int[] buffer, int bufferPos, int bufferLen) {
+	private static void grailCommonSort(int[] arr, int pos, int len, 
+			int[] buffer, int bufferPos, int bufferLen) {
 
 		int blockLen = 1;
 		if(len < 16) {

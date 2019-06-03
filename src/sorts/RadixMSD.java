@@ -64,7 +64,7 @@ public class RadixMSD {
         }
         marked.set(2, -5);
         marked.set(3, -5);
-        transcribe(array,registers,0,true,min,true);
+        transcribe(array,registers,0,true,min,true,false);
         
         int sum = 0;
         for(int i = 0; i < registers.length; i++){

@@ -46,7 +46,7 @@ public class ShatterSorts {
             marked.set(1, i);
             mockWrite(array, 0.5);
         }
-        transcribe(array,registers,0,false,0,true);
+        transcribe(array,registers,0,false,0,true,false);
     }
     
     public static void shatterSort(int[] array, int num) throws Exception {
