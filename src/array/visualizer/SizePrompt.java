@@ -4,7 +4,8 @@
  */
 package array.visualizer;
 
-import static array.visualizer.ArrayVisualizer.*;
+import static array.visualizer.ArrayVisualizer.ArrayLengths;
+import static array.visualizer.ArrayVisualizer.selectArray;
 
 import javax.swing.JFrame;
 

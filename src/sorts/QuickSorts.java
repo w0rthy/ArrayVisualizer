@@ -63,18 +63,9 @@ SOFTWARE.
 */
 
 public class QuickSorts {
-	
-    public static void quickSort(int[] a, int p, int r) throws InterruptedException
-    {
-        if(p<r)
-        {
-            int q=partition(a,p,r);
-            quickSort(a,p,q);
-            quickSort(a,q+1,r);
-        }
-    }
     
-    private static int partition(int[] a, int p, int r) throws InterruptedException {    	
+	//Thanks to Timo Bingmann for providing a good reference for Quick Sort w/ LR pointers.
+    public static void quickSort(int[] a, int p, int r) throws InterruptedException {    	
     	int[] part = Arrays.copyOfRange(a, p, r);
         //int x = a[findAverage(a,p,r)];
     	int rand = ((int) (Math.random() * part.length));
@@ -84,27 +75,33 @@ public class QuickSorts {
 
         marked.set(3, rand + p);
         
-        while (true) {
-            while ( i< r && compare(a[i], x) == -1){
+        while (i <= j) {
+            while (compare(a[i], x) == -1){
                 i++;
                 marked.set(1, i);
                 sleep(0.5);
             }
-            while (j>p && compare(a[j], x) == 1){
+            while (compare(a[j], x) == 1){
                 j--;
                 marked.set(2, j);
                 sleep(0.5);
             }
 
-            if (i < j) {
+            if (i <= j) {
             	if(i == rand + p || j == rand + p) {
             		marked.set(3, x);
             	}
                 swap(a, i, j, 1, true);
+                
+                i++; j--;
             }
-            else {
-                return j;
-            }
+        }
+        
+        if(p < j) {
+        	quickSort(a, p, j);
+        }
+        if(i < r) {
+        	quickSort(a, i, r);
         }
     }
     

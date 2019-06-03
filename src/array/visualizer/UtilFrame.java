@@ -4,7 +4,18 @@
  */
 package array.visualizer;
 
-import static array.visualizer.ArrayVisualizer.*;
+import static array.visualizer.ArrayVisualizer.FANCYFINISH;
+import static array.visualizer.ArrayVisualizer.LINEDRAW;
+import static array.visualizer.ArrayVisualizer.REALTIMER;
+import static array.visualizer.ArrayVisualizer.SHUFFLEANIM;
+import static array.visualizer.ArrayVisualizer.SKIPPED;
+import static array.visualizer.ArrayVisualizer.SLEEPRATIO;
+import static array.visualizer.ArrayVisualizer.SOUNDMUL;
+import static array.visualizer.ArrayVisualizer.comps;
+import static array.visualizer.ArrayVisualizer.realTimer;
+import static array.visualizer.ArrayVisualizer.swaps;
+import static array.visualizer.ArrayVisualizer.tempStores;
+import static array.visualizer.ArrayVisualizer.writes;
 
 import java.awt.Toolkit;
 
