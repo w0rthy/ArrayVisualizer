@@ -1,5 +1,5 @@
 # w0rthy's Array Visualizer - Revamped
-54 sorting algorithms demonstrated through 5 unique graphic designs
+54 sorting algorithms demonstrated through 10 unique graphic designs
 
 This new version of the program features new additions inspired by Timo Bingmann's "The Sound of Sorting" and w0rthy's original visualizer.
 
@@ -13,6 +13,8 @@ This new version of the program features new additions inspired by Timo Bingmann
 - Toggle shuffle animation
 - Toggle Timo Bingmann's "end sweep" animation
 - Refactored / optimized code
+
+**If you are experiencing performance issues in Windows 10, look here: https://superuser.com/questions/988379/how-do-i-run-java-apps-upscaled-on-a-high-dpi-display
 
 An executable .jar file is available in the dist folder. Have fun!
 
