@@ -16,16 +16,16 @@ import javax.swing.JFrame;
 public class ShufflePrompt extends javax.swing.JFrame implements AAFrame {
 
     /**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	JFrame f;
-	
+     * 
+     */
+    private static final long serialVersionUID = 1L;
+    JFrame f;
+
     /**
      * Creates new form SortPrompt
      */
     @SuppressWarnings("unchecked")
-	public ShufflePrompt(JFrame f) {
+    public ShufflePrompt(JFrame f) {
         this.f = f;
         setAlwaysOnTop(true);
         setUndecorated(true);
@@ -34,11 +34,11 @@ public class ShufflePrompt extends javax.swing.JFrame implements AAFrame {
         reposition();
         setVisible(true);
     }
-    
+
     public void reposition() {
         setLocation(f.getX()+(f.getWidth()-getWidth())/2,f.getY()+(f.getHeight()-getHeight())/2);
     }
-    
+
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -63,48 +63,48 @@ public class ShufflePrompt extends javax.swing.JFrame implements AAFrame {
 
         jList1.setModel(new javax.swing.AbstractListModel() {
             /**
-			 * 
-			 */
-			private static final long serialVersionUID = 1L;
-			
-			String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
+             * 
+             */
+            private static final long serialVersionUID = 1L;
+
+            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
             public int getSize() { return strings.length; }
             public Object getElementAt(int i) { return strings[i]; }
         });
-        
+
         jList1.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
             public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
                 try {
-					jList1ValueChanged(evt);
-				} catch (Exception e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+                    jList1ValueChanged(evt);
+                } catch (Exception e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
             }
         });
-        
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
-            .addGroup(layout.createSequentialGroup()
-            	.addGap(5, 5, 5)
-            	.addComponent(jLabel1)
-            	.addGap(5, 5, 5))
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
-        );
+                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
+                .addGroup(layout.createSequentialGroup()
+                        .addGap(5, 5, 5)
+                        .addComponent(jLabel1)
+                        .addGap(5, 5, 5))
+                .addGroup(layout.createSequentialGroup()
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
+                );
         layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel1))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, true)
-                	.addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE))
-            	.addGap(5, 5, 5))
-        );
+                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(jLabel1))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, true)
+                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(5, 5, 5))
+                );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -113,21 +113,21 @@ public class ShufflePrompt extends javax.swing.JFrame implements AAFrame {
         // TODO add your handling code here:
         int selection = evt.getFirstIndex();
         switch (selection) {
-			case 0:
-        		shuffleType = "random";
-        		break;
-        	case 1:
-        		shuffleType = "reverse";
-        		break;
-        	case 2:
-        	    shuffleType = "similar";
-        		break;
-        	case 3:
-        		shuffleType = "almost";
-        		break;
-        	case 4:
-        		shuffleType = "sorted";
-        		break;
+        case 0:
+            shuffleType = "random";
+            break;
+        case 1:
+            shuffleType = "reverse";
+            break;
+        case 2:
+            shuffleType = "similar";
+            break;
+        case 3:
+            shuffleType = "almost";
+            break;
+        case 4:
+            shuffleType = "sorted";
+            break;
         }
         dispose();
     }//GEN-LAST:event_jList1ValueChanged
@@ -135,7 +135,7 @@ public class ShufflePrompt extends javax.swing.JFrame implements AAFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLabel1;
     @SuppressWarnings("rawtypes")
-	private javax.swing.JList jList1;
+    private javax.swing.JList jList1;
     private javax.swing.JScrollPane jScrollPane1;
     // End of variables declaration//GEN-END:variables
 }

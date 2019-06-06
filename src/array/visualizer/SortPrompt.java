@@ -19,16 +19,16 @@ import javax.swing.JFrame;
 public class SortPrompt extends javax.swing.JFrame implements AAFrame {
 
     /**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	JFrame f;
-	
+     * 
+     */
+    private static final long serialVersionUID = 1L;
+    JFrame f;
+
     /**
      * Creates new form SortPrompt
      */
     @SuppressWarnings("unchecked")
-	public SortPrompt(JFrame f) {
+    public SortPrompt(JFrame f) {
         this.f = f;
         setAlwaysOnTop(true);
         setUndecorated(true);
@@ -38,11 +38,11 @@ public class SortPrompt extends javax.swing.JFrame implements AAFrame {
         reposition();
         setVisible(true);
     }
-    
+
     public void reposition() {
         setLocation(f.getX()+(f.getWidth()-getWidth())/2,f.getY()+(f.getHeight()-getHeight())/2);
     }
-    
+
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -71,21 +71,21 @@ public class SortPrompt extends javax.swing.JFrame implements AAFrame {
 
         jList2.setModel(new javax.swing.AbstractListModel() {
             /**
-			 * 
-			 */
-			private static final long serialVersionUID = 1L;
-			
-			String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
+             * 
+             */
+            private static final long serialVersionUID = 1L;
+
+            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
             public int getSize() { return strings.length; }
             public Object getElementAt(int i) { return strings[i]; }
         });
-        
+
         jList2.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
             public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
                 jList2ValueChanged(evt);
             }
         });
-        
+
         jScrollPane1.setViewportView(jList2);
 
         jScrollPane2.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
@@ -97,21 +97,21 @@ public class SortPrompt extends javax.swing.JFrame implements AAFrame {
 
         jList1.setModel(new javax.swing.AbstractListModel() {
             /**
-			 * 
-			 */
-			private static final long serialVersionUID = 1L;
-			
-			String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
+             * 
+             */
+            private static final long serialVersionUID = 1L;
+
+            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
             public int getSize() { return strings.length; }
             public Object getElementAt(int i) { return strings[i]; }
         });
-        
+
         jList1.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
             public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
                 jList1ValueChanged(evt);
             }
         });
-        
+
         jScrollPane2.setViewportView(jList1);
 
         jButton1.setText("Run All (approx. 30 minutes)");
@@ -124,34 +124,34 @@ public class SortPrompt extends javax.swing.JFrame implements AAFrame {
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-            	.addGap(40, 40, 40)
-            	.addComponent(jLabel1)
-                .addGap(76, 76, 76)
-                .addComponent(jLabel2)
-                .addGap(35, 35, 35))
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))
-            .addGroup(javax.swing.GroupLayout.Alignment.CENTER, layout.createSequentialGroup()
-                .addComponent(jButton1))
-        );
+                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createSequentialGroup()
+                        .addGap(40, 40, 40)
+                        .addComponent(jLabel1)
+                        .addGap(76, 76, 76)
+                        .addComponent(jLabel2)
+                        .addGap(35, 35, 35))
+                .addGroup(layout.createSequentialGroup()
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(javax.swing.GroupLayout.Alignment.CENTER, layout.createSequentialGroup()
+                        .addComponent(jButton1))
+                );
         layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel1)
-                    .addComponent(jLabel2))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 200, Short.MAX_VALUE)
-                    .addComponent(jScrollPane1))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jButton1)
-                .addGap(0, 0, 0))
-        );
+                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(jLabel1)
+                                .addComponent(jLabel2))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 200, Short.MAX_VALUE)
+                                .addComponent(jScrollPane1))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jButton1)
+                        .addGap(0, 0, 0))
+                );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -165,11 +165,11 @@ public class SortPrompt extends javax.swing.JFrame implements AAFrame {
         new Thread(){
             public void run(){
                 try {
-					RunAllSorts();
-				} catch (Exception e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+                    RunAllSorts();
+                } catch (Exception e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
             }
         }.start();
         dispose();
@@ -178,28 +178,28 @@ public class SortPrompt extends javax.swing.JFrame implements AAFrame {
     private void jList1ValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_jList1ValueChanged
         // TODO add your handling code here:
         final int tmp = evt.getFirstIndex();
-        	new Thread(){
-        		public void run(){
-        			try {
-						ReportDistributiveSort(tmp);
-					} catch (Exception e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-        		}
-        	}.start();
-        	dispose();
+        new Thread(){
+            public void run(){
+                try {
+                    ReportDistributiveSort(tmp);
+                } catch (Exception e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+            }
+        }.start();
+        dispose();
     }//GEN-LAST:event_jList1ValueChanged
 
     private void jList2ValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_jList2ValueChanged
         // TODO add your handling code here:
         final int tmp = evt.getFirstIndex();
-        	new Thread(){
-        		public void run(){
-        			ReportComparativeSort(tmp);
-        		}
-        	}.start();
-        	dispose();
+        new Thread(){
+            public void run(){
+                ReportComparativeSort(tmp);
+            }
+        }.start();
+        dispose();
     }//GEN-LAST:event_jList2ValueChanged
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -207,9 +207,9 @@ public class SortPrompt extends javax.swing.JFrame implements AAFrame {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     @SuppressWarnings("rawtypes")
-	private javax.swing.JList jList1;
+    private javax.swing.JList jList1;
     @SuppressWarnings("rawtypes")
-	private javax.swing.JList jList2;
+    private javax.swing.JList jList2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     // End of variables declaration//GEN-END:variables
