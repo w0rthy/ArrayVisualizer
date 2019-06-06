@@ -75,6 +75,9 @@ import javax.sound.midi.Synthesizer;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
+//TO DO:
+// - Array size slider
+
 /*
 MIT License
 
@@ -101,13 +104,13 @@ SOFTWARE.
 public class ArrayVisualizer {
 
 	static String[] ComparativeSorts =  ("Bad!Binary Insert!Binary Merge!Bitonic!Bottom-Up Merge!Bubble!Cocktail Shaker!Comb!Cycle"
-									   + "!Double Selection!Dual-Pivot Quick!Gnome!Grail!Hybrid Comb!Insertion!Intro!Max Heap!Merge"
-									   + "!Merge In-Place!Min Heap!Odd-Even!Odd-Even Merge!Pancake!Patience!Quick!Quick Shell"
-									   + "!Selection!Shell!Silly!Slow!Smart Gnome!Smooth!Stable Quick!Stooge!Ternary Heap!Tim"
-									   + "!Tournament!Weak Heap!Weave Merge!Wiki").split("!");
+			+ "!Double Selection!Dual-Pivot Quick!Gnome!Grail!Hybrid Comb!Insertion!Intro!Max Heap!Merge"
+			+ "!Merge In-Place!Min Heap!Odd-Even!Odd-Even Merge!Pancake!Patience!Quick!Quick Shell"
+			+ "!Selection!Shell!Silly!Slow!Smart Gnome!Smooth!Stable Quick!Stooge!Ternary Heap!Tim"
+			+ "!Tournament!Weak Heap!Weave Merge!Wiki").split("!");
 
 	static String[] DistributiveSorts = ("American Flag!Bogo!Cocktail Bogo!Counting!Flash!Gravity!Less Bogo!Pigeonhole!Radix LSD"
-									   + "!Radix LSD In-Place!Radix MSD!Shatter!Simple Shatter!Time").split("!");
+			+ "!Radix LSD In-Place!Radix MSD!Shatter!Simple Shatter!Time").split("!");
 
 	static final JFrame window = new JFrame();
 	static Thread sortingThread;
@@ -125,15 +128,16 @@ public class ArrayVisualizer {
 	public static final ArrayList<Integer> marked = new ArrayList<Integer>();
 
 	static String[] ArrayLengths = { Integer.toString(tinyArray.length), 
-			                         Integer.toString(smallArray.length), 
-			                         Integer.toString(mediumArray.length), 
-			                         Integer.toString(largeArray.length) };
-	
+			Integer.toString(smallArray.length), 
+			Integer.toString(mediumArray.length), 
+			Integer.toString(largeArray.length) };
+
 	static int currentLen = largeArray.length;
-	
+	static volatile boolean MUTABLE = true;
+
 	static String[] ShuffleTypes = ("Random!Reversed!Mostly Similar!Almost Sorted!Already Sorted").split("!");
 	static volatile String shuffleType = "random";
-	
+
 	static String category = "";
 	static String heading = "";
 	static Font typeFace = new Font("Times New Roman",Font.PLAIN,(int)(640/1280.0*25));
@@ -149,22 +153,36 @@ public class ArrayVisualizer {
 	static long nanos;
 	static double SLEEPRATIO = 1.0;
 
-	static boolean BARDRAW = false;
-	static boolean CIRCLEDRAW = false;
-	static boolean PIXELDRAW = false;
-	static boolean LINEDRAW = false;
-	static boolean MESHDRAW = false;
+	static volatile boolean TEXTDRAW = true;
+	static volatile boolean COLOR = false;
+	static volatile boolean DISPARITYDRAW = false;
+	static volatile boolean LINEDRAW = false;
+	static volatile boolean PIXELDRAW = false;
+	static volatile boolean RAINBOW = false;
+	static volatile boolean SPIRALDRAW = false;
+
+	final static int CIRCULAR = 1;
+	final static int HOOPS = 2;
+	final static int MESH = 3;
+	final static int BARS = 4;
+	final static int PIXELS = 5;
+
+	static volatile int VISUALS = BARS;
 
 	static boolean SHUFFLEANIM = true;
 	static boolean FANCYFINISH = true;
 
 	static boolean SKIPPED = false;
-	
+
 	static volatile boolean ANALYZE = false;
 
-	static boolean fancyFinish;
+	static int markNum = (int) (Math.log10(currentLen) / Math.log10(2));
+
+	static volatile boolean fancyFinish;
 	static int trackFinish;
 	static boolean drawRect;
+
+	static volatile boolean POINTER;
 
 	static int pointerBase;
 	static int pointerHeight;
@@ -178,7 +196,8 @@ public class ArrayVisualizer {
 	private static final double PNT_BASE_B = .7741935484;
 	private static final double PNT_BASE_A = .0035282258;
 
-	static boolean SOUND = false;
+	static volatile boolean SOUND = true;
+	static boolean MIDI = false;
 	static int NUMCHANNELS = 10; //Number of Audio Channels
 	static double PITCHMIN = 25d; //Minimum Pitch
 	static double PITCHMAX = 105d; //Maximum Pitch (up to 112)
@@ -297,7 +316,7 @@ public class ArrayVisualizer {
 	}
 
 	public static synchronized void SetSound(boolean val){
-		SOUND = val;
+		MIDI = val;
 	}
 
 	private static void startRealTimer() {
@@ -319,14 +338,14 @@ public class ArrayVisualizer {
 	}
 
 	public static void main(String[] args) throws Exception {
-		BARDRAW = true;
+		VISUALS = BARS;
 		category = "Select a Sort";
-		
+
 		window.setSize(new Dimension(1280,720));
 		window.setLocation(0, 0);
 		window.setVisible(true);
 		window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		window.setTitle("w0rthy's Array Visualizer - 54 Sorting Algorithms with 5 Different Visual Styles");
+		window.setTitle("w0rthy's Array Visualizer - 54 Sorting Algorithms with 10 Different Visual Styles");
 		window.setBackground(Color.BLACK);
 
 		uf = new UtilFrame(window);
@@ -364,7 +383,7 @@ public class ArrayVisualizer {
 
 					for(MidiChannel c : chan)
 						c.allNotesOff();
-					if(SOUND == false){
+					if(SOUND == false || MIDI == false){
 						continue;
 					}
 
@@ -398,6 +417,39 @@ public class ArrayVisualizer {
 
 		//DRAW THREAD
 		new Thread(){
+			private void lineMark(Graphics2D line) {
+				line.setStroke(new BasicStroke(9f*(window.getWidth()/1280f)));
+				if(COLOR) line.setColor(Color.BLACK);
+				else if(ANALYZE) line.setColor(Color.BLUE);
+				else line.setColor(Color.RED);
+			}
+			private void lineClear(Graphics2D line, int i) {
+				if(COLOR) line.setColor(getIntColor(getArrIndex(i))); 
+				else line.setColor(Color.WHITE);
+				line.setStroke(new BasicStroke(3f*(window.getWidth()/1280f)));
+			}
+			private void lineFancy(Graphics2D line) {
+				line.setColor(Color.GREEN);
+				line.setStroke(new BasicStroke(9f*(window.getWidth()/1280f)));
+			}
+			private void rectColor(Graphics2D rect) {
+				if(COLOR) rect.setColor(Color.WHITE);
+				else if(ANALYZE) rect.setColor(Color.BLUE);
+				else rect.setColor(Color.RED);
+			}
+			private void markBarFancy(Graphics2D line) {
+				if(!COLOR && !RAINBOW) line.setColor(Color.RED);
+				else line.setColor(Color.BLACK);
+			}
+			private void markBar(Graphics2D bar) {
+				if(COLOR || RAINBOW) bar.setColor(Color.BLACK);
+				else if(ANALYZE) bar.setColor(Color.BLUE);
+				else bar.setColor(Color.RED);
+			}
+			private Color getIntColor(int i) {
+				return Color.getHSBColor(((float)i/currentLen), 1.0F, 0.8F);
+			}
+			
 			@Override
 			public void run() {
 				int cw = window.getWidth();
@@ -446,61 +498,300 @@ public class ArrayVisualizer {
 					int dots = (dotw+doth)/2;
 					g.setStroke(new BasicStroke(3f*(window.getWidth()/1280f)));
 
-					if(CIRCLEDRAW) {
+					switch(VISUALS) {
+					case CIRCULAR:
 						for(int i = 0; i < currentLen; i++){
-							if(i >= currentLen) {
-								break;
-							}
+							if(i >= currentLen) break;
 							else if(i < trackFinish) {
 								g.setColor(Color.getHSBColor((1f/3f), 1f, 0.8f));
 							}
+							else if(!COLOR && (SPIRALDRAW || DISPARITYDRAW || PIXELDRAW)) g.setColor(Color.WHITE);
 							else g.setColor(getIntColor(getArrIndex(i)));
 
-							if((marked.contains(i) && fancyFinish) ||
-									(marked.contains(i - 1) && fancyFinish && currentLen >= 128) ||
-									(marked.contains(i - 2) && fancyFinish && currentLen >= 256) ||
-									(marked.contains(i - 3) && fancyFinish && currentLen >= 512) ||
-									(marked.contains(i - 4) && fancyFinish && currentLen >= 1024) ||
-									(marked.contains(i - 5) && fancyFinish && currentLen >= 2048)) {
-								g.setColor(Color.BLACK);
+							if(fancyFinish) {
+								switch(markNum) {
+								case 12: if(i == trackFinish - 11) markBarFancy(g);
+								case 11: if(i == trackFinish - 10) markBarFancy(g);
+								case 10: if(i == trackFinish - 9) markBarFancy(g);
+								case 9: if(i == trackFinish - 8) markBarFancy(g);
+								case 8: if(i == trackFinish - 7) markBarFancy(g);
+								case 7: if(i == trackFinish - 6) markBarFancy(g);
+								case 6: if(i == trackFinish - 5) markBarFancy(g);
+								case 5: if(i == trackFinish - 4) markBarFancy(g);
+								case 4: if(i == trackFinish - 3) markBarFancy(g);
+								case 3: if(i == trackFinish - 2) markBarFancy(g);
+								case 2: if(i == trackFinish - 1) markBarFancy(g);
+								default: if(i == trackFinish) markBarFancy(g);
+								}
 							}
 							else {
-								if(marked.contains(i)) {
-									g2.setColor(Color.WHITE);
+								if(POINTER) {
+									if(marked.contains(i)) {
+										g2.setColor(Color.WHITE);
 
-									if(currentLen > 16) {
-										pointerBase = (int) Math.ceil(((PNT_BASE_A * currentLen) + PNT_BASE_B));
-										pointerHeight = (int) (((PNT_HEIGHT_A * currentLen) + PNT_HEIGHT_B)*(ch/1080));
-										pointerWidth = (int) (((PNT_WIDTH_A * currentLen) + PNT_WIDTH_B)*(cw/1280));
+										if(currentLen > 16) {
+											pointerBase = (int) Math.ceil(((PNT_BASE_A * currentLen) + PNT_BASE_B));
+											pointerHeight = (int) (((PNT_HEIGHT_A * currentLen) + PNT_HEIGHT_B)*(ch/1080));
+											pointerWidth = (int) (((PNT_WIDTH_A * currentLen) + PNT_WIDTH_B)*(cw/1280));
+										}
+										else {
+											pointerBase = 0;
+											pointerHeight = 0;
+											pointerWidth = 0;
+										}
+
+
+										sinVal = ((i+(i+1.0))/2.0);
+
+										Polygon pointer = new Polygon();
+										pointer.addPoint(halfwidth+(int)(Math.sin((sinVal-pointerBase)*Math.PI/circamt)*(window.getWidth()+pointerWidth)/4.43), halfheight-(int)(Math.cos((sinVal-pointerBase)*Math.PI/circamt)*(window.getHeight()+pointerHeight)/2.6));
+										pointer.addPoint(halfwidth+(int)(Math.sin(sinVal*Math.PI/circamt)*(window.getWidth()-50)/4.43), halfheight-(int)(Math.cos(sinVal*Math.PI/circamt)*(window.getHeight()-50)/2.6));
+										pointer.addPoint(halfwidth+(int)(Math.sin((sinVal+pointerBase)*Math.PI/circamt)*(window.getWidth()+pointerWidth)/4.43), halfheight-(int)(Math.cos((sinVal+pointerBase)*Math.PI/circamt)*(window.getHeight()+pointerHeight)/2.6));
+										g2.fillPolygon(pointer);
 									}
-									else {
-										pointerBase = 0;
-										pointerHeight = 0;
-										pointerWidth = 0;
-									}
-
-
-									sinVal = ((i+(i+1.0))/2.0);
-
-									Polygon pointer = new Polygon();
-									pointer.addPoint(halfwidth+(int)(Math.sin((sinVal-pointerBase)*Math.PI/circamt)*(window.getWidth()+pointerWidth)/4.43), halfheight-(int)(Math.cos((sinVal-pointerBase)*Math.PI/circamt)*(window.getHeight()+pointerHeight)/2.6));
-									pointer.addPoint(halfwidth+(int)(Math.sin(sinVal*Math.PI/circamt)*(window.getWidth()-50)/4.43), halfheight-(int)(Math.cos(sinVal*Math.PI/circamt)*(window.getHeight()-50)/2.6));
-									pointer.addPoint(halfwidth+(int)(Math.sin((sinVal+pointerBase)*Math.PI/circamt)*(window.getWidth()+pointerWidth)/4.43), halfheight-(int)(Math.cos((sinVal+pointerBase)*Math.PI/circamt)*(window.getHeight()+pointerHeight)/2.6));
-									g2.fillPolygon(pointer);
 								}
 							}
 
 							double sinval = Math.sin(i*Math.PI/circamt);
 							double cosval = Math.cos(i*Math.PI/circamt);
 
-							Polygon p = new Polygon();
-							p.addPoint(halfwidth, halfheight);
-							p.addPoint(halfwidth+(int)(sinval*(window.getWidth()-64)/4.675), halfheight-(int)(cosval*(window.getHeight()-96)/2.63));
-							p.addPoint(halfwidth+(int)(Math.sin((i+1)*Math.PI/circamt)*(window.getWidth()-64)/4.675), halfheight-(int)(Math.cos((i+1)*Math.PI/circamt)*(window.getHeight()-96)/2.63));
-							g.fillPolygon(p);
+							if(DISPARITYDRAW) {
+								double len = ((currentLen/2d)-Math.min(Math.min(Math.abs(i-getArrIndex(i)), Math.abs(i-getArrIndex(i)+currentLen)),Math.abs(i-getArrIndex(i)-currentLen)))/(currentLen/2d);
+
+								if(PIXELDRAW){
+									int linkedpixX = halfwidth+(int)(sinval*((window.getWidth()-64)/4.675*len)) + dotw/2;
+									int linkedpixY = halfheight-(int)(cosval*((window.getHeight()-96)/2.63*len)) + doth/2;
+
+									if(LINEDRAW){
+										if(i>0) {
+											if(fancyFinish) {
+												if(i < trackFinish) lineFancy(g);
+												else lineClear(g, i);
+
+												switch(markNum) {
+												case 12: if(i == trackFinish - 11) lineMark(g);
+												case 11: if(i == trackFinish - 10) lineMark(g);
+												case 10: if(i == trackFinish - 9) lineMark(g);
+												case 9: if(i == trackFinish - 8) lineMark(g);
+												case 8: if(i == trackFinish - 7) lineMark(g);
+												case 7: if(i == trackFinish - 6) lineMark(g);
+												case 6: if(i == trackFinish - 5) lineMark(g);
+												case 5: if(i == trackFinish - 4) lineMark(g);
+												case 4: if(i == trackFinish - 3) lineMark(g);
+												case 3: if(i == trackFinish - 2) lineMark(g);
+												case 2: if(i == trackFinish - 1) lineMark(g);
+												default: if(i == trackFinish) lineMark(g);
+												}
+											}
+											else {
+												if(marked.contains(i)) {
+													switch(markNum){
+													case 12: if(marked.contains(i - 10)) lineMark(g);														
+													case 11: if(marked.contains(i - 10)) lineMark(g);
+													case 10: if(marked.contains(i - 9)) lineMark(g);
+													case 9: if(marked.contains(i - 8)) lineMark(g);
+													case 8: if(marked.contains(i - 7)) lineMark(g);
+													case 7: if(marked.contains(i - 6)) lineMark(g);
+													case 6: if(marked.contains(i - 5)) lineMark(g);
+													case 5: if(marked.contains(i - 4)) lineMark(g);
+													case 4: if(marked.contains(i - 3)) lineMark(g);
+													case 3: if(marked.contains(i - 2)) lineMark(g);
+													case 2: if(marked.contains(i - 1)) lineMark(g);
+													default: lineMark(g);
+													}
+												}
+												else lineClear(g, i);
+											}
+											g.drawLine(linkedpixX, linkedpixY, linkedpixdrawx, linkedpixdrawy);
+										}
+										linkedpixdrawx = linkedpixX;
+										linkedpixdrawy = linkedpixY;
+									}
+									else {
+										if(marked.contains(i)) {
+											rectColor(g2);
+											drawRect = true;
+										}
+										else drawRect = false;
+
+										if(drawRect) {
+											g2.setStroke(thickStroke);
+											if(fancyFinish) {
+												g2.fillRect((linkedpixX - dotw/2) - 10, (linkedpixY - doth/2) - 10, dotw + 20, doth + 20);
+											}
+											else {
+												g2.drawRect((linkedpixX - dotw/2) - 10, (linkedpixY - doth/2) - 10, dotw + 20, doth + 20);
+											}
+											g2.setStroke(oldStroke);
+										}
+										
+										g.fillRect(linkedpixX - dotw/2, linkedpixY - doth/2, dotw, doth);
+									}
+								}
+								else{
+									Polygon p = new Polygon();
+									p.addPoint(halfwidth, halfheight);
+									p.addPoint(halfwidth+(int)(sinval*((window.getWidth()-64)/4.675*len)), halfheight-(int)(cosval*((window.getHeight()-96)/2.63*len)));
+									p.addPoint(halfwidth+(int)(Math.sin((i+1)*Math.PI/circamt)*((window.getWidth()-64)/4.675*len)), halfheight-(int)(Math.cos((i+1)*Math.PI/circamt)*((window.getHeight()-96)/2.63*len)));
+									g.fillPolygon(p);
+								}
+							}
+							else if(SPIRALDRAW) {
+								if(PIXELDRAW){
+									if(LINEDRAW){
+										if(i>0) {
+											if(fancyFinish) {
+												if(i < trackFinish) lineFancy(g);
+												else lineClear(g, i);
+
+												switch(markNum) {
+												case 12: if(i == trackFinish - 11) lineMark(g);
+												case 11: if(i == trackFinish - 10) lineMark(g);
+												case 10: if(i == trackFinish - 9) lineMark(g);
+												case 9: if(i == trackFinish - 8) lineMark(g);
+												case 8: if(i == trackFinish - 7) lineMark(g);
+												case 7: if(i == trackFinish - 6) lineMark(g);
+												case 6: if(i == trackFinish - 5) lineMark(g);
+												case 5: if(i == trackFinish - 4) lineMark(g);
+												case 4: if(i == trackFinish - 3) lineMark(g);
+												case 3: if(i == trackFinish - 2) lineMark(g);
+												case 2: if(i == trackFinish - 1) lineMark(g);
+												default: if(i == trackFinish) lineMark(g);
+												}
+											}
+											else {
+												if(marked.contains(i)) {
+													switch(markNum){
+													case 12: if(marked.contains(i - 10)) lineMark(g);														
+													case 11: if(marked.contains(i - 10)) lineMark(g);
+													case 10: if(marked.contains(i - 9)) lineMark(g);
+													case 9: if(marked.contains(i - 8)) lineMark(g);
+													case 8: if(marked.contains(i - 7)) lineMark(g);
+													case 7: if(marked.contains(i - 6)) lineMark(g);
+													case 6: if(marked.contains(i - 5)) lineMark(g);
+													case 5: if(marked.contains(i - 4)) lineMark(g);
+													case 4: if(marked.contains(i - 3)) lineMark(g);
+													case 3: if(marked.contains(i - 2)) lineMark(g);
+													case 2: if(marked.contains(i - 1)) lineMark(g);
+													default: lineMark(g);
+													}	
+												}
+												else lineClear(g, i);
+											}
+											g.drawLine(halfwidth+(int)(sinval*((window.getWidth()-64)/3.0*(getArrIndex(i)/(double)getArr().length))), halfheight-(int)(cosval*((window.getHeight()-96)/2.0*(getArrIndex(i)/(double)getArr().length))), linkedpixdrawx, linkedpixdrawy);
+										}
+										linkedpixdrawx = halfwidth+(int)(sinval*((window.getWidth()-64)/3.0*(getArrIndex(i)/(double)getArr().length)));
+										linkedpixdrawy = halfheight-(int)(cosval*((window.getHeight()-96)/2.0*(getArrIndex(i)/(double)getArr().length)));		
+									}
+									else {
+										if(marked.contains(i)) {
+											rectColor(g2);
+											drawRect = true;
+										}
+										else drawRect = false;
+
+										int rectx = halfwidth+(int)(sinval*((window.getWidth()-64)/3*(getArrIndex(i)/(double)getArr().length)));
+										int recty = halfheight-(int)(cosval*((window.getHeight()-96)/2*(getArrIndex(i)/(double)getArr().length)));
+
+										g.fillRect(rectx, recty, dotw, doth);
+
+										if(drawRect) {
+											g2.setStroke(thickStroke);
+											if(fancyFinish) {
+												g2.fillRect(rectx - 10, recty - 10, dotw + 20, doth + 20);
+											}
+											else {
+												g2.drawRect(rectx - 10, recty - 10, dotw + 20, doth + 20);
+											}
+											g2.setStroke(oldStroke);
+										}
+									}
+								}
+								else {
+									if(marked.contains(i)) {
+										switch(markNum) {
+										case 12: if(marked.contains(i - 10)) markBarFancy(g);
+										case 11: if(marked.contains(i - 10)) markBarFancy(g);
+										case 10: if(marked.contains(i - 9)) markBarFancy(g);
+										case 9: if(marked.contains(i - 8)) markBarFancy(g);
+										case 8: if(marked.contains(i - 7)) markBarFancy(g);
+										case 7: if(marked.contains(i - 6)) markBarFancy(g);
+										case 6: if(marked.contains(i - 5)) markBarFancy(g);
+										case 5: if(marked.contains(i - 4)) markBarFancy(g);
+										case 4: if(marked.contains(i - 3)) markBarFancy(g);
+										case 3: if(marked.contains(i - 2)) markBarFancy(g);
+										case 2: if(marked.contains(i - 1)) markBarFancy(g);
+										default: markBarFancy(g);
+										}
+									}
+									Polygon p = new Polygon();
+									p.addPoint(halfwidth, halfheight);
+									p.addPoint(halfwidth+(int)(Math.sin((i)*Math.PI/circamt)*((window.getWidth()-64)/3*(getArrIndex(i)/(double)getArr().length))), halfheight-(int)(Math.cos((i)*Math.PI/circamt)*((window.getHeight()-96)/2*(getArrIndex(i)/(double)getArr().length))));
+									p.addPoint(halfwidth+(int)(Math.sin((i+1)*Math.PI/circamt)*((window.getWidth()-64)/3*(getArrIndex(Math.min(i+1,getArr().length-1))/(double)getArr().length))), halfheight-(int)(Math.cos((i+1)*Math.PI/circamt)*((window.getHeight()-96)/2*(getArrIndex(Math.min(i+1,getArr().length-1))/(double)getArr().length))));
+									g.fillPolygon(p);
+								}
+							}
+							else {
+								Polygon p = new Polygon();
+								p.addPoint(halfwidth, halfheight);
+								p.addPoint(halfwidth+(int)(sinval*(window.getWidth()-64)/4.675), halfheight-(int)(cosval*(window.getHeight()-96)/2.63));
+								p.addPoint(halfwidth+(int)(Math.sin((i+1)*Math.PI/circamt)*(window.getWidth()-64)/4.675), halfheight-(int)(Math.cos((i+1)*Math.PI/circamt)*(window.getHeight()-96)/2.63));
+								g.fillPolygon(p);
+							}
 						}
-					}
-					else if(MESHDRAW) {
+						break;
+					case HOOPS:
+						g.setStroke(new BasicStroke(1.0f)); //significantly increased performance
+                        
+                        double maxdiam = (double)Math.min(cw, ch-72);
+                        double diameter = maxdiam;
+                        double diamstep = Math.min(xscl, yscl);
+                        
+                        for(int i = currentLen; i >= 0; i--){
+                        	if(fancyFinish) {
+								if(i < trackFinish) g.setColor(Color.GREEN);
+								else g.setColor(getIntColor(getArrIndex(i)));
+
+								switch(markNum) {
+								case 12: if(i == trackFinish - 11) g.setColor(Color.BLACK);
+								case 11: if(i == trackFinish - 10) g.setColor(Color.BLACK);
+								case 10: if(i == trackFinish - 9) g.setColor(Color.BLACK);
+								case 9: if(i == trackFinish - 8) g.setColor(Color.BLACK);
+								case 8: if(i == trackFinish - 7) g.setColor(Color.BLACK);
+								case 7: if(i == trackFinish - 6) g.setColor(Color.BLACK);
+								case 6: if(i == trackFinish - 5) g.setColor(Color.BLACK);
+								case 5: if(i == trackFinish - 4) g.setColor(Color.BLACK);
+								case 4: if(i == trackFinish - 3) g.setColor(Color.BLACK);
+								case 3: if(i == trackFinish - 2) g.setColor(Color.BLACK);
+								case 2: if(i == trackFinish - 1) g.setColor(Color.BLACK);
+								default: if(i == trackFinish) g.setColor(Color.BLACK);
+								}
+							}
+                        	else if(marked.contains(i)) {
+								switch(markNum) {
+								case 12: if(marked.contains(i - 10)) g.setColor(Color.BLACK);
+								case 11: if(marked.contains(i - 10)) g.setColor(Color.BLACK);
+								case 10: if(marked.contains(i - 9)) g.setColor(Color.BLACK);
+								case 9: if(marked.contains(i - 8)) g.setColor(Color.BLACK);
+								case 8: if(marked.contains(i - 7)) g.setColor(Color.BLACK);
+								case 7: if(marked.contains(i - 6)) g.setColor(Color.BLACK);
+								case 6: if(marked.contains(i - 5)) g.setColor(Color.BLACK);
+								case 5: if(marked.contains(i - 4)) g.setColor(Color.BLACK);
+								case 4: if(marked.contains(i - 3)) g.setColor(Color.BLACK);
+								case 3: if(marked.contains(i - 2)) g.setColor(Color.BLACK);
+								case 2: if(marked.contains(i - 1)) g.setColor(Color.BLACK);
+								default: g.setColor(Color.BLACK);
+								}
+							}
+                        	else g.setColor(getIntColor(getArrIndex(i)));
+                        	
+                            int radius = (int)(diameter/2.0);
+                            
+                            g.drawOval(halfwidth-radius, halfheight-radius-12, (int)diameter, (int)diameter);
+                            diameter-=diamstep;
+                        }
+                        break;
+					case MESH:
 						int trih = window.getHeight()/20; //Height of triangles to use, Width will be scaled accordingly
 						if(currentLen <= 64) {
 							trih *= 2.3;
@@ -517,15 +808,10 @@ public class ArrayVisualizer {
 						int[] triptsy = new int[3];
 
 						for(int i = 0; i < currentLen; i++){
-							if(marked.contains(i)/*||marked.contains(i-1)||marked.contains(i-2)||marked.contains(i-3)*/)
-								g.setColor(Color.BLACK);
+							if(marked.contains(i)) g.setColor(Color.BLACK);
 							else {
-								if(i >= currentLen) {
-									break;
-								}
-								if(fancyFinish && (i < trackFinish && i > trackFinish - (triperrow * 2))) {
-									g.setColor(Color.GREEN);
-								}
+								if(i >= currentLen) break;
+								if(fancyFinish && (i < trackFinish && i > trackFinish - (markNum * 10))) g.setColor(Color.GREEN);
 								else g.setColor(getIntColor(getArrIndex(i)));
 							}
 							//If i/triperrow is even, then triangle points right, else left
@@ -567,184 +853,119 @@ public class ArrayVisualizer {
 								cury+=trih/2;
 							}
 						}
-					}
-					else if(BARDRAW) {
+						break;
+					case BARS:
 						for(int i = 0; i < currentLen; i++){
 							if(fancyFinish) {
-								if(currentLen > 256) {
-									if(i < trackFinish - 6) {
-										g.setColor(Color.GREEN);
-									}
-									else if(i < (trackFinish + 32)) {
-										g.setColor(Color.RED);
-									}
-									else {
-										g.setColor(Color.WHITE);
-									}
-								}
-								else if(currentLen > 64) {
-									if(i < trackFinish - 3) {
-										g.setColor(Color.GREEN);
-									}
-									else if(i < (trackFinish + 8)) {
-										g.setColor(Color.RED);
-									}
-									else {
-										g.setColor(Color.WHITE);
-									}
-								}
-								else {
-									if(i < trackFinish) {
-										g.setColor(Color.GREEN);
-									}
-									else {
-										if(i < trackFinish + 1) {
-											g.setColor(Color.RED);
-										}
-										else {
-											g.setColor(Color.WHITE);
-										}
-									}
-								}
-							}
-							else if(currentLen > 256) {
-								if(marked.contains(i) || marked.contains(i - 1) || 
-										marked.contains(i - 2) || marked.contains(i - 3)) {
-									if(!ANALYZE) g.setColor(Color.RED);
-									else g.setColor(Color.BLUE);
-								}
-								else {
-									g.setColor(Color.WHITE);
-								}
-							}
-							else if(currentLen > 64) {
-								if(marked.contains(i) || marked.contains(i - 1)) {
-									if(!ANALYZE) g.setColor(Color.RED);
-									else g.setColor(Color.BLUE);
-								}
-								else {
-									g.setColor(Color.WHITE);
-								}
-							}
-							else {
-								if(marked.contains(i)) {
-									if(ANALYZE) g.setColor(Color.BLUE);
-									else g.setColor(Color.RED);
-								}
-								else {
-									g.setColor(Color.WHITE);
-								}
-							}
+								if(i < trackFinish) g.setColor(Color.GREEN);
+								else if(RAINBOW || COLOR) g.setColor(getIntColor(getArrIndex(i)));
+								else g.setColor(Color.WHITE);
 
+								switch(markNum) {
+								case 12: if(i == trackFinish - 11) markBarFancy(g);
+								case 11: if(i == trackFinish - 10) markBarFancy(g);
+								case 10: if(i == trackFinish - 9) markBarFancy(g);
+								case 9: if(i == trackFinish - 8) markBarFancy(g);
+								case 8: if(i == trackFinish - 7) markBarFancy(g);
+								case 7: if(i == trackFinish - 6) markBarFancy(g);
+								case 6: if(i == trackFinish - 5) markBarFancy(g);
+								case 5: if(i == trackFinish - 4) markBarFancy(g);
+								case 4: if(i == trackFinish - 3) markBarFancy(g);
+								case 3: if(i == trackFinish - 2) markBarFancy(g);
+								case 2: if(i == trackFinish - 1) markBarFancy(g);
+								default: if(i == trackFinish) markBarFancy(g);
+								}
+							}
+                        	else if(marked.contains(i)) {
+								switch(markNum) {
+								case 12: if(marked.contains(i - 10)) markBar(g);
+								case 11: if(marked.contains(i - 10)) markBar(g);
+								case 10: if(marked.contains(i - 9)) markBar(g);
+								case 9: if(marked.contains(i - 8)) markBar(g);
+								case 8: if(marked.contains(i - 7)) markBar(g);
+								case 7: if(marked.contains(i - 6)) markBar(g);
+								case 6: if(marked.contains(i - 5)) markBar(g);
+								case 5: if(marked.contains(i - 4)) markBar(g);
+								case 4: if(marked.contains(i - 3)) markBar(g);
+								case 3: if(marked.contains(i - 2)) markBar(g);
+								case 2: if(marked.contains(i - 1)) markBar(g);
+								default: markBar(g);
+								}
+							}
+                        	else {
+								if(RAINBOW || COLOR) g.setColor(getIntColor(getArrIndex(i)));
+								else g.setColor(Color.WHITE);
+							}
+							
 							int y = 0;
 							int width = (int)(xscl*i)-amt;
 
-							if(width>0){
-								if(i >= currentLen) {
-									break;
+							if(RAINBOW) {
+								if(width>0){
+									if(i >= currentLen) break;
+									
+									g.fillRect(amt+20, 0, width, window.getHeight());
 								}
-								y = (int)((window.getHeight()-20)-getArrIndex(i)*yscl);
-								g.fillRect(amt+20, y, width, (int) Math.max(getArrIndex(i)*yscl,1));
+								amt+=width;
 							}
-							amt+=width;
+							else {
+								if(width>0){
+									if(i >= currentLen) break;
+									y = (int)((window.getHeight()-20)-getArrIndex(i)*yscl);
+									g.fillRect(amt+20, y, width, (int) Math.max(getArrIndex(i)*yscl,1));
+								}
+								amt+=width;
+							}
 						}
-					}
-					else if(PIXELDRAW) {
+						break;
+					case PIXELS:
 						if(LINEDRAW) {
 							for(int i = 0; i < currentLen; i++){
-
 								int y = 0;
 								int width = (int)(xscl*i)-amt;
 
 								if(width>0){
-									if(i >= currentLen) {
-										break;
+									if(i >= currentLen) break;
 
-									}
 									y = (int)((window.getHeight()-20)-getArrIndex(i)*yscl);
 									if(i>0) {
 										if(fancyFinish) {
-											if(currentLen > 256) {
-												if(i < trackFinish - 6) {
-													g.setColor(Color.GREEN);
-													g.setStroke(new BasicStroke(9f*(window.getWidth()/1280f)));
-												}
-												else if(i < (trackFinish + 32)) {
-													g.setColor(Color.RED);
-													g.setStroke(new BasicStroke(9f*(window.getWidth()/1280f)));
-												}
-												else {
-													g.setColor(Color.WHITE);
-													g.setStroke(new BasicStroke(3f*(window.getWidth()/1280f)));
-												}
-											}
-											else if(currentLen > 64) {
-												if(i < trackFinish - 3) {
-													g.setColor(Color.GREEN);
-													g.setStroke(new BasicStroke(9f*(window.getWidth()/1280f)));
-												}
-												else if(i < (trackFinish + 8)) {
-													g.setColor(Color.RED);
-													g.setStroke(new BasicStroke(9f*(window.getWidth()/1280f)));
-												}
-												else {
-													g.setColor(Color.WHITE);
-													g.setStroke(new BasicStroke(3f*(window.getWidth()/1280f)));
-												}
-											}
-											else {
-												if(i < trackFinish) {
-													g.setColor(Color.GREEN);
-													g.setStroke(new BasicStroke(9f*(window.getWidth()/1280f)));
-												}
-												else {
-													if(i < trackFinish + 1) {
-														g.setColor(Color.RED);
-														g.setStroke(new BasicStroke(9f*(window.getWidth()/1280f)));
-													}
-													else {
-														g.setColor(Color.WHITE);
-														g.setStroke(new BasicStroke(3f*(window.getWidth()/1280f)));
-													}
-												}
+											if(i < trackFinish) lineFancy(g);
+											else lineClear(g, i);
+
+											switch(markNum) {
+											case 12: if(i == trackFinish - 11) lineMark(g);
+											case 11: if(i == trackFinish - 10) lineMark(g);
+											case 10: if(i == trackFinish - 9) lineMark(g);
+											case 9: if(i == trackFinish - 8) lineMark(g);
+											case 8: if(i == trackFinish - 7) lineMark(g);
+											case 7: if(i == trackFinish - 6) lineMark(g);
+											case 6: if(i == trackFinish - 5) lineMark(g);
+											case 5: if(i == trackFinish - 4) lineMark(g);
+											case 4: if(i == trackFinish - 3) lineMark(g);
+											case 3: if(i == trackFinish - 2) lineMark(g);
+											case 2: if(i == trackFinish - 1) lineMark(g);
+											default: if(i == trackFinish) lineMark(g);
 											}
 										}
-										else if(currentLen > 256) {
-											if(marked.contains(i) || marked.contains(i - 1) || 
-													marked.contains(i - 2) || marked.contains(i - 3) || 
-													marked.contains(i - 4) || marked.contains(i - 5)) {
-												g.setStroke(new BasicStroke(9f*(window.getWidth()/1280f)));
-												if(ANALYZE) g.setColor(Color.BLUE);
-												else g.setColor(Color.RED);
-											}
-											else {
-												g.setStroke(new BasicStroke(3f*(window.getWidth()/1280f)));
-												g.setColor(Color.WHITE);
-											}
-										}
-										else if(currentLen > 64) {
-											if(marked.contains(i) || marked.contains(i - 1) || 
-													marked.contains(i - 2)) {
-												g.setStroke(new BasicStroke(9f*(window.getWidth()/1280f)));
-												if(ANALYZE) g.setColor(Color.BLUE);
-												else g.setColor(Color.RED);
-											}
-											else {
-												g.setStroke(new BasicStroke(3f*(window.getWidth()/1280f)));
-												g.setColor(Color.WHITE);
+										else if(marked.contains(i)) {
+											switch(markNum){
+											case 12: if(marked.contains(i - 10)) lineMark(g);														
+											case 11: if(marked.contains(i - 10)) lineMark(g);
+											case 10: if(marked.contains(i - 9)) lineMark(g);
+											case 9: if(marked.contains(i - 8)) lineMark(g);
+											case 8: if(marked.contains(i - 7)) lineMark(g);
+											case 7: if(marked.contains(i - 6)) lineMark(g);
+											case 6: if(marked.contains(i - 5)) lineMark(g);
+											case 5: if(marked.contains(i - 4)) lineMark(g);
+											case 4: if(marked.contains(i - 3)) lineMark(g);
+											case 3: if(marked.contains(i - 2)) lineMark(g);
+											case 2: if(marked.contains(i - 1)) lineMark(g);
+											default: lineMark(g);
 											}
 										}
-										else {
-											if((i == trackFinish + 1 && fancyFinish) || marked.contains(i)) {
-												g.setStroke(new BasicStroke(9f*(window.getWidth()/1280f)));
-												if(ANALYZE) g.setColor(Color.BLUE);
-												else g.setColor(Color.RED);
-											}
-											else {
-												g.setStroke(new BasicStroke(3f*(window.getWidth()/1280f)));
-												g.setColor(Color.WHITE);
-											}
-										}
+										else lineClear(g, i);
+										
 										g.drawLine(amt, y, linkedpixdrawx, linkedpixdrawy);
 									}
 									linkedpixdrawx = amt;
@@ -755,27 +976,22 @@ public class ArrayVisualizer {
 						}
 						else {
 							for(int i = 0; i < currentLen; i++){
-								if(i < trackFinish) {
-									g.setColor(Color.GREEN);
-								}
+								if(i < trackFinish) g.setColor(Color.GREEN);
 								else if(i == trackFinish && fancyFinish) {
-									if(ANALYZE) g.setColor(Color.BLUE);
+									if(COLOR) g.setColor(Color.WHITE);
 									else g.setColor(Color.RED);
 								}
+								else if(COLOR) g.setColor(getIntColor(getArrIndex(i)));
 								else g.setColor(Color.WHITE);
-
+								
 								int y = 0;
 								int width = (int)(xscl*i)-amt;
 
 								if(marked.contains(i)) {
-									if(ANALYZE) g2.setColor(Color.BLUE);
-									else g2.setColor(Color.RED);
+									rectColor(g2);
 									drawRect = true;
 								}
-								else {
-									g2.setColor(Color.BLACK);
-									drawRect = false;
-								}
+								else drawRect = false;
 
 								if(width>0){
 									if(i >= currentLen) {
@@ -797,37 +1013,35 @@ public class ArrayVisualizer {
 								amt+=width;
 							}
 						}
-					}
-					else {
+						break;
+					default:
 						try {
 							throw new Exception("Invalid graphic setting!");
 						} catch (Exception e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
 						}
+						break;
 					}
-
 					int coltmp = 255;
 					g.setColor(new Color(coltmp,coltmp,coltmp));
-					Font f = g.getFont();
-					g.setFont(typeFace);
-					g.drawString(category + ": " + heading, 15, (int)(cw/1280.0*40)+30);
-					g.drawString(formatter.format(currentLen) + " Numbers", 15, (int)(cw/1280.0*65)+30);
-					g.drawString(String.format("Delay: " + formatter.format(delay) + "ms"), 15, (int)(cw/1280.0*105)+30);
-					g.drawString(String.format("Estimated Real Time: " + getRealTime()), 15, (int)(cw/1280.0*130)+30);
-					g.drawString(checkCompOverflow() + " Comparisons", 15, (int)(cw/1280.0*170)+30);
-					g.drawString(checkSwapOverflow() + " Swaps", 15, (int)(cw/1280.0*195)+30);
-					g.drawString(checkWriteOverflow() + " Writes to Main Array", 15, (int)(cw/1280.0*220)+30);
-					g.drawString(checkTempOverflow() + " Writes to Auxillary Array(s)", 15, (int)(cw/1280.0*245)+30);
-					g.setFont(f);
+					if(TEXTDRAW) {
+						Font f = g.getFont();
+						g.setFont(typeFace);
+						g.drawString(category + ": " + heading, 15, (int)(cw/1280.0*40)+30);
+						g.drawString(formatter.format(currentLen) + " Numbers", 15, (int)(cw/1280.0*65)+30);
+						g.drawString(String.format("Delay: " + formatter.format(delay) + "ms"), 15, (int)(cw/1280.0*105)+30);
+						g.drawString(String.format("Estimated Real Time: " + getRealTime()), 15, (int)(cw/1280.0*130)+30);
+						g.drawString(checkCompOverflow() + " Comparisons", 15, (int)(cw/1280.0*170)+30);
+						g.drawString(checkSwapOverflow() + " Swaps", 15, (int)(cw/1280.0*195)+30);
+						g.drawString(checkWriteOverflow() + " Writes to Main Array", 15, (int)(cw/1280.0*220)+30);
+						g.drawString(checkTempOverflow() + " Writes to Auxillary Array(s)", 15, (int)(cw/1280.0*245)+30);
+						g.setFont(f);
+					}
 					Graphics g3 = window.getGraphics();
 					g3.setColor(Color.BLACK);
 					g3.drawImage(img, 0, 0, null);
 				}
-			}
-
-			public Color getIntColor(int i) {
-				return Color.getHSBColor(((float)i/currentLen), 1.0F, 0.8F);
 			}
 		}.start();
 
@@ -986,7 +1200,8 @@ public class ArrayVisualizer {
 			public void run(){
 				try{
 					double storeVol = SOUNDMUL;
-					
+					MUTABLE = false;
+
 					category = "Exchange Sorts";
 
 					SLEEPRATIO = 2.5; 
@@ -1015,7 +1230,7 @@ public class ArrayVisualizer {
 					Thread.sleep(1000);
 
 					SLEEPRATIO = 2.5;
-					
+
 					refresharray();
 					SLEEPRATIO = 30;
 					heading = "Gnome Sort";
@@ -1092,7 +1307,7 @@ public class ArrayVisualizer {
 					Thread.sleep(1000);
 
 					category = "Selection Sorts";
-		
+
 					SLEEPRATIO = 2.5;
 
 					refresharray();
@@ -1105,7 +1320,7 @@ public class ArrayVisualizer {
 					Thread.sleep(1000);
 
 					SLEEPRATIO = 2.5; 
-				
+
 					refresharray();
 					heading = "Double Selection Sort";
 					SLEEPRATIO = 25;
@@ -1138,7 +1353,7 @@ public class ArrayVisualizer {
 					Thread.sleep(1000);
 
 					SLEEPRATIO = 2.5;
-					
+
 					refresharray();
 					heading = "Ternary Heap Sort";
 					SLEEPRATIO = 1.65;
@@ -1182,7 +1397,7 @@ public class ArrayVisualizer {
 					Thread.sleep(1000);
 
 					SLEEPRATIO = 2.5; 
-					
+
 					refresharray();
 					heading = "Tournament Sort";
 					SLEEPRATIO = 1.5;
@@ -1195,7 +1410,7 @@ public class ArrayVisualizer {
 					category = "Insertion Sorts";
 
 					SLEEPRATIO = 2.5; 
-					
+
 					refresharray();
 					heading = "Insertion Sort";
 					SLEEPRATIO = 2;
@@ -1239,9 +1454,9 @@ public class ArrayVisualizer {
 					Thread.sleep(1000);
 
 					category = "Merge Sorts";
-					
+
 					SLEEPRATIO = 2.5; 
-					
+
 					refresharray();
 					heading = "Merge Sort";
 					SLEEPRATIO = 1.75;
@@ -1263,7 +1478,7 @@ public class ArrayVisualizer {
 					Thread.sleep(1000);
 
 					category = "Distribution Sorts";
-					
+
 					SLEEPRATIO = 2.5; 
 
 					refresharray();
@@ -1313,7 +1528,7 @@ public class ArrayVisualizer {
 					heading = "Radix LSD Sort, Base 4";
 					SLEEPRATIO = 2;
 					startRealTimer();
-					radixLSDsort(largeArray, 8);
+					radixLSDsort(largeArray, 4);
 
 					endSort();
 					Thread.sleep(1000);
@@ -1322,10 +1537,10 @@ public class ArrayVisualizer {
 					SOUNDMUL = 0.01;
 
 					refresharray();
-					heading = "In-Place Radix LSD Sort, Base 10";
+					heading = "In-Place Radix LSD Sort, Base 16";
 					SLEEPRATIO = 2;
 					startRealTimer();
-					inPlaceRadixLSDSort(largeArray, 10);
+					inPlaceRadixLSDSort(largeArray, 16);
 
 					endSort();
 					Thread.sleep(1000);
@@ -1337,7 +1552,7 @@ public class ArrayVisualizer {
 					heading = "Radix MSD Sort, Base 8";
 					SLEEPRATIO = 1.75;
 					startRealTimer();
-					radixMSDSort(largeArray, 6);
+					radixMSDSort(largeArray, 8);
 
 					endSort();
 					Thread.sleep(1000);
@@ -1374,7 +1589,7 @@ public class ArrayVisualizer {
 
 					endSort();
 					Thread.sleep(1000);
-					
+
 					SLEEPRATIO = 2.5;
 
 					refresharray();
@@ -1525,7 +1740,7 @@ public class ArrayVisualizer {
 
 					endSort();
 					Thread.sleep(1000);
-					
+
 					category = "Impractical Sorts";
 
 					refresharray();
@@ -1601,7 +1816,8 @@ public class ArrayVisualizer {
 
 					category = "Run All";
 					heading = "Done";
-					
+
+					MUTABLE = true;
 					SOUNDMUL = storeVol;
 				}catch (Exception e){}
 				SetSound(false);
@@ -1618,12 +1834,13 @@ public class ArrayVisualizer {
 			SLEEPRATIO = 1;
 			SKIPPED = false;
 		}
-		
+
 		SetSound(true);
 		sortingThread = new Thread(){
 			public void run(){
 				try{
 					boolean goAhead;
+					MUTABLE = false;
 					refresharray();
 					heading = ComparativeSorts[n] + " Sort";
 					startRealTimer();
@@ -1748,16 +1965,16 @@ public class ArrayVisualizer {
 						if(currentLen > 256) {
 							Object[] options = { "Let's see how bad Silly Sort is!", "Cancel" };
 							int n = JOptionPane.showOptionDialog(window, "Even at a high speed, Silly Sorting " + currentLen + 
-																		 " numbers will not finish in a reasonable amount of time. "
-																		 + "Are you sure you want to continue?", "Warning!", 2, 
-																		 JOptionPane.WARNING_MESSAGE, null, options, options[1]);
+									" numbers will not finish in a reasonable amount of time. "
+									+ "Are you sure you want to continue?", "Warning!", 2, 
+									JOptionPane.WARNING_MESSAGE, null, options, options[1]);
 							if(n == 0) goAhead = true;
 							else goAhead = false;
 						}
 						else {
 							goAhead = true;
 						}
-						
+
 						if(goAhead) {
 							category = "Exchange Sorts";
 							sillySort(getArr(), 0, getArr().length - 1);
@@ -1849,6 +2066,7 @@ public class ArrayVisualizer {
 						startWikiSort(getArr());
 						break;
 					}
+					MUTABLE = true;
 					endSort();
 				}catch(Exception e){e.printStackTrace();}
 				SetSound(false);
@@ -1865,10 +2083,10 @@ public class ArrayVisualizer {
 			SLEEPRATIO = 1;
 			SKIPPED = false;
 		}
-		
+
 		double storeVol = SOUNDMUL;
 		category = "Distributive Sorts";
-		
+
 		int bas = 10;
 		if(n==8||n==9||n==10) {
 			try{bas = Integer.parseInt(JOptionPane.showInputDialog(null, "Enter Base for Sort"));}catch(Exception e){}
@@ -1886,7 +2104,8 @@ public class ArrayVisualizer {
 			@Override
 			public void run(){
 				try {
-					boolean goAhead = false;
+					boolean goAhead;
+					MUTABLE = false;
 					refresharray();
 					heading = DistributiveSorts[num]+" Sort";
 					startRealTimer();
@@ -1921,9 +2140,9 @@ public class ArrayVisualizer {
 						if(currentLen > 256) {
 							Object[] options = { "Let's see how bad Cocktail Bogo Sort is!", "Cancel" };
 							int n = JOptionPane.showOptionDialog(window, "Even at a high speed, Cocktail Bogo Sorting " 
-							        + currentLen + " numbers will almost certainly not finish in a reasonable amount "
-							        + "of time. Are you sure you want to continue?", "Warning!", 2, JOptionPane.WARNING_MESSAGE, 
-							        null, options, options[1]);
+									+ currentLen + " numbers will almost certainly not finish in a reasonable amount "
+									+ "of time. Are you sure you want to continue?", "Warning!", 2, JOptionPane.WARNING_MESSAGE, 
+									null, options, options[1]);
 							if(n == 0) {
 								goAhead = true;
 								SLEEPRATIO = 1000;
@@ -1955,9 +2174,9 @@ public class ArrayVisualizer {
 						if(currentLen > 256) {
 							Object[] options = { "Let's see how bad Less Bogo Sort is!", "Cancel" };
 							int n = JOptionPane.showOptionDialog(window, "Even at a high speed, Less Bogo Sorting " 
-							        + currentLen + " numbers will almost certainly not finish in a reasonable amount "
-							        + "of time. Are you sure you want to continue?", "Warning!", 2, JOptionPane.WARNING_MESSAGE, 
-							        null, options, options[1]);
+									+ currentLen + " numbers will almost certainly not finish in a reasonable amount "
+									+ "of time. Are you sure you want to continue?", "Warning!", 2, JOptionPane.WARNING_MESSAGE, 
+									null, options, options[1]);
 							if(n == 0) {
 								goAhead = true;
 								SLEEPRATIO = 1000;
@@ -1998,6 +2217,7 @@ public class ArrayVisualizer {
 						timeSort(getArr(), base);
 						break;
 					}
+					MUTABLE = true;
 					endSort();
 					SOUNDMUL = storeVol;
 				}catch(Exception e){}

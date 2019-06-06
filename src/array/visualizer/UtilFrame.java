@@ -4,13 +4,17 @@
  */
 package array.visualizer;
 
+import static array.visualizer.ArrayVisualizer.COLOR;
 import static array.visualizer.ArrayVisualizer.FANCYFINISH;
 import static array.visualizer.ArrayVisualizer.LINEDRAW;
+import static array.visualizer.ArrayVisualizer.MUTABLE;
 import static array.visualizer.ArrayVisualizer.REALTIMER;
 import static array.visualizer.ArrayVisualizer.SHUFFLEANIM;
 import static array.visualizer.ArrayVisualizer.SKIPPED;
 import static array.visualizer.ArrayVisualizer.SLEEPRATIO;
+import static array.visualizer.ArrayVisualizer.SOUND;
 import static array.visualizer.ArrayVisualizer.SOUNDMUL;
+import static array.visualizer.ArrayVisualizer.TEXTDRAW;
 import static array.visualizer.ArrayVisualizer.comps;
 import static array.visualizer.ArrayVisualizer.realTimer;
 import static array.visualizer.ArrayVisualizer.swaps;
@@ -78,6 +82,9 @@ public class UtilFrame extends javax.swing.JFrame {
         jButton6 = new javax.swing.JButton();
         jCheckBox5 = new javax.swing.JCheckBox();
         jButton7 = new javax.swing.JButton();
+        jCheckBox6 = new javax.swing.JCheckBox();
+        jCheckBox7 = new javax.swing.JCheckBox();
+        jCheckBox8 = new javax.swing.JCheckBox();
         
         jLabel1.setText("Settings");
 
@@ -171,6 +178,30 @@ public class UtilFrame extends javax.swing.JFrame {
                 jButton7ActionPerformed(evt);
             }
         });
+        
+        jCheckBox6.setSelected(true);
+        jCheckBox6.setText("Display Stats");
+        jCheckBox6.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jCheckBox6ActionPerformed(evt);
+            }
+        });
+        
+        jCheckBox7.setSelected(true);
+        jCheckBox7.setText("Enable Sounds");
+        jCheckBox7.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jCheckBox7ActionPerformed(evt);
+            }
+        });
+        
+        jCheckBox8.setSelected(false);
+        jCheckBox8.setText("Enable Color");
+        jCheckBox8.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jCheckBox8ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -185,15 +216,19 @@ public class UtilFrame extends javax.swing.JFrame {
                     	.addComponent(jCheckBox2)
                         .addComponent(jCheckBox3)
                         .addComponent(jCheckBox4)
-                        .addComponent(jCheckBox5)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
-                        	.addComponent(jButton7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        	.addComponent(jButton6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        	.addComponent(jButton5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        	.addComponent(jButton4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jButton3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                        .addComponent(jCheckBox6)
+                        .addComponent(jCheckBox7)
+                        .addComponent(jCheckBox8)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, true)
+                    	.addComponent(jCheckBox5)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
+                        .addComponent(jButton7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                       	.addComponent(jButton6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                       	.addComponent(jButton5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                       	.addComponent(jButton4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jButton3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))))
                 .addGap(0, 10, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -205,26 +240,31 @@ public class UtilFrame extends javax.swing.JFrame {
                 .addComponent(jButton5)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jButton2)
+                .addGap(5, 5, 5)
+                .addComponent(jCheckBox2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jCheckBox8)
+                .addGap(7, 7, 7)
                 .addComponent(jButton3)
                 .addGap(12, 12, 12)
-                .addComponent(jButton7)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jButton1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jButton4)
-                .addGap(10, 10, 10)
-                .addComponent(jCheckBox2)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jButton7)
+                .addGap(7, 7, 7)
+                .addComponent(jCheckBox1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jCheckBox7)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jCheckBox5)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jCheckBox4)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jCheckBox1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jCheckBox3)
-                .addGap(10, 10, 10)
+                .addGap(8, 8, 8)
                 .addComponent(jButton6)
+                .addGap(5, 5, 5)
+                .addComponent(jCheckBox6)
+                .addComponent(jCheckBox4)
                 .addContainerGap())
         );
 
@@ -285,15 +325,17 @@ public class UtilFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_jCheckBox4ActionPerformed
     
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        // TODO add your handling code here:
-        //CHANGE SIZE
-        if(v != null && v.isVisible()){
-                boolean tmp = v instanceof SizePrompt;
-                v.dispose();
-                if(tmp)
-                    return;
-        }
-        v = new SizePrompt(f);
+    	// TODO add your handling code here:
+    	//CHANGE SIZE
+    	if(MUTABLE) {
+    		if(v != null && v.isVisible()){
+    			boolean tmp = v instanceof SizePrompt;
+    			v.dispose();
+    			if(tmp)
+    				return;
+    		}
+    		v = new SizePrompt(f);
+    	}
     }//GEN-LAST:event_jButton5ActionPerformed
     
     private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
@@ -324,6 +366,18 @@ public class UtilFrame extends javax.swing.JFrame {
         }
         v = new ShufflePrompt(f);
     }//GEN-LAST:event_jButton7ActionPerformed
+    
+    private void jCheckBox6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+    	TEXTDRAW = jCheckBox6.isSelected();
+    }//GEN-LAST:event_jCheckBox6ActionPerformed
+    
+    private void jCheckBox7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+    	SOUND = jCheckBox7.isSelected();
+    }//GEN-LAST:event_jCheckBox7ActionPerformed
+    
+    private void jCheckBox8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+    	COLOR = jCheckBox8.isSelected();
+    }//GEN-LAST:event_jCheckBox8ActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLabel1;
@@ -339,5 +393,8 @@ public class UtilFrame extends javax.swing.JFrame {
     private javax.swing.JCheckBox jCheckBox3;
     private javax.swing.JCheckBox jCheckBox4;
     private javax.swing.JCheckBox jCheckBox5;
+    private javax.swing.JCheckBox jCheckBox6;
+    private javax.swing.JCheckBox jCheckBox7;
+    private javax.swing.JCheckBox jCheckBox8;
     // End of variables declaration//GEN-END:variables
 }

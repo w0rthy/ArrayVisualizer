@@ -4,10 +4,7 @@
  */
 package array.visualizer;
 
-import static array.visualizer.ArrayVisualizer.BARDRAW;
-import static array.visualizer.ArrayVisualizer.CIRCLEDRAW;
-import static array.visualizer.ArrayVisualizer.MESHDRAW;
-import static array.visualizer.ArrayVisualizer.PIXELDRAW;
+import static array.visualizer.ArrayVisualizer.*;
 
 import javax.swing.JFrame;
 
@@ -50,43 +47,89 @@ public class ViewPrompt extends javax.swing.JFrame implements AAFrame {
     private void initComponents() {
 
     	jLabel1 = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
-        jButton4 = new javax.swing.JButton();
+        barGraph = new javax.swing.JButton();
+        dotGraph = new javax.swing.JButton();
+        colorCircle = new javax.swing.JButton();
+        triangleMesh = new javax.swing.JButton();
+        spiral = new javax.swing.JButton();
+        disparity = new javax.swing.JButton();
+        disparityDots = new javax.swing.JButton();
+        spiralDots= new javax.swing.JButton();
+        rainbow = new javax.swing.JButton();
+        hoops = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
 
         jLabel1.setText("Select Visual Style");
         
-        jButton1.setText("Bar Graph");
-        jButton1.setMaximumSize(new java.awt.Dimension(87, 23));
-        jButton1.setMinimumSize(new java.awt.Dimension(87, 23));
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        barGraph.setText("Bar Graph");
+        barGraph.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                barGraphActionPerformed(evt);
             }
         });
 
-        jButton2.setText("Dot Graph");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
+        dotGraph.setText("Dot Graph");
+        dotGraph.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
+                dotGraphActionPerformed(evt);
             }
         });
         
-        jButton3.setText("Color Circle");
-        jButton3.addActionListener(new java.awt.event.ActionListener() {
+        colorCircle.setText("Color Circle");
+        colorCircle.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton3ActionPerformed(evt);
+                colorCircleActionPerformed(evt);
             }
         });
 
-        jButton4.setText("Triangle Mesh");
-        jButton4.addActionListener(new java.awt.event.ActionListener() {
+        triangleMesh.setText("Triangle Mesh");
+        triangleMesh.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton4ActionPerformed(evt);
+                triangleMeshActionPerformed(evt);
+            }
+        });
+        
+        spiral.setText("Spiral");
+        spiral.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                spiralActionPerformed(evt);
+            }
+        });
+        
+        rainbow.setText("Rainbow");
+        rainbow.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                rainbowActionPerformed(evt);
+            }
+        });
+        
+        disparity.setText("Disparity Circle");
+        disparity.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                disparityActionPerformed(evt);
+            }
+        });
+        
+        hoops.setText("Hoops");
+        hoops.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                hoopsActionPerformed(evt);
+            }
+        });
+        
+        disparityDots.setText("Disparity Dots");
+        disparityDots.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                disparityDotsActionPerformed(evt);
+            }
+        });
+        
+        spiralDots.setText("Spiral Dots");
+        spiralDots.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                spiralDotsActionPerformed(evt);
             }
         });
 
@@ -97,12 +140,18 @@ public class ViewPrompt extends javax.swing.JFrame implements AAFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, true)
-                    .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(barGraph, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(rainbow, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(colorCircle, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(disparity, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(disparityDots, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, true)
-                    .addComponent(jButton4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jButton3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(dotGraph, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(triangleMesh, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(spiral, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(hoops, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(spiralDots, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(18, 18, 18))
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER, true)
                 .addComponent(jLabel1))
@@ -114,12 +163,25 @@ public class ViewPrompt extends javax.swing.JFrame implements AAFrame {
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE, true)
-                    .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                	.addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(barGraph, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                	.addComponent(dotGraph, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE, true)
-                    .addComponent(jButton2)
-                    .addComponent(jButton4))
+                    .addComponent(rainbow, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(triangleMesh, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE, true)
+                    .addComponent(colorCircle, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(spiral, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE, true)
+                    .addComponent(disparity, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(hoops, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE, true)
+                    .addComponent(disparityDots, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(spiralDots, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addContainerGap(18, Short.MAX_VALUE))
         );
 
@@ -127,44 +189,85 @@ public class ViewPrompt extends javax.swing.JFrame implements AAFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void setAllFieldsFalse(){
-        BARDRAW = false;
-    	CIRCLEDRAW = false;
-        MESHDRAW = false;
-        PIXELDRAW = false;
+    	POINTER = false;
+    	DISPARITYDRAW = false;
+    	PIXELDRAW = false;
+    	RAINBOW = false;
+    	SPIRALDRAW = false;
     }
-    
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // TODO add your handling code here:
-        setAllFieldsFalse();
-        BARDRAW = true;
-        dispose();
-    }//GEN-LAST:event_jButton1ActionPerformed
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
-        // TODO add your handling code here:
+    private void barGraphActionPerformed(java.awt.event.ActionEvent evt) {
         setAllFieldsFalse();
+        VISUALS = BARS;
+        dispose();
+    }
+    private void dotGraphActionPerformed(java.awt.event.ActionEvent evt) {
+        setAllFieldsFalse();
+        VISUALS = PIXELS;
+        dispose();
+    }
+    private void rainbowActionPerformed(java.awt.event.ActionEvent evt) {
+        setAllFieldsFalse();
+        VISUALS = BARS;
+        RAINBOW = true;
+        dispose();
+    }
+    private void triangleMeshActionPerformed(java.awt.event.ActionEvent evt) {
+        setAllFieldsFalse();
+        VISUALS = MESH;
+        dispose();
+    }
+    private void colorCircleActionPerformed(java.awt.event.ActionEvent evt) {
+        setAllFieldsFalse();
+        VISUALS = CIRCULAR;
+        RAINBOW = true;
+        POINTER = true;
+        dispose();
+    }
+    private void spiralActionPerformed(java.awt.event.ActionEvent evt) {
+        setAllFieldsFalse();
+        VISUALS = CIRCULAR;
+        SPIRALDRAW = true;
+        dispose();
+    }
+    private void disparityActionPerformed(java.awt.event.ActionEvent evt) {
+        setAllFieldsFalse();
+        VISUALS = CIRCULAR;
+        DISPARITYDRAW = true;
+        POINTER = true;
+        dispose();
+    }
+    private void hoopsActionPerformed(java.awt.event.ActionEvent evt) {
+        setAllFieldsFalse();
+        VISUALS = HOOPS;
+        dispose();
+    }
+    private void disparityDotsActionPerformed(java.awt.event.ActionEvent evt) {
+        setAllFieldsFalse();
+        VISUALS = CIRCULAR;
+        DISPARITYDRAW = true;
         PIXELDRAW = true;
         dispose();
-    }//GEN-LAST:event_jButton5ActionPerformed
-
-    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        // TODO add your handling code here:
+    }
+    private void spiralDotsActionPerformed(java.awt.event.ActionEvent evt) {
         setAllFieldsFalse();
-        CIRCLEDRAW = true;
+        VISUALS = CIRCULAR;
+        SPIRALDRAW = true;
+        PIXELDRAW = true;
         dispose();
-    }//GEN-LAST:event_jButton2ActionPerformed
+    }
     
-    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton9ActionPerformed
-        setAllFieldsFalse();
-        MESHDRAW = true;
-        dispose();
-    }//GEN-LAST:event_jButton9ActionPerformed
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
+    private javax.swing.JButton barGraph;
+    private javax.swing.JButton dotGraph;
+    private javax.swing.JButton colorCircle;
+    private javax.swing.JButton triangleMesh;
+    private javax.swing.JButton spiral;
+    private javax.swing.JButton spiralDots;
+    private javax.swing.JButton disparity;
+    private javax.swing.JButton disparityDots;
+    private javax.swing.JButton rainbow;
+    private javax.swing.JButton hoops;
     private javax.swing.JLabel jLabel1;
     // End of variables declaration//GEN-END:variables
 

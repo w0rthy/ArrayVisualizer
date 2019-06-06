@@ -102,12 +102,12 @@ private static int iterator;
 	public static void doubleBogoSort(int[] a) throws Exception {
     	minIterator = 0;
     	maxIterator = a.length - 1;
-    
-    	boolean maxSorted = isMaxSorted(a);
-    	boolean minSorted = isMinSorted(a);
     	
-    	while(minIterator != maxIterator) {
-    		while( !maxSorted && !minSorted ) {
+    	while(minIterator < maxIterator) {
+        	boolean maxSorted = isMaxSorted(a);
+        	boolean minSorted = isMinSorted(a);
+        	
+        	while( !maxSorted && !minSorted ) {
     			doubleBogoSwap(a);
     			
     			maxSorted = isMaxSorted(a);
@@ -119,14 +119,11 @@ private static int iterator;
             	minIterator++;
             	minSorted = false;
             }
-    		else if(maxSorted) {
+    		if(maxSorted) {
             	marked.set(1, maxIterator);
             	maxIterator--;
             	maxSorted = false;
         	}
-    		else {
-    			throw new Exception("No maximum or minimum found!");
-    		}
     	}
     	clearmarked();
     }

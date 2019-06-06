@@ -110,22 +110,22 @@ public class SizePrompt extends javax.swing.JFrame implements AAFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jList1ValueChanged(javax.swing.event.ListSelectionEvent evt) throws Exception {//GEN-FIRST:event_jList1ValueChanged
-        // TODO add your handling code here:
-        int selection = evt.getFirstIndex();
-        switch (selection) {
-        	case 0:
-        		selectArray("tiny");
-        		break;
-        	case 1:
-        		selectArray("small");
-        		break;
-        	case 2:
-        		selectArray("medium");
-        		break;
-        	case 3:
-        		selectArray("large");
-        		break;
-        }
+    	// TODO add your handling code here:
+    	int selection = evt.getFirstIndex();
+    	switch (selection) {
+    	case 0:
+    		selectArray("tiny");
+    		break;
+    	case 1:
+    		selectArray("small");
+    		break;
+    	case 2:
+    		selectArray("medium");
+    		break;
+    	case 3:
+    		selectArray("large");
+    		break;
+    	}
         dispose();
     }//GEN-LAST:event_jList1ValueChanged
 
