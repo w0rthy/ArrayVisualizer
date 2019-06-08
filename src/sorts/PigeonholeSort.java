@@ -16,12 +16,12 @@ import static array.visualizer.Writes.write;
 // Code refactored from the Python implementation found here: https://en.wikipedia.org/wiki/Pigeonhole_sort
 
 public class PigeonholeSort {
-	public static void pigeonSort(int[] a) {
+	public static void pigeonSort(int[] a, int length) {
 		int mi = 0;
-		int size = a.length;
+		int size = length;
 		int[] holes = new int[size];
 		int j = 0;
-		for(int x : a) {
+		for(int x = 0; x < length; x++) {
 			write(holes, x - mi, holes[x - mi] + 1, 1, false, true);
 			marked.set(1, j);
 			j++;

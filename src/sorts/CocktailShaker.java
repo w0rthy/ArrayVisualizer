@@ -34,10 +34,10 @@ SOFTWARE.
 */
 
 public class CocktailShaker {
-    public static void cocktailShakerSort(int[] array){
+    public static void cocktailShakerSort(int[] array, int length){
         int i = 0;
-        while(i<array.length/2){
-            for(int j = i; j < array.length-i-1; j++){
+        while(i<length/2){
+            for(int j = i; j < length-i-1; j++){
                 if(compare(array[j], array[j+1]) == 1) {
                     swap(array, j, j+1, 0.1, true);
                 }
@@ -45,7 +45,7 @@ public class CocktailShaker {
                 marked.set(2, j+1);
                 sleep(0.01);
             }
-            for(int j = array.length-i-1; j > i; j--){
+            for(int j = length-i-1; j > i; j--){
                 if(compare(array[j], array[j-1]) == -1) {
                     swap(array, j, j-1, 0.1, true);
                 }

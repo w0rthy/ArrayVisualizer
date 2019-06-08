@@ -36,9 +36,9 @@ SOFTWARE.
  */
 
 public class MergeSortOOP {
-	public static void mergeSortOOP(int[] array, boolean binary)throws Exception {
+	public static void mergeSortOOP(int[] array, int length, boolean binary)throws Exception {
 		int start = 0;
-		int end = array.length;
+		int end = length;
 		int mid = (end+start)/2;
 		mergeOOP(array,start,mid,end,binary);
 	}
@@ -180,7 +180,7 @@ public class MergeSortOOP {
           int   s = 16;      // segment size
           int[] b = new int [n];
           
-          for(int i = 0; i <= a.length - 16; i += 16) {
+          for(int i = 0; i <= n - 16; i += 16) {
         	  partialBinaryInsert(a, i, i + 16, 0.35);
           }
           

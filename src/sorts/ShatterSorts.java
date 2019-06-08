@@ -36,26 +36,26 @@ SOFTWARE.
 */
 public class ShatterSorts {
     @SuppressWarnings("unchecked")
-	private static void shatterPartition(int[] array, int num) throws Exception {
-        int shatters = (int)Math.ceil(array.length/(double)num);
+	private static void shatterPartition(int[] array, int length, int num) throws Exception {
+        int shatters = (int)Math.ceil(length/(double)num);
         ArrayList<Integer>[] registers = new ArrayList[shatters];
         for(int i = 0; i < shatters; i++)
             registers[i] = new ArrayList<Integer>();
-        for(int i = 0; i < array.length; i++){
+        for(int i = 0; i < length; i++){
             registers[array[i]/num].add(array[i]);
             marked.set(1, i);
-            mockWrite(array, 0.5);
+            mockWrite(length, 0.5);
         }
         transcribe(array,registers,0,false,0,true,false);
     }
     
-    public static void shatterSort(int[] array, int num) throws Exception {
-        int shatters = (int)Math.ceil(array.length/(double)num);
-        shatterPartition(array, num);
+    public static void shatterSort(int[] array, int length, int num) throws Exception {
+        int shatters = (int)Math.ceil(length/(double)num);
+        shatterPartition(array, length, num);
         int[] tmp = new int[num];
         for(int i = 0; i < shatters; i++){
             for(int j = 0; j < num; j++){
-                if(i*num+j>=array.length)
+                if(i*num+j>=length)
                     write(tmp, j, -1, 0.5, false, true);
                 else
                 	write(tmp, j, array[i * num + j], 0.5, false, true);
@@ -63,7 +63,7 @@ public class ShatterSorts {
             }
             for(int j = 0; j < tmp.length; j++){
                 int tmpj = tmp[j];
-                if(i*num+(tmpj%num)>=array.length || tmpj == -1)
+                if(i*num+(tmpj%num)>=length || tmpj == -1)
                     break;
                 write(array, i * num + (tmpj % num), tmpj, 1, false, false);
                 marked.set(1, i*num+(tmpj%num));
@@ -71,9 +71,9 @@ public class ShatterSorts {
         }
     }
     
-    public static void simpleShatterSort(int[] array, int num, int rate) throws Exception {
+    public static void simpleShatterSort(int[] array, int length, int num, int rate) throws Exception {
         for(int i = num; i > 1; i = i/rate)
-            shatterPartition(array, i);
-        shatterPartition(array, 1);
+            shatterPartition(array, length, i);
+        shatterPartition(array, length, 1);
     }
 }

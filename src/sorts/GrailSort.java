@@ -631,8 +631,8 @@ public class GrailSort {
         grailMergeWithoutBuffer(arr, pos, dist, len - dist);
     }
 
-    public static void grailSortWithoutBuffer(int[] arr) {
-        grailCommonSort(arr, 0, arr.length, null, 0, 0);
+    public static void grailSortWithoutBuffer(int[] arr, int length) {
+        grailCommonSort(arr, 0, length, null, 0, 0);
     }
 
     public static void grailSortWithBuffer(int[] arr) {

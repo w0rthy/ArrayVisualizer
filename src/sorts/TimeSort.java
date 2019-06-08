@@ -12,6 +12,7 @@ import static array.visualizer.Writes.write;
 import static sorts.InsertionSorts.partialInsert;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -41,13 +42,13 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 public class TimeSort {
-    public static void timeSort(int[] array, int magnitude) throws Exception {
+    public static void timeSort(int[] array, int length, int magnitude) throws Exception {
         final int A = magnitude;
         next = 0;
         ArrayList<Thread> threads = new ArrayList<Thread>();
-        final int[] tmp = array.clone();
-        tempStores += array.length;
-        for(int i = 0; i < array.length; i++){
+        final int[] tmp = Arrays.copyOfRange(array, 0, length);
+        tempStores += length;
+        for(int i = 0; i < length; i++){
             final int c = i;
             threads.add(new Thread(){
                 public void run() {
@@ -64,8 +65,9 @@ public class TimeSort {
         }
         for(Thread t : threads)
             t.start();
-        Thread.sleep(array.length * A);
-        partialInsert(array,0,array.length,0.2);
+        Thread.sleep(length * A);
+        realTimer = length * A;
+        partialInsert(array,0,length,0.2);
         sleep(2);
     }
     static volatile int next = 0;

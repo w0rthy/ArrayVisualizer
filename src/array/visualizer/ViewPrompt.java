@@ -15,6 +15,8 @@ import static array.visualizer.ArrayVisualizer.POINTER;
 import static array.visualizer.ArrayVisualizer.RAINBOW;
 import static array.visualizer.ArrayVisualizer.SPIRALDRAW;
 import static array.visualizer.ArrayVisualizer.VISUALS;
+import static array.visualizer.ArrayVisualizer.currentLen;
+import static array.visualizer.ArrayVisualizer.uf;
 
 import javax.swing.JFrame;
 
@@ -209,22 +211,26 @@ public class ViewPrompt extends javax.swing.JFrame implements AAFrame {
     private void barGraphActionPerformed(java.awt.event.ActionEvent evt) {
         setAllFieldsFalse();
         VISUALS = BARS;
+        uf.jButton2ResetText();
         dispose();
     }
     private void dotGraphActionPerformed(java.awt.event.ActionEvent evt) {
         setAllFieldsFalse();
         VISUALS = PIXELS;
+        uf.jButton2ResetText();
         dispose();
     }
     private void rainbowActionPerformed(java.awt.event.ActionEvent evt) {
         setAllFieldsFalse();
         VISUALS = BARS;
         RAINBOW = true;
+        uf.jButton2ResetText();
         dispose();
     }
     private void triangleMeshActionPerformed(java.awt.event.ActionEvent evt) {
         setAllFieldsFalse();
         VISUALS = MESH;
+        uf.jButton2ResetText();
         dispose();
     }
     private void colorCircleActionPerformed(java.awt.event.ActionEvent evt) {
@@ -232,12 +238,16 @@ public class ViewPrompt extends javax.swing.JFrame implements AAFrame {
         VISUALS = CIRCULAR;
         RAINBOW = true;
         POINTER = true;
+        if(currentLen == 2) currentLen = 4;
+        uf.jButton2ResetText();
         dispose();
     }
     private void spiralActionPerformed(java.awt.event.ActionEvent evt) {
         setAllFieldsFalse();
         VISUALS = CIRCULAR;
         SPIRALDRAW = true;
+        if(currentLen == 2) currentLen = 4;
+        uf.jButton2ResetText();
         dispose();
     }
     private void disparityActionPerformed(java.awt.event.ActionEvent evt) {
@@ -245,11 +255,14 @@ public class ViewPrompt extends javax.swing.JFrame implements AAFrame {
         VISUALS = CIRCULAR;
         DISPARITYDRAW = true;
         POINTER = true;
+        if(currentLen == 2) currentLen = 4;
+        uf.jButton2ResetText();
         dispose();
     }
     private void hoopsActionPerformed(java.awt.event.ActionEvent evt) {
         setAllFieldsFalse();
         VISUALS = HOOPS;
+        uf.jButton2ResetText();
         dispose();
     }
     private void disparityDotsActionPerformed(java.awt.event.ActionEvent evt) {
@@ -257,6 +270,8 @@ public class ViewPrompt extends javax.swing.JFrame implements AAFrame {
         VISUALS = CIRCULAR;
         DISPARITYDRAW = true;
         PIXELDRAW = true;
+        if(currentLen == 2) currentLen = 4;
+        uf.jButton2ResetText();
         dispose();
     }
     private void spiralDotsActionPerformed(java.awt.event.ActionEvent evt) {
@@ -264,6 +279,8 @@ public class ViewPrompt extends javax.swing.JFrame implements AAFrame {
         VISUALS = CIRCULAR;
         SPIRALDRAW = true;
         PIXELDRAW = true;
+        if(currentLen == 2) currentLen = 4;
+        uf.jButton2ResetText();
         dispose();
     }
 

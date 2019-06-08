@@ -59,7 +59,7 @@ public class TournamentSort<Integer>
 		ArrayList<Integer> copy = new ArrayList<Integer>( v.length );
 		for (int i = 0; i < v.length; i++) {
 			copy.add( tourney.pop() );
-			mockWrite(arr, 0);
+			mockWrite(v.length, 0);
 		}
 
 		clearmarked();
@@ -146,9 +146,9 @@ public class TournamentSort<Integer>
 		}    	
 	}
 
-	public static void tournamentSort(int[] arr)
+	public static void tournamentSort(int[] arr, int length)
 	{
-		Object[] nums = Arrays.stream(arr).boxed().toArray();
+		Object[] nums = Arrays.copyOfRange(Arrays.stream(arr).boxed().toArray(), 0, length);
 		InstrumentedCompare tournamentCompare = new InstrumentedCompare();
 
 		sort( arr, nums, tournamentCompare );

@@ -31,12 +31,12 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
 public class CombSort {
-	public static void combSort(int[] array, boolean hybrid)
+	public static void combSort(int[] array, int length, boolean hybrid)
 	{
 	    double shrink = 1.3;
 	
 	    boolean swapped = false;
-	    int gap = array.length;
+	    int gap = length;
 	
 	    while ((gap > 1) || swapped)
 	    {
@@ -48,11 +48,11 @@ public class CombSort {
 	
 	        swapped = false;
 	
-	        for (int i = 0; (gap + i) < array.length; ++i)
+	        for (int i = 0; (gap + i) < length; ++i)
 	        {
-	        	if(hybrid && (gap <= Math.min(8, array.length * 0.03125))) {
+	        	if(hybrid && (gap <= Math.min(8, length * 0.03125))) {
 	        		gap = 0;
-	        		partialInsert(array, 0, array.length, 0.5);
+	        		partialInsert(array, 0, length, 0.5);
 	        		break;
 	        	}
 	            if (compare(array[i], array[i + gap]) == 1)

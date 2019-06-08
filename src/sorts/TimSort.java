@@ -186,8 +186,8 @@ public class TimSort {
      * of the public method with the same signature in java.util.Arrays.
      */
 
-    public static void timSort(int[] a) {
-        sort(a, 0, a.length);
+    public static void timSort(int[] a, int length) {
+        sort(a, 0, length);
     }
     
     private static void sort(int[] a, int lo, int hi) {

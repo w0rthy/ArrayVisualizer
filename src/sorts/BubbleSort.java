@@ -34,8 +34,8 @@ SOFTWARE.
 */
 
 public class BubbleSort {
-    public static void bubbleSort(int[] array) throws Exception{
-        for(int i = array.length-1; i > 0; i--){
+    public static void bubbleSort(int[] array, int length) throws Exception{
+        for(int i = length-1; i > 0; i--){
             for(int j = 0; j < i; j++) {
                 if(compare(array[j], array[j+1]) == 1){
                     swap(array, j, j+1, 0.15, true);

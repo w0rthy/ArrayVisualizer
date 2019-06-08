@@ -6,6 +6,7 @@ package array.visualizer;
 
 import static array.visualizer.ArrayVisualizer.ShuffleTypes;
 import static array.visualizer.ArrayVisualizer.shuffleType;
+import static array.visualizer.ArrayVisualizer.uf;
 
 import javax.swing.JFrame;
 
@@ -31,8 +32,13 @@ public class ShufflePrompt extends javax.swing.JFrame implements AAFrame {
         setUndecorated(true);
         initComponents();
         jList1.setListData(ShuffleTypes);
+        if(shuffleType.equals("random")) jList1.setSelectedIndex(0);
+        else if(shuffleType.equals("reverse")) jList1.setSelectedIndex(1);
+        else if(shuffleType.equals("similar")) jList1.setSelectedIndex(2);
+        else if(shuffleType.equals("almost")) jList1.setSelectedIndex(3);
+        else jList1.setSelectedIndex(4);
         reposition();
-        setVisible(true);
+        setVisible(true); 
     }
 
     public void reposition() {
@@ -111,7 +117,7 @@ public class ShufflePrompt extends javax.swing.JFrame implements AAFrame {
 
     private void jList1ValueChanged(javax.swing.event.ListSelectionEvent evt) throws Exception {//GEN-FIRST:event_jList1ValueChanged
         // TODO add your handling code here:
-        int selection = evt.getFirstIndex();
+        int selection = evt.getLastIndex();
         switch (selection) {
         case 0:
             shuffleType = "random";
@@ -129,6 +135,7 @@ public class ShufflePrompt extends javax.swing.JFrame implements AAFrame {
             shuffleType = "sorted";
             break;
         }
+        uf.jButton6ResetText();
         dispose();
     }//GEN-LAST:event_jList1ValueChanged
 

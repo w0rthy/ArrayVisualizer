@@ -32,9 +32,9 @@ public class WeakHeapSort {
 	/*
 	 * Weak Heap Sort
 	 */
-	public static void weakHeapSort(int[] array)
+	public static void weakHeapSort(int[] array, int length)
 	{
-	    int n = array.length;
+	    int n = length;
 	    if (n > 1)
 	    {
 	        int i, j, x, y, Gparent;

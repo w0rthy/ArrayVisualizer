@@ -8,9 +8,9 @@ import static array.visualizer.Writes.swap;
 public class GnomeSorts {
 
 	//Code retrieved from http://www.algostructure.com/sorting/gnomesort.php
-	public static void gnomeSort(int[] array)
+	public static void gnomeSort(int[] array, int length)
 	{
-	    for (int i = 1; i < array.length;)
+	    for (int i = 1; i < length;)
 	    {
 	        if (compare(array[i], array[i-1]) >= 0)
 	        {
@@ -43,9 +43,9 @@ public class GnomeSorts {
 		}
 	}
 
-	public static void smartGnome(int[] array)
+	public static void smartGnome(int[] array, int length)
 	{
-	    for(int i = 1; i < array.length; i++) {
+	    for(int i = 1; i < length; i++) {
 	    	smartGnomeSort(array, i);
 	    }
 	}

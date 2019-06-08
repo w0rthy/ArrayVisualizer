@@ -177,8 +177,8 @@ public class QuickSorts {
  // Author: Rodney Shaghoulian
  // Github: github.com/RodneyShag
     
-    public static void stableQuickSort(int [] array) {
-        stableQuSort(array, 0, array.length - 1);
+    public static void stableQuickSort(int [] array, int length) {
+        stableQuSort(array, 0, length - 1);
     }
     
     private static void stableQuSort(int [] array, int start, int end) {
@@ -204,7 +204,7 @@ public class QuickSorts {
             } else {
                 rightList.add(array[i]);
             }
-            mockWrite(array, 0.25);
+            mockWrite(end - start, 0.25);
         }
         
         /* Recreate array */

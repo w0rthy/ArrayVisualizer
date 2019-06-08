@@ -46,13 +46,13 @@ public class AmericanFlagSort {
 
 	    private static int NUMBER_OF_BUCKETS = 128; // ex. 10 for base 10 numbers
 
-	    public static void flagSort(int[] array, int buckets) {
+	    public static void flagSort(int[] array, int length, int buckets) {
 	    	NUMBER_OF_BUCKETS = buckets;
-	        int numberOfDigits = getMaxNumberOfDigits(array); // Max number of digits
+	        int numberOfDigits = getMaxNumberOfDigits(array, length); // Max number of digits
 	        int max = 1;
 	        for (int i = 0; i < numberOfDigits - 1; i++)
 	            max *= NUMBER_OF_BUCKETS;
-	        sort(array, 0, array.length, max);
+	        sort(array, 0, length, max);
 	    }
 
 	    private static void sort(int[] array, int start, int length, int divisor) {
@@ -102,11 +102,11 @@ public class AmericanFlagSort {
 	        }
 	    }
 
-	    private static int getMaxNumberOfDigits(int[] array) {
+	    private static int getMaxNumberOfDigits(int[] array, int length) {
 	        int max = Integer.MIN_VALUE;
 	        int temp = 0;
-	        for (int i : array) {
-	            temp = (int) (Math.log(i)/Math.log(NUMBER_OF_BUCKETS)) + 1;
+	        for (int i = 0; i < length; i++) {
+	            temp = (int) (Math.log(array[i])/Math.log(NUMBER_OF_BUCKETS)) + 1;
 	            if (temp > max)
 	                max = temp;
 	        }

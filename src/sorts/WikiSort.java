@@ -347,8 +347,8 @@ public class WikiSort {
 		}
 
 		// bottom-up merge sort combined with an in-place merge algorithm for O(1) memory use
-		private void Sort(int[] array) {
-			int size = array.length;
+		private void Sort(int[] array, int len) {
+			int size = len;
 
 			// if the array is of size 0, 1, 2, or 3, just sort them like so:
 			if (size < 4) {
@@ -787,9 +787,9 @@ public class WikiSort {
 			}
 		}
 	}
-	public static void startWikiSort (int[] array) {
+	public static void startWikiSort (int[] array, int length) {
 		WikiSorter Wiki = new WikiSorter();
 
-		Wiki.Sort(array);
+		Wiki.Sort(array, length);
 	}
 }

@@ -1,8 +1,9 @@
 package test;
 
-import static array.visualizer.ArrayVisualizer.*;
-import static sorts.BubbleSort.*;
+import static array.visualizer.ArrayVisualizer.currentLen;
+import static array.visualizer.ArrayVisualizer.initArr;
 import static array.visualizer.Writes.swap;
+import static sorts.BubbleSort.bubbleSort;
 
 public class Tester {
 	public static void main(String[] args) throws Exception {
@@ -14,7 +15,7 @@ public class Tester {
     	}
 		
 		long timeStart = System.nanoTime();
-		bubbleSort(testArr);
+		bubbleSort(testArr, currentLen);
 		long timeFinish = System.nanoTime();
 		double finish = (timeFinish - timeStart) / 1e+6;
 		System.out.println(finish + "ms");

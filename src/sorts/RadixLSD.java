@@ -40,33 +40,33 @@ SOFTWARE.
 */
 public class RadixLSD {
     @SuppressWarnings("unchecked")
-	public static void radixLSDsort(int[] a, int radix)throws Exception {
+	public static void radixLSDsort(int[] a, int length, int radix)throws Exception {
         clearmarked();
-        int highestpower = analyze(a, radix, 0, false, false);
+        int highestpower = analyze(a, length, radix, 0, false, false);
         ArrayList<Integer>[] registers = new ArrayList[radix];
         for(int i = 0; i < radix; i++)
             registers[i] = new ArrayList<Integer>();
         for(int p = 0; p <= highestpower; p++){
-            for(int i = 0; i < a.length; i++){
+            for(int i = 0; i < length; i++){
                 marked.set(1, i);
                 registers[getDigit(a[i],p,radix)].add(a[i]);
-                mockWrite(a, 1);
+                mockWrite(length, 1);
             }
             //transcribe(registers,array);
-            fancyTranscribe(a, registers);
+            fancyTranscribe(a, length, registers);
         }
     }
     
-    public static void inPlaceRadixLSDSort(int[] array, int radix)throws Exception{
+    public static void inPlaceRadixLSDSort(int[] array, int length, int radix)throws Exception{
         int pos = 0;
         int[] vregs = new int[radix-1];
-        int maxpower = analyze(array, radix, 0.01, false, true);
+        int maxpower = analyze(array, length, radix, 0.01, false, true);
         for(int p = 0; p <= maxpower; p++){
             for(int i = 0; i < vregs.length; i++) {
-                write(vregs, i, array.length - 1, 0, false, true);
+                write(vregs, i, length - 1, 0, false, true);
             }
             pos = 0;
-            for(int i = 0; i < array.length; i++){
+            for(int i = 0; i < length; i++){
                 int digit = getDigit(array[pos], p, radix);
                 if(digit==0) {
                     pos++;

@@ -39,14 +39,14 @@ public class PatienceSort {
 		sleep(0.5);
 	}
 
-	public static void patienceSort (int[] n) throws Exception {
+	public static void patienceSort (int[] n, int length) throws Exception {
 		ArrayList<Pile> piles = new ArrayList<Pile>();
 		// sort into piles
-		for (int x = 0; x < n.length; x++) {
+		for (int x = 0; x < length; x++) {
 			Pile newPile = new Pile();
 			newPile.push(n[x]);
 			marked.set(2, x);
-			mockWrite(n, 1);
+			mockWrite(length, 1);
 			int i = Collections.binarySearch(piles, newPile);
 			if(!piles.isEmpty()) {
 				binarySearch(piles, newPile, n);
@@ -54,11 +54,11 @@ public class PatienceSort {
 			if (i < 0) i = ~i;
 			if (i != piles.size()) {
 				piles.get(i).push(n[x]);
-				mockWrite(n, 0);
+				mockWrite(length, 0);
 			}
 			else {
 				piles.add(newPile);
-				mockWrite(n, 0);
+				mockWrite(length, 0);
 			}
 		}
 		
@@ -66,15 +66,15 @@ public class PatienceSort {
 		
 		// priority queue allows us to retrieve least pile efficiently
 		PriorityQueue<Pile> heap = new PriorityQueue<Pile>(piles);
-		for (int c = 0; c < n.length; c++) {
+		for (int c = 0; c < length; c++) {
 			Pile smallPile = heap.poll();
-			mockWrite(n, 0);
+			mockWrite(length, 0);
 			write(n, c, smallPile.pop(), 1, false, false);
-			mockWrite(n, 0);
+			mockWrite(length, 0);
 			marked.set(1, c);
 			if (!smallPile.isEmpty()) {
 				heap.offer(smallPile);
-				mockWrite(n, 0);
+				mockWrite(length, 0);
 			}
 		}
 		assert(heap.isEmpty());

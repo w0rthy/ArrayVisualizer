@@ -35,10 +35,10 @@ SOFTWARE.
 
 public class InsertionSorts {
 	
-	public static void insertionSort(int[] array) {
+	public static void insertionSort(int[] array, int length) {
         int pos;
         int current;
-        for(int i = 1; i < array.length; i++){
+        for(int i = 1; i < length; i++){
             current = array[i];
             pos = i - 1;
             //marked.set(0, i);
@@ -65,8 +65,8 @@ public class InsertionSorts {
         }
     }
     
-    public static void binaryInsertionSort(int[] array) {
-        for (int i = 1; i < array.length; i++) {
+    public static void binaryInsertionSort(int[] array, int length) {
+        for (int i = 1; i < length; i++) {
             int num = array[i];
 
             int lo = 0, hi = i;

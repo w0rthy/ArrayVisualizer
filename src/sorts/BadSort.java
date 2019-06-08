@@ -12,18 +12,18 @@ import static array.visualizer.Writes.swap;
  
 public class BadSort {
 	
-	public static void badSort(int[] arr) {
-	    for (int i = 0; i < arr.length; i++)
+	public static void badSort(int[] arr, int length) {
+	    for (int i = 0; i < length; i++)
 	    {
 	        int shortest = i;
 	        marked.set(3, shortest);
 	        sleep(0.1);
-	        for (int j = i; j < arr.length; j++)
+	        for (int j = i; j < length; j++)
 	        {
 	        	marked.set(1, j);
 	        	sleep(0.1);
 	            boolean isShortest = true;
-	            for (int k = j + 1; k < arr.length; k++)
+	            for (int k = j + 1; k < length; k++)
 	            {
 	            	marked.set(2, k);
 	            	sleep(0.1);

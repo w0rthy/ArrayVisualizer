@@ -25,18 +25,18 @@ import static sorts.ShellSort.shellSort;
 	  /*
 	   * Public interface
 	   */
-	  public static void introSort(int[] a, int part, int choice, int shellpart) throws Exception
+	  public static void introSort(int[] a, int length, int part, int choice, int shellpart) throws Exception
 	    {
 		  size_threshold = part;
 		  if(choice == 1) {
-			  introsort_loop(a, 0, a.length, 2*floor_lg(a.length));
+			  introsort_loop(a, 0, length, 2*floor_lg(a.length));
 			  clearmarked();
-			  partialInsert(a, 0, a.length, .5);
+			  partialInsert(a, 0, length, .5);
 		  }
 		  else if(choice == 2) {
-			  shellIntrosort(a, 0, a.length, 2*floor_lg(a.length));
+			  shellIntrosort(a, 0, length, 2*floor_lg(a.length));
 			  clearmarked();
-			  shellSort(a, shellpart);
+			  shellSort(a, length, shellpart);
 		  }
 		  else throw new Exception("Invalid insertion sort!");
 	    }

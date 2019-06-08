@@ -9,7 +9,7 @@ import static array.visualizer.Writes.write;
 // https://www.cs.princeton.edu/~rs/talks/shellsort.ps
 
 public class ShellSort {
-	public static void shellSort(int[] array, int start)
+	public static void shellSort(int[] array, int length, int start)
     {
         int incs[] = {1391376, 463792, 198768, 86961, 33936,
                             13776, 4592, 1968, 861, 336,
@@ -17,7 +17,7 @@ public class ShellSort {
 
         for (int k = start; k < 16; k++)
         {
-            for (int h = incs[k], i = h; i < array.length; i++)
+            for (int h = incs[k], i = h; i < length; i++)
             {
                 int v = array[i];
                 int j = i;

@@ -4,10 +4,11 @@
  */
 package array.visualizer;
 
+import static array.visualizer.ArrayVisualizer.af;
+
 import static array.visualizer.ArrayVisualizer.COLOR;
 import static array.visualizer.ArrayVisualizer.FANCYFINISH;
 import static array.visualizer.ArrayVisualizer.LINEDRAW;
-import static array.visualizer.ArrayVisualizer.MUTABLE;
 import static array.visualizer.ArrayVisualizer.REALTIMER;
 import static array.visualizer.ArrayVisualizer.SHUFFLEANIM;
 import static array.visualizer.ArrayVisualizer.SKIPPED;
@@ -16,15 +17,21 @@ import static array.visualizer.ArrayVisualizer.SOUND;
 import static array.visualizer.ArrayVisualizer.SOUNDMUL;
 import static array.visualizer.ArrayVisualizer.TEXTDRAW;
 import static array.visualizer.ArrayVisualizer.comps;
+import static array.visualizer.ArrayVisualizer.currentLen;
 import static array.visualizer.ArrayVisualizer.realTimer;
 import static array.visualizer.ArrayVisualizer.swaps;
 import static array.visualizer.ArrayVisualizer.tempStores;
 import static array.visualizer.ArrayVisualizer.writes;
 
 import java.awt.Toolkit;
+import java.util.Hashtable;
 
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JSlider;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 /**
  *
@@ -47,14 +54,14 @@ public class UtilFrame extends javax.swing.JFrame {
         this.f = f;
         setUndecorated(true);
         initComponents();
-        setLocation(f.getX() + f.getWidth(), f.getY() + 29);
+        setLocation(Math.min((int) Toolkit.getDefaultToolkit().getScreenSize().getWidth() - getWidth(), f.getX() + f.getWidth()), f.getY() + 29);
         setAlwaysOnTop(false);
         setVisible(true);
     }
 
     public void reposition(){
         toFront();
-        setLocation(Math.min((int) Toolkit.getDefaultToolkit().getScreenSize().getWidth() - getWidth(), f.getX() + f.getWidth()), 
+        setLocation(Math.min((int) Toolkit.getDefaultToolkit().getScreenSize().getWidth() - getWidth(), f.getX() + f.getWidth() + af.getWidth()), 
                 f.getY() + 29);
         if(v != null && v.isVisible())
             v.reposition();
@@ -79,25 +86,50 @@ public class UtilFrame extends javax.swing.JFrame {
         jCheckBox3 = new javax.swing.JCheckBox();
         jCheckBox4 = new javax.swing.JCheckBox();
         jButton5 = new javax.swing.JButton();
-        jButton6 = new javax.swing.JButton();
         jCheckBox5 = new javax.swing.JCheckBox();
-        jButton7 = new javax.swing.JButton();
+        jButton6 = new javax.swing.JButton();
         jCheckBox6 = new javax.swing.JCheckBox();
         jCheckBox7 = new javax.swing.JCheckBox();
         jCheckBox8 = new javax.swing.JCheckBox();
+        jSlider = new javax.swing.JSlider(JSlider.VERTICAL, 1, 12, 11);
 
         jLabel1.setText("Settings");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
 
-        jButton1.setText("Choose Sort");
+        Hashtable<Integer, JLabel> labels = new Hashtable<Integer, JLabel>();
+        labels.put(1, new JLabel("2"));
+        labels.put(2, new JLabel("4"));
+        labels.put(3, new JLabel("8"));
+        labels.put(4, new JLabel("16"));
+        labels.put(5, new JLabel("32"));
+        labels.put(6, new JLabel("64"));
+        labels.put(7, new JLabel("128"));
+        labels.put(8, new JLabel("256"));
+        labels.put(9, new JLabel("512"));
+        labels.put(10, new JLabel("1024"));
+        labels.put(11, new JLabel("2048"));
+        labels.put(12, new JLabel("4096"));
+
+        jSlider.setMajorTickSpacing(1);
+        jSlider.setLabelTable(labels);
+        jSlider.setPaintLabels(true);
+        jSlider.setPaintTicks(true);
+        jSlider.setSnapToTicks(true);
+        jSlider.addChangeListener(new ChangeListener() {
+            public void stateChanged(ChangeEvent event) {
+                currentLen = (int) Math.pow(2, jSlider.getValue());
+            }
+        });
+
+        jButton1ResetText();
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton1ActionPerformed(evt);
             }
         });
 
-        jButton2.setText("Visual Style");
+        jButton2ResetText();
         jButton2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton2ActionPerformed(evt);
@@ -150,17 +182,10 @@ public class UtilFrame extends javax.swing.JFrame {
             }
         });
 
-        jButton5.setText("Array Size");
+        jButton5.setText("Clear Stats");
         jButton5.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton5ActionPerformed(evt);
-            }
-        });
-
-        jButton6.setText("Clear Stats");
-        jButton6.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton6ActionPerformed(evt);
             }
         });
 
@@ -172,10 +197,10 @@ public class UtilFrame extends javax.swing.JFrame {
             }
         });
 
-        jButton7.setText("Choose Shuffle");
-        jButton7.addActionListener(new java.awt.event.ActionListener() {
+        jButton6ResetText();
+        jButton6.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton7ActionPerformed(evt);
+                jButton6ActionPerformed(evt);
             }
         });
 
@@ -222,7 +247,6 @@ public class UtilFrame extends javax.swing.JFrame {
                                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, true)
                                                 .addComponent(jCheckBox5)
                                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
-                                                        .addComponent(jButton7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                                         .addComponent(jButton6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                                         .addComponent(jButton5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                                         .addComponent(jButton4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -237,8 +261,6 @@ public class UtilFrame extends javax.swing.JFrame {
                         .addGap(5, 5, 5)
                         .addComponent(jLabel1)
                         .addGap(7, 7, 7)
-                        .addComponent(jButton5)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jButton2)
                         .addGap(5, 5, 5)
                         .addComponent(jCheckBox2)
@@ -251,7 +273,7 @@ public class UtilFrame extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jButton4)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton7)
+                        .addComponent(jButton6)
                         .addGap(7, 7, 7)
                         .addComponent(jCheckBox1)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -261,11 +283,10 @@ public class UtilFrame extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jCheckBox3)
                         .addGap(8, 8, 8)
-                        .addComponent(jButton6)
+                        .addComponent(jButton5)
                         .addGap(5, 5, 5)
                         .addComponent(jCheckBox6)
-                        .addComponent(jCheckBox4)
-                        .addContainerGap())
+                        .addComponent(jCheckBox4))
                 );
 
         pack();
@@ -277,23 +298,39 @@ public class UtilFrame extends javax.swing.JFrame {
         if(v != null && v.isVisible()){
             boolean tmp = v instanceof SortPrompt;
             v.dispose();
+            jButton1ResetText();
             if(tmp)
                 return;
         }
         v = new SortPrompt(f);
+        jButton1.setText("Close");
+        jButton2ResetText();
+        jButton6ResetText();
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    public void jButton1ResetText() {
+        jButton1.setText("Choose Sort");
+    }
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:
         //CHANGE VIEW
         if(v != null && v.isVisible()){
             boolean tmp = v instanceof ViewPrompt;
+            jButton2ResetText();
             v.dispose();
             if(tmp)
                 return;
         }
         v = new ViewPrompt(f);
+        jButton2.setText("Close");
+        jButton1ResetText();
+        jButton6ResetText();
     }//GEN-LAST:event_jButton2ActionPerformed
+
+    public void jButton2ResetText() {
+        jButton2.setText("Visual Style");
+    }
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         // TODO add your handling code here:
@@ -324,21 +361,7 @@ public class UtilFrame extends javax.swing.JFrame {
         REALTIMER = jCheckBox4.isSelected();
     }//GEN-LAST:event_jCheckBox4ActionPerformed
 
-    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        // TODO add your handling code here:
-        //CHANGE SIZE
-        if(MUTABLE) {
-            if(v != null && v.isVisible()){
-                boolean tmp = v instanceof SizePrompt;
-                v.dispose();
-                if(tmp)
-                    return;
-            }
-            v = new SizePrompt(f);
-        }
-    }//GEN-LAST:event_jButton5ActionPerformed
-
-    private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
         comps = 0;
         writes = 0;
         swaps = 0;
@@ -355,17 +378,25 @@ public class UtilFrame extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jCheckBox5ActionPerformed
 
-    private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+    private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:
         //CHANGE SIZE
         if(v != null && v.isVisible()){
             boolean tmp = v instanceof ShufflePrompt;
             v.dispose();
+            jButton6ResetText();
             if(tmp)
                 return;
         }
         v = new ShufflePrompt(f);
+        jButton6.setText("Close");
+        jButton1ResetText();
+        jButton2ResetText();
     }//GEN-LAST:event_jButton7ActionPerformed
+
+    public void jButton6ResetText() {
+        jButton6.setText("Choose Shuffle");
+    }
 
     private void jCheckBox6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
         TEXTDRAW = jCheckBox6.isSelected();
@@ -387,7 +418,6 @@ public class UtilFrame extends javax.swing.JFrame {
     private javax.swing.JButton jButton4;
     private javax.swing.JButton jButton5;
     private javax.swing.JButton jButton6;
-    private javax.swing.JButton jButton7;
     private javax.swing.JCheckBox jCheckBox1;
     private javax.swing.JCheckBox jCheckBox2;
     private javax.swing.JCheckBox jCheckBox3;
@@ -396,5 +426,6 @@ public class UtilFrame extends javax.swing.JFrame {
     private javax.swing.JCheckBox jCheckBox6;
     private javax.swing.JCheckBox jCheckBox7;
     private javax.swing.JCheckBox jCheckBox8;
+    private javax.swing.JSlider jSlider;
     // End of variables declaration//GEN-END:variables
 }

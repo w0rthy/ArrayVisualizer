@@ -17,8 +17,8 @@ Free Documentation License".
 
 public class CycleSort {
 	
-	public static void cycleSort(int[] a) {
-	    for (int cycleStart = 0; cycleStart < a.length - 1; cycleStart++) {
+	public static void cycleSort(int[] a, int length) {
+	    for (int cycleStart = 0; cycleStart < length - 1; cycleStart++) {
 	      int val = a[cycleStart];
 	      /*
 	        Count the number of values that are smaller 
@@ -26,7 +26,7 @@ public class CycleSort {
 	      */
 	      int pos = cycleStart;
 	      marked.set(3, pos);
-	      for (int i = cycleStart + 1; i < a.length; i++) {
+	      for (int i = cycleStart + 1; i < length; i++) {
 	    	marked.set(2, i);
 	      	sleep(0.01);
 	    	if (compare(a[i], val) == -1) {
@@ -62,7 +62,7 @@ public class CycleSort {
 	      */
 	      while (pos != cycleStart) {
 	        pos = cycleStart;
-	        for (int i = cycleStart + 1; i < a.length; i++) {
+	        for (int i = cycleStart + 1; i < length; i++) {
 	          marked.set(2, i);
 	          sleep(0.01);
 	          if (compare(a[i], val) == -1) {

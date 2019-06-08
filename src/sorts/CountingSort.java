@@ -36,24 +36,24 @@ SOFTWARE.
 */
 
 public class CountingSort {
-    public static void countingSort(int[] array) throws Exception {
-    	int max = analyze(array, 0, 0, true, false);
-    	int[] output = Arrays.copyOf(array, array.length);
+    public static void countingSort(int[] array, int length) throws Exception {
+    	int max = analyze(array, length, 0, 0, true, false);
+    	int[] output = Arrays.copyOf(array, length);
         int[] counts = new int[max+1];
-        for(int i = 0; i < array.length; i++){
+        for(int i = 0; i < length; i++){
             write(counts, array[i], counts[array[i]] + 1, 1, false, true);
             marked.set(1, i);
         }
         for (int i = 1; i <= max; i++) {
         	write(counts, i, counts[i] + counts[i - 1], 1, true, true);
         }
-        for(int i = array.length - 1; i >= 0; i--){
+        for(int i = length - 1; i >= 0; i--){
             write(counts, array[i], counts[array[i]] - 1, 0, false, true);
             write(output, counts[array[i]], array[i], 0, false, true);
             tempStores--;
         }
         //Usually counting sort returns a sorted copy of the input array. The visualization pretends that happens here.
-        for(int i = array.length - 1; i >= 0; i--) {
+        for(int i = length - 1; i >= 0; i--) {
         	write(array, i, output[i], 1, false, false);
         	marked.set(1, i);
         }

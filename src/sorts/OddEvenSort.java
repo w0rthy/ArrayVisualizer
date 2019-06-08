@@ -12,7 +12,7 @@ import static array.visualizer.Writes.swap;
 
 public class OddEvenSort {
 
-	public static void oddEvenSort(int[] array)
+	public static void oddEvenSort(int[] array, int length)
 	{
 	    boolean sorted = false;
 	
@@ -20,7 +20,7 @@ public class OddEvenSort {
 	    {
 	        sorted = true;
 	
-	        for (int i = 1; i < array.length-1; i += 2)
+	        for (int i = 1; i < length-1; i += 2)
 	        {
 	            if(compare(array[i], array[i+1]) == 1)
 	            {
@@ -31,7 +31,7 @@ public class OddEvenSort {
 	            sleep(.1);
 	        }
 	
-	        for (int i = 0; i < array.length-1; i += 2)
+	        for (int i = 0; i < length-1; i += 2)
 	        {
 	            if(compare(array[i], array[i+1]) == 1)
 	            {

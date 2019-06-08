@@ -15,8 +15,8 @@ import static array.visualizer.Writes.swap;
  */
 
 public class PancakeSort {
-	public static void pancakeSort(int[] array) {
-	      for (int i = array.length - 1; i > 0; i--) {
+	public static void pancakeSort(int[] array, int length) {
+	      for (int i = length - 1; i > 0; i--) {
 	          int index = findMax(array, i);
 	          
 	          flip(array, index);

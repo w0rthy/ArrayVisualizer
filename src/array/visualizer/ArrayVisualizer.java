@@ -75,9 +75,6 @@ import javax.sound.midi.Synthesizer;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
-//TO DO:
-// - Array size slider
-
 /*
 MIT License
 
@@ -115,24 +112,19 @@ public class ArrayVisualizer {
     static final JFrame window = new JFrame();
     static Thread sortingThread;
     static UtilFrame uf;
+    static ArrayFrame af;
     static ViewPrompt v;
     static Synthesizer synth;
     static MidiChannel[] chan;
 
-    private static final int MAX_ARRAY_VAL = 4096;
+    public static final int MIN_ARRAY_VAL = 2;
+    public static final int MAX_ARRAY_VAL = 4096;
 
-    private static final int [] tinyArray = new int[8];
-    private static final int [] smallArray = new int[64];
-    private static final int [] mediumArray = new int[256];
-    private static final int [] largeArray = new int[2048];
+    private static final int [] array = new int[MAX_ARRAY_VAL];
     public static final ArrayList<Integer> marked = new ArrayList<Integer>();
 
-    static String[] ArrayLengths = { Integer.toString(tinyArray.length), 
-            Integer.toString(smallArray.length), 
-            Integer.toString(mediumArray.length), 
-            Integer.toString(largeArray.length) };
-
-    static int currentLen = largeArray.length;
+    public static volatile int currentLen = 2048;
+    static volatile int lenLog = (int) (Math.log(currentLen)/Math.log(2));
     static volatile boolean MUTABLE = true;
 
     static String[] ShuffleTypes = ("Random!Reversed!Mostly Similar!Almost Sorted!Already Sorted").split("!");
@@ -167,16 +159,14 @@ public class ArrayVisualizer {
     final static int BARS = 4;
     final static int PIXELS = 5;
 
-    static volatile int VISUALS = BARS;
+    public static volatile int VISUALS = BARS;
 
     static boolean SHUFFLEANIM = true;
     static boolean FANCYFINISH = true;
 
-    static boolean SKIPPED = false;
+    public static volatile boolean SKIPPED = false;
 
     static volatile boolean ANALYZE = false;
-
-    static int markNum = (int) (Math.log10(currentLen) / Math.log10(2));
 
     static volatile boolean fancyFinish;
     static int trackFinish;
@@ -270,10 +260,6 @@ public class ArrayVisualizer {
         }
     }
 
-    public static void markAnalysis(boolean value) {
-        ANALYZE = value;
-    }
-
     public static void sleep(double milis){
         if(milis <= 0) {
             return;
@@ -290,29 +276,6 @@ public class ArrayVisualizer {
         }catch(Exception ex){
             Logger.getLogger(ArrayVisualizer.class.getName()).log(Level.SEVERE, null, ex);
         }
-    }
-
-    public synchronized static void selectArray(String arg) throws Exception {
-        if(arg == "medium") currentLen = mediumArray.length;
-        else if(arg == "large") currentLen = largeArray.length;
-        else if(arg == "small") currentLen = smallArray.length;
-        else if(arg == "tiny") currentLen = tinyArray.length;
-        else throw new Exception("Requested array does not exist");
-    }
-
-    private static int[] getArr() {
-        if(currentLen == largeArray.length) return largeArray;
-        else if (currentLen == mediumArray.length) return mediumArray;
-        else if (currentLen == smallArray.length) return smallArray;
-        else return tinyArray;
-    }
-
-    private static int getArrIndex(int i) {
-        if(currentLen == largeArray.length && !(i >= currentLen)) return largeArray[i];
-        else if (currentLen == mediumArray.length && !(i >= currentLen)) return mediumArray[i];
-        else if (currentLen == smallArray.length && !(i >= currentLen)) return smallArray[i];
-        else if (currentLen == tinyArray.length && !(i >= currentLen)) return tinyArray[i];
-        else return 0;
     }
 
     public static synchronized void SetSound(boolean val){
@@ -349,6 +312,8 @@ public class ArrayVisualizer {
         window.setBackground(Color.BLACK);
 
         uf = new UtilFrame(window);
+        af = new ArrayFrame(window);
+        uf.reposition();
 
         synth = MidiSystem.getSynthesizer();
         synth.open();
@@ -370,10 +335,7 @@ public class ArrayVisualizer {
             JOptionPane.showMessageDialog(null, "Could not find a valid instrument. Sound is disabled");
         }
 
-        initArr(largeArray);
-        initArr(mediumArray);
-        initArr(smallArray);
-        initArr(tinyArray);
+        initArr(array);
 
         //AUDIO THREAD
         new Thread(){
@@ -398,7 +360,7 @@ public class ArrayVisualizer {
                     for(int i : marked)
                         if(i != -5){
                             //PITCH
-                            double pitch = (double) getArrIndex(Math.min(Math.max(i, 0),currentLen-1))/currentLen*(PITCHMAX-PITCHMIN)+PITCHMIN;
+                            double pitch = (double) array[Math.min(Math.max(i, 0),currentLen-1)]/currentLen*(PITCHMAX-PITCHMIN)+PITCHMIN;
                             int pitchmajor = (int)pitch;
                             int pitchminor = (int)((pitch-(double)((int)pitch))*8192d)+8192;
 
@@ -424,7 +386,7 @@ public class ArrayVisualizer {
                 else line.setColor(Color.RED);
             }
             private void lineClear(Graphics2D line, int i) {
-                if(COLOR) line.setColor(getIntColor(getArrIndex(i))); 
+                if(COLOR) line.setColor(getIntColor(array[i])); 
                 else line.setColor(Color.WHITE);
                 line.setStroke(new BasicStroke(3f*(window.getWidth()/1280f)));
             }
@@ -464,6 +426,7 @@ public class ArrayVisualizer {
                 while(true){
                     if(window.getWidth()!=cw|| window.getHeight()!=ch || window.getX() != cx || window.getY() != cy){
                         uf.reposition();
+                        af.reposition();
                         if(v != null && v.isVisible())
                             v.reposition();
                         cx = window.getX();
@@ -501,15 +464,14 @@ public class ArrayVisualizer {
                     switch(VISUALS) {
                     case CIRCULAR:
                         for(int i = 0; i < currentLen; i++){
-                            if(i >= currentLen) break;
-                            else if(i < trackFinish) {
+                            if(i < trackFinish) {
                                 g.setColor(Color.getHSBColor((1f/3f), 1f, 0.8f));
                             }
                             else if(!COLOR && (SPIRALDRAW || DISPARITYDRAW || PIXELDRAW)) g.setColor(Color.WHITE);
-                            else g.setColor(getIntColor(getArrIndex(i)));
+                            else g.setColor(getIntColor(array[i]));
 
                             if(fancyFinish) {
-                                switch(markNum) {
+                                switch(lenLog) {
                                 case 12: if(i == trackFinish - 11) markBarFancy(g);
                                 case 11: if(i == trackFinish - 10) markBarFancy(g);
                                 case 10: if(i == trackFinish - 9) markBarFancy(g);
@@ -556,7 +518,7 @@ public class ArrayVisualizer {
                             double cosval = Math.cos(i*Math.PI/circamt);
 
                             if(DISPARITYDRAW) {
-                                double len = ((currentLen/2d)-Math.min(Math.min(Math.abs(i-getArrIndex(i)), Math.abs(i-getArrIndex(i)+currentLen)),Math.abs(i-getArrIndex(i)-currentLen)))/(currentLen/2d);
+                                double len = ((currentLen/2d)-Math.min(Math.min(Math.abs(i-array[i]), Math.abs(i-array[i]+currentLen)),Math.abs(i-array[i]-currentLen)))/(currentLen/2d);
 
                                 if(PIXELDRAW){
                                     int linkedpixX = halfwidth+(int)(sinval*((window.getWidth()-64)/4.675*len)) + dotw/2;
@@ -568,7 +530,7 @@ public class ArrayVisualizer {
                                                 if(i < trackFinish) lineFancy(g);
                                                 else lineClear(g, i);
 
-                                                switch(markNum) {
+                                                switch(lenLog) {
                                                 case 12: if(i == trackFinish - 11) lineMark(g);
                                                 case 11: if(i == trackFinish - 10) lineMark(g);
                                                 case 10: if(i == trackFinish - 9) lineMark(g);
@@ -584,22 +546,7 @@ public class ArrayVisualizer {
                                                 }
                                             }
                                             else {
-                                                if(marked.contains(i)) {
-                                                    switch(markNum){
-                                                    case 12: if(marked.contains(i - 10)) lineMark(g);														
-                                                    case 11: if(marked.contains(i - 10)) lineMark(g);
-                                                    case 10: if(marked.contains(i - 9)) lineMark(g);
-                                                    case 9: if(marked.contains(i - 8)) lineMark(g);
-                                                    case 8: if(marked.contains(i - 7)) lineMark(g);
-                                                    case 7: if(marked.contains(i - 6)) lineMark(g);
-                                                    case 6: if(marked.contains(i - 5)) lineMark(g);
-                                                    case 5: if(marked.contains(i - 4)) lineMark(g);
-                                                    case 4: if(marked.contains(i - 3)) lineMark(g);
-                                                    case 3: if(marked.contains(i - 2)) lineMark(g);
-                                                    case 2: if(marked.contains(i - 1)) lineMark(g);
-                                                    default: lineMark(g);
-                                                    }
-                                                }
+                                                if(marked.contains(i)) lineMark(g);
                                                 else lineClear(g, i);
                                             }
                                             g.drawLine(linkedpixX, linkedpixY, linkedpixdrawx, linkedpixdrawy);
@@ -644,7 +591,7 @@ public class ArrayVisualizer {
                                                 if(i < trackFinish) lineFancy(g);
                                                 else lineClear(g, i);
 
-                                                switch(markNum) {
+                                                switch(lenLog) {
                                                 case 12: if(i == trackFinish - 11) lineMark(g);
                                                 case 11: if(i == trackFinish - 10) lineMark(g);
                                                 case 10: if(i == trackFinish - 9) lineMark(g);
@@ -660,28 +607,13 @@ public class ArrayVisualizer {
                                                 }
                                             }
                                             else {
-                                                if(marked.contains(i)) {
-                                                    switch(markNum){
-                                                    case 12: if(marked.contains(i - 10)) lineMark(g);														
-                                                    case 11: if(marked.contains(i - 10)) lineMark(g);
-                                                    case 10: if(marked.contains(i - 9)) lineMark(g);
-                                                    case 9: if(marked.contains(i - 8)) lineMark(g);
-                                                    case 8: if(marked.contains(i - 7)) lineMark(g);
-                                                    case 7: if(marked.contains(i - 6)) lineMark(g);
-                                                    case 6: if(marked.contains(i - 5)) lineMark(g);
-                                                    case 5: if(marked.contains(i - 4)) lineMark(g);
-                                                    case 4: if(marked.contains(i - 3)) lineMark(g);
-                                                    case 3: if(marked.contains(i - 2)) lineMark(g);
-                                                    case 2: if(marked.contains(i - 1)) lineMark(g);
-                                                    default: lineMark(g);
-                                                    }	
-                                                }
+                                                if(marked.contains(i)) lineMark(g);
                                                 else lineClear(g, i);
                                             }
-                                            g.drawLine(halfwidth+(int)(sinval*((window.getWidth()-64)/3.0*(getArrIndex(i)/(double)getArr().length))), halfheight-(int)(cosval*((window.getHeight()-96)/2.0*(getArrIndex(i)/(double)getArr().length))), linkedpixdrawx, linkedpixdrawy);
+                                            g.drawLine(halfwidth+(int)(sinval*((window.getWidth()-64)/3.0*(array[i]/(double)currentLen))), halfheight-(int)(cosval*((window.getHeight()-96)/2.0*(array[i]/(double)currentLen))), linkedpixdrawx, linkedpixdrawy);
                                         }
-                                        linkedpixdrawx = halfwidth+(int)(sinval*((window.getWidth()-64)/3.0*(getArrIndex(i)/(double)getArr().length)));
-                                        linkedpixdrawy = halfheight-(int)(cosval*((window.getHeight()-96)/2.0*(getArrIndex(i)/(double)getArr().length)));		
+                                        linkedpixdrawx = halfwidth+(int)(sinval*((window.getWidth()-64)/3.0*(array[i]/(double)currentLen)));
+                                        linkedpixdrawy = halfheight-(int)(cosval*((window.getHeight()-96)/2.0*(array[i]/(double)currentLen)));		
                                     }
                                     else {
                                         if(marked.contains(i)) {
@@ -690,8 +622,8 @@ public class ArrayVisualizer {
                                         }
                                         else drawRect = false;
 
-                                        int rectx = halfwidth+(int)(sinval*((window.getWidth()-64)/3*(getArrIndex(i)/(double)getArr().length)));
-                                        int recty = halfheight-(int)(cosval*((window.getHeight()-96)/2*(getArrIndex(i)/(double)getArr().length)));
+                                        int rectx = halfwidth+(int)(sinval*((window.getWidth()-64)/3*(array[i]/(double)currentLen)));
+                                        int recty = halfheight-(int)(cosval*((window.getHeight()-96)/2*(array[i]/(double)currentLen)));
 
                                         g.fillRect(rectx, recty, dotw, doth);
 
@@ -709,7 +641,7 @@ public class ArrayVisualizer {
                                 }
                                 else {
                                     if(marked.contains(i)) {
-                                        switch(markNum) {
+                                        switch(lenLog) {
                                         case 12: if(marked.contains(i - 10)) markBarFancy(g);
                                         case 11: if(marked.contains(i - 10)) markBarFancy(g);
                                         case 10: if(marked.contains(i - 9)) markBarFancy(g);
@@ -726,8 +658,8 @@ public class ArrayVisualizer {
                                     }
                                     Polygon p = new Polygon();
                                     p.addPoint(halfwidth, halfheight);
-                                    p.addPoint(halfwidth+(int)(Math.sin((i)*Math.PI/circamt)*((window.getWidth()-64)/3*(getArrIndex(i)/(double)getArr().length))), halfheight-(int)(Math.cos((i)*Math.PI/circamt)*((window.getHeight()-96)/2*(getArrIndex(i)/(double)getArr().length))));
-                                    p.addPoint(halfwidth+(int)(Math.sin((i+1)*Math.PI/circamt)*((window.getWidth()-64)/3*(getArrIndex(Math.min(i+1,getArr().length-1))/(double)getArr().length))), halfheight-(int)(Math.cos((i+1)*Math.PI/circamt)*((window.getHeight()-96)/2*(getArrIndex(Math.min(i+1,getArr().length-1))/(double)getArr().length))));
+                                    p.addPoint(halfwidth+(int)(Math.sin((i)*Math.PI/circamt)*((window.getWidth()-64)/3*(array[i]/(double)currentLen))), halfheight-(int)(Math.cos((i)*Math.PI/circamt)*((window.getHeight()-96)/2*(array[i]/(double)currentLen))));
+                                    p.addPoint(halfwidth+(int)(Math.sin((i+1)*Math.PI/circamt)*((window.getWidth()-64)/3*(array[Math.min(i+1,currentLen-1)]/(double)currentLen))), halfheight-(int)(Math.cos((i+1)*Math.PI/circamt)*((window.getHeight()-96)/2*(array[Math.min(i+1,currentLen-1)]/(double)currentLen))));
                                     g.fillPolygon(p);
                                 }
                             }
@@ -750,9 +682,9 @@ public class ArrayVisualizer {
                         for(int i = currentLen; i >= 0; i--){
                             if(fancyFinish) {
                                 if(i < trackFinish) g.setColor(Color.GREEN);
-                                else g.setColor(getIntColor(getArrIndex(i)));
+                                else g.setColor(getIntColor(array[i]));
 
-                                switch(markNum) {
+                                switch(lenLog) {
                                 case 12: if(i == trackFinish - 11) g.setColor(Color.BLACK);
                                 case 11: if(i == trackFinish - 10) g.setColor(Color.BLACK);
                                 case 10: if(i == trackFinish - 9) g.setColor(Color.BLACK);
@@ -767,23 +699,8 @@ public class ArrayVisualizer {
                                 default: if(i == trackFinish) g.setColor(Color.BLACK);
                                 }
                             }
-                            else if(marked.contains(i)) {
-                                switch(markNum) {
-                                case 12: if(marked.contains(i - 10)) g.setColor(Color.BLACK);
-                                case 11: if(marked.contains(i - 10)) g.setColor(Color.BLACK);
-                                case 10: if(marked.contains(i - 9)) g.setColor(Color.BLACK);
-                                case 9: if(marked.contains(i - 8)) g.setColor(Color.BLACK);
-                                case 8: if(marked.contains(i - 7)) g.setColor(Color.BLACK);
-                                case 7: if(marked.contains(i - 6)) g.setColor(Color.BLACK);
-                                case 6: if(marked.contains(i - 5)) g.setColor(Color.BLACK);
-                                case 5: if(marked.contains(i - 4)) g.setColor(Color.BLACK);
-                                case 4: if(marked.contains(i - 3)) g.setColor(Color.BLACK);
-                                case 3: if(marked.contains(i - 2)) g.setColor(Color.BLACK);
-                                case 2: if(marked.contains(i - 1)) g.setColor(Color.BLACK);
-                                default: g.setColor(Color.BLACK);
-                                }
-                            }
-                            else g.setColor(getIntColor(getArrIndex(i)));
+                            else if(marked.contains(i)) g.setColor(Color.BLACK);
+                            else g.setColor(getIntColor(array[i]));
 
                             int radius = (int)(diameter/2.0);
 
@@ -793,16 +710,34 @@ public class ArrayVisualizer {
                         break;
                     case MESH:
                         int trih = window.getHeight()/20; //Height of triangles to use, Width will be scaled accordingly
-                        if(currentLen <= 64) {
-                            trih *= 2.3;
+
+                        switch(currentLen) {
+                        case 2: trih *= 20; break;
+                        case 4: trih *= 13; break;
+                        case 8: trih *= 8; break;
+                        case 16:
+                        case 32: trih *= 4.4; break; 
+                        case 64: trih *= 2.3; break;
+                        case 128: trih *= 2.35; break;
+                        case 256: trih *= 1.22; break;
+                        default: trih *= 1;
                         }
 
                         int tripercol = window.getHeight()/trih*2; //Triangles per vertical column
-                        int triperrow = Math.max(currentLen/tripercol,1); //Triangles per horizontal row
+                        int triperrow;
+
+                        switch(currentLen) {
+                        case 32: 
+                        case 64: triperrow = 4; break;
+                        case 128:
+                        case 256: triperrow = 8; break;
+                        default: triperrow = Math.max(currentLen/tripercol,2); //Triangles per horizontal row
+                        }
+
                         double triw = (double)window.getWidth()/triperrow; //Width of triangles to use
 
                         double curx = 0;
-                        int cury = 30;
+                        int cury = 15;
 
                         int[] triptsx = new int[3];
                         int[] triptsy = new int[3];
@@ -810,16 +745,13 @@ public class ArrayVisualizer {
                         for(int i = 0; i < currentLen; i++){
                             if(marked.contains(i)) g.setColor(Color.BLACK);
                             else {
-                                if(i >= currentLen) break;
-                                if(fancyFinish && (i < trackFinish && i > trackFinish - (markNum * 10))) g.setColor(Color.GREEN);
-                                else g.setColor(getIntColor(getArrIndex(i)));
+                                if(fancyFinish && (i < trackFinish && i > trackFinish - (lenLog * 10))) g.setColor(Color.GREEN);
+                                else g.setColor(getIntColor(array[i]));
                             }
                             //If i/triperrow is even, then triangle points right, else left
                             boolean direction = false;
-                            if((i/triperrow)%2==0)
-                                direction = true;
-                            if(cury > 30 && i % triperrow == 0)
-                                direction = !direction;
+                            if(i/triperrow % 2 == 0) direction = true;
+                            else direction = false;
 
                             //Make the triangle
                             if(!direction){
@@ -848,7 +780,8 @@ public class ArrayVisualizer {
                             g.fillPolygon(triptsx,triptsy,triptsx.length);
 
                             //If at the end of a row, reset curx
-                            if(i != 0 && (i % triperrow == 0)){
+                            //(i != 0 || i != currentLen - 1)
+                            if((i + 1) % triperrow == 0){
                                 curx = 0d;
                                 cury+=trih/2;
                             }
@@ -858,10 +791,10 @@ public class ArrayVisualizer {
                         for(int i = 0; i < currentLen; i++){
                             if(fancyFinish) {
                                 if(i < trackFinish) g.setColor(Color.GREEN);
-                                else if(RAINBOW || COLOR) g.setColor(getIntColor(getArrIndex(i)));
+                                else if(RAINBOW || COLOR) g.setColor(getIntColor(array[i]));
                                 else g.setColor(Color.WHITE);
 
-                                switch(markNum) {
+                                switch(lenLog) {
                                 case 12: if(i == trackFinish - 11) markBarFancy(g);
                                 case 11: if(i == trackFinish - 10) markBarFancy(g);
                                 case 10: if(i == trackFinish - 9) markBarFancy(g);
@@ -876,43 +809,24 @@ public class ArrayVisualizer {
                                 default: if(i == trackFinish) markBarFancy(g);
                                 }
                             }
-                            else if(marked.contains(i)) {
-                                switch(markNum) {
-                                case 12: if(marked.contains(i - 10)) markBar(g);
-                                case 11: if(marked.contains(i - 10)) markBar(g);
-                                case 10: if(marked.contains(i - 9)) markBar(g);
-                                case 9: if(marked.contains(i - 8)) markBar(g);
-                                case 8: if(marked.contains(i - 7)) markBar(g);
-                                case 7: if(marked.contains(i - 6)) markBar(g);
-                                case 6: if(marked.contains(i - 5)) markBar(g);
-                                case 5: if(marked.contains(i - 4)) markBar(g);
-                                case 4: if(marked.contains(i - 3)) markBar(g);
-                                case 3: if(marked.contains(i - 2)) markBar(g);
-                                case 2: if(marked.contains(i - 1)) markBar(g);
-                                default: markBar(g);
-                                }
-                            }
                             else {
-                                if(RAINBOW || COLOR) g.setColor(getIntColor(getArrIndex(i)));
+                                if(RAINBOW || COLOR) g.setColor(getIntColor(array[i]));
                                 else g.setColor(Color.WHITE);
+
+                                if(marked.contains(i)) markBar(g);
                             }
 
                             int y = 0;
-                            int width = (int)(xscl*i)-amt;
+                            int width = (int)(xscl*(i+1))-amt;
 
                             if(RAINBOW) {
-                                if(width>0){
-                                    if(i >= currentLen) break;
-
-                                    g.fillRect(amt+20, 0, width, window.getHeight());
-                                }
+                                if(width>0) g.fillRect(amt+20, 0, width, window.getHeight());
                                 amt+=width;
                             }
                             else {
                                 if(width>0){
-                                    if(i >= currentLen) break;
-                                    y = (int)((window.getHeight()-20)-getArrIndex(i)*yscl);
-                                    g.fillRect(amt+20, y, width, (int) Math.max(getArrIndex(i)*yscl,1));
+                                    y = (int)((window.getHeight()-20)-(array[i])*yscl);
+                                    g.fillRect(amt+20, y, width, (int) Math.max(array[i]*yscl,1));
                                 }
                                 amt+=width;
                             }
@@ -922,18 +836,16 @@ public class ArrayVisualizer {
                         if(LINEDRAW) {
                             for(int i = 0; i < currentLen; i++){
                                 int y = 0;
-                                int width = (int)(xscl*i)-amt;
+                                int width = (int)(xscl*(i+1))-amt;
 
                                 if(width>0){
-                                    if(i >= currentLen) break;
-
-                                    y = (int)((window.getHeight()-20)-getArrIndex(i)*yscl);
+                                    y = (int)((window.getHeight()-20)-array[i]*yscl);
                                     if(i>0) {
                                         if(fancyFinish) {
                                             if(i < trackFinish) lineFancy(g);
                                             else lineClear(g, i);
 
-                                            switch(markNum) {
+                                            switch(lenLog) {
                                             case 12: if(i == trackFinish - 11) lineMark(g);
                                             case 11: if(i == trackFinish - 10) lineMark(g);
                                             case 10: if(i == trackFinish - 9) lineMark(g);
@@ -948,22 +860,7 @@ public class ArrayVisualizer {
                                             default: if(i == trackFinish) lineMark(g);
                                             }
                                         }
-                                        else if(marked.contains(i)) {
-                                            switch(markNum){
-                                            case 12: if(marked.contains(i - 10)) lineMark(g);														
-                                            case 11: if(marked.contains(i - 10)) lineMark(g);
-                                            case 10: if(marked.contains(i - 9)) lineMark(g);
-                                            case 9: if(marked.contains(i - 8)) lineMark(g);
-                                            case 8: if(marked.contains(i - 7)) lineMark(g);
-                                            case 7: if(marked.contains(i - 6)) lineMark(g);
-                                            case 6: if(marked.contains(i - 5)) lineMark(g);
-                                            case 5: if(marked.contains(i - 4)) lineMark(g);
-                                            case 4: if(marked.contains(i - 3)) lineMark(g);
-                                            case 3: if(marked.contains(i - 2)) lineMark(g);
-                                            case 2: if(marked.contains(i - 1)) lineMark(g);
-                                            default: lineMark(g);
-                                            }
-                                        }
+                                        else if(marked.contains(i)) lineMark(g);
                                         else lineClear(g, i);
 
                                         g.drawLine(amt, y, linkedpixdrawx, linkedpixdrawy);
@@ -981,11 +878,11 @@ public class ArrayVisualizer {
                                     if(COLOR) g.setColor(Color.WHITE);
                                     else g.setColor(Color.RED);
                                 }
-                                else if(COLOR) g.setColor(getIntColor(getArrIndex(i)));
+                                else if(COLOR) g.setColor(getIntColor(array[i]));
                                 else g.setColor(Color.WHITE);
 
                                 int y = 0;
-                                int width = (int)(xscl*i)-amt;
+                                int width = (int)(xscl*(i+1))-amt;
 
                                 if(marked.contains(i)) {
                                     rectColor(g2);
@@ -994,10 +891,7 @@ public class ArrayVisualizer {
                                 else drawRect = false;
 
                                 if(width>0){
-                                    if(i >= currentLen) {
-                                        break;
-                                    }
-                                    y = (int)((window.getHeight()-20)-getArrIndex(i)*yscl);
+                                    y = (int)((window.getHeight()-20)-array[i]*yscl);
                                     g.fillRect(amt + 20, y, dots, dots);
                                     if(drawRect) {
                                         g2.setStroke(thickStroke);
@@ -1046,6 +940,7 @@ public class ArrayVisualizer {
         }.start();
 
         uf.setVisible(true);
+        af.setVisible(true);
 
         //keep on keeping on
         while(window.isActive())Thread.sleep(100);
@@ -1057,8 +952,8 @@ public class ArrayVisualizer {
 
         SLEEPRATIO = 1;
 
-        for(int i = 0; i < currentLen; i++) {
-            marked.set(1, i);
+        for(int i = 0; i < currentLen + lenLog; i++) {
+            if(i < currentLen) marked.set(1, i);
             trackFinish++;
             sleep(100 * (4.0 / (double) currentLen));
         }
@@ -1076,7 +971,7 @@ public class ArrayVisualizer {
         marked.set(1, -5);
         heading = "";
         writes = 0;
-        shuffle(getArr());
+        shuffle(array);
         clearmarked();
         Thread.sleep(500);
         swaps = 0;
@@ -1118,10 +1013,10 @@ public class ArrayVisualizer {
         String tmp = heading;
         heading = "Shuffling...";
 
-        if(shuffleType == "random") {
+        if(shuffleType.equals("random")) {
             //RANDOM ORDER
-            for(int i = 0; i < array.length; i++){
-                swap(array, i, (int)(Math.random()*array.length), 0, true);
+            for(int i = 0; i < currentLen; i++){
+                swap(array, i, (int)(Math.random()*currentLen), 0, true);
                 swaps--;
                 if(swaps < 0) {
                     swaps = 0;
@@ -1130,28 +1025,28 @@ public class ArrayVisualizer {
                     sleep(1);
             }
         }
-        else if (shuffleType == "reverse") {
+        else if (shuffleType.equals("reverse")) {
             //REVERSE ORDER
-            for (int left = 0, right = array.length - 1; left < right; left++, right--) {
+            for (int left = 0, right = currentLen - 1; left < right; left++, right--) {
                 // swap the values at the left and right indices
                 swap(array, left, right, 0, true);
                 if(SHUFFLEANIM)
                     sleep(1);
             }
         }
-        else if(shuffleType == "similar") {
-            for(int i = 0; i < array.length - 8; i++) {
-                array[i] = array.length / 2;
+        else if(shuffleType.equals("similar")) {
+            for(int i = 0; i < currentLen - 8; i++) {
+                array[i] = currentLen / 2;
                 if(SHUFFLEANIM)
                     sleep(1);
             }
-            for(int i = array.length - 8; i < array.length; i++) {
-                array[i] = (int) (Math.random() < 0.5 ? array.length * 0.75 : array.length * 0.25);
+            for(int i = currentLen - 8; i < currentLen; i++) {
+                array[i] = (int) (Math.random() < 0.5 ? currentLen * 0.75 : currentLen * 0.25);
                 if(SHUFFLEANIM)
                     sleep(1);
             }
-            for(int i = 0; i < array.length; i++){
-                swap(array, i, (int)(Math.random()*array.length), 0, true);
+            for(int i = 0; i < currentLen; i++){
+                swap(array, i, (int)(Math.random()*currentLen), 0, true);
                 swaps--;
                 if(swaps < 0) {
                     swaps = 0;
@@ -1160,17 +1055,17 @@ public class ArrayVisualizer {
                     sleep(1);
             }
         }
-        else if(shuffleType == "sorted") {
-            for(int i = 0; i < array.length; i++) {
+        else if(shuffleType.equals("sorted")) {
+            for(int i = 0; i < currentLen; i++) {
                 if(SHUFFLEANIM) {
                     marked.set(1, i);
                     sleep(1);
                 }
             }
         }
-        else if(shuffleType == "almost") {
+        else if(shuffleType.equals("almost")) {
             for(int i = 0; i < (int) (currentLen / 10); i++){
-                swap(array, (int)(Math.random()*array.length), (int)(Math.random()*array.length), 0, true);
+                swap(array, (int)(Math.random()*currentLen), (int)(Math.random()*currentLen), 0, true);
                 swaps--;
                 if(swaps < 0) {
                     swaps = 0;
@@ -1200,20 +1095,20 @@ public class ArrayVisualizer {
             public void run(){
                 try{
                     double storeVol = SOUNDMUL;
+                    currentLen = 2048;
                     MUTABLE = false;
+                    lenLog = (int) (Math.log(currentLen)/Math.log(2));
 
                     category = "Exchange Sorts";
 
                     SLEEPRATIO = 2.5; 
-                    SOUNDMUL = 1;
-
-                    selectArray("large");
+                    SOUNDMUL = 1;                    
 
                     refresharray();
                     heading = "Bubble Sort";
                     SLEEPRATIO = 22;
                     startRealTimer();
-                    bubbleSort(largeArray);
+                    bubbleSort(array, currentLen);
 
                     endSort();
                     Thread.sleep(1000);
@@ -1224,7 +1119,7 @@ public class ArrayVisualizer {
                     SLEEPRATIO = 22;
                     heading = "Cocktail Shaker Sort";
                     startRealTimer();
-                    cocktailShakerSort(largeArray);
+                    cocktailShakerSort(array, currentLen);
 
                     endSort();
                     Thread.sleep(1000);
@@ -1235,7 +1130,7 @@ public class ArrayVisualizer {
                     SLEEPRATIO = 30;
                     heading = "Gnome Sort";
                     startRealTimer();
-                    gnomeSort(largeArray);
+                    gnomeSort(array, currentLen);
 
                     endSort();
                     Thread.sleep(1000);
@@ -1246,7 +1141,7 @@ public class ArrayVisualizer {
                     heading = "Optimized Gnome Sort";
                     SLEEPRATIO = 30;
                     startRealTimer();
-                    smartGnome(largeArray);
+                    smartGnome(array, currentLen);
 
                     endSort();
                     Thread.sleep(1000);
@@ -1257,7 +1152,7 @@ public class ArrayVisualizer {
                     heading = "Odd-Even Sort";
                     SLEEPRATIO = 50;
                     startRealTimer();
-                    oddEvenSort(largeArray);
+                    oddEvenSort(array, currentLen);
 
                     endSort();
                     Thread.sleep(1000);
@@ -1268,7 +1163,7 @@ public class ArrayVisualizer {
                     heading = "Comb Sort";
                     SLEEPRATIO = 2.75;
                     startRealTimer();
-                    combSort(largeArray, false);
+                    combSort(array, currentLen, false);
 
                     endSort();
                     Thread.sleep(1000);
@@ -1279,7 +1174,7 @@ public class ArrayVisualizer {
                     heading = "Quick Sort";
                     SLEEPRATIO = 3;
                     startRealTimer();
-                    quickSort(largeArray, 0, largeArray.length-1);
+                    quickSort(array, 0, currentLen-1);
 
                     endSort();
                     Thread.sleep(1000);
@@ -1290,7 +1185,7 @@ public class ArrayVisualizer {
                     heading = "Stable Quick Sort";
                     SLEEPRATIO = 1.5;
                     startRealTimer();
-                    stableQuickSort(largeArray);
+                    stableQuickSort(array, currentLen);
 
                     endSort();
                     Thread.sleep(1000);
@@ -1301,7 +1196,7 @@ public class ArrayVisualizer {
                     heading = "Dual-Pivot Quick Sort";
                     SLEEPRATIO = 1.25;
                     startRealTimer();
-                    dualPivot(largeArray, 0, largeArray.length-1);
+                    dualPivot(array, 0, currentLen-1);
 
                     endSort();
                     Thread.sleep(1000);
@@ -1314,7 +1209,7 @@ public class ArrayVisualizer {
                     heading = "Selection Sort";
                     SLEEPRATIO = 50;
                     startRealTimer();
-                    selectionSort(largeArray);
+                    selectionSort(array, currentLen);
 
                     endSort();
                     Thread.sleep(1000);
@@ -1325,7 +1220,7 @@ public class ArrayVisualizer {
                     heading = "Double Selection Sort";
                     SLEEPRATIO = 25;
                     startRealTimer();
-                    doubleSelectionSort(largeArray);
+                    doubleSelectionSort(array, currentLen);
 
                     endSort();
                     Thread.sleep(1000);
@@ -1336,7 +1231,7 @@ public class ArrayVisualizer {
                     heading = "Max Heap Sort";
                     SLEEPRATIO = 1.85;
                     startRealTimer();
-                    heapSort(largeArray, true);
+                    heapSort(array, currentLen, true);
 
                     endSort();
                     Thread.sleep(1000);
@@ -1347,7 +1242,7 @@ public class ArrayVisualizer {
                     heading = "Min Heap Sort";
                     SLEEPRATIO = 1.85;
                     startRealTimer();
-                    heapSort(largeArray, false);
+                    heapSort(array, currentLen, false);
 
                     endSort();
                     Thread.sleep(1000);
@@ -1358,7 +1253,7 @@ public class ArrayVisualizer {
                     heading = "Ternary Heap Sort";
                     SLEEPRATIO = 1.65;
                     startRealTimer();
-                    ternaryHeapSort(largeArray);
+                    ternaryHeapSort(array, currentLen);
 
                     endSort();
                     Thread.sleep(1000);
@@ -1369,7 +1264,7 @@ public class ArrayVisualizer {
                     heading = "Weak Heap Sort";
                     SLEEPRATIO = 1;
                     startRealTimer();
-                    weakHeapSort(largeArray);
+                    weakHeapSort(array, currentLen);
 
                     endSort();
                     Thread.sleep(1000);
@@ -1380,7 +1275,7 @@ public class ArrayVisualizer {
                     heading = "Smooth Sort";
                     SLEEPRATIO = 2;
                     startRealTimer();
-                    smoothSort(largeArray);
+                    smoothSort(array, currentLen);
 
                     endSort();
                     Thread.sleep(1000);
@@ -1391,7 +1286,7 @@ public class ArrayVisualizer {
                     heading = "Cycle Sort";
                     SLEEPRATIO = 3;
                     startRealTimer();
-                    cycleSort(largeArray);
+                    cycleSort(array, currentLen);
 
                     endSort();
                     Thread.sleep(1000);
@@ -1402,7 +1297,7 @@ public class ArrayVisualizer {
                     heading = "Tournament Sort";
                     SLEEPRATIO = 1.5;
                     startRealTimer();
-                    tournamentSort(largeArray);
+                    tournamentSort(array, currentLen);
 
                     endSort();
                     Thread.sleep(1000);            
@@ -1415,7 +1310,7 @@ public class ArrayVisualizer {
                     heading = "Insertion Sort";
                     SLEEPRATIO = 2;
                     startRealTimer();
-                    insertionSort(largeArray);
+                    insertionSort(array, currentLen);
 
                     endSort();
                     Thread.sleep(1000);
@@ -1426,7 +1321,7 @@ public class ArrayVisualizer {
                     heading = "Binary Insertion Sort";
                     SLEEPRATIO = 2;
                     startRealTimer();
-                    binaryInsertionSort(largeArray);
+                    binaryInsertionSort(array, currentLen);
 
                     endSort();
                     Thread.sleep(1000);
@@ -1437,7 +1332,7 @@ public class ArrayVisualizer {
                     heading = "Shell Sort";
                     SLEEPRATIO = 3;
                     startRealTimer();
-                    shellSort(largeArray, 0);
+                    shellSort(array, currentLen, 0);
 
                     endSort();
                     Thread.sleep(1000);
@@ -1448,7 +1343,7 @@ public class ArrayVisualizer {
                     heading = "Patience Sort";
                     SLEEPRATIO = 2;
                     startRealTimer();
-                    patienceSort(largeArray);
+                    patienceSort(array, currentLen);
 
                     endSort();
                     Thread.sleep(1000);
@@ -1461,7 +1356,7 @@ public class ArrayVisualizer {
                     heading = "Merge Sort";
                     SLEEPRATIO = 1.75;
                     startRealTimer();
-                    mergeSortOOP(largeArray, false);
+                    mergeSortOOP(array, currentLen, false);
 
                     endSort();
                     Thread.sleep(1000);
@@ -1472,7 +1367,7 @@ public class ArrayVisualizer {
                     heading = "In-Place Merge Sort";
                     SLEEPRATIO = 7;
                     startRealTimer();
-                    mergeSort(largeArray, 0, largeArray.length - 1);
+                    mergeSort(array, 0, currentLen - 1);
 
                     endSort();
                     Thread.sleep(1000);
@@ -1484,7 +1379,7 @@ public class ArrayVisualizer {
                     refresharray();
                     heading = "American Flag Sort, 256 Buckets";
                     startRealTimer();
-                    flagSort(largeArray, 256);
+                    flagSort(array, currentLen, 256);
 
                     endSort();
                     Thread.sleep(1000);
@@ -1495,7 +1390,7 @@ public class ArrayVisualizer {
                     heading = "Bead (Gravity) Sort";
                     SLEEPRATIO = Integer.MAX_VALUE;
                     startRealTimer();
-                    gravitySort(largeArray);
+                    gravitySort(array, currentLen);
 
                     endSort();
                     Thread.sleep(1000);
@@ -1506,7 +1401,7 @@ public class ArrayVisualizer {
                     heading = "Counting Sort";
                     SLEEPRATIO = 5;
                     startRealTimer();
-                    countingSort(largeArray);
+                    countingSort(array, currentLen);
 
                     endSort();
                     Thread.sleep(1000);
@@ -1517,7 +1412,7 @@ public class ArrayVisualizer {
                     heading = "Pigeonhole Sort";
                     SLEEPRATIO = 5;
                     startRealTimer();
-                    pigeonSort(largeArray);
+                    pigeonSort(array, currentLen);
 
                     endSort();
                     Thread.sleep(1000);
@@ -1528,7 +1423,7 @@ public class ArrayVisualizer {
                     heading = "Radix LSD Sort, Base 4";
                     SLEEPRATIO = 2;
                     startRealTimer();
-                    radixLSDsort(largeArray, 4);
+                    radixLSDsort(array, currentLen, 4);
 
                     endSort();
                     Thread.sleep(1000);
@@ -1540,7 +1435,7 @@ public class ArrayVisualizer {
                     heading = "In-Place Radix LSD Sort, Base 16";
                     SLEEPRATIO = 2;
                     startRealTimer();
-                    inPlaceRadixLSDSort(largeArray, 16);
+                    inPlaceRadixLSDSort(array, currentLen, 16);
 
                     endSort();
                     Thread.sleep(1000);
@@ -1552,7 +1447,7 @@ public class ArrayVisualizer {
                     heading = "Radix MSD Sort, Base 8";
                     SLEEPRATIO = 1.75;
                     startRealTimer();
-                    radixMSDSort(largeArray, 8);
+                    radixMSDSort(array, currentLen, 8);
 
                     endSort();
                     Thread.sleep(1000);
@@ -1563,7 +1458,7 @@ public class ArrayVisualizer {
                     heading = "Flash Sort";
                     SLEEPRATIO = 1.5;
                     startRealTimer();
-                    flashSort(largeArray, largeArray.length);
+                    flashSort(array, currentLen);
 
                     endSort();
                     Thread.sleep(1000);
@@ -1574,7 +1469,7 @@ public class ArrayVisualizer {
                     heading = "Shatter Sort";
                     SLEEPRATIO = 1;
                     startRealTimer();
-                    shatterSort(largeArray, 64);
+                    shatterSort(array, currentLen, 64);
 
                     endSort();
                     Thread.sleep(1000);
@@ -1585,7 +1480,7 @@ public class ArrayVisualizer {
                     heading = "Simple Shatter Sort";
                     SLEEPRATIO = 1.5;
                     startRealTimer();
-                    simpleShatterSort(largeArray, 256, 4);
+                    simpleShatterSort(array, currentLen, 256, 4);
 
                     endSort();
                     Thread.sleep(1000);
@@ -1596,7 +1491,7 @@ public class ArrayVisualizer {
                     heading = "Time Sort (Mul 4)";
                     SLEEPRATIO = 1.5;
                     startRealTimer();
-                    timeSort(largeArray, 4);
+                    timeSort(array, currentLen, 4);
 
                     endSort();
                     Thread.sleep(1000);
@@ -1609,7 +1504,7 @@ public class ArrayVisualizer {
                     heading = "Batcher's Bitonic Sort";
                     SLEEPRATIO = 4.5;
                     startRealTimer();
-                    bitonicSort(largeArray, 0, largeArray.length, true);
+                    bitonicSort(array, 0, currentLen, true);
 
                     endSort();
                     Thread.sleep(1000);
@@ -1620,7 +1515,7 @@ public class ArrayVisualizer {
                     heading = "Batcher's Odd-Even Merge Sort";
                     SLEEPRATIO = 3;
                     startRealTimer();
-                    oddEvenMergeSort(largeArray, 0, largeArray.length);
+                    oddEvenMergeSort(array, 0, currentLen);
 
                     endSort();
                     Thread.sleep(1000);
@@ -1633,7 +1528,7 @@ public class ArrayVisualizer {
                     heading = "Hybrid Comb Sort (Comb/Insertion)";
                     SLEEPRATIO = 3;
                     startRealTimer();
-                    combSort(largeArray, true);
+                    combSort(array, currentLen, true);
 
                     endSort();
                     Thread.sleep(1000);
@@ -1644,7 +1539,7 @@ public class ArrayVisualizer {
                     heading = "Binary Merge Sort (Merge/Binary Insertion)";
                     SLEEPRATIO = 1.25;
                     startRealTimer();
-                    mergeSortOOP(largeArray, true);
+                    mergeSortOOP(array, currentLen, true);
 
                     endSort();
                     Thread.sleep(1000);
@@ -1655,7 +1550,7 @@ public class ArrayVisualizer {
                     heading = "Weave Merge Sort (Merge/Insertion)";
                     SLEEPRATIO = 2.5;
                     startRealTimer();
-                    weaveMergeSort(largeArray, 0, largeArray.length - 1);
+                    weaveMergeSort(array, 0, currentLen - 1);
 
                     endSort();
                     Thread.sleep(1000);
@@ -1666,7 +1561,7 @@ public class ArrayVisualizer {
                     heading = "TimSort";
                     SLEEPRATIO = 1.5;
                     startRealTimer();
-                    timSort(largeArray);
+                    timSort(array, currentLen);
 
                     endSort();
                     Thread.sleep(1000);
@@ -1677,7 +1572,7 @@ public class ArrayVisualizer {
                     heading = "WikiSort (Block Merge Sort)";
                     SLEEPRATIO = 3;
                     startRealTimer();
-                    startWikiSort(largeArray);
+                    startWikiSort(array, currentLen);
 
                     endSort();
                     Thread.sleep(1000);
@@ -1688,7 +1583,7 @@ public class ArrayVisualizer {
                     heading = "GrailSort (Block Merge Sort)";
                     SLEEPRATIO = 3;
                     startRealTimer();
-                    grailSortWithoutBuffer(largeArray);
+                    grailSortWithoutBuffer(array, currentLen);
 
                     endSort();
                     Thread.sleep(1000);
@@ -1699,7 +1594,7 @@ public class ArrayVisualizer {
                     heading = "std::sort (Introsort)";
                     SLEEPRATIO = 1.5;
                     startRealTimer();
-                    introSort(largeArray, 32, 1, 0);
+                    introSort(array, currentLen, 32, 1, 0);
 
                     endSort();
                     Thread.sleep(1000);
@@ -1710,7 +1605,7 @@ public class ArrayVisualizer {
                     heading = "Quick Shell Sort (Introsort with Shellsort)";
                     SLEEPRATIO = 1.5;
                     startRealTimer();
-                    introSort(largeArray, 48, 2, 12);
+                    introSort(array, currentLen, 48, 2, 12);
 
                     endSort();
                     Thread.sleep(1000);
@@ -1721,22 +1616,20 @@ public class ArrayVisualizer {
                     heading = "std::stable_sort (Insert/Bottom-up Merge)";
                     SLEEPRATIO = 1.5;
                     startRealTimer();
-                    stableSort(largeArray, largeArray.length);
+                    stableSort(array, currentLen);
 
                     endSort();
                     Thread.sleep(1000);
 
                     category = "Miscellaneous Sorts";
-
+                    currentLen = 256;
                     SLEEPRATIO = 1; 
-
-                    selectArray("medium");
 
                     refresharray();
                     heading = "Pancake Sort";
                     SLEEPRATIO = 1;
                     startRealTimer();
-                    pancakeSort(mediumArray);
+                    pancakeSort(array, currentLen);
 
                     endSort();
                     Thread.sleep(1000);
@@ -1747,7 +1640,7 @@ public class ArrayVisualizer {
                     heading = "Stooge Sort";
                     SLEEPRATIO = 2.5;
                     startRealTimer();
-                    stoogeSort(mediumArray, 0, mediumArray.length - 1);
+                    stoogeSort(array, 0, currentLen - 1);
 
                     endSort();
                     Thread.sleep(1000);
@@ -1758,7 +1651,7 @@ public class ArrayVisualizer {
                     heading = "Bad Sort";
                     SLEEPRATIO = 1;
                     startRealTimer();
-                    badSort(mediumArray);
+                    badSort(array, currentLen);
 
                     endSort();
                     Thread.sleep(1000);
@@ -1767,7 +1660,7 @@ public class ArrayVisualizer {
                     heading = "Silly Sort";
                     SLEEPRATIO = 1;
                     startRealTimer();
-                    sillySort(mediumArray, 0, mediumArray.length - 1);
+                    sillySort(array, 0, currentLen - 1);
 
                     endSort();
                     Thread.sleep(1000);
@@ -1776,7 +1669,7 @@ public class ArrayVisualizer {
                     heading = "Slow Sort";
                     SLEEPRATIO = 1;
                     startRealTimer();
-                    slowSort(mediumArray);
+                    slowSort(array, 0, currentLen - 1);
 
                     endSort();
                     Thread.sleep(1000);
@@ -1785,7 +1678,7 @@ public class ArrayVisualizer {
                     heading = "Less Bogo Sort";
                     SLEEPRATIO = 300;
                     startRealTimer();
-                    lessBogoSort(mediumArray);
+                    lessBogoSort(array, currentLen);
 
                     endSort();
                     Thread.sleep(1000);
@@ -1796,20 +1689,19 @@ public class ArrayVisualizer {
                     heading = "Cocktail Bogo Sort";
                     startRealTimer();
                     SLEEPRATIO = 300;
-                    doubleBogoSort(mediumArray);
+                    doubleBogoSort(array, currentLen);
 
                     endSort();
                     Thread.sleep(1000);
 
+                    currentLen = 8;
                     SLEEPRATIO = 0.01;
-
-                    selectArray("tiny");
 
                     refresharray();
                     heading = "Bogo Sort";
                     startRealTimer();
                     SLEEPRATIO = 5;
-                    bogoSort(tinyArray);
+                    bogoSort(array, currentLen);
 
                     endSort();
                     Thread.sleep(1000);
@@ -1841,124 +1733,125 @@ public class ArrayVisualizer {
                 try{
                     boolean goAhead;
                     MUTABLE = false;
+                    lenLog = (int) (Math.log(currentLen)/Math.log(2));
                     refresharray();
                     heading = ComparativeSorts[n] + " Sort";
                     startRealTimer();
                     switch (n){
                     case 0:
                         category = "Selection Sorts";
-                        badSort(getArr());
+                        badSort(array, currentLen);
                         break;
                     case 1:
                         category = "Insertion Sorts";
-                        binaryInsertionSort(getArr());
+                        binaryInsertionSort(array, currentLen);
                         break;
                     case 2:
                         category = "Hybrid Sorts";
-                        mergeSortOOP(getArr(), true);
+                        mergeSortOOP(array, currentLen, true);
                         break;
                     case 3:
                         category = "Concurrent Sorts";
-                        bitonicSort(getArr(), 0, getArr().length, true);
+                        bitonicSort(array, 0, currentLen, true);
                         break;
                     case 4:
                         category = "Hybrid Sorts";
-                        stableSort(getArr(), getArr().length);
+                        stableSort(array, currentLen);
                         break;
                     case 5:
                         category = "Exchange Sorts";
-                        bubbleSort(getArr());
+                        bubbleSort(array, currentLen);
                         break;
                     case 6:
                         category = "Exchange Sorts";
-                        cocktailShakerSort(getArr());
+                        cocktailShakerSort(array, currentLen);
                         break;
                     case 7:
                         category = "Exchange Sorts";
-                        combSort(getArr(), false);
+                        combSort(array, currentLen, false);
                         break;
                     case 8:
                         category = "Selection Sorts";
-                        cycleSort(getArr());
+                        cycleSort(array, currentLen);
                         break;
                     case 9:
                         category = "Selection Sorts";
-                        doubleSelectionSort(getArr());
+                        doubleSelectionSort(array, currentLen);
                         break;
                     case 10:
                         category = "Exchange Sorts";
-                        dualPivot(getArr(), 0, getArr().length - 1);
+                        dualPivot(array, 0, currentLen - 1);
                         break;
                     case 11:
                         category = "Exchange Sorts";
-                        gnomeSort(getArr());
+                        gnomeSort(array, currentLen);
                         break;
                     case 12:
                         category = "Hybrid Sorts";
-                        grailSortWithoutBuffer(getArr());
+                        grailSortWithoutBuffer(array, currentLen);
                         break;
                     case 13:
                         category = "Hybrid Sorts";
-                        combSort(getArr(), true);
+                        combSort(array, currentLen, true);
                         break;
                     case 14:
                         category = "Insertion Sorts";
-                        insertionSort(getArr());
+                        insertionSort(array, currentLen);
                         break;
                     case 15:
                         category = "Hybrid Sorts";
-                        introSort(getArr(), 32, 1, 0);
+                        introSort(array, currentLen, 32, 1, 0);
                         break;
                     case 16:
                         category = "Selection Sorts";
-                        heapSort(getArr(), true);
+                        heapSort(array, currentLen, true);
                         break;
                     case 17:
                         category = "Merge Sorts";
-                        mergeSortOOP(getArr(), false);
+                        mergeSortOOP(array, currentLen, false);
                         break;
                     case 18:
                         category = "Merge Sorts";
-                        mergeSort(getArr(), 0, getArr().length - 1);
+                        mergeSort(array, 0, currentLen - 1);
                         break;
                     case 19:
                         category = "Selection Sorts";
-                        heapSort(getArr(), false);
+                        heapSort(array, currentLen, false);
                         break;
                     case 20:
                         category = "Exchange Sorts";
-                        oddEvenSort(getArr());
+                        oddEvenSort(array, currentLen);
                         break;
                     case 21:
                         category = "Concurrent Sorts";
-                        oddEvenMergeSort(getArr(), 0, getArr().length);
+                        oddEvenMergeSort(array, 0, currentLen);
                         break;
                     case 22:
                         if(currentLen > 64) {
                             SLEEPRATIO = 10;
                         }
                         category = "Miscellaneous Sorts";
-                        pancakeSort(getArr());
+                        pancakeSort(array, currentLen);
                         break;
                     case 23:
                         category = "Insertion Sorts";
-                        patienceSort(getArr());
+                        patienceSort(array, currentLen);
                         break;
                     case 24:
                         category = "Exchange Sorts";
-                        quickSort(getArr(), 0, getArr().length - 1);
+                        quickSort(array, 0, currentLen - 1);
                         break;
                     case 25:
                         category = "Hybrid Sorts";
-                        introSort(getArr(), 48, 2, 12);
+                        introSort(array, currentLen, 48, 2, 12);
                         break;
                     case 26:
                         category = "Selection Sorts";
-                        selectionSort(getArr());
+                        selectionSort(array, currentLen);
                         break;
                     case 27:
                         category = "Insertion Sorts";
-                        shellSort(getArr(), 0);
+                        shellSort(array, currentLen, 0);
                         break;
                     case 28:
                         goAhead = false;
@@ -1968,21 +1861,18 @@ public class ArrayVisualizer {
                                     " numbers will not finish in a reasonable amount of time. "
                                     + "Are you sure you want to continue?", "Warning!", 2, 
                                     JOptionPane.WARNING_MESSAGE, null, options, options[1]);
+
                             if(n == 0) goAhead = true;
                             else goAhead = false;
                         }
-                        else {
-                            goAhead = true;
-                        }
+                        else goAhead = true;
 
                         if(goAhead) {
                             category = "Exchange Sorts";
-                            sillySort(getArr(), 0, getArr().length - 1);
+                            sillySort(array, 0, currentLen - 1);
                             break;
                         }
-                        else {
-                            break;
-                        }
+                        else break;
                     case 29:
                         goAhead = false;
                         if(currentLen > 256) {
@@ -1991,79 +1881,73 @@ public class ArrayVisualizer {
                                     " numbers will not finish in a reasonable amount of time. "
                                     + "Are you sure you want to continue?", "Warning!", 2, 
                                     JOptionPane.WARNING_MESSAGE, null, options, options[1]);
+
                             if(n == 0) goAhead = true;
                             else goAhead = false;
                         }
-                        else {
-                            goAhead = true;
-                        }
+                        else goAhead = true;
 
                         if(goAhead) {
                             category = "Exchange Sorts";
-                            slowSort(getArr());
+                            slowSort(array, 0, currentLen - 1);
                             break;
                         }
-                        else {
-                            break;
-                        }
+                        else break;
                     case 30:
                         category = "Exchange Sorts";
-                        smartGnome(getArr());
+                        smartGnome(array, currentLen);
                         break;
                     case 31:
                         category = "Selection Sorts";
-                        smoothSort(getArr());
+                        smoothSort(array, currentLen);
                         break;
                     case 32:
                         category = "Exchange Sorts";
-                        stableQuickSort(getArr());
+                        stableQuickSort(array, currentLen);
                         break;
                     case 33:
                         goAhead = false;
-                        if(currentLen > 256) {
+                        if(currentLen > 1024) {
                             Object[] options = { "Let's see how bad Stooge Sort is!", "Cancel" };
                             int n = JOptionPane.showOptionDialog(window, "Even at a high speed, Stooge Sorting " + currentLen + 
                                     " numbers will not finish in a reasonable amount of time. "
                                     + "Are you sure you want to continue?", "Warning!", 2, 
                                     JOptionPane.WARNING_MESSAGE, null, options, options[1]);
+
                             if(n == 0) goAhead = true;
                             else goAhead = false;
                         }
-                        else {
-                            goAhead = true;
-                        }
+                        else goAhead = true;
 
                         if(goAhead) {
                             category = "Exchange Sorts";
-                            stoogeSort(getArr(), 0, getArr().length - 1);
+                            stoogeSort(array, 0, currentLen - 1);
                             break;
                         }
-                        else {
-                            break;
-                        }
+                        else break;
                     case 34:
                         category = "Selection Sorts";
-                        ternaryHeapSort(getArr());
+                        ternaryHeapSort(array, currentLen);
                         break;
                     case 35:
                         category = "Hybrid Sorts";
-                        timSort(getArr());
+                        timSort(array, currentLen);
                         break;
                     case 36:
                         category = "Selection Sorts";
-                        tournamentSort(getArr());
+                        tournamentSort(array, currentLen);
                         break;
                     case 37:
                         category = "Selection Sorts";
-                        weakHeapSort(getArr());
+                        weakHeapSort(array, currentLen);
                         break;
                     case 38:
                         category = "Hybrid Sorts";
-                        weaveMergeSort(getArr(), 0, getArr().length - 1);
+                        weaveMergeSort(array, 0, currentLen - 1);
                         break;
                     case 39:
                         category = "Hybrid Sorts";
-                        startWikiSort(getArr());
+                        startWikiSort(array, currentLen);
                         break;
                     }
                     MUTABLE = true;
@@ -2092,12 +1976,18 @@ public class ArrayVisualizer {
             try{bas = Integer.parseInt(JOptionPane.showInputDialog(null, "Enter Base for Sort"));}catch(Exception e){}
             SOUNDMUL = .25;
         }
-        else if(n==0||n==11||n==12||n==13) {
+        else if(n==0||n==11||n==12) {
             try{bas = Integer.parseInt(JOptionPane.showInputDialog(null, "Enter Size/Number of Partitions"));}catch(Exception e){}
             SOUNDMUL = .25;
         }
+        else {
+            try{bas = Integer.parseInt(JOptionPane.showInputDialog(null, "Enter Delay per Element in Milliseconds"));}catch(Exception e){}
+            SOUNDMUL = .25;
+        }
 
-        base = Math.max(bas,2);
+        if(bas < 2 && n != 13) base = 2;
+        else base = bas;
+
         num = n;
         SetSound(true);
         sortingThread = new Thread(){
@@ -2106,12 +1996,13 @@ public class ArrayVisualizer {
                 try {
                     boolean goAhead;
                     MUTABLE = false;
+                    lenLog = (int) (Math.log(currentLen)/Math.log(2));
                     refresharray();
                     heading = DistributiveSorts[num]+" Sort";
                     startRealTimer();
                     switch (num){
                     case 0:
-                        flagSort(largeArray, base);
+                        flagSort(array, currentLen, base);
                         break;
                     case 1:
                         goAhead = false;
@@ -2121,20 +2012,17 @@ public class ArrayVisualizer {
                                     " numbers will almost certainly not finish in a reasonable amount of time. "
                                     + "Are you sure you want to continue?", "Warning!", 2, 
                                     JOptionPane.WARNING_MESSAGE, null, options, options[1]);
+
                             if(n == 0) goAhead = true;
                             else goAhead = false;
                         }
-                        else {
-                            goAhead = true;
-                        }
+                        else goAhead = true;
 
                         if(goAhead) {
-                            bogoSort(getArr());
+                            bogoSort(array, currentLen);
                             break;
                         }
-                        else {
-                            break;
-                        }
+                        else break;
                     case 2:
                         goAhead = false;
                         if(currentLen > 256) {
@@ -2143,31 +2031,28 @@ public class ArrayVisualizer {
                                     + currentLen + " numbers will almost certainly not finish in a reasonable amount "
                                     + "of time. Are you sure you want to continue?", "Warning!", 2, JOptionPane.WARNING_MESSAGE, 
                                     null, options, options[1]);
+
                             if(n == 0) {
                                 goAhead = true;
                                 SLEEPRATIO = 1000;
                             }
                             else goAhead = false;
                         }
-                        else {
-                            goAhead = true;
-                        }
+                        else goAhead = true;
 
                         if(goAhead) {
-                            doubleBogoSort(getArr());
+                            doubleBogoSort(array, currentLen);
                             break;
                         }
-                        else {
-                            break;
-                        }
+                        else break;
                     case 3:
-                        countingSort(getArr());
+                        countingSort(array, currentLen);
                         break;
                     case 4:
-                        flashSort(getArr(), getArr().length);
+                        flashSort(array, currentLen);
                         break;
                     case 5:
-                        gravitySort(getArr());
+                        gravitySort(array, currentLen);
                         break;
                     case 6:
                         goAhead = false;
@@ -2177,45 +2062,55 @@ public class ArrayVisualizer {
                                     + currentLen + " numbers will almost certainly not finish in a reasonable amount "
                                     + "of time. Are you sure you want to continue?", "Warning!", 2, JOptionPane.WARNING_MESSAGE, 
                                     null, options, options[1]);
+
                             if(n == 0) {
                                 goAhead = true;
                                 SLEEPRATIO = 1000;
                             }
                             else goAhead = false;
                         }
-                        else {
-                            goAhead = true;
-                        }
+                        else goAhead = true;
 
                         if(goAhead) {
-                            lessBogoSort(getArr());
+                            lessBogoSort(array, currentLen);
                             break;
                         }
-                        else {
-                            break;
-                        }
+                        else break;
                     case 7:
-                        pigeonSort(getArr());
+                        pigeonSort(array, currentLen);
                         break;
                     case 8:
-                        radixLSDsort(getArr(), base);
+                        radixLSDsort(array, currentLen, base);
                         break;
                     case 9:
                         SOUNDMUL = 0.01;
-                        inPlaceRadixLSDSort(getArr(), base);
+                        inPlaceRadixLSDSort(array, currentLen, base);
                         break;
                     case 10:
-                        radixMSDSort(getArr(), base);
+                        radixMSDSort(array, currentLen, base);
                         break;
                     case 11:
-                        shatterSort(getArr(), base);
+                        shatterSort(array, currentLen, base);
                         break;
                     case 12:
-                        simpleShatterSort(getArr(), base, 8);
+                        simpleShatterSort(array, currentLen, base, 8);
                         break;
                     case 13:
-                        timeSort(getArr(), base);
-                        break;
+                        goAhead = false;
+                        Object[] options = { "Continue", "Cancel" };
+                        int n = JOptionPane.showOptionDialog(window, "Time Sort will take at least " 
+                                + formatter.format((double) (currentLen * base) / 1000) + " seconds to complete. Once it starts,"
+                                + " you cannot skip this sort. Proceed?", "Warning!", 2, JOptionPane.WARNING_MESSAGE, null, 
+                                options, options[1]);
+
+                        if(n == 0) goAhead = true;
+                        else goAhead = false;
+
+                        if(goAhead) {
+                            timeSort(array, currentLen, base);
+                            break;
+                        }
+                        else break;
                     }
                     MUTABLE = true;
                     endSort();

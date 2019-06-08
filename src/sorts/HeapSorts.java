@@ -32,19 +32,19 @@ public class HeapSorts {
     static int SLP = 1;
 	private static int heapSize;
 	
-	private static void buildheap(int[] arr, boolean isMax) {
+	private static void buildheap(int[] arr, int length, boolean isMax) {
 		/*
-		 * As last non leaf node will be at (arr.length-1)/2 
+		 * As last non leaf node will be at (length-1)/2 
 		 * so we will start from this location for heapifying the elements
 		 * */
-		for(int i=(arr.length-1)/2; i>=0; i--){
-			heapify(arr,i,arr.length-1,isMax);
+		for(int i=(length-1)/2; i>=0; i--){
+			heapify(arr,i,length-1,isMax);
 		}
 	}
 	
 	private static void buildpartialheap(int[] arr, int lo, int hi) {
 		/*
-		 * As last non leaf node will be at (arr.length-1)/2 
+		 * As last non leaf node will be at (length-1)/2 
 		 * so we will start from this location for heapifying the elements
 		 * */
 		for(int i=hi/2; i>=lo; i--){
@@ -91,17 +91,17 @@ public class HeapSorts {
 		}
 	}
 
-	public static void heapSort(int[] arr, boolean isMax) {
+	public static void heapSort(int[] arr, int length, boolean isMax) {
 
-		buildheap(arr, isMax);
-		int sizeOfHeap=arr.length-1;
+		buildheap(arr, length, isMax);
+		int sizeOfHeap=length-1;
 		for(int i=sizeOfHeap; i>0; i--) {
 			swap(arr,0, i, 1,true);
 			sizeOfHeap--;
 			heapify(arr,0,sizeOfHeap,isMax);
 		}
 		if(!isMax) {
-			for(int left = 0, right = arr.length - 1; left < right; left++, right--) {
+			for(int left = 0, right = length - 1; left < right; left++, right--) {
 				swap(arr, left, right, 1, true);
 			}
 		}
@@ -273,28 +273,17 @@ public class HeapSorts {
     	 }
      }
 
-     public static void smoothSort(int[] A)
+     public static void smoothSort(int[] A, int length)
      {
-    	 sort(A, 0, A.length-1);
-     }
-     
-     public static void partitionSmoothSort(int[] A) {
-    	 int size = 1;
-    	 
-    	 while(size <= A.length) {
-    		 for(int i = 0; i < A.length; i += size) {
-    			 sort(A, i, i + size - 1);
-    		 }
-    		 size *= 2;
-    	 }
+    	 sort(A, 0, length - 1);
      }
 
      //TERNARY HEAP SORT - written by qbit
      // https://codereview.stackexchange.com/questions/63384/binary-heapsort-and-ternary-heapsort-implementation
      
-     private static void buildMaxHeapT(int[] array){
-    	 heapSize = array.length - 1;
-    	 for(int i = array.length - 1  / 3; i >= 0; i--)
+     private static void buildMaxHeapT(int[] array, int length){
+    	 heapSize = length - 1;
+    	 for(int i = length - 1  / 3; i >= 0; i--)
     		 maxHeapifyT(array, i);
 
      }
@@ -335,10 +324,10 @@ public class HeapSorts {
     	 return 3 * i + 3;
      }
      
-     public static void ternaryHeapSort(int[] array){
-    	 buildMaxHeapT(array);
+     public static void ternaryHeapSort(int[] array, int length){
+    	 buildMaxHeapT(array, length);
 
-    	 for(int i = array.length - 1; i >= 0; i--){
+    	 for(int i = length - 1; i >= 0; i--){
     		 swap(array, 0, i, 1, true); //add last element on array, i.e heap root
 
     		 heapSize = heapSize - 1; //shrink heap by 1

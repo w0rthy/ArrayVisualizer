@@ -89,8 +89,8 @@ public class Writes {
     }
 
     //Simulates a write in order to estimate time for values being written to an ArrayList
-    public static void mockWrite(int[] array, double pause) {
-        int[] mockArray = new int[array.length];
+    public static void mockWrite(int length, double pause) {
+        int[] mockArray = new int[length];
         tempStores++;
         sleep(pause);
 
@@ -130,26 +130,26 @@ public class Writes {
         }
     }
 
-    public static void fancyTranscribe(int[] array, ArrayList<Integer>[] registers) throws Exception {
-        int[] tempArray = new int[array.length];
-        boolean[] tempWrite = new boolean[array.length];
+    public static void fancyTranscribe(int[] array, int length, ArrayList<Integer>[] registers) throws Exception {
+        int[] tempArray = new int[length];
+        boolean[] tempWrite = new boolean[length];
         int radix = registers.length;
 
         transcribe(tempArray, registers, 0, false, 0, false, true);
-        tempStores -= array.length;
+        tempStores -= length;
 
-        for(int i = 0; i < tempArray.length; i++) {
+        for(int i = 0; i < length; i++) {
             int register = i % radix;
             if(register == 0) sleep(radix);
 
-            int pos = (int) ((register * (tempArray.length / radix)) + (i / radix));
+            int pos = (int) ((register * (length / radix)) + (i / radix));
             if(!tempWrite[pos]) {
                 write(array, pos, tempArray[pos], 0, false, false);
                 tempWrite[pos] = true;
             }
             marked.set(register, pos);
         }
-        for(int i = 0; i < tempWrite.length; i++) {
+        for(int i = 0; i < length; i++) {
             if(!tempWrite[i]){
                 write(array, i, tempArray[i], 0, false, false);
             }

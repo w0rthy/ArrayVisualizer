@@ -35,10 +35,10 @@ SOFTWARE.
 */
 
 public class GravitySort {
-    public static void gravitySort(int[] array) throws Exception {
-        int max = analyze(array, 0, 0.25, true, true);
-        int[][] abacus = new int[array.length][max];
-        for(int i = 0; i < array.length; i++){
+    public static void gravitySort(int[] array, int length) throws Exception {
+        int max = analyze(array, length, 0, 0.25, true, true);
+        int[][] abacus = new int[length][max];
+        for(int i = 0; i < length; i++){
             for(int j = 0; j < array[i]; j++) {
                 multiDimWrite(abacus, i, abacus[0].length - j - 1, 1, 0, true, true);
         	}
@@ -65,7 +65,7 @@ public class GravitySort {
                     count += abacus[x][y];
                 write(array, x, count, 0.025, true, false);
             }
-            marked.set(2, array.length - i - 1);
+            marked.set(2, length - i - 1);
             sleep(0.05);
         }
     }

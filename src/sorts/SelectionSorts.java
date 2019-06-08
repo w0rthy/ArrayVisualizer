@@ -33,10 +33,10 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 public class SelectionSorts {  
-    public static void selectionSort(int[] array) throws Exception {
-        for (int i = 0; i < array.length - 1; i++) {
+    public static void selectionSort(int[] array, int length) throws Exception {
+        for (int i = 0; i < length - 1; i++) {
             int lowestindex = i;
-            for (int j = i + 1; j < array.length; j++) {
+            for (int j = i + 1; j < length; j++) {
             	marked.set(2, j);
             	sleep(0.1);
                 if (compare(array[j], array[lowestindex]) == -1){
@@ -49,9 +49,9 @@ public class SelectionSorts {
         }
     }
     
-    public static void doubleSelectionSort(int[] arr) {
+    public static void doubleSelectionSort(int[] arr, int length) {
         int left = 0;
-        int right = arr.length-1;
+        int right = length-1;
         int smallest = 0;
         int biggest = 0;
         while(left<=right){

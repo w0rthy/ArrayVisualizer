@@ -11,9 +11,9 @@ import java.util.Arrays;
 
 public class FlashSort {
 
-	private static int indexOfIntArray(int[] array, int key) {
+	private static int indexOfIntArray(int[] array, int length, int key) {
 	    int returnvalue = -1;
-	    for (int i = 0; i < array.length; ++i) {
+	    for (int i = 0; i < length; ++i) {
 	        if (key == array[i]) {
 	            returnvalue = i;
 	            break;
@@ -274,9 +274,9 @@ public class FlashSort {
 				//smaller for the next level of recursion. However,
 				//progress is assured since at each level the elements
 				//with the maximum value will get sorted.
-				flashSort(Arrays.copyOfRange(array, indexOfIntArray(array, L[K]), indexOfIntArray(array, L[K+1])), classSize);
+				flashSort(Arrays.copyOfRange(array, indexOfIntArray(array, length, L[K]), indexOfIntArray(array, length, L[K+1])), classSize);
 			}
 		}
-		partialInsert(array, 0, array.length, 0.75);
+		partialInsert(array, 0, length, 0.75);
 	}
 }

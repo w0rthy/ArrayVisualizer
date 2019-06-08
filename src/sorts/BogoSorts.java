@@ -31,8 +31,8 @@ SOFTWARE.
 */
 
 public class BogoSorts {
-	private static boolean bogoIsSorted(int[] i){
-		for(int x = 0; x < i.length - 1; x++) {
+	private static boolean bogoIsSorted(int[] i, int length){
+		for(int x = 0; x < length - 1; x++) {
 			if(compare(i[x], i[x+1]) == 1) {
 				marked.set(1, x);
 				return false;
@@ -42,11 +42,11 @@ public class BogoSorts {
 		return true;
 	}
     
-    public static void bogoSort(int[] i){
-        while(!bogoIsSorted(i)){
-        	for(int j = 0; j < i.length; ++j) {
-        		int index1 = (int) (Math.random() * i.length),
-        			index2 = (int) (Math.random() * i.length);
+    public static void bogoSort(int[] i, int length){
+        while(!bogoIsSorted(i, length)){
+        	for(int j = 0; j < length; ++j) {
+        		int index1 = (int) (Math.random() * length),
+        			index2 = (int) (Math.random() * length);
         			swap(i, index1, index2, 0, false);
             }
         }
@@ -55,12 +55,12 @@ public class BogoSorts {
     
 private static int iterator;
 	
-	public static void lessBogoSort(int[] a) {
+	public static void lessBogoSort(int[] a, int length) {
     	iterator = 0;
     	
-    	while(iterator != a.length) {
-    		while(!isZeroSorted(a)) {
-    			bogoSwap(a);
+    	while(iterator != length) {
+    		while(!isZeroSorted(a, length)) {
+    			bogoSwap(a, length);
     		}
     		marked.set(1, iterator);
     		iterator++;
@@ -71,22 +71,22 @@ private static int iterator;
     	marked.set(3, -5);
     }
 	
-	private static void bogoSwap(int[] a){
-		for(int i = iterator; i < a.length; i++) {
-            swap(a, i, randomPosition(a), 0, true);
+	private static void bogoSwap(int[] a, int length){
+		for(int i = iterator; i < length; i++) {
+            swap(a, i, randomPosition(a, length), 0, true);
         }
     }
 	
-	private static int randomPosition(int[] a) {
-		int value = (int) ((Math.random() * a.length) + iterator);
+	private static int randomPosition(int[] a, int length) {
+		int value = (int) ((Math.random() * length) + iterator);
 
-		return Math.min(value, a.length-1);
+		return Math.min(value, length-1);
 	}
 	
-	private static boolean isZeroSorted(int[] a) {
+	private static boolean isZeroSorted(int[] a, int length) {
     	clearmarked();
     	marked.set(2, iterator);
-    	for(int j = iterator + 1; j < a.length; j++) {
+    	for(int j = iterator + 1; j < length; j++) {
         	marked.set(1, j);
         	sleep(75);
         	if(compare(a[iterator], a[j]) == 1) {
@@ -99,9 +99,9 @@ private static int iterator;
     private static int minIterator;
 	private static int maxIterator;
 	
-	public static void doubleBogoSort(int[] a) throws Exception {
+	public static void doubleBogoSort(int[] a, int length) throws Exception {
     	minIterator = 0;
-    	maxIterator = a.length - 1;
+    	maxIterator = length - 1;
     	
     	while(minIterator < maxIterator) {
         	boolean maxSorted = isMaxSorted(a);

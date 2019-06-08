@@ -39,17 +39,17 @@ SOFTWARE.
 */
 public class RadixMSD {
 
-    public static void radixMSDSort(int[] array, int radix) throws Exception {
+    public static void radixMSDSort(int[] array, int length, int radix) throws Exception {
         clearmarked();
-        int highestpower = analyze(array, radix, 0, false, false);
-        int[] tmp = new int[array.length];
-        System.arraycopy(array, 0, tmp, 0, array.length);
-        tempStores += array.length;
-        radixMSDRec(array,0,array.length,radix,highestpower);
+        int highestpower = analyze(array, length, radix, 0, false, false);
+        int[] tmp = new int[length];
+        System.arraycopy(array, 0, tmp, 0, length);
+        tempStores += length;
+        radixMSDRec(array,length,0,length,radix,highestpower);
     }
     
     @SuppressWarnings("unchecked")
-	private static void radixMSDRec(int[] array, int min, int max, int radix, int pow)throws Exception{
+	private static void radixMSDRec(int[] array, int length,  int min, int max, int radix, int pow)throws Exception{
         if(min >= max || pow < 0)
             return;
         marked.set(2,max);
@@ -60,7 +60,7 @@ public class RadixMSD {
         for(int i = min; i < max; i++){
             marked.set(1,i);
             registers[getDigit(array[i], pow, radix)].add(array[i]);
-            mockWrite(array, 0.65);
+            mockWrite(length, 0.65);
         }
         marked.set(2, -5);
         marked.set(3, -5);
@@ -68,7 +68,7 @@ public class RadixMSD {
         
         int sum = 0;
         for(int i = 0; i < registers.length; i++){
-            radixMSDRec(array, sum+min, sum+min+registers[i].size(), radix, pow-1);
+            radixMSDRec(array, length, sum+min, sum+min+registers[i].size(), radix, pow-1);
             sum+=registers[i].size();
             registers[i].clear();
             tempStores += registers[i].size();

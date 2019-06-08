@@ -9,6 +9,7 @@ import static array.visualizer.ArrayVisualizer.DistributiveSorts;
 import static array.visualizer.ArrayVisualizer.ReportComparativeSort;
 import static array.visualizer.ArrayVisualizer.ReportDistributiveSort;
 import static array.visualizer.ArrayVisualizer.RunAllSorts;
+import static array.visualizer.ArrayVisualizer.uf;
 
 import javax.swing.JFrame;
 
@@ -172,6 +173,7 @@ public class SortPrompt extends javax.swing.JFrame implements AAFrame {
                 }
             }
         }.start();
+        uf.jButton1ResetText();
         dispose();
     }//GEN-LAST:event_jButton1ActionPerformed
 
@@ -188,6 +190,7 @@ public class SortPrompt extends javax.swing.JFrame implements AAFrame {
                 }
             }
         }.start();
+        uf.jButton1ResetText();
         dispose();
     }//GEN-LAST:event_jList1ValueChanged
 
@@ -199,6 +202,7 @@ public class SortPrompt extends javax.swing.JFrame implements AAFrame {
                 ReportComparativeSort(tmp);
             }
         }.start();
+        uf.jButton1ResetText();
         dispose();
     }//GEN-LAST:event_jList2ValueChanged
 
