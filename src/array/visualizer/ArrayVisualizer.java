@@ -169,7 +169,7 @@ public class ArrayVisualizer {
     static volatile boolean ANALYZE = false;
 
     static volatile boolean fancyFinish;
-    static int trackFinish;
+    static volatile int trackFinish;
     static boolean drawRect;
 
     static volatile boolean POINTER;
@@ -223,7 +223,7 @@ public class ArrayVisualizer {
     public static String checkSwapOverflow() {
         if(swaps < 0) {
             swaps = Long.MIN_VALUE;
-            return "Over " + formatter.format(Integer.MAX_VALUE);
+            return "Over " + formatter.format(Long.MAX_VALUE);
         }
         else {
             return formatter.format(swaps);
@@ -233,7 +233,7 @@ public class ArrayVisualizer {
     public static String checkCompOverflow() {
         if(comps < 0) {
             comps = Long.MIN_VALUE;
-            return "Over " + formatter.format(Integer.MAX_VALUE);
+            return "Over " + formatter.format(Long.MAX_VALUE);
         }
         else {
             return formatter.format(comps);
@@ -243,7 +243,7 @@ public class ArrayVisualizer {
     public static String checkWriteOverflow() {
         if(writes < 0) {
             writes = Long.MIN_VALUE;
-            return "Over " + formatter.format(Integer.MAX_VALUE);
+            return "Over " + formatter.format(Long.MAX_VALUE);
         }
         else {
             return formatter.format(writes);
@@ -253,7 +253,7 @@ public class ArrayVisualizer {
     public static String checkTempOverflow() {
         if(tempStores < 0) {
             tempStores = Long.MIN_VALUE;
-            return "Over " + formatter.format(Integer.MAX_VALUE);
+            return "Over " + formatter.format(Long.MAX_VALUE);
         }
         else {
             return formatter.format(tempStores);
@@ -640,22 +640,8 @@ public class ArrayVisualizer {
                                     }
                                 }
                                 else {
-                                    if(marked.contains(i)) {
-                                        switch(lenLog) {
-                                        case 12: if(marked.contains(i - 10)) markBarFancy(g);
-                                        case 11: if(marked.contains(i - 10)) markBarFancy(g);
-                                        case 10: if(marked.contains(i - 9)) markBarFancy(g);
-                                        case 9: if(marked.contains(i - 8)) markBarFancy(g);
-                                        case 8: if(marked.contains(i - 7)) markBarFancy(g);
-                                        case 7: if(marked.contains(i - 6)) markBarFancy(g);
-                                        case 6: if(marked.contains(i - 5)) markBarFancy(g);
-                                        case 5: if(marked.contains(i - 4)) markBarFancy(g);
-                                        case 4: if(marked.contains(i - 3)) markBarFancy(g);
-                                        case 3: if(marked.contains(i - 2)) markBarFancy(g);
-                                        case 2: if(marked.contains(i - 1)) markBarFancy(g);
-                                        default: markBarFancy(g);
-                                        }
-                                    }
+                                    if(marked.contains(i)) markBar(g);
+                                    
                                     Polygon p = new Polygon();
                                     p.addPoint(halfwidth, halfheight);
                                     p.addPoint(halfwidth+(int)(Math.sin((i)*Math.PI/circamt)*((window.getWidth()-64)/3*(array[i]/(double)currentLen))), halfheight-(int)(Math.cos((i)*Math.PI/circamt)*((window.getHeight()-96)/2*(array[i]/(double)currentLen))));
@@ -679,7 +665,7 @@ public class ArrayVisualizer {
                         double diameter = maxdiam;
                         double diamstep = Math.min(xscl, yscl);
 
-                        for(int i = currentLen; i >= 0; i--){
+                        for(int i = currentLen - 1; i >= 0; i--){
                             if(fancyFinish) {
                                 if(i < trackFinish) g.setColor(Color.GREEN);
                                 else g.setColor(getIntColor(array[i]));
@@ -699,7 +685,7 @@ public class ArrayVisualizer {
                                 default: if(i == trackFinish) g.setColor(Color.BLACK);
                                 }
                             }
-                            else if(marked.contains(i)) g.setColor(Color.BLACK);
+                            else if(marked.contains(i) && currentLen != 2) g.setColor(Color.BLACK);
                             else g.setColor(getIntColor(array[i]));
 
                             int radius = (int)(diameter/2.0);
@@ -743,7 +729,7 @@ public class ArrayVisualizer {
                         int[] triptsy = new int[3];
 
                         for(int i = 0; i < currentLen; i++){
-                            if(marked.contains(i)) g.setColor(Color.BLACK);
+                            if(marked.contains(i) && currentLen != 2) g.setColor(Color.BLACK);
                             else {
                                 if(fancyFinish && (i < trackFinish && i > trackFinish - (lenLog * 10))) g.setColor(Color.GREEN);
                                 else g.setColor(getIntColor(array[i]));
@@ -810,10 +796,11 @@ public class ArrayVisualizer {
                                 }
                             }
                             else {
-                                if(RAINBOW || COLOR) g.setColor(getIntColor(array[i]));
-                                else g.setColor(Color.WHITE);
-
-                                if(marked.contains(i)) markBar(g);
+                                if(marked.contains(i) && currentLen != 2) markBar(g);
+                                else {
+                                    if(RAINBOW || COLOR) g.setColor(getIntColor(array[i]));
+                                    else g.setColor(Color.WHITE);
+                                }
                             }
 
                             int y = 0;
@@ -860,7 +847,7 @@ public class ArrayVisualizer {
                                             default: if(i == trackFinish) lineMark(g);
                                             }
                                         }
-                                        else if(marked.contains(i)) lineMark(g);
+                                        else if(marked.contains(i) && currentLen != 2) lineMark(g);
                                         else lineClear(g, i);
 
                                         g.drawLine(amt, y, linkedpixdrawx, linkedpixdrawy);
@@ -884,7 +871,7 @@ public class ArrayVisualizer {
                                 int y = 0;
                                 int width = (int)(xscl*(i+1))-amt;
 
-                                if(marked.contains(i)) {
+                                if(marked.contains(i) && currentLen != 2) {
                                     rectColor(g2);
                                     drawRect = true;
                                 }
@@ -959,8 +946,9 @@ public class ArrayVisualizer {
         }
         marked.set(1, -5);
 
-        trackFinish = -1;
         fancyFinish = false;
+        trackFinish = -1;
+        clearmarked();
     }
 
     public static void refresharray() throws Exception {
@@ -1980,7 +1968,7 @@ public class ArrayVisualizer {
             try{bas = Integer.parseInt(JOptionPane.showInputDialog(null, "Enter Size/Number of Partitions"));}catch(Exception e){}
             SOUNDMUL = .25;
         }
-        else {
+        else if(n == 13){
             try{bas = Integer.parseInt(JOptionPane.showInputDialog(null, "Enter Delay per Element in Milliseconds"));}catch(Exception e){}
             SOUNDMUL = .25;
         }
