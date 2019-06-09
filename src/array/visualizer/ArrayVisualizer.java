@@ -490,18 +490,18 @@ public class ArrayVisualizer {
                                 if(POINTER) {
                                     if(marked.contains(i)) {
                                         g2.setColor(Color.WHITE);
-
+                                        int x = currentLen == 4096 ? 2048 : currentLen;
+                                        
                                         if(currentLen > 16) {
-                                            pointerBase = (int) Math.ceil(((PNT_BASE_A * currentLen) + PNT_BASE_B));
-                                            pointerHeight = (int) (((PNT_HEIGHT_A * currentLen) + PNT_HEIGHT_B)*(ch/1080));
-                                            pointerWidth = (int) (((PNT_WIDTH_A * currentLen) + PNT_WIDTH_B)*(cw/1280));
+                                            pointerBase = (int) Math.ceil(((PNT_BASE_A * x) + PNT_BASE_B));
+                                            pointerHeight = (int) (((PNT_HEIGHT_A * x) + PNT_HEIGHT_B)*(ch/1080));
+                                            pointerWidth = (int) (((PNT_WIDTH_A * x) + PNT_WIDTH_B)*(cw/1280));
                                         }
                                         else {
                                             pointerBase = 0;
                                             pointerHeight = 0;
                                             pointerWidth = 0;
                                         }
-
 
                                         sinVal = ((i+(i+1.0))/2.0);
 
