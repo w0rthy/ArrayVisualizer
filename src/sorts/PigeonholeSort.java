@@ -17,22 +17,32 @@ import static array.visualizer.Writes.write;
 
 public class PigeonholeSort {
 	public static void pigeonSort(int[] a, int length) {
-		int mi = 0;
-		int size = length;
-		int[] holes = new int[size];
-		int j = 0;
-		for(int x = 0; x < length; x++) {
-			write(holes, x - mi, holes[x - mi] + 1, 1, false, true);
-			marked.set(1, j);
-			j++;
+		int min = Integer.MAX_VALUE;
+		int max = Integer.MIN_VALUE;
+		
+		for(int i = 0; i < length; i++) {
+		    if(a[i] < min) {
+		        min = a[i];
+		    }
+		    else if(a[i] > max) {
+		        max = a[i];
+		    }
 		}
-		int i = 0;
+	    
+	    int mi = min;
+		int size = max - mi + 1;
+		int[] holes = new int[size];
+		for(int x = 0; x < length; x++) {
+			write(holes, a[x] - mi, holes[a[x] - mi] + 1, 1, false, true);
+			marked.set(1, x);
+		}
+		int j = 0;
 		for(int count = 0; count < size; count++) {
 			while(holes[count] > 0) {
 				write(holes, count, holes[count] - 1, 0, false, true);
-				write(a, i, count + mi, 1, false, false);
-				marked.set(1, i);
-				i++;
+				write(a, j, count + mi, 1, false, false);
+				marked.set(1, j);
+				j++;
 			}
 		}
 	}

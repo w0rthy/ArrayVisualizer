@@ -277,6 +277,6 @@ public class FlashSort {
 				flashSort(Arrays.copyOfRange(array, indexOfIntArray(array, length, L[K]), indexOfIntArray(array, length, L[K+1])), classSize);
 			}
 		}
-		partialInsert(array, 0, length, 0.75);
+		partialInsert(array, 1, length, 0.75);
 	}
 }
