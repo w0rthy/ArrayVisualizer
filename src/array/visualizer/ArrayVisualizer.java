@@ -1056,7 +1056,7 @@ public class ArrayVisualizer {
             }
         }
         else if(shuffleType.equals("almost")) {
-            for(int i = 0; i < (int) (currentLen / 10); i++){
+            for(int i = 0; i < Math.max((int) (currentLen / 10), 1); i++){
                 swap(array, (int)(Math.random()*currentLen), (int)(Math.random()*currentLen), 0, true);
                 swaps--;
                 if(swaps < 0) {

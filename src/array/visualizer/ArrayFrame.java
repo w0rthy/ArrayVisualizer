@@ -6,6 +6,7 @@ package array.visualizer;
 
 import static array.visualizer.ArrayVisualizer.MUTABLE;
 import static array.visualizer.ArrayVisualizer.VISUALS;
+import static array.visualizer.ArrayVisualizer.clearmarked;
 import static array.visualizer.ArrayVisualizer.currentLen;
 import static array.visualizer.ArrayVisualizer.lenLog;
 import static array.visualizer.ArrayVisualizer.uf;
@@ -93,6 +94,7 @@ public class ArrayFrame extends javax.swing.JFrame {
                 if(MUTABLE) currentLen = (int) Math.pow(2, jSlider.getValue());
                 else jSlider.setValue(lenLog);
                 if(VISUALS == 1 && jSlider.getValue() == 1) jSlider.setValue(2);
+                clearmarked();
             }
         });
 
