@@ -24,7 +24,7 @@ public class PigeonholeSort {
 		    if(a[i] < min) {
 		        min = a[i];
 		    }
-		    else if(a[i] > max) {
+		    if(a[i] > max) {
 		        max = a[i];
 		    }
 		}
