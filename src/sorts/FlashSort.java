@@ -2,10 +2,11 @@ package sorts;
 
 import static array.visualizer.ArrayVisualizer.compare;
 import static array.visualizer.ArrayVisualizer.marked;
+import static array.visualizer.ArrayVisualizer.shuffleType;
 import static array.visualizer.ArrayVisualizer.sleep;
 import static array.visualizer.Writes.swap;
 import static array.visualizer.Writes.write;
-import static sorts.InsertionSorts.partialInsert;
+import static sorts.InsertionSorts.insertionSort;
 
 import java.util.Arrays;
 
@@ -255,28 +256,31 @@ public class FlashSort {
 		//or recursively flashsort its members;
 		//skip the K == m class because it is already sorted
 		//since all of the elements have the same value
-		for(K = m - 1; K >= 1; K--)
-		{
-			//determine the number of elments in the Kth class
-			int classSize = L[K + 1] - L[K];
 
-			//if the class size is larger than expected but not
-			//so small that insertion sort could make quick work
-			//of it then...
-			if(classSize > threshold && classSize > minElements)
-			{
-				//...attempt to flashsort the class. This will work 
-				//well if the elements inside the class are uniformly
-				//distributed throughout the class otherwise it will 
-				//perform badly, O(n^2) worst case, since we will have 
-				//performed another classification and permutation step
-				//and not succeeded in making the problem significantly
-				//smaller for the next level of recursion. However,
-				//progress is assured since at each level the elements
-				//with the maximum value will get sorted.
-				flashSort(Arrays.copyOfRange(array, indexOfIntArray(array, length, L[K]), indexOfIntArray(array, length, L[K+1])), classSize);
-			}
+		if(!shuffleType.equals("similar")) {
+		    for(K = m - 1; K >= 1; K--)
+		    {
+		        //determine the number of elments in the Kth class
+		        int classSize = L[K + 1] - L[K];
+
+		        //if the class size is larger than expected but not
+		        //so small that insertion sort could make quick work
+		        //of it then...
+		        if(classSize > threshold && classSize > minElements)
+		        {
+		            //...attempt to flashsort the class. This will work 
+		            //well if the elements inside the class are uniformly
+		            //distributed throughout the class otherwise it will 
+		            //perform badly, O(n^2) worst case, since we will have 
+		            //performed another classification and permutation step
+		            //and not succeeded in making the problem significantly
+		            //smaller for the next level of recursion. However,
+		            //progress is assured since at each level the elements
+		            //with the maximum value will get sorted.
+		            flashSort(Arrays.copyOfRange(array, indexOfIntArray(array, length, L[K]), indexOfIntArray(array, length, L[K+1])), classSize);
+		        }
+		    }
 		}
-		partialInsert(array, 1, length, 0.75);
+		insertionSort(array, length, 0.75);
 	}
 }

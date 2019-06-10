@@ -55,7 +55,7 @@ public class GrailSort {
         swap(arr, a, b, 1, true);
     }
 
-    private static void grailMultiSwap(int[] arr, int a, int b, int swapsLeft) {
+    private static void grailMultiSwap(int[] arr, int a, int b, int swapsLeft) {        
         while(swapsLeft != 0) { 
             grailSwap(arr, a++, b++);
             swapsLeft--;
@@ -73,6 +73,49 @@ public class GrailSort {
                 lenA -= lenB;
             }
         }
+    }
+    
+    // When keys are being rotated to their final position, b and a are right next to each other.
+    // Rather than continuously swapping elements, we can save time by keeping arr[b] in memory, 
+    // shifting everything from b down to a by 1, and then writing arr[b] into index a. This way, 
+    // we save extra write operations and make Grail Sort slightly faster. Effectively, grailKeyRotate
+    // is a specialized Insertion Sort.
+
+    // Most of the time, grailRotate is doing multiple gapped swaps instead, which is similar
+    // to Comb Sort. Before, using grailRotate to sort keys would still be similar to
+    // Insertion Sort, but it would instead be a variant known as Optimized Gnome Sort, a.k.a
+    // Dr. Hamid Sarbazi-Azad's Stupid Sort remembering the index it came from.
+    
+    // Unfortunately, I couldn't generalize grailRotates with gaps of 1 to Insertion Sort past  
+    // array sizes of 150,000. I'm very confused why this is the case, as using Inserting with (b - a == 1)
+    // worked with every array of length 149,999 and under. Perhaps it has to do with the number
+    // of keys or block lengths at that point? I'll keep looking into this. Either way, here I don't
+    // have to use a conditional as all grailKeyRotates have gaps of 1. This also saves time, as I
+    // just hard code in the cases when grailKeyRotate is used over grailRotate.
+    private static void grailKeyRotate(int[] array, int pos, int lenA, int lenB) {
+        while(lenA != 0 && lenB != 0) {
+            if(lenA <= lenB) {
+                if((pos + lenA) - pos == 1) grailKeyInsert(array, pos, pos + lenA, lenA);
+                else grailMultiSwap(array, pos, pos + lenA, lenA);
+                pos += lenA;
+                lenB -= lenA;
+            } 
+            else {
+                if((pos + lenA) - (pos + (lenA - lenB)) == 1) grailKeyInsert(array, pos + (lenA - lenB), pos + lenA, lenB);
+                else grailMultiSwap(array, pos + (lenA - lenB), pos + lenA, lenB);
+                lenA -= lenB;
+            }
+        }
+    }
+    private static void grailKeyInsert(int[] arr, int a, int b, int writesLeft) { 
+        int temp = arr[b];
+        int pos = b - 1;
+
+        while(writesLeft != 0){
+            write(arr, pos + 1, arr[pos--], 0.25, true, false);
+            writesLeft--;
+        }
+        write(arr, pos + 1, temp, 0.25, true, false);
     }
 
     private static void grailInsertSort(int[] arr, int pos, int len) {
@@ -107,14 +150,14 @@ public class GrailSort {
             //Binary Search left
             int loc = grailBinSearch(arr, pos + firstKey, foundKeys, pos + dist, true);
             if(loc == foundKeys || compare(arr[pos + dist], arr[pos + (firstKey + loc)]) != 0) {
-                grailRotate(arr, pos + firstKey, foundKeys, dist - (firstKey + foundKeys));
+                grailKeyRotate(arr, pos + firstKey, foundKeys, dist - (firstKey + foundKeys));
                 firstKey = dist - foundKeys;
-                grailRotate(arr, pos + (firstKey + loc), foundKeys - loc, 1);
+                grailKeyRotate(arr, pos + (firstKey + loc), foundKeys - loc, 1);
                 foundKeys++;
             }
             dist++;
         }
-        grailRotate(arr, pos, firstKey, foundKeys);
+        grailKeyRotate(arr, pos, firstKey, foundKeys);
         return foundKeys;
     }
 

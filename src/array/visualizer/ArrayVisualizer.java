@@ -128,7 +128,7 @@ public class ArrayVisualizer {
     static volatile boolean MUTABLE = true;
 
     static String[] ShuffleTypes = ("Random!Reversed!Mostly Similar!Almost Sorted!Already Sorted").split("!");
-    static volatile String shuffleType = "random";
+    public static volatile String shuffleType = "random";
 
     static String category = "";
     static String heading = "";
@@ -220,43 +220,47 @@ public class ArrayVisualizer {
         return cmp;
     }
 
-    public static String checkSwapOverflow() {
+    public static String prepareSwaps() {
         if(swaps < 0) {
             swaps = Long.MIN_VALUE;
             return "Over " + formatter.format(Long.MAX_VALUE);
         }
         else {
-            return formatter.format(swaps);
+            if(swaps == 1) return swaps + " Swap";
+            else return formatter.format(swaps) + " Swaps";
         }
     }
 
-    public static String checkCompOverflow() {
+    public static String prepareComps() {
         if(comps < 0) {
             comps = Long.MIN_VALUE;
             return "Over " + formatter.format(Long.MAX_VALUE);
         }
         else {
-            return formatter.format(comps);
+            if(comps == 1) return comps + "Comparison";
+            else return formatter.format(comps) + " Comparisons";
         }
     }
 
-    public static String checkWriteOverflow() {
+    public static String prepareWrites() {
         if(writes < 0) {
             writes = Long.MIN_VALUE;
             return "Over " + formatter.format(Long.MAX_VALUE);
         }
         else {
-            return formatter.format(writes);
+            if(writes == 1) return writes + " Write to Main Array";
+            else return formatter.format(writes) + " Writes to Main Array";
         }
     }
 
-    public static String checkTempOverflow() {
+    public static String prepareTempWrites() {
         if(tempStores < 0) {
             tempStores = Long.MIN_VALUE;
             return "Over " + formatter.format(Long.MAX_VALUE);
         }
         else {
-            return formatter.format(tempStores);
+            if(tempStores == 1) return tempStores + " Write to Auxillary Array(s)";
+            else return formatter.format(tempStores) + " Writes to Auxillary Array(s)";
         }
     }
 
@@ -913,10 +917,10 @@ public class ArrayVisualizer {
                         g.drawString(formatter.format(currentLen) + " Numbers", 15, (int)(cw/1280.0*65)+30);
                         g.drawString(String.format("Delay: " + formatter.format(delay) + "ms"), 15, (int)(cw/1280.0*105)+30);
                         g.drawString(String.format("Estimated Real Time: " + getRealTime()), 15, (int)(cw/1280.0*130)+30);
-                        g.drawString(checkCompOverflow() + " Comparisons", 15, (int)(cw/1280.0*170)+30);
-                        g.drawString(checkSwapOverflow() + " Swaps", 15, (int)(cw/1280.0*195)+30);
-                        g.drawString(checkWriteOverflow() + " Writes to Main Array", 15, (int)(cw/1280.0*220)+30);
-                        g.drawString(checkTempOverflow() + " Writes to Auxillary Array(s)", 15, (int)(cw/1280.0*245)+30);
+                        g.drawString(prepareComps(), 15, (int)(cw/1280.0*170)+30);
+                        g.drawString(prepareSwaps(), 15, (int)(cw/1280.0*195)+30);
+                        g.drawString(prepareWrites(), 15, (int)(cw/1280.0*220)+30);
+                        g.drawString(prepareTempWrites(), 15, (int)(cw/1280.0*245)+30);
                         g.setFont(f);
                     }
                     Graphics g3 = window.getGraphics();
@@ -1298,7 +1302,7 @@ public class ArrayVisualizer {
                     heading = "Insertion Sort";
                     SLEEPRATIO = 2;
                     startRealTimer();
-                    insertionSort(array, currentLen);
+                    insertionSort(array, currentLen, -1);
 
                     endSort();
                     Thread.sleep(1000);
@@ -1784,7 +1788,9 @@ public class ArrayVisualizer {
                         break;
                     case 14:
                         category = "Insertion Sorts";
-                        insertionSort(array, currentLen);
+                        
+                        //-1 resolves to Insertion Sort's default delay.
+                        insertionSort(array, currentLen, -1);
                         break;
                     case 15:
                         category = "Hybrid Sorts";

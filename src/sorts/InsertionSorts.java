@@ -35,8 +35,10 @@ SOFTWARE.
 
 public class InsertionSorts {
 	
-	public static void insertionSort(int[] array, int length) {
-        int pos;
+	public static void insertionSort(int[] array, int length, double sleep) {
+        if(sleep == -1) sleep = 0.015;
+	    
+	    int pos;
         int current;
         for(int i = 1; i < length; i++){
             current = array[i];
