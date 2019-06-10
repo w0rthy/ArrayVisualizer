@@ -1093,8 +1093,7 @@ public class ArrayVisualizer {
 
                     category = "Exchange Sorts";
 
-                    SLEEPRATIO = 2.5; 
-                    SOUNDMUL = 1;                    
+                    SLEEPRATIO = 2.5;             
 
                     refresharray();
                     heading = "Bubble Sort";
@@ -1433,7 +1432,7 @@ public class ArrayVisualizer {
                     Thread.sleep(1000);
 
                     SLEEPRATIO = 2.5;
-                    SOUNDMUL = 1;
+                    SOUNDMUL = storeVol;
 
                     refresharray();
                     heading = "Radix MSD Sort, Base 8";
@@ -1702,7 +1701,6 @@ public class ArrayVisualizer {
                     heading = "Done";
 
                     MUTABLE = true;
-                    SOUNDMUL = storeVol;
                 }catch (Exception e){}
                 SetSound(false);
             }
