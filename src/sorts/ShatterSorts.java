@@ -5,6 +5,7 @@
 package sorts;
 
 import static array.visualizer.ArrayVisualizer.marked;
+import static array.visualizer.ArrayVisualizer.shuffleType;
 import static array.visualizer.Writes.mockWrite;
 import static array.visualizer.Writes.transcribe;
 import static array.visualizer.Writes.write;
@@ -50,6 +51,7 @@ public class ShatterSorts {
     }
     
     public static void shatterSort(int[] array, int length, int num) throws Exception {
+        if(shuffleType.equals("similar")) num = 2;
         int shatters = (int)Math.ceil(length/(double)num);
         shatterPartition(array, length, num);
         int[] tmp = new int[num];
