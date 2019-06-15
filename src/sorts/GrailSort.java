@@ -60,43 +60,17 @@ public class GrailSort {
             grailSwap(arr, a++, b++);
             swapsLeft--;
         }
-    }
-    
-    // grailShift is called when indices b and a are right next to each other.
-    // Rather than continuously swapping elements, we can save time by keeping arr[b] in memory, 
-    // shifting everything from b down to a by 1, and then writing arr[b] into index a. This way, 
-    // we save extra write operations and make Grail Sort slightly faster in processes like finding
-    // keys. Effectively, grailShift is a specialized Insertion Sort.
-
-    // Most of the time, grailRotate is doing multiple gapped swaps instead, which is similar
-    // to Comb Sort. Before, using grailRotate to sort keys would still be similar to
-    // Insertion Sort, but it would instead be a variant known as Optimized Gnome Sort, a.k.a
-    // Dr. Hamid Sarbazi-Azad's Stupid Sort remembering the index it came from.
-    
-    // I was able to generalize this in grailRotate, at the slight cost of a conditional. Nevertheless,
-    // GrailSort did prove to be slightly faster over the average of a thousand tests.
-    private static void grailShift(int[] arr, int a, int b, int writesLeft) { 
-        int temp = arr[b];
-        int pos = b - 1;
-
-        while(writesLeft != 0){
-            write(arr, pos + 1, arr[pos--], 0.25, true, false);
-            writesLeft--;
-        }
-        write(arr, pos + 1, temp, 0.25, true, false);
-    }
-    
+    } 
+   
     private static void grailRotate(int[] array, int pos, int lenA, int lenB) {
         while(lenA != 0 && lenB != 0) {
             if(lenA <= lenB) {
-                if((pos + lenA) - pos == 1) grailShift(array, pos, pos + lenA, lenA);
-                else grailMultiSwap(array, pos, pos + lenA, lenA);
+                grailMultiSwap(array, pos, pos + lenA, lenA);
                 pos += lenA;
                 lenB -= lenA;
             } 
             else {
-                if((pos + lenA) - (pos + (lenA - lenB)) == 1) grailShift(array, pos + (lenA - lenB), pos + lenA, lenB);
-                else grailMultiSwap(array, pos + (lenA - lenB), pos + lenA, lenB);
+                grailMultiSwap(array, pos + (lenA - lenB), pos + lenA, lenB);
                 lenA -= lenB;
             }
         }
