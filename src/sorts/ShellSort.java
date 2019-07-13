@@ -42,7 +42,7 @@ public class ShellSort {
     {
         int incs[] = {48, 21, 7, 3, 1};
 
-        for (int k = 0; k < 16; k++)
+        for (int k = 0; k < 5; k++)
         {
             for (int h = incs[k], i = h + lo; i < hi; i++)
             {
