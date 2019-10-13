@@ -6,8 +6,8 @@
 			<attribute name="module" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="classgraph/classgraph-4.8.47-javadoc.jar"/>
-	<classpathentry kind="lib" path="classgraph/classgraph-4.8.47-sources.jar"/>
-	<classpathentry kind="lib" path="classgraph/classgraph-4.8.47.jar"/>
+	<classpathentry kind="lib" path="lib/classgraph-4.8.47-javadoc.jar"/>
+	<classpathentry kind="lib" path="lib/classgraph-4.8.47-sources.jar"/>
+	<classpathentry kind="lib" path="lib/classgraph-4.8.47.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
