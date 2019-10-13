@@ -1,5 +1,5 @@
 # w0rthy's Array Visualizer, Revamped
-[![Donate](https://img.shields.io/badge/Donate-PayPal-green.svg)](YOUR_EMAIL_CODE)
+[![Donate](https://img.shields.io/badge/Donate-PayPal-green.svg)](Q5QLCFZ8G7WY6)
 
 
 73 sorting algorithms demonstrated through 10 unique graphic designs
