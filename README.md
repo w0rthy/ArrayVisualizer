@@ -1,11 +1,17 @@
 # w0rthy's Array Visualizer, Revamped
 [![Donate](https://img.shields.io/badge/Donate-PayPal-green.svg)](https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=Q5QLCFZ8G7WY6&currency_code=USD&source=url)
 
-
 73 sorting algorithms demonstrated through 10 unique graphic designs
 
 This new version of the program features new additions inspired by Timo Bingmann's "The Sound of Sorting" and w0rthy's original visualizer.
 
+To build (After -cp, use ";" with Windows and ":" with Mac/Linux):
+```
+ant
+java -cp bin;lib/classgraph-4.8.47.jar main.ArrayVisualizer
+```
+
+###Features:
 - 40 new sorting algorithms
 - Updated visuals and sound effects
 - You can select different array sizes now
@@ -94,12 +100,6 @@ This new version of the program features new additions inspired by Timo Bingmann
 - Small organizational changes
 
 **If you are experiencing performance issues in Windows 10, look here: https://superuser.com/questions/988379/how-do-i-run-java-apps-upscaled-on-a-high-dpi-display**
-
-To build (After -cp, use ";" with Windows and ":" with Mac/Linux):
-```
-ant
-java -cp bin;lib/classgraph-4.8.47.jar main.ArrayVisualizer
-```
 
 An executable .jar file is available in the dist folder. Have fun!
 
