@@ -1,62 +1,36 @@
 package sorts;
 
-import static array.visualizer.ArrayVisualizer.compare;
-import static array.visualizer.ArrayVisualizer.marked;
-import static array.visualizer.ArrayVisualizer.sleep;
-import static array.visualizer.Writes.write;
+import templates.ShellSorting;
+import utils.Delays;
+import utils.Highlights;
+import utils.Reads;
+import utils.Writes;
 
-//Shell sort variant retrieved from:
+// Shell sort variant retrieved from:
 // https://www.cs.princeton.edu/~rs/talks/shellsort.ps
 
-public class ShellSort {
-	public static void shellSort(int[] array, int length, int start)
-    {
-        int incs[] = {1391376, 463792, 198768, 86961, 33936,
-                            13776, 4592, 1968, 861, 336,
-                            112, 48, 21, 7, 3, 1};
-
-        for (int k = start; k < 16; k++)
-        {
-            for (int h = incs[k], i = h; i < length; i++)
-            {
-                int v = array[i];
-                int j = i;
-                
-                marked.set(1, j);
-            	marked.set(2, j-h);
-            	sleep(0.2);
-            	
-                while (j >= h && compare(array[j-h], v) == 1)
-                {
-                	marked.set(1, j);
-                	marked.set(2, j-h);
-                	write(array, j, array[j - h], 0.5, false, false);
-                    j -= h;
-                }
-                write(array, j, v, 0.5, true, false);
-            }
-        }
+final public class ShellSort extends ShellSorting {
+    public ShellSort(Delays delayOps, Highlights markOps, Reads readOps, Writes writeOps) {
+        super(delayOps, markOps, readOps, writeOps);
+        
+        this.setSortPromptID("Shell");
+        this.setRunAllID("Shell Sort");
+        this.setReportSortID("Shellsort");
+        this.setCategory("Insertion Sorts");
+        this.isComparisonBased(true);
+        this.isBucketSort(false);
+        this.isRadixSort(false);
+        this.isUnreasonablySlow(false);
+        this.setUnreasonableLimit(0);
+        this.isBogoSort(false);
     }
-	
-	public static void partShellSort(int[] array, int lo, int hi)
-    {
-        int incs[] = {48, 21, 7, 3, 1};
-
-        for (int k = 0; k < 16; k++)
-        {
-            for (int h = incs[k], i = h + lo; i < hi; i++)
-            {
-                int v = array[i];
-                int j = i;
-
-                while (j >= h && compare(array[j-h], v) == 1)
-                {
-                	marked.set(1, j);
-                	write(array, j, array[j - h], 1, true, false);
-                    j -= h;
-                }
-                write(array, j, v, 0.5, true, false);
-            }
-        }
+    
+    public void finishQuickShell(int[] array, int currentLen) {
+        this.quickShellSort(array, 0, currentLen);
+    }
+    
+    @Override
+    public void runSort(int[] array, int currentLength, int bucketCount) {
+        this.shellSort(this.ArrayVisualizer, array, currentLength);
     }
 }

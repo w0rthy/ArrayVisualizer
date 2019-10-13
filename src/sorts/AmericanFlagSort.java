@@ -1,10 +1,13 @@
 package sorts;
 
-import static array.visualizer.ArrayVisualizer.marked;
-import static array.visualizer.ArrayVisualizer.sleep;
-import static array.visualizer.Writes.write;
+import templates.Sort;
+import utils.Delays;
+import utils.Highlights;
+import utils.Reads;
+import utils.Writes;
 
 /*
+ * 
 Copyright 2017 Justin Wetherell
 
 Licensed under the Apache License, Version 2.0 (the "License");
@@ -18,9 +21,10 @@ distributed under the License is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
-*/
+ *
+ */
 
-/**
+/*
  * An American flag sort is an efficient, in-place variant of radix sort that
  * distributes items into hundreds of buckets. Non-comparative sorting
  * algorithms such as radix sort and American flag sort are typically used to
@@ -42,78 +46,110 @@ limitations under the License.
  * @author Justin Wetherell <phishman3579@gmail.com>
  */
 
-public class AmericanFlagSort {
-
-	    private static int NUMBER_OF_BUCKETS = 128; // ex. 10 for base 10 numbers
-
-	    public static void flagSort(int[] array, int length, int buckets) {
-	    	NUMBER_OF_BUCKETS = buckets;
-	        int numberOfDigits = getMaxNumberOfDigits(array, length); // Max number of digits
-	        int max = 1;
-	        for (int i = 0; i < numberOfDigits - 1; i++)
-	            max *= NUMBER_OF_BUCKETS;
-	        sort(array, 0, length, max);
+final public class AmericanFlagSort extends Sort {	    
+	    private int NUMBER_OF_BUCKETS = 128; // ex. 10 for base 10 numbers
+	    
+	    public AmericanFlagSort(Delays delayOps, Highlights markOps, Reads readOps, Writes writeOps) {
+	        super(delayOps, markOps, readOps, writeOps);
+	        
+	        this.setSortPromptID("American Flag");
+	        this.setRunAllID("American Flag Sort, " + this.NUMBER_OF_BUCKETS + " Buckets");
+	        this.setReportSortID("American Flag Sort");
+	        this.setCategory("Distributive Sorts");
+	        this.isComparisonBased(false);
+	        this.isBucketSort(true);
+	        this.isRadixSort(true);
+	        this.isUnreasonablySlow(false);
+	        this.setUnreasonableLimit(0);
+	        this.isBogoSort(false);
 	    }
-
-	    private static void sort(int[] array, int start, int length, int divisor) {
-	        // First pass - find counts
-	        int[] count = new int[NUMBER_OF_BUCKETS];
-	        int[] offset = new int[NUMBER_OF_BUCKETS];
-	        int digit = 0;
-	        for (int i = start; i < length; i++) {
-	        	marked.set(1, i);
-	        	sleep(1);
-	            int d = array[i];
-	            digit = getDigit(d, divisor);
-	            write(count, digit, count[digit] + 1, 0, false, true);
-	        }
-	        write(offset, 0, start + 0, 0, false, true);
-	        for (int i = 1; i < NUMBER_OF_BUCKETS; i++) {
-	        	write(offset, i, count[i - 1] + offset[i - 1], 0, false, true);
-	        }
-	        // Second pass - move into position
-	        for (int b = 0; b < NUMBER_OF_BUCKETS; b++) {
-	        	while (count[b] > 0) {
-	                int origin = offset[b];
-	                int from = origin;
-	                int num = array[from];
-	                write(array, from, -1, 1, true, false);
-	                do {
-	                    digit = getDigit(num, divisor);
-	                    int to = offset[digit];
-	                    write(offset, digit, offset[digit] + 1, 0, false, true);
-	                    write(count, digit, count[digit] - 1, 0, false, true);
-	                    
-	                    int temp = array[to];
-	                    write(array, to, num, 2, true, false);
-	                    num = temp;
-	                    from = to;
-	                } while (from != origin);
-	            }
-	        }
-	        if (divisor > 1) {
-	            // Sort the buckets
-	            for (int i = 0; i < NUMBER_OF_BUCKETS; i++) {
-	                int begin = (i > 0) ? offset[i - 1] : start;
-	                int end = offset[i];
-	                if (end - begin > 1)
-	                    sort(array, begin, end, divisor / NUMBER_OF_BUCKETS);
-	            }
-	        }
-	    }
-
-	    private static int getMaxNumberOfDigits(int[] array, int length) {
+	    
+	    // Slightly different than Reads.analyzeMaxLog.
+	    private int getMaxNumberOfDigits(int[] array, int length) {
 	        int max = Integer.MIN_VALUE;
-	        int temp = 0;
-	        for (int i = 0; i < length; i++) {
-	            temp = (int) (Math.log(array[i])/Math.log(NUMBER_OF_BUCKETS)) + 1;
-	            if (temp > max)
-	                max = temp;
-	        }
-	        return max;
-	    }
+            int temp = 0;
+            
+            for (int i = 0; i < length; i++) {
+                temp = (int) (Math.log(array[i]) / Math.log(this.NUMBER_OF_BUCKETS)) + 1;
+                
+                if (temp > max)
+                    max = temp;
+            }
+            return max;
+        }
 
-	    private static int getDigit(int integer, int divisor) {
-	        return (integer / divisor) % NUMBER_OF_BUCKETS;
-	    }
+        private int getDigit(int integer, int divisor) {
+            return (integer / divisor) % this.NUMBER_OF_BUCKETS;
+        }
+        
+        private void sort(int[] array, int start, int length, int divisor) {
+            // First pass - find counts
+            int[] count = new int[this.NUMBER_OF_BUCKETS];
+            int[] offset = new int[this.NUMBER_OF_BUCKETS];
+            int digit = 0;
+            
+            for (int i = start; i < length; i++) {
+                Highlights.markArray(1, i);
+                Delays.sleep(0.75);
+                
+                int d = array[i];
+                digit = this.getDigit(d, divisor);
+                
+                Writes.write(count, digit, count[digit] + 1, 0, false, true);
+            }
+            
+            Writes.write(offset, 0, start + 0, 0, false, true);
+            
+            for (int i = 1; i < this.NUMBER_OF_BUCKETS; i++) {
+                Writes.write(offset, i, count[i - 1] + offset[i - 1], 0, false, true);
+            }
+            
+            // Second pass - move into position
+            for (int b = 0; b < this.NUMBER_OF_BUCKETS; b++) {
+                while (count[b] > 0) {
+                    int origin = offset[b];
+                    int from = origin;
+                    int num = array[from];
+                    
+                    Writes.write(array, from, -1, 0.5, true, false);
+                    
+                    do {
+                        digit = this.getDigit(num, divisor);
+                        int to = offset[digit];
+                        
+                        Writes.write(offset, digit, offset[digit] + 1, 0, false, true);
+                        Writes.write(count, digit, count[digit] - 1, 0, false, true);
+                        
+                        int temp = array[to];
+                        Writes.write(array, to, num, 0.75, true, false);
+                        
+                        num = temp;
+                        from = to;
+                    } while (from != origin);
+                }
+            }
+            if (divisor > 1) {
+                // Sort the buckets
+                for (int i = 0; i < this.NUMBER_OF_BUCKETS; i++) {
+                    int begin = (i > 0) ? offset[i - 1] : start;
+                    int end = offset[i];
+                    
+                    if (end - begin > 1)
+                        this.sort(array, begin, end, divisor / this.NUMBER_OF_BUCKETS);
+                }
+            }
+        }
+
+        @Override
+        public void runSort(int[] array, int currentLen, int bucketCount) {
+            this.NUMBER_OF_BUCKETS = bucketCount;
+            
+            int numberOfDigits = this.getMaxNumberOfDigits(array, currentLen); // Max number of digits
+            int max = 1;
+            
+            for (int i = 0; i < numberOfDigits - 1; i++)
+                max *= this.NUMBER_OF_BUCKETS;
+            
+            this.sort(array, 0, currentLen, max);
+        }
 	}

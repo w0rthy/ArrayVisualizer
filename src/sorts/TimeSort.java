@@ -1,24 +1,18 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package sorts;
 
-import static array.visualizer.ArrayVisualizer.calcReal;
-import static array.visualizer.ArrayVisualizer.realTimer;
-import static array.visualizer.ArrayVisualizer.sleep;
-import static array.visualizer.ArrayVisualizer.tempStores;
-import static array.visualizer.Writes.write;
-import static sorts.InsertionSorts.partialInsert;
-
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import array.visualizer.ArrayVisualizer;
+import main.ArrayVisualizer;
+import templates.Sort;
+import utils.Delays;
+import utils.Highlights;
+import utils.Reads;
+import utils.Writes;
 
 /*
+ * 
 MIT License
 
 Copyright (c) 2019 w0rthy
@@ -40,39 +34,85 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
-*/
-public class TimeSort {
-    public static void timeSort(int[] array, int length, int magnitude) throws Exception {
+ *
+ */
+
+final public class TimeSort extends Sort {
+    private InsertionSort insertSorter;
+    
+    private volatile int next = 0;
+    
+    public TimeSort(Delays delayOps, Highlights markOps, Reads readOps, Writes writeOps) {
+        super(delayOps, markOps, readOps, writeOps);
+        
+        this.setSortPromptID("Time");
+        this.setRunAllID("Time Sort");
+        this.setReportSortID("Timesort");
+        this.setCategory("Distributive Sorts");
+        this.isComparisonBased(false);
+        this.isBucketSort(false); // *Does not* use buckets! "magnitude" is only a multiplier.
+        this.isRadixSort(false);
+        this.isUnreasonablySlow(true);
+        this.setUnreasonableLimit(2); //See threads.RunDistributionSort for details
+        this.isBogoSort(false);
+    }
+    
+    private synchronized void report(int[] array, int a){
+        Writes.write(array, next, a, 0, true, false);
+        next++;
+    }
+
+    @Override
+    public void runSort(int[] array, int length, int magnitude) {
+        insertSorter = new InsertionSort(this.Delays, this.Highlights, this.Reads, this.Writes);
+        
         final int A = magnitude;
         next = 0;
-        ArrayList<Thread> threads = new ArrayList<Thread>();
-        final int[] tmp = Arrays.copyOfRange(array, 0, length);
-        tempStores += length;
+        
+        ArrayList<Thread> threads = new ArrayList<>();
+        
+        final int[] tmp = new int[length];
+        
+        for(int i = 0; i < length; i++) {
+            Writes.write(tmp, i, array[i], 0.25, true, true);
+        }
+        
+        double temp = Delays.getCurrentDelay();
+        Delays.setCurrentDelay(magnitude);
+        
         for(int i = 0; i < length; i++){
             final int c = i;
+            
             threads.add(new Thread(){
+                @Override
                 public void run() {
                     int a = tmp[c];
+                   
                     try {
                         sleep(a*A);
-                        if(calcReal) realTimer += A;
-                    } catch (InterruptedException ex) {
+                        Writes.addTime(A);
+                    } 
+                    catch (InterruptedException ex) {
                         Logger.getLogger(ArrayVisualizer.class.getName()).log(Level.SEVERE, null, ex);
                     }
-                    report(array, a);
+                    TimeSort.this.report(array, a);
                 }
             });
         }
+        
         for(Thread t : threads)
             t.start();
-        Thread.sleep(length * A);
-        realTimer = length * A;
-        partialInsert(array,0,length,0.2);
-        sleep(2);
-    }
-    static volatile int next = 0;
-    private static synchronized void report(int[] array, int a){
-        write(array, next, a, 0, true, false);
-        next++;
+        
+        try {
+            Thread.sleep(length * A);
+        }
+        catch (InterruptedException e) {
+            Logger.getLogger(ArrayVisualizer.class.getName()).log(Level.SEVERE, null, e);
+        }
+        
+        Delays.setCurrentDelay(temp);
+        Writes.setTime(length * A);
+        
+        insertSorter.customInsertSort(array, 0, length, 0.2, false);
     }
 }

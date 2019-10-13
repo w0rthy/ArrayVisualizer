@@ -1,17 +1,12 @@
 package sorts;
 
-import static array.visualizer.ArrayVisualizer.calcReal;
-import static array.visualizer.ArrayVisualizer.clearmarked;
-import static array.visualizer.ArrayVisualizer.comps;
-import static array.visualizer.ArrayVisualizer.marked;
-import static array.visualizer.ArrayVisualizer.realTimer;
-import static array.visualizer.ArrayVisualizer.sleep;
-import static array.visualizer.Writes.mockWrite;
-import static array.visualizer.Writes.write;
-
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Comparator;
+
+import templates.Sort;
+import utils.Delays;
+import utils.Highlights;
+import utils.Reads;
+import utils.Writes;
 
 /*
  * "Some implementations of tournament sort in various languages"
@@ -30,127 +25,141 @@ import java.util.Comparator;
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-@SuppressWarnings("hiding")
-public class TournamentSort<Integer>
-{
-	Comparator<Integer> comparator;
-	Integer[] arr;
-	int[] matches;
-	int tourney;
 
-	private TournamentSort( Comparator<Integer> comparator, Integer[] v )
-	{
-		this.arr        = v;
-		this.matches    = new int[6*v.length];
-		this.comparator = comparator;
-		this.tourney    = knockout( 0, v.length-1, 3 );
-	}
+final public class TournamentSort extends Sort {
+    private int[] matches;
+    private int tourney;
+    
+    public TournamentSort(Delays delayOps, Highlights markOps, Reads readOps, Writes writeOps) {
+        super(delayOps, markOps, readOps, writeOps);
+        
+        this.setSortPromptID("Tournament");
+        this.setRunAllID("Tournament Sort");
+        this.setReportSortID("Tournament Sort");
+        this.setCategory("Selection Sorts");
+        this.isComparisonBased(true);
+        this.isBucketSort(false);
+        this.isRadixSort(false);
+        this.isUnreasonablySlow(false);
+        this.setUnreasonableLimit(0);
+        this.isBogoSort(false);
+    }
 
-	private Integer pop()
-	{
-		Integer result = arr[getPlayer( tourney )];
-		tourney = isPlayer( tourney ) ? 0 : rebuild( tourney );
+    private int tourneyCompare(int a, int b) {
+        Highlights.markArray(2, a);
+        Highlights.markArray(3, b);
+        
+        Delays.sleep(1);
+        
+        return Reads.compare(a, b);
+    }
+    
+    private static boolean isPlayer(int i) {
+        return i <= 0;
+    }
+    
+    private void setWinner(int root, int winner) {
+        Writes.write(matches, root, winner, 0, false, true);
+    }
+    private void setWinners(int root, int winners) {
+        Writes.write(matches, root + 1, winners, 0, false, true);
+    }
+    private void setLosers(int root, int losers) {
+        Writes.write(matches, root + 2, losers, 0, false, true);
+    }
+    private int getWinner(int root) {
+        return matches[root];
+    }
+    private int getWinners(int root) {
+        return matches[root + 1];
+    }
+    private int getLosers(int root) {
+        return matches[root + 2];
+    }
+    private void setMatch(int root, int winner, int winners, int losers) {
+        this.setWinner(root, winner);
+        this.setWinners(root, winners);
+        this.setLosers(root, losers);
+    }
+    
+    private int getPlayer(int i) {
+        return i <= 0 ? Math.abs(i) : this.getWinner(i);
+    }
+    
+	private int pop(int[] arr) {
+		int result = arr[this.getPlayer(tourney)];
+		tourney = TournamentSort.isPlayer(tourney) ? 0 : this.rebuild(arr, tourney);
 		return result;
 	}
 
-	private static <Integer> void sort( int[] arr, Integer[] v, Comparator<Integer>  comparator )
-	{
-		TournamentSort<Integer> tourney = new TournamentSort<Integer>( comparator, v );
-		ArrayList<Integer> copy = new ArrayList<Integer>( v.length );
-		for (int i = 0; i < v.length; i++) {
-			copy.add( tourney.pop() );
-			mockWrite(v.length, 0);
+	private static int makePlayer(int i) {
+	    return -i;
+	}
+
+	private int makeMatch(int[] arr, int top, int bot, int root) {
+        int top_w = this.getPlayer(top);
+        int bot_w = this.getPlayer(bot);
+        
+        if (tourneyCompare(arr[top_w], arr[bot_w]) <= 0)
+            this.setMatch(root, top_w, top, bot);
+        else
+            this.setMatch(root, bot_w, bot, top);
+        
+        return root;
+    }
+	
+    private int knockout(int[] arr, int i, int k, int root) {
+        if (i == k) return TournamentSort.makePlayer(i);
+        
+        int j = (i + k) / 2;
+        return this.makeMatch(arr, this.knockout(arr, i, j, 2 * root), this.knockout(arr,j + 1, k, (2 * root) + 3), root);
+    }
+
+    private int rebuild(int[] arr, int root) {
+        if (TournamentSort.isPlayer(this.getWinners(root)))
+            return this.getLosers(root);
+        
+        this.setWinners(root, this.rebuild(arr, this.getWinners(root)));
+        
+        if (tourneyCompare(arr[this.getPlayer(this.getLosers(root))], arr[this.getPlayer(this.getWinners(root))]) < 0) {
+            this.setWinner(root, this.getPlayer(this.getLosers(root)));
+            
+            int temp = this.getLosers(root);
+            
+            this.setLosers(root, this.getWinners(root));
+            this.setWinners(root, temp);
+        }
+        else {
+            this.setWinner(root, this.getPlayer(this.getWinners(root)));
+        }
+        
+        return root;
+    }
+    
+	private void sort(int[] arr, int currentLen) {
+		ArrayList<Integer> copy = new ArrayList<>(currentLen);
+		for (int i = 0; i < currentLen; i++) {
+		    int result = this.pop(arr);
+		    
+		    Writes.mockWrite(currentLen, copy.size(), result, 0);
+		    copy.add(result);
 		}
 
-		clearmarked();
+		Highlights.clearAllMarks();
 
-		for (int i = 0; i < v.length; i++) {
+		for (int i = 0; i < currentLen; i++) {
 			Integer selected = copy.get(i);
-			write(arr, i, (int) selected, 1, false, false);
-			marked.set(1, i);
+			
+			Writes.write(arr, i, selected, 1, false, false);
+			Highlights.markArray(1, i);
 		}
 	}
 
-	private int getPlayer( int i )
-	{
-		return i <= 0 ? Math.abs(i) : getWinner( i );
-	}
-
-	private void setWinner( int root, int winner ) { write(matches, root, winner, 0, false, true); }
-	private void setWinners( int root, int winners ) { write(matches, root + 1, winners, 0, false, true); }
-	private void setLosers( int root, int losers ) { write(matches, root + 2, losers, 0, false, true); }
-	private int getWinner( int root )  { return matches[root];   }
-	private int getWinners( int root ) { return matches[root+1]; }
-	private int getLosers( int root )  { return matches[root+2]; }
-	private void setMatch( int root, int winner, int winners, int losers )
-	{
-		setWinner(root, winner);
-		setWinners(root, winners);
-		setLosers(root, losers);
-	}
-
-	private int mkMatch( int top, int bot, int root )
-	{
-		int top_w = getPlayer( top );
-		int bot_w = getPlayer( bot );
-		if (comparator.compare( arr[top_w], arr[bot_w] ) <= 0)
-			setMatch( root, top_w, top, bot );
-		else
-			setMatch( root, bot_w, bot, top );
-		return root;
-	}
-
-	private int mkPlayer( int i ){ return -i; }
-
-	private int knockout( int i, int k, int root )
-	{
-		if (i == k) return mkPlayer( i );
-		int j = (i+k)/2;
-		return mkMatch( knockout( i, j, 2*root ), knockout( j+1, k, 2*root+3 ), root );
-	}
-
-	private boolean isPlayer( int i ) { return i <= 0; }
-
-	private int rebuild( int root )
-	{
-		if (isPlayer( getWinners( root ) ))
-			return getLosers( root );
-		else
-		{
-			setWinners( root, rebuild( getWinners( root ) ) );
-			if (comparator.compare( arr[getPlayer(getLosers( root ))], arr[getPlayer(getWinners( root ))] ) < 0)
-			{
-				setWinner( root, getPlayer( getLosers( root ) ) );
-				int temp = getLosers( root );
-				setLosers( root, getWinners( root ) );
-				setWinners( root, temp );
-			}
-			else
-				setWinner( root, getPlayer( getWinners( root ) ) );
-			return root;
-		}
-	}
-
-	static class InstrumentedCompare implements Comparator<Object>
-	{
-		public int compare( Object a, Object b )
-		{
-			comps++;
-			marked.set(2, (java.lang.Integer) a);
-			marked.set(3, (java.lang.Integer) b);
-			sleep(1);
-			long time = System.nanoTime();
-			int cmp = ((java.lang.Integer) a).compareTo( (java.lang.Integer) b);
-			if(calcReal) realTimer += (System.nanoTime() - time) / 1e+6;
-			return cmp;
-		}    	
-	}
-
-	public static void tournamentSort(int[] arr, int length)
-	{
-		Object[] nums = Arrays.copyOfRange(Arrays.stream(arr).boxed().toArray(), 0, length);
-		InstrumentedCompare tournamentCompare = new InstrumentedCompare();
-
-		sort( arr, nums, tournamentCompare );
-	}
+    @Override
+    public void runSort(int[] array, int currentLength, int bucketCount) {
+        this.matches = new int[6 * currentLength];
+        this.tourney = this.knockout(array, 0, currentLength - 1, 3);
+        
+        this.sort(array, currentLength);
+    }
 }

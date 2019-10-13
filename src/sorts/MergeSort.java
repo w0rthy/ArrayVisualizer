@@ -1,19 +1,13 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package sorts;
 
-import static array.visualizer.ArrayVisualizer.compare;
-import static array.visualizer.ArrayVisualizer.sleep;
-import static array.visualizer.Writes.swap;
-
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
-import array.visualizer.ArrayVisualizer;
+import templates.MergeSorting;
+import utils.Delays;
+import utils.Highlights;
+import utils.Reads;
+import utils.Writes;
 
 /*
+ *
 MIT License
 
 Copyright (c) 2019 w0rthy
@@ -35,55 +29,27 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
-*/
+ *
+ */
 
-public class MergeSort {
-	private static void merge(int[] array, int min,int max,int mid){
-		try {
-			//radixLSDsortnd(2, min, max);
-
-
-			int i=min;
-			while(i<=mid){
-				if(compare(array[i], array[mid+1]) == 1){
-					swap(array,i,mid+1,0.1,true);
-					push(array,mid+1,max);
-				}
-				i++;
-				sleep(0.2);
-			}		
-
-		} catch (Exception ex) {
-			Logger.getLogger(ArrayVisualizer.class.getName()).log(Level.SEVERE, null, ex);
-		}
-	}
-
-	private static void push(int[] array, int s,int e){
-
-		for(int i=s;i<e;i++){
-			if(compare(array[i], array[i+1]) == 1){
-				swap(array,i,i+1,0.1,true);
-			}
-		}
-
-
-	}
-
-	public static void mergeSort(int[] array, int min,int max){
-		if(max-min==0){//only one element.
-			//no swap
-		}
-		else if(max-min==1){//only two elements and swaps them
-			if(compare(array[min], array[max]) == 1) {
-				swap(array,min,max,0.01,true);
-			}
-		}
-		else{
-			int mid=((int) Math.floor((min+max)/2));//The midpoint
-
-			mergeSort(array,min,mid);//sort the left side
-			mergeSort(array,mid+1,max);//sort the right side
-			merge(array,min,max,mid);//combines them
-		}
-	}
+final public class MergeSort extends MergeSorting {
+    public MergeSort(Delays delayOps, Highlights markOps, Reads readOps, Writes writeOps) {
+        super(delayOps, markOps, readOps, writeOps);
+        
+        this.setSortPromptID("Merge");
+        this.setRunAllID("Merge Sort");
+        this.setReportSortID("Mergesort");
+        this.setCategory("Merge Sorts");
+        this.isComparisonBased(true);
+        this.isBucketSort(false);
+        this.isRadixSort(false);
+        this.isUnreasonablySlow(false);
+        this.setUnreasonableLimit(0);
+        this.isBogoSort(false);
+    }
+    
+    @Override
+    public void runSort(int[] array, int length, int bucketCount) {
+        this.mergeSort(array, length, false);
+    }
 }

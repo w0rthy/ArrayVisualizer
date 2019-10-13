@@ -1,9 +1,10 @@
 package sorts;
 
-import static array.visualizer.ArrayVisualizer.compare;
-import static array.visualizer.ArrayVisualizer.marked;
-import static array.visualizer.ArrayVisualizer.sleep;
-import static array.visualizer.Writes.swap;
+import templates.Sort;
+import utils.Delays;
+import utils.Highlights;
+import utils.Reads;
+import utils.Writes;
 
 /*
  * THE WORK (AS DEFINED BELOW) IS PROVIDED UNDER THE TERMS OF THIS CREATIVE COMMONS PUBLIC LICENSE ("CCPL" OR "LICENSE").
@@ -15,30 +16,47 @@ import static array.visualizer.Writes.swap;
  * CONSIDERATION OF YOUR ACCEPTANCE OF SUCH TERMS AND CONDITIONS.
  */
 
-//Code refactored from: https://en.wikipedia.org/wiki/Stooge_sort
-public class StoogeSort {
-
-	public static void stoogeSort(int[] A, int i, int j)
-	{
-	    if (compare(A[i], A[j]) == 1)
-	    {
-	        swap(A, i, j, 1, true);
+// Code refactored from: https://en.wikipedia.org/wiki/Stooge_sort
+final public class StoogeSort extends Sort {
+    public StoogeSort(Delays delayOps, Highlights markOps, Reads readOps, Writes writeOps) {
+        super(delayOps, markOps, readOps, writeOps);
+        
+        this.setSortPromptID("Stooge");
+        this.setRunAllID("Stooge Sort");
+        this.setReportSortID("Stoogesort");
+        this.setCategory("Exchange Sorts");
+        this.isComparisonBased(true);
+        this.isBucketSort(false);
+        this.isRadixSort(false);
+        this.isUnreasonablySlow(true);
+        this.setUnreasonableLimit(2048);
+        this.isBogoSort(false);
+    }
+    
+	private void stoogeSort(int[] A, int i, int j) {
+	    if (Reads.compare(A[i], A[j]) == 1) {
+	        Writes.swap(A, i, j, 0.005, true, false);
 	    }
-	    sleep(0.025);
-	
-	    if (j - i + 1 >= 3)
-	    {
+	    
+	    Delays.sleep(0.0025);
+	    
+	    Highlights.markArray(1, i);
+        Highlights.markArray(2, j);
+	    
+        if (j - i + 1 >= 3) {
 	        int t = (j - i + 1) / 3;
+	        
+	        Highlights.markArray(3, j - t);
+	        Highlights.markArray(4, i + t);
 	
-	        marked.set(1, i);
-	        marked.set(2, j);
-	
-	        stoogeSort(A, i, j-t);
-	        stoogeSort(A, i+t, j);
-	        stoogeSort(A, i, j-t);
-	
-	        marked.set(1, 0);
-	        marked.set(2, 0);
+	        this.stoogeSort(A, i, j-t);
+	        this.stoogeSort(A, i+t, j);
+	        this.stoogeSort(A, i, j-t);
 	    }
 	}
+
+    @Override
+    public void runSort(int[] array, int currentLength, int bucketCount) {
+        this.stoogeSort(array, 0, currentLength - 1);
+    }
 }

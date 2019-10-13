@@ -1,15 +1,13 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package sorts;
 
-import static array.visualizer.ArrayVisualizer.compare;
-import static array.visualizer.ArrayVisualizer.marked;
-import static array.visualizer.ArrayVisualizer.sleep;
-import static array.visualizer.Writes.swap;
+import templates.Sort;
+import utils.Delays;
+import utils.Highlights;
+import utils.Reads;
+import utils.Writes;
 
 /*
+ * 
 MIT License
 
 Copyright (c) 2019 w0rthy
@@ -31,19 +29,41 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
-*/
+ *
+ */
 
-public class BubbleSort {
-    public static void bubbleSort(int[] array, int length) throws Exception{
-        for(int i = length-1; i > 0; i--){
-            for(int j = 0; j < i; j++) {
-                if(compare(array[j], array[j+1]) == 1){
-                    swap(array, j, j+1, 0.15, true);
+final public class BubbleSort extends Sort {
+    public BubbleSort(Delays delayOps, Highlights markOps, Reads readOps, Writes writeOps) {
+        super(delayOps, markOps, readOps, writeOps);
+        
+        this.setSortPromptID("Bubble");
+        this.setRunAllID("Bubble Sort");
+        this.setReportSortID("Bubblesort");
+        this.setCategory("Exchange Sorts");
+        this.isComparisonBased(true);
+        this.isBucketSort(false);
+        this.isRadixSort(false);
+        this.isUnreasonablySlow(false);
+        this.setUnreasonableLimit(0);
+        this.isBogoSort(false);
+    }
+
+    @Override
+    public void runSort(int[] array, int length, int bucketCount) {
+        boolean sorted = false;
+
+        while(!sorted) {
+            sorted = true;
+            for(int i = 0; i < length - 1; i++) {             
+                if(Reads.compare(array[i], array[i + 1]) == 1){
+                    Writes.swap(array, i, i + 1, 0.075, true, false);
+                    sorted = false;
                 }
-                marked.set(1, j);
-                marked.set(2, j + 1);
-                sleep(0.015);
+
+                Highlights.markArray(1, i);
+                Highlights.markArray(2, i + 1);
+                Delays.sleep(0.025);
             }
-        }
+        }    
     }
 }

@@ -1,16 +1,13 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package sorts;
 
-import static array.visualizer.Analysis.analyze;
-import static array.visualizer.ArrayVisualizer.marked;
-import static array.visualizer.ArrayVisualizer.sleep;
-import static array.visualizer.Writes.multiDimWrite;
-import static array.visualizer.Writes.write;
+import templates.Sort;
+import utils.Delays;
+import utils.Highlights;
+import utils.Reads;
+import utils.Writes;
 
 /*
+ * 
 MIT License
 
 Copyright (c) 2019 w0rthy
@@ -32,28 +29,49 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
-*/
+ *
+ */
 
-public class GravitySort {
-    public static void gravitySort(int[] array, int length) throws Exception {
-        int max = analyze(array, length, 0, 0.25, true, true);
+final public class GravitySort extends Sort {
+    public GravitySort(Delays delayOps, Highlights markOps, Reads readOps, Writes writeOps) {
+        super(delayOps, markOps, readOps, writeOps);
+        
+        this.setSortPromptID("Gravity");
+        this.setRunAllID("Gravity (Bead) Sort");
+        this.setReportSortID("Beadsort");
+        this.setCategory("Distributive Sorts");
+        this.isComparisonBased(false);
+        this.isBucketSort(false);
+        this.isRadixSort(false);
+        this.isUnreasonablySlow(true);
+        this.setUnreasonableLimit(4096);
+        this.isBogoSort(false);
+    }
+
+    @Override
+    public void runSort(int[] array, int length, int bucketCount) {
+        int max = Reads.analyzeMax(array, length, 0.25, true);
         int[][] abacus = new int[length][max];
-        for(int i = 0; i < length; i++){
+        
+        for(int i = 0; i < length; i++) {
             for(int j = 0; j < array[i]; j++) {
-                multiDimWrite(abacus, i, abacus[0].length - j - 1, 1, 0, true, true);
-        	}
+                Writes.multiDimWrite(abacus, i, abacus[0].length - j - 1, 1, 0, true, true);
+            }
         }
+        
         //apply gravity
-        for(int i = 0; i < abacus[0].length; i++){
-            for(int j = 0; j < abacus.length; j++){
-                if(abacus[j][i]==1){
+        for(int i = 0; i < abacus[0].length; i++) {
+            for(int j = 0; j < abacus.length; j++) {
+                if(abacus[j][i] == 1) {
                     //Drop it
-                    int droppos = j;
-                    while(droppos+1 < abacus.length && abacus[droppos][i] == 1)
-                        droppos++;
-                    if(abacus[droppos][i]==0){
-                    	multiDimWrite(abacus, j, i, 0, 0, true, true);
-                    	multiDimWrite(abacus, droppos, i, 1, 0, true, true);
+                    int dropPos = j;
+                    
+                    while(dropPos + 1 < abacus.length && abacus[dropPos][i] == 1)
+                        dropPos++;
+                    
+                    if(abacus[dropPos][i] == 0) {
+                        Writes.multiDimWrite(abacus, j, i, 0, 0, true, true);
+                        Writes.multiDimWrite(abacus, dropPos, i, 1, 0, true, true);
                     }
                 }
             }
@@ -61,12 +79,14 @@ public class GravitySort {
             int count = 0;
             for(int x = 0; x < abacus.length; x++){
                 count = 0;
+                
                 for(int y = 0; y < abacus[0].length; y++)
                     count += abacus[x][y];
-                write(array, x, count, 0.025, true, false);
+                
+                Writes.write(array, x, count, 0.002, true, false);
             }
-            marked.set(2, length - i - 1);
-            sleep(0.05);
+            Highlights.markArray(2, length - i - 1);
+            Delays.sleep(0.001);
         }
     }
 }

@@ -1,17 +1,15 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package sorts;
-
-import static array.visualizer.Analysis.analyze;
-import static array.visualizer.ArrayVisualizer.marked;
-import static array.visualizer.ArrayVisualizer.tempStores;
-import static array.visualizer.Writes.write;
 
 import java.util.Arrays;
 
+import templates.Sort;
+import utils.Delays;
+import utils.Highlights;
+import utils.Reads;
+import utils.Writes;
+
 /*
+ * 
 MIT License
 
 Copyright (c) 2019 w0rthy
@@ -33,29 +31,51 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
-*/
+ *
+ */
 
-public class CountingSort {
-    public static void countingSort(int[] array, int length) throws Exception {
-    	int max = analyze(array, length, 0, 0, true, false);
-    	int[] output = Arrays.copyOf(array, length);
-        int[] counts = new int[max+1];
+final public class CountingSort extends Sort {
+    public CountingSort(Delays delayOps, Highlights markOps, Reads readOps, Writes writeOps) {
+        super(delayOps, markOps, readOps, writeOps);
+        
+        this.setSortPromptID("Counting");
+        this.setRunAllID("Counting Sort");
+        this.setReportSortID("Counting Sort");
+        this.setCategory("Distributive Sorts");
+        this.isComparisonBased(false);
+        this.isBucketSort(false);
+        this.isRadixSort(false);
+        this.isUnreasonablySlow(false);
+        this.setUnreasonableLimit(0);
+        this.isBogoSort(false);
+    }
+
+    @Override
+    public void runSort(int[] array, int length, int bucketCount) {
+        int max = Reads.analyzeMax(array, length, 0, false);
+        
+        int[] output = Arrays.copyOf(array, length);
+        int[] counts = new int[max + 1];
+        
         for(int i = 0; i < length; i++){
-            write(counts, array[i], counts[array[i]] + 1, 1, false, true);
-            marked.set(1, i);
+            Writes.write(counts, array[i], counts[array[i]] + 1, 0.5, false, true);
+            Highlights.markArray(1, i);
         }
         for (int i = 1; i <= max; i++) {
-        	write(counts, i, counts[i] + counts[i - 1], 1, true, true);
+            Writes.write(counts, i, counts[i] + counts[i - 1], 1, true, true);
         }
         for(int i = length - 1; i >= 0; i--){
-            write(counts, array[i], counts[array[i]] - 1, 0, false, true);
-            write(output, counts[array[i]], array[i], 0, false, true);
-            tempStores--;
+            Writes.write(counts, array[i], counts[array[i]] - 1, 0, false, true);
+            Writes.write(output, counts[array[i]], array[i], 0, false, true);
+            
+            Writes.changeTempWrites(-2);
         }
         //Usually counting sort returns a sorted copy of the input array. The visualization pretends that happens here.
         for(int i = length - 1; i >= 0; i--) {
-        	write(array, i, output[i], 1, false, false);
-        	marked.set(1, i);
+            Writes.write(array, i, output[i], 1, false, false);
+            
+            Writes.changeTempWrites(1);
+            Highlights.markArray(1, i);
         }
     }
 }

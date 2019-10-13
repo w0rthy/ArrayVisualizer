@@ -1,13 +1,13 @@
 package sorts;
 
-import static array.visualizer.ArrayVisualizer.compare;
-import static array.visualizer.ArrayVisualizer.marked;
-import static array.visualizer.ArrayVisualizer.sleep;
-import static array.visualizer.Writes.swap;
-
-import static sorts.InsertionSorts.partialInsert;
+import templates.CombSorting;
+import utils.Delays;
+import utils.Highlights;
+import utils.Reads;
+import utils.Writes;
 
 /*
+ * 
 The MIT License (MIT)
 
 Copyright (c) 2012 Daniel Imms, http://www.growingwiththeweb.com
@@ -28,43 +28,30 @@ FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
 COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
 IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-*/
+ *
+ */
 
-public class CombSort {
-	public static void combSort(int[] array, int length, boolean hybrid)
-	{
-	    double shrink = 1.3;
-	
-	    boolean swapped = false;
-	    int gap = length;
-	
-	    while ((gap > 1) || swapped)
-	    {
-	    	marked.set(2, -5);
-	    	
-	        if (gap > 1) {
-	            gap = (int) ((float)gap / shrink);
-	        }
-	
-	        swapped = false;
-	
-	        for (int i = 0; (gap + i) < length; ++i)
-	        {
-	        	if(hybrid && (gap <= Math.min(8, length * 0.03125))) {
-	        		gap = 0;
-	        		partialInsert(array, 0, length, 0.5);
-	        		break;
-	        	}
-	            if (compare(array[i], array[i + gap]) == 1)
-	            {
-	                swap(array, i, i+gap, 1, true);
-	                swapped = true;
-	            }
-	            marked.set(1, i);
-	            marked.set(2, i + gap);
-	            sleep(0.5);
-	            marked.set(1, -5);
-	        }
-	    }
-	}
+final public class CombSort extends CombSorting {
+    public CombSort(Delays delayOps, Highlights markOps, Reads readOps, Writes writeOps) {
+        super(delayOps, markOps, readOps, writeOps);
+        
+        this.setSortPromptID("Comb");
+        this.setRunAllID("Comb Sort");
+        this.setReportSortID("Combsort");
+        this.setCategory("Exchange Sorts");
+        this.isComparisonBased(true);
+        this.isBucketSort(false);
+        this.isRadixSort(false);
+        this.isUnreasonablySlow(false);
+        this.setUnreasonableLimit(0);
+        this.isBogoSort(false);
+        
+        //Default options
+        this.setShrinkFactor(4); //Index 4 of Shrink Factors array
+    }
+
+    @Override
+    public void runSort(int[] array, int currentLength, int bucketCount) {
+        this.combSort(this.ArrayVisualizer, array, currentLength, false);
+    }
 }
