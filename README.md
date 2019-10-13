@@ -97,10 +97,10 @@ This new version of the program features new additions inspired by Timo Bingmann
 
 To build (After -cp, use ";" with Windows and ":" with Mac/Linux):
 
-'''
+```
 ant
 java -cp bin;lib/classgraph-4.8.47.jar main.ArrayVisualizer
-'''
+```
 
 An executable .jar file is available in the dist folder. Have fun!
 
