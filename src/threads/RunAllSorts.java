@@ -1,14 +1,5 @@
 package threads;
 
-import main.ArrayManager;
-import main.ArrayVisualizer;
-import utils.Delays;
-import utils.Highlights;
-import utils.Reads;
-import utils.Sounds;
-import utils.Timer;
-import utils.Writes;
-
 /*
  * 
 MIT License
@@ -36,7 +27,10 @@ SOFTWARE.
  */
 
 final public class RunAllSorts {
-
+    public static void runAllSorts() {
+        return;
+    }
+    /*
                     category = "Merge Sorts";
 
                     SLEEPRATIO = 2.5; 
@@ -443,6 +437,7 @@ final public class RunAllSorts {
                 SetSound(false);
             }
         };
-        sortingThread.start(); 
+        sortingThread.start();
     }
+    */
 }
