@@ -1,5 +1,5 @@
 # w0rthy's Array Visualizer, Revamped
-54 sorting algorithms demonstrated through 10 unique graphic designs
+73 sorting algorithms demonstrated through 10 unique graphic designs
 
 This new version of the program features new additions inspired by Timo Bingmann's "The Sound of Sorting" and w0rthy's original visualizer.
 
@@ -14,7 +14,7 @@ This new version of the program features new additions inspired by Timo Bingmann
 - Toggle Timo Bingmann's "end sweep" animation
 - Refactored / optimized code
 
-# 10/13/2019 - Version 2.0 is now released!
+## 10/13/2019 - Version 2.0 is now released!
 - Now includes 73 sorting algorithms, with 2 more that will be finished in the future
   - NEW SORTS:
     - Unoptimized Bubble Sort
@@ -51,7 +51,7 @@ This new version of the program features new additions inspired by Timo Bingmann
 - Shatter Sort's highlights slightly tweaked
 - GrailSort's highlights slightly tweaked
 
-** KNOWN BUGS:
+**KNOWN BUGS:**
 - Certain sorts (comb sort, radix sorts) cause the program to forget the current speed
 - Certain sorts do not work with the "Skip Sort" button
 - Linked Dots visual has an extra, static line
@@ -59,19 +59,20 @@ This new version of the program features new additions inspired by Timo Bingmann
 - SkaSort and HolyGrailSort produce errors -- this is normal, they aren't finished yet
 - No circular pointer -- will be fixed soon
 
-** PLANS FOR FUTURE RELEASES:
+**PLANS FOR FUTURE RELEASES:**
 - Javadocs!!
 - SkaSort
 - "Holy Grail Sort"
-- Option to enter in your own set of numbers
-- Option to select CombSort gap sequence
-- Option to select ShellSort gap sequence
-- Option to change TimSort "minrun" value
-- Option to change IntroSort threshold for insertion/heap sort
-- Option to change Simple Shatter Sort rate(?)
+- Options to:
+  - Enter in your own set of numbers
+  - Select CombSort gap sequence
+  - Select ShellSort gap sequence
+  - Change TimSort "minrun" value
+  - Change IntroSort threshold for insertion/heap sort
+  - Change Simple Shatter Sort rate(?)
+  - Stop Run All Sorts(?)
+  - Stop TimeSort(?)
 - Pre-shuffled arrays
-- Option to stop Run All Sorts(?)
-- Option to stop TimeSort(?)
 - Organize list of sorts into more categories
 - Run All Sorts in specific category
 - Subheadings for customizable sorts (e.g. display the number of buckets during a bucket sort)
@@ -81,13 +82,14 @@ This new version of the program features new additions inspired by Timo Bingmann
 - Fixed circular pointer with much cleaner math
 - Toogle between pointer and black bar with circular visuals
 - Refactor/reorganize prompts and frames
-- Cleaner Counting Sort
-- Cleaner Tree Sort
-- Cleaner getters/setters
-- Cleaner method parameters
+- Cleaner:
+  - Counting Sort
+  - Tree Sort
+  - getters/setters
+  - method parameters
 - Small organizational changes
 
-** If you are experiencing performance issues in Windows 10, look here: https://superuser.com/questions/988379/how-do-i-run-java-apps-upscaled-on-a-high-dpi-display
+**If you are experiencing performance issues in Windows 10, look here: https://superuser.com/questions/988379/how-do-i-run-java-apps-upscaled-on-a-high-dpi-display**
 
 An executable .jar file is available in the dist folder. Have fun!
 
