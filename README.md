@@ -96,6 +96,7 @@ This new version of the program features new additions inspired by Timo Bingmann
 **If you are experiencing performance issues in Windows 10, look here: https://superuser.com/questions/988379/how-do-i-run-java-apps-upscaled-on-a-high-dpi-display**
 
 To build (After -cp, use ";" with Windows and ":" with Mac/Linux):
+
 '''
 ant
 java -cp bin;lib/classgraph-4.8.47.jar main.ArrayVisualizer
