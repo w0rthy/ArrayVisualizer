@@ -40,6 +40,7 @@ This new version of the program features new additions inspired by Timo Bingmann
     - Treesort
     - Optimized Gnomesort with Binary Search
 - Significantly refactored code, more object-oriented
+- Optimized visuals -- the program runs smoother than ever!
 - Plug-and-play functionality -- using classgraph, you can now easily add your own sorting algorithms to the program! Documentation on that will be available in the future.
 - Sort delay system redesigned -- you can now change the speed of the program in the middle of a delayed compare or swap
 - Speed dialogue is now disabled while other windows are open
