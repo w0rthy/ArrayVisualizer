@@ -16,27 +16,27 @@ This new version of the program features new additions inspired by Timo Bingmann
 
 # 10/13/2019 - Version 2.0 is now released!
 - Now includes 73 sorting algorithms, with 2 more that will be finished in the future
- - NEW SORTS:
- - - Unoptimized Bubble Sort
- - - Rotation-based In-Place Merge Sort
- - - "Lazy Stable Sort" from Andrey Astrelin's GrailSort
- - - Grail sorting with a static buffer
- - - Grail sorting with a dynamic buffer
- - - Andrey Astrelin's "SqrtSort"
- - - CircleSort
- - - Introspective CircleSort
- - - Orson Peters' "Pattern-Defeating Quicksort" (PDQSort)
- - - Branchless PDQSort
- - - Morween's implementation of "Poplar Heapsort"
- - - Recursive Binary Quicksort
- - - Iterative Binary Quicksort
- - - Iterative Bitonic Sort
- - - Iterative Odd-Even Mergesort
- - - "Bubble Bogosort"
- - - "Exchange Bogosort"
- - - Treesort
- - - Optimized Gnomesort with Binary Search
-- Significantly refactored code, making it much more object-oriented
+-- NEW SORTS:
+--- Unoptimized Bubble Sort
+--- Rotation-based In-Place Merge Sort
+--- "Lazy Stable Sort" from Andrey Astrelin's GrailSort
+--- Grail sorting with a static buffer
+--- Grail sorting with a dynamic buffer
+--- Andrey Astrelin's "SqrtSort"
+--- CircleSort
+--- Introspective CircleSort
+--- Orson Peters' "Pattern-Defeating Quicksort" (PDQSort)
+--- Branchless PDQSort
+--- Morween's implementation of "Poplar Heapsort"
+--- Recursive Binary Quicksort
+--- Iterative Binary Quicksort
+--- Iterative Bitonic Sort
+--- Iterative Odd-Even Mergesort
+--- "Bubble Bogosort"
+--- "Exchange Bogosort"
+--- Treesort
+--- Optimized Gnomesort with Binary Search
+- Significantly refactored code, more object-oriented
 - Plug-and-play functionality -- using classgraph, you can now easily add your own sorting algorithms to the program! Documentation on that will be available in the future.
 - Sort delay system redesigned -- you can now change the speed of the program in the middle of a delayed compare or swap
 - Speed dialogue is now disabled while other windows are open
