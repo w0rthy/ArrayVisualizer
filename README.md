@@ -1,4 +1,4 @@
-# w0rthy's Array Visualizer, Revamped
+# w0rthy's Array Visualizer, Revamped [![Donate](https://img.shields.io/badge/Donate-PayPal-green.svg)](YOUR_EMAIL_CODE)
 73 sorting algorithms demonstrated through 10 unique graphic designs
 
 This new version of the program features new additions inspired by Timo Bingmann's "The Sound of Sorting" and w0rthy's original visualizer.
