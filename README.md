@@ -11,7 +11,7 @@ ant
 java -cp bin;lib/classgraph-4.8.47.jar main.ArrayVisualizer
 ```
 
-###Features:
+### Features:
 - 40 new sorting algorithms
 - Updated visuals and sound effects
 - You can select different array sizes now
