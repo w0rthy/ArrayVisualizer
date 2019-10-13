@@ -51,7 +51,7 @@ This new version of the program features new additions inspired by Timo Bingmann
 - Shatter Sort's highlights slightly tweaked
 - GrailSort's highlights slightly tweaked
 
-**KNOWN BUGS:**
+**KNOWN BUGS:
 - Certain sorts (comb sort, radix sorts) cause the program to forget the current speed
 - Certain sorts do not work with the "Skip Sort" button
 - Linked Dots visual has an extra, static line
@@ -59,7 +59,7 @@ This new version of the program features new additions inspired by Timo Bingmann
 - SkaSort and HolyGrailSort produce errors -- this is normal, they aren't finished yet
 - No circular pointer -- will be fixed soon
 
-**PLANS FOR FUTURE RELEASES:**
+**PLANS FOR FUTURE RELEASES:
 - Javadocs!!
 - SkaSort
 - "Holy Grail Sort"
