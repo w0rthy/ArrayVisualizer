@@ -73,9 +73,6 @@ public abstract class RougeSorting extends Sort {
             if (gap > 1) {
                 gap = (int) ((float) gap - 1);
                 //ArrayVisualizer.setCurrentGap(gap);
-
-                if(gap == 1)
-                    Delays.setSleepRatio(10);
             }
 
             swapped = false;

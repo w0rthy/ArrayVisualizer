@@ -1,13 +1,13 @@
 package sorts;
 
-import templates.BinaryInsertionSorting;
+import templates.MergeSorting;
 import utils.Delays;
 import utils.Highlights;
 import utils.Reads;
 import utils.Writes;
 
 /*
- * 
+ *
 MIT License
 
 Copyright (c) 2019 w0rthy
@@ -32,14 +32,14 @@ SOFTWARE.
  *
  */
 
-final public class BinaryInsertionSort extends BinaryInsertionSorting {
-    public BinaryInsertionSort(Delays delayOps, Highlights markOps, Reads readOps, Writes writeOps) {
+final public class HealySort extends MergeSorting {
+    public HealySort(Delays delayOps, Highlights markOps, Reads readOps, Writes writeOps) {
         super(delayOps, markOps, readOps, writeOps);
         
-        this.setSortPromptID("Binary Insert");
-        this.setRunAllID("Binary Insertion Sort");
-        this.setReportSortID("Binary Insertsort");
-        this.setCategory("Insertion Sorts");
+        this.setSortPromptID("Healy");
+        this.setRunAllID("Healy Sort");
+        this.setReportSortID("Healysort");
+        this.setCategory("Hybrid Sorts");
         this.isComparisonBased(true);
         this.isBucketSort(false);
         this.isRadixSort(false);
@@ -47,17 +47,9 @@ final public class BinaryInsertionSort extends BinaryInsertionSorting {
         this.setUnreasonableLimit(0);
         this.isBogoSort(false);
     }
-
-    public void customBinaryInsert(int[] array, int start, int end, double sleep) {
-        this.binaryInsertSort(array, start, end, sleep, sleep);
-    }
-
-    public void customBinarylimitInsert(int[] array, int start, int end, double sleep, int limit) {
-        this.binaryInsertlimitSort(array, start, end, sleep, sleep, limit);
-    }
     
     @Override
-    public void runSort(int[] array, int currentLength, int bucketCount) {
-        this.binaryInsertSort(array, 0, currentLength, 0.05, 0.015);
+    public void runSort(int[] array, int length, int bucketCount) {
+        this.healySort(array, length, 256, 0.05, 0.05, 121, 40, 13, 4);
     }
 }

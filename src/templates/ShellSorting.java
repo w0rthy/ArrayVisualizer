@@ -30,6 +30,9 @@ public abstract class ShellSorting extends Sort {
     final protected int[] CiuraGaps            = {1750, 701, 301, 132, 57, 23, 10, 4, 1};
     final protected int[] ExtendedCiuraGaps    = {511000, 227111, 100938, 44861, 19938, 8861, 3938, 1750,
                                                   701, 301, 132, 57, 23, 10, 4, 1};
+    final protected int[] HealyLevels          = {40, 13, 4};
+    final protected int[] HealyLevels2         = {77, 23, 8};
+    final protected int[] MarshmallowLevels    = {9, 6, 4};
 
     protected ShellSorting(Delays delayOps, Highlights markOps, Reads readOps, Writes writeOps) {
         super(delayOps, markOps, readOps, writeOps);
@@ -115,5 +118,64 @@ public abstract class ShellSorting extends Sort {
                 Writes.write(array, j, v, 0.5, true, false);
             }
         }
+    }
+
+    protected void marshmallowSort(ArrayVisualizer ArrayVisualizer, int[] array, int length) {
+        int incs[] = MarshmallowLevels;
+        
+        for (int k = 0; k < incs.length; k++) {
+                if(incs[k] < length) {
+                    for (int h = incs[k], i = h; i < length; i++) {
+                        //ArrayVisualizer.setCurrentGap(incs[k]);
+                        
+                        int v = array[i];
+                        int j = i;
+
+                        Highlights.markArray(1, j);
+                        Highlights.markArray(2, j - h);
+                        
+                        Delays.sleep(0.2);
+
+                        while (j >= h && Reads.compare(array[j - h], v) == 1)
+                        {
+                            Highlights.markArray(1, j);
+                            Highlights.markArray(2, j - h);
+                            
+                            Writes.write(array, j, array[j - h], 0.5, false, false);
+                            j -= h;
+                        }
+                        Writes.write(array, j, v, 0.5, true, false);
+                    }
+                }
+
+        }
+        int gap = 4;
+
+        double tempDelay = Delays.getSleepRatio();
+        while ((gap > 1))
+        {
+            Highlights.clearMark(2);
+
+            if (gap > 1) {
+                gap = (int) ((float) gap - 1);
+                //ArrayVisualizer.setCurrentGap(gap);
+            }
+
+
+            for (int i = 0; (gap + i) < length; ++i)
+            {
+                if (Reads.compare(array[i], array[i + gap]) == 1)
+                {
+                    Writes.swap(array, i, i+gap, 0.75, true, false);
+                }
+                Highlights.markArray(1, i);
+                Highlights.markArray(2, i + gap);
+                
+                Delays.sleep(0.25);
+                Highlights.clearMark(1);
+            }
+        } 
+        
+        Delays.setSleepRatio(tempDelay);
     }
 }
