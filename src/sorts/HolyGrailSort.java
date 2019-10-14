@@ -68,15 +68,13 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 /*                                                       */
 /*********************************************************/
 
-SORT DISABLED
-
 final public class HolyGrailSort extends HolyGrailSorting {
     private int bufferType = 0;
     
     public HolyGrailSort(Delays delayOps, Highlights markOps, Reads readOps, Writes writeOps) {
         super(delayOps, markOps, readOps, writeOps);
         
-        this.setSortPromptID("Holy Grail");
+        this.setSortPromptID(""); // Sort disabled
         this.setRunAllID("Holy Grail Sort (Block Merge Sort)");
         this.setReportSortID("Holygrailsort");
         this.setCategory("Hybrid Sorts");

@@ -50,7 +50,7 @@ final public class CashewSort extends Sort {
 
     private void cashewsort(int[] array, int start, int end, double sleep) {
         int i = start;
-        while(i < ((end / 4) + start)) {
+        while(i < ((end / 2) + start)) {
             for(int j = i; j < end + start - i - 1; j++) {
                 if(Reads.compare(array[j], array[j + 1]) == 1) {
                     Writes.swap(array, j, j + 1, sleep, true, false);
@@ -61,7 +61,7 @@ final public class CashewSort extends Sort {
                 
                 Delays.sleep(0.01);
             }
-            for(int j = i; j < end + start - i - 1; j++) {
+            for(int j = i; j < end + start - i - 2; j++) {
                 if(Reads.compare(array[j], array[j + 1]) == 1) {
                     Writes.swap(array, j, j + 1, sleep, true, false);
                 }
@@ -71,7 +71,7 @@ final public class CashewSort extends Sort {
                 
                 Delays.sleep(0.01);
             }
-            for(int j = end + start - i - 1; j > i; j--){
+            for(int j = end + start - i - 3; j > i; j--){
                 if(Reads.compare(array[j], array[j - 1]) == -1) {
                     Writes.swap(array, j, j - 1, sleep, true, false);
                 }
@@ -81,7 +81,7 @@ final public class CashewSort extends Sort {
                 
                 Delays.sleep(0.01);
             }
-            for(int j = end + start - i - 1; j > i; j--){
+            for(int j = end + start - i - 3; j > i + 1; j--){
                 if(Reads.compare(array[j], array[j - 1]) == -1) {
                     Writes.swap(array, j, j - 1, sleep, true, false);
                 }
@@ -92,7 +92,7 @@ final public class CashewSort extends Sort {
                 Delays.sleep(0.01);
             }
             
-            i++;
+            i += 2;
         }
     }
     

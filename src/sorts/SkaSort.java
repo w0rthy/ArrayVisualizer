@@ -10,7 +10,6 @@ import utils.Writes;
 // Distributed under the Boost Software License, Version 1.0.
 // (See http://www.boost.org/LICENSE_1_0.txt)
 
-SORT DISABLED
 
 final class PartitionInfo {
     private int count;
@@ -57,7 +56,7 @@ public class SkaSort extends Sort {
     public SkaSort(Delays delayOps, Highlights markOps, Reads readOps, Writes writeOps) {
         super(delayOps, markOps, readOps, writeOps);
         
-        this.setSortPromptID("Ska");
+        this.setSortPromptID(""); // Sort disabled
         this.setRunAllID("Ska Sort");
         this.setReportSortID("Skasort");
         this.setCategory("Distributive Sorts");
@@ -68,6 +67,8 @@ public class SkaSort extends Sort {
         this.setUnreasonableLimit(0);
         this.isBogoSort(false);
     }
+    
+    /*
     
     template<typename It, typename Func>
     inline void unroll_loop_four_times(It begin, size_t iteration_count, Func && to_call)
@@ -199,9 +200,10 @@ public class SkaSort extends Sort {
     private void ska_sort(int[] array, int begin, int end) {
         this.inplace_radix_sort(array, begin, end);
     }
-
+*/
+    
     @Override
     public void runSort(int[] array, int length, int bucketCount) {
-        this.ska_sort(array, 0, length);
+        //this.ska_sort(array, 0, length);
     }
 }

@@ -9,13 +9,13 @@ import utils.Writes;
 // Shell sort variant retrieved from:
 // https://www.cs.princeton.edu/~rs/talks/shellsort.ps
 
-final public class ShellSort extends ShellSorting {
-    public ShellSort(Delays delayOps, Highlights markOps, Reads readOps, Writes writeOps) {
+final public class MarshmallowSort extends ShellSorting {
+    public MarshmallowSort(Delays delayOps, Highlights markOps, Reads readOps, Writes writeOps) {
         super(delayOps, markOps, readOps, writeOps);
         
-        this.setSortPromptID("Shell");
-        this.setRunAllID("Shell Sort");
-        this.setReportSortID("Shellsort");
+        this.setSortPromptID("Marshmallow");
+        this.setRunAllID("Marshmallow Sort");
+        this.setReportSortID("Marshmallow Sort");
         this.setCategory("Insertion Sorts");
         this.isComparisonBased(true);
         this.isBucketSort(false);
@@ -31,6 +31,6 @@ final public class ShellSort extends ShellSorting {
     
     @Override
     public void runSort(int[] array, int currentLength, int bucketCount) {
-        this.shellSort(this.ArrayVisualizer, array, currentLength);
+        this.marshmallowSort(this.ArrayVisualizer, array, currentLength);
     }
 }

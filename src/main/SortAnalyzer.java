@@ -102,7 +102,7 @@ final public class SortAnalyzer {
         }
     }
     
-    private boolean verifySort(Sort sort) {
+    private static boolean verifySort(Sort sort) {
         boolean validSort = true;
         
         if(sort.getSortPromptID().equals("")) {
