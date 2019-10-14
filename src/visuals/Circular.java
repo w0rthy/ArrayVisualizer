@@ -47,11 +47,11 @@ final public class Circular {
     // If we we use sine with height and cosine with width, the sorts would start from the right side of the circle,
     // just like the unit circle from trigonometry.
     
-    private double getSinOfDegrees(double d, int halfCirc) {
+    private static double getSinOfDegrees(double d, int halfCirc) {
         return Math.sin((d * Math.PI) / halfCirc);
     }
     
-    private double getCosOfDegrees(double d, int halfCirc) {
+    private static double getCosOfDegrees(double d, int halfCirc) {
         return Math.cos((d * Math.PI) / halfCirc);
     }
     
@@ -127,8 +127,8 @@ final public class Circular {
                 double len = ((ArrayVisualizer.getCurrentLength() / 2d) - Math.min(Math.min(Math.abs(i - array[i]), Math.abs(i - array[i] + ArrayVisualizer.getCurrentLength())), Math.abs(i - array[i] - ArrayVisualizer.getCurrentLength()))) / (ArrayVisualizer.getCurrentLength() / 2d);
 
                 if(ArrayVisualizer.pixelsEnabled()) {
-                    int linkedpixX = ArrayVisualizer.windowHalfWidth()  + (int) (this.getSinOfDegrees(i, ArrayVisualizer.halfCircle()) * ((ArrayVisualizer.windowWidth()  - 64) / CIRC_WIDTH_RATIO  * len)) + Renderer.getDotWidth()  / 2;
-                    int linkedpixY = ArrayVisualizer.windowHalfHeight() - (int) (this.getCosOfDegrees(i, ArrayVisualizer.halfCircle()) * ((ArrayVisualizer.windowHeight() - 96) / CIRC_HEIGHT_RATIO * len)) + Renderer.getDotHeight() / 2;
+                    int linkedpixX = ArrayVisualizer.windowHalfWidth()  + (int) (Circular.getSinOfDegrees(i, ArrayVisualizer.halfCircle()) * ((ArrayVisualizer.windowWidth()  - 64) / CIRC_WIDTH_RATIO  * len)) + Renderer.getDotWidth()  / 2;
+                    int linkedpixY = ArrayVisualizer.windowHalfHeight() - (int) (Circular.getCosOfDegrees(i, ArrayVisualizer.halfCircle()) * ((ArrayVisualizer.windowHeight() - 96) / CIRC_HEIGHT_RATIO * len)) + Renderer.getDotHeight() / 2;
 
                     if(ArrayVisualizer.linesEnabled()) {
                         if(i > 0) {
@@ -179,11 +179,11 @@ final public class Circular {
                     p.addPoint(ArrayVisualizer.windowHalfWidth(),
                                ArrayVisualizer.windowHalfHeight());
                     
-                    p.addPoint(ArrayVisualizer.windowHalfWidth()  + (int) (this.getSinOfDegrees(i, ArrayVisualizer.halfCircle()) * (((ArrayVisualizer.currentWidth() - 64)  / CIRC_WIDTH_RATIO)  * len)),
-                               ArrayVisualizer.windowHalfHeight() - (int) (this.getCosOfDegrees(i, ArrayVisualizer.halfCircle()) * (((ArrayVisualizer.currentHeight() - 96) / CIRC_HEIGHT_RATIO) * len)));
+                    p.addPoint(ArrayVisualizer.windowHalfWidth()  + (int) (Circular.getSinOfDegrees(i, ArrayVisualizer.halfCircle()) * (((ArrayVisualizer.currentWidth() - 64)  / CIRC_WIDTH_RATIO)  * len)),
+                               ArrayVisualizer.windowHalfHeight() - (int) (Circular.getCosOfDegrees(i, ArrayVisualizer.halfCircle()) * (((ArrayVisualizer.currentHeight() - 96) / CIRC_HEIGHT_RATIO) * len)));
                     
-                    p.addPoint(ArrayVisualizer.windowHalfWidth()  + (int) (this.getSinOfDegrees(i + 1, ArrayVisualizer.halfCircle()) * (((ArrayVisualizer.currentWidth()  - 64) / CIRC_WIDTH_RATIO)  * len)),
-                               ArrayVisualizer.windowHalfHeight() - (int) (this.getCosOfDegrees(i + 1, ArrayVisualizer.halfCircle()) * (((ArrayVisualizer.currentHeight() - 96) / CIRC_HEIGHT_RATIO) * len)));
+                    p.addPoint(ArrayVisualizer.windowHalfWidth()  + (int) (Circular.getSinOfDegrees(i + 1, ArrayVisualizer.halfCircle()) * (((ArrayVisualizer.currentWidth()  - 64) / CIRC_WIDTH_RATIO)  * len)),
+                               ArrayVisualizer.windowHalfHeight() - (int) (Circular.getCosOfDegrees(i + 1, ArrayVisualizer.halfCircle()) * (((ArrayVisualizer.currentHeight() - 96) / CIRC_HEIGHT_RATIO) * len)));
                     
                     mainRender.fillPolygon(p);
                 }
@@ -206,13 +206,13 @@ final public class Circular {
                                 }
                                 else Renderer.lineClear(mainRender, ArrayVisualizer.colorEnabled(), array, i, ArrayVisualizer.getCurrentLength(), ArrayVisualizer.currentWidth());
                             }
-                            mainRender.drawLine(ArrayVisualizer.windowHalfWidth()  + (int) (this.getSinOfDegrees(i, ArrayVisualizer.halfCircle()) * ((((ArrayVisualizer.windowWidth()  - 64) / 3.0) * array[i]) / ArrayVisualizer.getCurrentLength())), 
-                                                ArrayVisualizer.windowHalfHeight() - (int) (this.getCosOfDegrees(i, ArrayVisualizer.halfCircle()) * ((((ArrayVisualizer.windowHeight() - 96) / 2.0) * array[i]) / ArrayVisualizer.getCurrentLength())), 
+                            mainRender.drawLine(ArrayVisualizer.windowHalfWidth()  + (int) (Circular.getSinOfDegrees(i, ArrayVisualizer.halfCircle()) * ((((ArrayVisualizer.windowWidth()  - 64) / 3.0) * array[i]) / ArrayVisualizer.getCurrentLength())), 
+                                                ArrayVisualizer.windowHalfHeight() - (int) (Circular.getCosOfDegrees(i, ArrayVisualizer.halfCircle()) * ((((ArrayVisualizer.windowHeight() - 96) / 2.0) * array[i]) / ArrayVisualizer.getCurrentLength())), 
                                                 Renderer.getLineX(),
                                                 Renderer.getLineY());
                         }
-                        Renderer.setLineX(ArrayVisualizer.windowHalfWidth()  + (int) (this.getSinOfDegrees(i, ArrayVisualizer.halfCircle()) * ((((ArrayVisualizer.windowWidth()  - 64) / 3.0) * array[i]) / ArrayVisualizer.getCurrentLength())));
-                        Renderer.setLineY(ArrayVisualizer.windowHalfHeight() - (int) (this.getCosOfDegrees(i, ArrayVisualizer.halfCircle()) * ((((ArrayVisualizer.windowHeight() - 96) / 2.0) * array[i]) / ArrayVisualizer.getCurrentLength())));      
+                        Renderer.setLineX(ArrayVisualizer.windowHalfWidth()  + (int) (Circular.getSinOfDegrees(i, ArrayVisualizer.halfCircle()) * ((((ArrayVisualizer.windowWidth()  - 64) / 3.0) * array[i]) / ArrayVisualizer.getCurrentLength())));
+                        Renderer.setLineY(ArrayVisualizer.windowHalfHeight() - (int) (Circular.getCosOfDegrees(i, ArrayVisualizer.halfCircle()) * ((((ArrayVisualizer.windowHeight() - 96) / 2.0) * array[i]) / ArrayVisualizer.getCurrentLength())));      
                     }
                     else {
                         if(Highlights.containsPosition(i)) {
@@ -221,8 +221,8 @@ final public class Circular {
                         }
                         else drawRect = false;
 
-                        int rectx = ArrayVisualizer.windowHalfWidth()  + (int) (this.getSinOfDegrees(i, ArrayVisualizer.halfCircle()) * (((((ArrayVisualizer.windowWidth()  - 64) / 3.0) * array[i]) / ArrayVisualizer.getCurrentLength())));
-                        int recty = ArrayVisualizer.windowHalfHeight() - (int) (this.getCosOfDegrees(i, ArrayVisualizer.halfCircle()) * (((((ArrayVisualizer.windowHeight() - 96) / 2.0) * array[i]) / ArrayVisualizer.getCurrentLength())));
+                        int rectx = ArrayVisualizer.windowHalfWidth()  + (int) (Circular.getSinOfDegrees(i, ArrayVisualizer.halfCircle()) * (((((ArrayVisualizer.windowWidth()  - 64) / 3.0) * array[i]) / ArrayVisualizer.getCurrentLength())));
+                        int recty = ArrayVisualizer.windowHalfHeight() - (int) (Circular.getCosOfDegrees(i, ArrayVisualizer.halfCircle()) * (((((ArrayVisualizer.windowHeight() - 96) / 2.0) * array[i]) / ArrayVisualizer.getCurrentLength())));
 
                         mainRender.fillRect(rectx, recty, Renderer.getDotWidth(), Renderer.getDotHeight());
 
@@ -248,11 +248,11 @@ final public class Circular {
                     p.addPoint(ArrayVisualizer.windowHalfWidth(),
                                ArrayVisualizer.windowHalfHeight());
                     
-                    p.addPoint(ArrayVisualizer.windowHalfWidth()  + (int) (this.getSinOfDegrees(i, ArrayVisualizer.halfCircle()) * ((((ArrayVisualizer.windowWidth()  - 64) / 3.0) * array[i]) / ArrayVisualizer.getCurrentLength())),
-                               ArrayVisualizer.windowHalfHeight() - (int) (this.getCosOfDegrees(i, ArrayVisualizer.halfCircle()) * ((((ArrayVisualizer.windowHeight() - 96) / 2.0) * array[i]) / ArrayVisualizer.getCurrentLength())));
+                    p.addPoint(ArrayVisualizer.windowHalfWidth()  + (int) (Circular.getSinOfDegrees(i, ArrayVisualizer.halfCircle()) * ((((ArrayVisualizer.windowWidth()  - 64) / 3.0) * array[i]) / ArrayVisualizer.getCurrentLength())),
+                               ArrayVisualizer.windowHalfHeight() - (int) (Circular.getCosOfDegrees(i, ArrayVisualizer.halfCircle()) * ((((ArrayVisualizer.windowHeight() - 96) / 2.0) * array[i]) / ArrayVisualizer.getCurrentLength())));
                     
-                    p.addPoint(ArrayVisualizer.windowHalfWidth()  + (int) (this.getSinOfDegrees(i + 1, ArrayVisualizer.halfCircle()) * ((((ArrayVisualizer.windowWidth()  - 64) / 3.0) * array[Math.min(i + 1, ArrayVisualizer.getCurrentLength() - 1)]) / ArrayVisualizer.getCurrentLength())),
-                               ArrayVisualizer.windowHalfHeight() - (int) (this.getCosOfDegrees(i + 1, ArrayVisualizer.halfCircle()) * ((((ArrayVisualizer.windowHeight() - 96) / 2.0) * array[Math.min(i + 1, ArrayVisualizer.getCurrentLength() - 1)]) / ArrayVisualizer.getCurrentLength())));
+                    p.addPoint(ArrayVisualizer.windowHalfWidth()  + (int) (Circular.getSinOfDegrees(i + 1, ArrayVisualizer.halfCircle()) * ((((ArrayVisualizer.windowWidth()  - 64) / 3.0) * array[Math.min(i + 1, ArrayVisualizer.getCurrentLength() - 1)]) / ArrayVisualizer.getCurrentLength())),
+                               ArrayVisualizer.windowHalfHeight() - (int) (Circular.getCosOfDegrees(i + 1, ArrayVisualizer.halfCircle()) * ((((ArrayVisualizer.windowHeight() - 96) / 2.0) * array[Math.min(i + 1, ArrayVisualizer.getCurrentLength() - 1)]) / ArrayVisualizer.getCurrentLength())));
                     
                     mainRender.fillPolygon(p);
                 }
@@ -263,11 +263,11 @@ final public class Circular {
                 p.addPoint(ArrayVisualizer.windowHalfWidth(),
                            ArrayVisualizer.windowHalfHeight());
                 
-                p.addPoint(ArrayVisualizer.windowHalfWidth()  + (int) (this.getSinOfDegrees(i, ArrayVisualizer.halfCircle()) * ((ArrayVisualizer.windowWidth()  - 64) / CIRC_WIDTH_RATIO)),
-                           ArrayVisualizer.windowHalfHeight() - (int) (this.getCosOfDegrees(i, ArrayVisualizer.halfCircle()) * ((ArrayVisualizer.windowHeight() - 96) / CIRC_HEIGHT_RATIO)));
+                p.addPoint(ArrayVisualizer.windowHalfWidth()  + (int) (Circular.getSinOfDegrees(i, ArrayVisualizer.halfCircle()) * ((ArrayVisualizer.windowWidth()  - 64) / CIRC_WIDTH_RATIO)),
+                           ArrayVisualizer.windowHalfHeight() - (int) (Circular.getCosOfDegrees(i, ArrayVisualizer.halfCircle()) * ((ArrayVisualizer.windowHeight() - 96) / CIRC_HEIGHT_RATIO)));
                 
-                p.addPoint(ArrayVisualizer.windowHalfWidth()  + (int) (this.getSinOfDegrees(i + 1, ArrayVisualizer.halfCircle()) * ((ArrayVisualizer.windowWidth()  - 64) / CIRC_WIDTH_RATIO)),
-                           ArrayVisualizer.windowHalfHeight() - (int) (this.getCosOfDegrees(i + 1, ArrayVisualizer.halfCircle()) * ((ArrayVisualizer.windowHeight() - 96) / CIRC_HEIGHT_RATIO)));
+                p.addPoint(ArrayVisualizer.windowHalfWidth()  + (int) (Circular.getSinOfDegrees(i + 1, ArrayVisualizer.halfCircle()) * ((ArrayVisualizer.windowWidth()  - 64) / CIRC_WIDTH_RATIO)),
+                           ArrayVisualizer.windowHalfHeight() - (int) (Circular.getCosOfDegrees(i + 1, ArrayVisualizer.halfCircle()) * ((ArrayVisualizer.windowHeight() - 96) / CIRC_HEIGHT_RATIO)));
                 
                 mainRender.fillPolygon(p);
             }

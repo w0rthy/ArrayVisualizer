@@ -10,14 +10,39 @@
     <property name="source" value="1.8"/>
     <path id="ArrayVisualizer-master.classpath">
         <pathelement location="bin"/>
-        <pathelement location="classgraph/classgraph-4.8.47-javadoc.jar"/>
-        <pathelement location="classgraph/classgraph-4.8.47-sources.jar"/>
-        <pathelement location="classgraph/classgraph-4.8.47.jar"/>
+        <pathelement location="lib/classgraph-4.8.47-javadoc.jar"/>
+        <pathelement location="lib/classgraph-4.8.47-sources.jar"/>
+        <pathelement location="lib/classgraph-4.8.47.jar"/>
+    </path>
+    <path id="run.ArrayVisualizer.classpath">
+        <path refid="ArrayVisualizer-master.classpath"/>
+        <pathelement location="lib/classgraph-4.8.47-javadoc.jar"/>
+        <pathelement location="lib/classgraph-4.8.47-sources.jar"/>
+        <pathelement location="lib/classgraph-4.8.47.jar"/>
+    </path>
+    <path id="run.Main.classpath">
+        <path refid="ArrayVisualizer-master.classpath"/>
+        <pathelement location="lib/classgraph-4.8.47-javadoc.jar"/>
+        <pathelement location="lib/classgraph-4.8.47-sources.jar"/>
+        <pathelement location="lib/classgraph-4.8.47.jar"/>
+    </path>
+    <path id="run.Tester (2).classpath">
+        <path refid="ArrayVisualizer-master.classpath"/>
+        <pathelement location="lib/classgraph-4.8.47-javadoc.jar"/>
+        <pathelement location="lib/classgraph-4.8.47-sources.jar"/>
+        <pathelement location="lib/classgraph-4.8.47.jar"/>
+    </path>
+    <path id="run.Tester.classpath">
+        <path refid="ArrayVisualizer-master.classpath"/>
+        <pathelement location="lib/classgraph-4.8.47-javadoc.jar"/>
+        <pathelement location="lib/classgraph-4.8.47-sources.jar"/>
+        <pathelement location="lib/classgraph-4.8.47.jar"/>
     </path>
     <target name="init">
         <mkdir dir="bin"/>
         <copy includeemptydirs="false" todir="bin">
             <fileset dir="src">
+                <exclude name="**/*.launch"/>
                 <exclude name="**/*.java"/>
             </fileset>
         </copy>
@@ -38,22 +63,22 @@
     <target description="Build all projects which reference this project. Useful to propagate changes." name="build-refprojects"/>
     <target name="ArrayVisualizer">
         <java classname="main.ArrayVisualizer" failonerror="true" fork="yes">
-            <classpath refid="ArrayVisualizer-master.classpath"/>
+            <classpath refid="run.ArrayVisualizer.classpath"/>
         </java>
     </target>
     <target name="Main">
         <java classname="main.Main" failonerror="true" fork="yes">
-            <classpath refid="ArrayVisualizer-master.classpath"/>
+            <classpath refid="run.Main.classpath"/>
         </java>
     </target>
     <target name="Tester (2)">
         <java classname="test.Tester" failonerror="true" fork="yes">
-            <classpath refid="ArrayVisualizer-master.classpath"/>
+            <classpath refid="run.Tester (2).classpath"/>
         </java>
     </target>
     <target name="Tester">
         <java classname="javagrailsort.Tester" failonerror="true" fork="yes">
-            <classpath refid="ArrayVisualizer-master.classpath"/>
+            <classpath refid="run.Tester.classpath"/>
         </java>
     </target>
 </project>
