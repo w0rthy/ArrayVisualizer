@@ -106,8 +106,3 @@ An executable .jar file is available in the dist folder. Have fun!
 Videos this program is featured in:
 
 https://www.youtube.com/playlist?list=PL5w_-zMAJC8tSgmfaltMMj7Kn390eRzMq
-
-
-Videos this program is featured in:
-
-https://www.youtube.com/playlist?list=PL5w_-zMAJC8tSgmfaltMMj7Kn390eRzMq
