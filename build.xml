@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- WARNING: Eclipse auto-generated file.
+              Any modifications will be overwritten.
+              To include a user specific buildfile here, simply create one in the same
+              directory with the processing instruction <?eclipse.ant.import?>
+              as the first entry and export the buildfile again. --><project basedir="." default="build" name="ArrayVisualizer-master">
+    <property environment="env"/>
+    <property name="debuglevel" value="source,lines,vars"/>
+    <property name="target" value="1.8"/>
+    <property name="source" value="1.8"/>
+    <path id="ArrayVisualizer-master.classpath">
+        <pathelement location="bin"/>
+        <pathelement location="lib/classgraph-4.8.47-javadoc.jar"/>
+        <pathelement location="lib/classgraph-4.8.47-sources.jar"/>
+        <pathelement location="lib/classgraph-4.8.47.jar"/>
+    </path>
+    <path id="run.ArrayVisualizer.classpath">
+        <path refid="ArrayVisualizer-master.classpath"/>
+        <pathelement location="lib/classgraph-4.8.47-javadoc.jar"/>
+        <pathelement location="lib/classgraph-4.8.47-sources.jar"/>
+        <pathelement location="lib/classgraph-4.8.47.jar"/>
+    </path>
+    <path id="run.Main.classpath">
+        <path refid="ArrayVisualizer-master.classpath"/>
+        <pathelement location="lib/classgraph-4.8.47-javadoc.jar"/>
+        <pathelement location="lib/classgraph-4.8.47-sources.jar"/>
+        <pathelement location="lib/classgraph-4.8.47.jar"/>
+    </path>
+    <path id="run.Tester (2).classpath">
+        <path refid="ArrayVisualizer-master.classpath"/>
+        <pathelement location="lib/classgraph-4.8.47-javadoc.jar"/>
+        <pathelement location="lib/classgraph-4.8.47-sources.jar"/>
+        <pathelement location="lib/classgraph-4.8.47.jar"/>
+    </path>
+    <path id="run.Tester.classpath">
+        <path refid="ArrayVisualizer-master.classpath"/>
+        <pathelement location="lib/classgraph-4.8.47-javadoc.jar"/>
+        <pathelement location="lib/classgraph-4.8.47-sources.jar"/>
+        <pathelement location="lib/classgraph-4.8.47.jar"/>
+    </path>
+    <target name="init">
+        <mkdir dir="bin"/>
+        <copy includeemptydirs="false" todir="bin">
+            <fileset dir="src">
+                <exclude name="**/*.launch"/>
+                <exclude name="**/*.java"/>
+            </fileset>
+        </copy>
+    </target>
+    <target name="clean">
+        <delete dir="bin"/>
+    </target>
+    <target depends="clean" name="cleanall"/>
+    <target depends="build-subprojects,build-project" name="build"/>
+    <target name="build-subprojects"/>
+    <target depends="init" name="build-project">
+        <echo message="${ant.project.name}: ${ant.file}"/>
+        <javac debug="true" debuglevel="${debuglevel}" destdir="bin" includeantruntime="false" source="${source}" target="${target}">
+            <src path="src"/>
+            <classpath refid="ArrayVisualizer-master.classpath"/>
+        </javac>
+    </target>
+    <target description="Build all projects which reference this project. Useful to propagate changes." name="build-refprojects"/>
+    <target name="ArrayVisualizer">
+        <java classname="main.ArrayVisualizer" failonerror="true" fork="yes">
+            <classpath refid="run.ArrayVisualizer.classpath"/>
+        </java>
+    </target>
+    <target name="Main">
+        <java classname="main.Main" failonerror="true" fork="yes">
+            <classpath refid="run.Main.classpath"/>
+        </java>
+    </target>
+    <target name="Tester (2)">
+        <java classname="test.Tester" failonerror="true" fork="yes">
+            <classpath refid="run.Tester (2).classpath"/>
+        </java>
+    </target>
+    <target name="Tester">
+        <java classname="javagrailsort.Tester" failonerror="true" fork="yes">
+            <classpath refid="run.Tester.classpath"/>
+        </java>
+    </target>
+</project>
