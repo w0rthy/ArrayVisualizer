@@ -61,6 +61,7 @@ final public class ApollyonSort extends CircleSorting {
 	        }
 
 	        this.bitonicMerge(A, lo, m, dir);
+		this.bitonicMerge(A, lo + m, n - m, dir);
 	    }
 	}
 
