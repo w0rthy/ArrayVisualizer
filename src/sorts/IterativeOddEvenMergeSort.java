@@ -33,8 +33,12 @@ final public class IterativeOddEvenMergeSort extends Sort {
           for (int k = p; k > 0; k /= 2)
             for (int j = k % p; j + k < currentLength; j += k + k)
               for (int i = 0; i < k; i++)
-                if ((i + j)/(p + p) == (i + j + k)/(p + p))
-                  if(Reads.compare(array[i + j], array[i + j + k]) > 0)
+                if ((i + j)/(p + p) == (i + j + k)/(p + p)) {
+                   Highlights.markArray(1, i + j);
+                   Highlights.markArray(2, i + j + k);
+                   Delays.sleep(1);
+                   if(Reads.compare(array[i + j], array[i + j + k]) > 0)
                       Writes.swap(array, i + j, i + j + k, 1, true, false);
+                }
     }
 }

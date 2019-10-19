@@ -67,7 +67,7 @@ public abstract class PDQSorting extends Sort {
 
     // We do not record laps here in order to better estimate Branchless PDQ's running time
     private int pdqLessThan(int a, int b) {
-        Reads.addComparison();    
+        Reads.addComparison();
         return 1 & (Boolean.hashCode(a < b) >> 1);
     }
 
@@ -75,9 +75,7 @@ public abstract class PDQSorting extends Sort {
     private void pdqInsertSort(int[] array, int begin, int end, boolean Branchless) {
         if (begin == end) return;
 
-        double sleep;
-        if(Branchless) sleep = 0.25;
-        else sleep = 0.05;
+        double sleep = 1/3d;
 
         for (int cur = begin + 1; cur != end; ++cur) {
             int sift = cur;
@@ -100,9 +98,7 @@ public abstract class PDQSorting extends Sort {
     private void pdqUnguardInsertSort(int[] array, int begin, int end, boolean Branchless) {
         if (begin == end) return;
 
-        double sleep;
-        if(Branchless) sleep = 0.25;
-        else sleep = 0.05;
+        double sleep = 1/3d;
 
         for (int cur = begin + 1; cur != end; ++cur) {
             int sift = cur;
@@ -127,9 +123,7 @@ public abstract class PDQSorting extends Sort {
     private boolean pdqPartialInsertSort(int[] array, int begin, int end, boolean Branchless) {
         if (begin == end) return true;
 
-        double sleep;
-        if(Branchless) sleep = 0.25;
-        else sleep = 0.05;
+        double sleep = 1/3d;
 
         int limit = 0;
         for (int cur = begin + 1; cur != end; ++cur) {
