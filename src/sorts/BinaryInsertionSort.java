@@ -51,10 +51,6 @@ final public class BinaryInsertionSort extends BinaryInsertionSorting {
     public void customBinaryInsert(int[] array, int start, int end, double sleep) {
         this.binaryInsertSort(array, start, end, sleep, sleep);
     }
-
-    public void customBinarylimitInsert(int[] array, int start, int end, double sleep, int limit) {
-        this.binaryInsertlimitSort(array, start, end, sleep, sleep, limit);
-    }
     
     @Override
     public void runSort(int[] array, int currentLength, int bucketCount) {
