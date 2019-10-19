@@ -66,6 +66,7 @@ import visuals.VisualStyles;
  * - - run all sorts in specific category
  * - - option for custom parts for intro sorts
  * - - option for simple shatter rate???
+ * - - Timo Bingmann's green sweep also *verify* a sorted array
  * - Finish:
  * - - SkaSort
  * - - HolyGrailSort

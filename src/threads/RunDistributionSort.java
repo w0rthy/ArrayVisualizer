@@ -142,6 +142,7 @@ final public class RunDistributionSort {
         if(ArrayVisualizer.getSortingThread() != null && ArrayVisualizer.getSortingThread().isAlive())
             return;
 
+        //TODO: This code is bugged! It causes the program to forget the sleep ratio specified by the user!
         if(delayOps.skipped()) {
             delayOps.setSleepRatio(1);
             delayOps.changeSkipped(false);

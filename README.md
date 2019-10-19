@@ -1,9 +1,9 @@
 # w0rthy's Array Visualizer, Revamped
 [![Donate](https://img.shields.io/badge/Donate-PayPal-green.svg)](https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=Q5QLCFZ8G7WY6&currency_code=USD&source=url)
 
-73 sorting algorithms demonstrated through 10 unique graphic designs
+76 sorting algorithms demonstrated through 10 unique graphic designs
 
-This new version of the program features new additions inspired by Timo Bingmann's "The Sound of Sorting" and w0rthy's original visualizer.
+This new version of the program features additions inspired by Timo Bingmann's "The Sound of Sorting" and w0rthy's updates to the original visualizer.
 
 To build (After -cp, use ";" with Windows and ":" with Mac/Linux):
 ```
@@ -12,7 +12,7 @@ java -cp bin;lib/classgraph-4.8.47.jar main.ArrayVisualizer
 ```
 
 ### Features:
-- 40 new sorting algorithms
+- 40+ new sorting algorithms
 - Updated visuals and sound effects
 - You can select different array sizes now
 - New shuffle types, including reversed, mostly similar numbers, almost sorted, and already sorted
@@ -22,6 +22,14 @@ java -cp bin;lib/classgraph-4.8.47.jar main.ArrayVisualizer
 - Toggle shuffle animation
 - Toggle Timo Bingmann's "end sweep" animation
 - Refactored / optimized code
+
+## 10/19/2019 - Version 2.1
+- Both Odd-Even Mergesorts now display comparisons
+- PDQSort's Insertion Sorts have been slowed down
+- New sorts, courtesy of Piotr Grochowski (https://github.com/PiotrGrochowski/ArrayVisualizer):
+  - Iterative Pairwise Sorting Network
+  - Recursive Pairwise Sorting Network
+  - Recursive Combsort
 
 ## 10/13/2019 - Version 2.0 is now released!
 - Now includes 73 sorting algorithms, with 2 more that will be finished in the future
@@ -45,6 +53,8 @@ java -cp bin;lib/classgraph-4.8.47.jar main.ArrayVisualizer
     - "Exchange Bogosort"
     - Treesort
     - Optimized Gnomesort with Binary Search
+    - "Cocktail Mergesort" (https://www.youtube.com/watch?v=fWubJgIWyxQ)
+    - NOTE: "Quick Shell Sort" has been removed.
 - Significantly refactored code, more object-oriented
 - Optimized visuals -- the program runs smoother than ever!
 - Plug-and-play functionality -- using classgraph, you can now easily add your own sorting algorithms to the program! Documentation on that will be available in the future.
