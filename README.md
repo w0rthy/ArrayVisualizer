@@ -26,7 +26,7 @@ java -cp bin;lib/classgraph-4.8.47.jar main.ArrayVisualizer
 ## 10/19/2019 - Version 2.1
 - Both Odd-Even Mergesorts now display comparisons
 - PDQSort's Insertion Sorts have been slowed down
-- New sorts, courtesy of PiotrGrochowski (https://github.com/PiotrGrochowski/ArrayVisualizer):
+- New sorts, courtesy of Piotr Grochowski (https://github.com/PiotrGrochowski/ArrayVisualizer):
   - Iterative Pairwise Sorting Network
   - Recursive Pairwise Sorting Network
   - Recursive Combsort
