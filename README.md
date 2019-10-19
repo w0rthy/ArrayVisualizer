@@ -1,7 +1,7 @@
 # w0rthy's Array Visualizer, Revamped
 [![Donate](https://img.shields.io/badge/Donate-PayPal-green.svg)](https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=Q5QLCFZ8G7WY6&currency_code=USD&source=url)
 
-73 sorting algorithms demonstrated through 10 unique graphic designs
+76 sorting algorithms demonstrated through 10 unique graphic designs
 
 This new version of the program features new additions inspired by Timo Bingmann's "The Sound of Sorting" and w0rthy's original visualizer.
 
@@ -12,7 +12,7 @@ java -cp bin;lib/classgraph-4.8.47.jar main.ArrayVisualizer
 ```
 
 ### Features:
-- 40 new sorting algorithms
+- 40+ new sorting algorithms
 - Updated visuals and sound effects
 - You can select different array sizes now
 - New shuffle types, including reversed, mostly similar numbers, almost sorted, and already sorted
