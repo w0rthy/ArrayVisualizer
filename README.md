@@ -23,6 +23,14 @@ java -cp bin;lib/classgraph-4.8.47.jar main.ArrayVisualizer
 - Toggle Timo Bingmann's "end sweep" animation
 - Refactored / optimized code
 
+## 10/19/2019 - Version 2.1
+- Both Odd-Even Mergesorts now display comparisons
+- PDQSort's Insertion Sorts have been slowed down
+- New sorts, courtesy of PiotrGrochowski (https://github.com/PiotrGrochowski/ArrayVisualizer):
+  - Iterative Pairwise Sorting Network
+  - Recursive Pairwise Sorting Network
+  - Recursive Combsort
+
 ## 10/13/2019 - Version 2.0 is now released!
 - Now includes 73 sorting algorithms, with 2 more that will be finished in the future
   - NEW SORTS:
@@ -45,6 +53,8 @@ java -cp bin;lib/classgraph-4.8.47.jar main.ArrayVisualizer
     - "Exchange Bogosort"
     - Treesort
     - Optimized Gnomesort with Binary Search
+    - "Cocktail Mergesort" (https://www.youtube.com/watch?v=fWubJgIWyxQ)
+    - NOTE: "Quick Shell Sort" has been removed.
 - Significantly refactored code, more object-oriented
 - Optimized visuals -- the program runs smoother than ever!
 - Plug-and-play functionality -- using classgraph, you can now easily add your own sorting algorithms to the program! Documentation on that will be available in the future.
