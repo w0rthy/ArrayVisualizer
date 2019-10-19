@@ -9,7 +9,7 @@ import utils.Writes;
 /*
  * 
 MIT License
-Copyright (c) 2019 w0rthy
+Copyright (c) 2019 PiotrGrochowski
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
 in the Software without restriction, including without limitation the rights
