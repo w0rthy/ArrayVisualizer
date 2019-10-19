@@ -3,7 +3,7 @@
 
 76 sorting algorithms demonstrated through 10 unique graphic designs
 
-This new version of the program features new additions inspired by Timo Bingmann's "The Sound of Sorting" and w0rthy's original visualizer.
+This new version of the program features additions inspired by Timo Bingmann's "The Sound of Sorting" and w0rthy's updates to the original visualizer.
 
 To build (After -cp, use ";" with Windows and ":" with Mac/Linux):
 ```
