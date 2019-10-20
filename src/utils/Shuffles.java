@@ -117,7 +117,7 @@ public enum Shuffles {
         public void shuffleArray(int[] array, ArrayVisualizer ArrayVisualizer, Delays Delays, Highlights Highlights, Writes Writes) {
             int currentLen = ArrayVisualizer.getCurrentLength();
             
-            for(int i = 0; i < Math.max(Math.min((currentLen + 3) / 4, 64) / 20, 1); i++){
+            for(int i = 0; i < Math.max(Math.min((currentLen + 3) / 4, 64), 1); i++){
                 Writes.swap(array, (int)(Math.random()*currentLen), (int)(Math.random()*currentLen), 0, true, false);
                 
                 if(ArrayVisualizer.shuffleEnabled()) Delays.sleep(2);
