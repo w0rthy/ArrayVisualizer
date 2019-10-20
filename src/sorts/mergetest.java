@@ -58,7 +58,7 @@ final public class mergetest extends Sort {
         for (int i = start; i < (end - 1); i++){
             a = i;
             for (int j = (i + 1); j < end; j++){
-                if (array[j] < array[a]){
+                if (Reads.compare(array[j], array[a]) == -1) {
                     a = j;
                 }
             }
