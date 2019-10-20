@@ -314,21 +314,21 @@ public abstract class MergeSorting extends Sort {
         }
         sequence++;
         stackend++;
-        stack[stackend] = test;
+        Writes.write(stack, stackend, test, 0, false, true);
         for (int r = 0; r < Integer.numberOfTrailingZeros(sequence); r++){
             merge2(array, merge, stack[stackend - 2], stack[stackend - 1] - 1, stack[stackend - 1], stack[stackend] - 1, writeSleep, compSleep);
             stackend--;
-            stack[stackend] = stack[stackend + 1];
+            Writes.write(stack, stackend, stack[stackend + 1], 0, false, true);
         }
         }
         if (stack[stackend] == (end - 1)){
-        stackend++;
-        stack[stackend] = end;
+            stackend++;
+            Writes.write(stack, stackend, end, 0, false, true);;
         }
         while (stackend > 1){
             merge2(array, merge, stack[stackend - 2], stack[stackend - 1] - 1, stack[stackend - 1], stack[stackend] - 1, writeSleep, compSleep);
             stackend--;
-            stack[stackend] = stack[stackend + 1];
+            Writes.write(stack, stackend, stack[stackend + 1], 0, false, true);
         }
     }
 
@@ -381,21 +381,21 @@ public abstract class MergeSorting extends Sort {
         test += length2;
         sequence++;
         stackend++;
-        stack[stackend] = test;
+        Writes.write(stack, stackend, test, 0, false, true);
         for (int r = 0; r < Integer.numberOfTrailingZeros(sequence); r++){
             healymerge2(array, merge, stack[stackend - 2], stack[stackend - 1] - 1, stack[stackend - 1], stack[stackend] - 1, writeSleep, compSleep, parameter4);
             stackend--;
-            stack[stackend] = stack[stackend + 1];
+            Writes.write(stack, stackend, stack[stackend + 1], 0, false, true);;
         }
         }
         if (stack[stackend] == (end - 1)){
         stackend++;
-        stack[stackend] = end;
+        Writes.write(stack, stackend, end, 0, false, true);
         }
         while (stackend > 1){
             healymerge2(array, merge, stack[stackend - 2], stack[stackend - 1] - 1, stack[stackend - 1], stack[stackend] - 1, writeSleep, compSleep, parameter4);
             stackend--;
-            stack[stackend] = stack[stackend + 1];
+            Writes.write(stack, stackend, stack[stackend + 1], 0, false, true);
         }
         int incs2[] = {9, 6, 4};
         for (int k2 = 0; k2 < incs2.length; k2++) {
