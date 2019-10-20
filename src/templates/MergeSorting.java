@@ -165,21 +165,36 @@ public abstract class MergeSorting extends Sort {
     }
 
     protected void healymerge2(int[] array, int[] merge, int min1, int max1, int min2, int max2, double writeSleep, double compSleep, int parameter4) {
+      Highlights.clearAllMarks();
       int q = max1;
         for (int o = 1; o < parameter4; o++){
-          if (Reads.compare(array[max1 - o], array[max1]) < 0){
-            q = max1 - o;
-          }
+          if ((max1 - o) >= min1){
+            Highlights.markArray(1, max1 - o);
+            Highlights.markArray(2, max1);
+            Delays.sleep(compSleep);
+            if (Reads.compare(array[max1 - o], array[max1]) < 0){
+              q = max1 - o;
+            }
+          } 
         }
       int p = min2;
         for (int o = 1; o < parameter4; o++){
-          if (Reads.compare(array[min2 + o], array[min2]) > 0){
-            p = min2 + o;
+          if ((min2 + o) <= max2){
+            Highlights.markArray(1, min2 + o);
+            Highlights.markArray(2, min2);
+            Delays.sleep(compSleep);
+            if (Reads.compare(array[min2 + o], array[min2]) > 0){
+              p = min2 + o;
+            }
           }
         }
+      Highlights.markArray(1, q);
+      Highlights.markArray(2, p);
+      Delays.sleep(compSleep);
       if (Reads.compare(array[q], array[p]) <= 0){
         return;
       }
+      Highlights.clearAllMarks();
       if ((min2 - min1) <= (max2 - max1)){
         for (int g = 0; g < (min2 - min1); g++){
         Highlights.markArray(2, max1 - g);

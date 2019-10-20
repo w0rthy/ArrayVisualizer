@@ -35,6 +35,30 @@ public enum Shuffles {
             int currentLen = ArrayVisualizer.getCurrentLength();
             
             for(int i = 0; i < currentLen; i++){
+                Writes.swap(array, i, (int)(Math.random()*(currentLen - i)) + i, 0, true, false);
+                
+                if(ArrayVisualizer.shuffleEnabled()) Delays.sleep(1);
+            }
+        }
+    },
+    RANDOM2 {
+        @Override
+        public void shuffleArray(int[] array, ArrayVisualizer ArrayVisualizer, Delays Delays, Highlights Highlights, Writes Writes) {
+            int currentLen = ArrayVisualizer.getCurrentLength();
+            
+            for(int i = 0; i < currentLen; i++){
+                Writes.swap(array, i, (int)(Math.random()*i), 0, true, false);
+                
+                if(ArrayVisualizer.shuffleEnabled()) Delays.sleep(1);
+            }
+        }
+    },
+    RANDOMWRONG {
+        @Override
+        public void shuffleArray(int[] array, ArrayVisualizer ArrayVisualizer, Delays Delays, Highlights Highlights, Writes Writes) {
+            int currentLen = ArrayVisualizer.getCurrentLength();
+            
+            for(int i = 0; i < currentLen; i++){
                 Writes.swap(array, i, (int)(Math.random()*currentLen), 0, true, false);
                 
                 if(ArrayVisualizer.shuffleEnabled()) Delays.sleep(1);
@@ -85,6 +109,52 @@ public enum Shuffles {
                 Writes.swap(array, (int)(Math.random()*currentLen), (int)(Math.random()*currentLen), 0, true, false);
                 
                 if(ArrayVisualizer.shuffleEnabled()) Delays.sleep(2);
+            }
+        }
+    },
+    ALMOST2 {
+        @Override
+        public void shuffleArray(int[] array, ArrayVisualizer ArrayVisualizer, Delays Delays, Highlights Highlights, Writes Writes) {
+            int currentLen = ArrayVisualizer.getCurrentLength();
+            
+            for(int i = 0; i < Math.max(Math.min((currentLen + 3) / 4, 64) / 20, 1); i++){
+                Writes.swap(array, (int)(Math.random()*currentLen), (int)(Math.random()*currentLen), 0, true, false);
+                
+                if(ArrayVisualizer.shuffleEnabled()) Delays.sleep(2);
+            }
+        }
+    },
+    NEARLY {
+        @Override
+        public void shuffleArray(int[] array, ArrayVisualizer ArrayVisualizer, Delays Delays, Highlights Highlights, Writes Writes) {
+            int currentLen = ArrayVisualizer.getCurrentLength();
+            for (int n = 6; n > 0; n--){
+                int u = 0;
+                int i = n;
+                while(i<currentLen){
+                    if ((int)(Math.random()*2)==0){
+                        Writes.swap(array, i - n, i, 0, true, false);
+                        if(ArrayVisualizer.shuffleEnabled()) Delays.sleep(0.5);
+                    }
+                    i++;
+                    u = (u + 1) % n;
+                    if (u == 0){
+                        i += n;
+                    }
+                }
+                u = 0;
+                i = (2*n);
+                while(i<currentLen){
+                    if ((int)(Math.random()*2)==0){
+                        Writes.swap(array, i - n, i, 0, true, false);
+                        if(ArrayVisualizer.shuffleEnabled()) Delays.sleep(0.5);
+                    }
+                    i++;
+                    u = (u + 1) % n;
+                    if (u == 0){
+                        i += n;
+                    }
+                }
             }
         }
     },
