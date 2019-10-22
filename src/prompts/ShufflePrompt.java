@@ -170,6 +170,9 @@ final public class ShufflePrompt extends javax.swing.JFrame implements Frame {
         case 8:
             ArrayManager.setShuffle(ArrayManager.getShuffles()[8]);
             break;
+        case 9:
+            ArrayManager.setShuffle(ArrayManager.getShuffles()[9]);
+            break;
         default:
             break;
         }
