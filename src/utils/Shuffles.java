@@ -170,6 +170,18 @@ public enum Shuffles {
                 }
             }
         }
+    },
+    TESTING {
+        @Override
+        public void shuffleArray(int[] array, ArrayVisualizer ArrayVisualizer, Delays Delays, Highlights Highlights, Writes Writes) {
+            int currentLen = ArrayVisualizer.getCurrentLength();
+            
+            for(int i = 0; i < currentLen/2; i++) {
+                Writes.swap(array, i, i+(currentLen/2), 0, true, false);
+                
+                if(ArrayVisualizer.shuffleEnabled()) Delays.sleep(1);
+            }
+        }
     };
 
     public abstract void shuffleArray(int[] array, ArrayVisualizer ArrayVisualizer, Delays Delays, Highlights Highlights, Writes Writes);
