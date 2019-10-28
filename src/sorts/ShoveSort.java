@@ -43,8 +43,8 @@ final public class ShoveSort extends Sort {
         this.isComparisonBased(true);
         this.isBucketSort(false);
         this.isRadixSort(false);
-        this.isUnreasonablySlow(false);
-        this.setUnreasonableLimit(0);
+        this.isUnreasonablySlow(true);
+        this.setUnreasonableLimit(512);
         this.isBogoSort(false);
     }
 
