@@ -1,7 +1,6 @@
 package sorts;
 
 import templates.Sort;
-import templates.CircleSorting;
 import utils.Delays;
 import utils.Highlights;
 import utils.Reads;
@@ -12,15 +11,15 @@ import utils.Writes;
  * http://www.inf.fh-flensburg.de/lang/algorithmen/sortieren/bitonic/oddn.htm
  */
 
-final public class STBSort extends CircleSorting {
+final public class STBSort extends Sort {
     private boolean direction = true;
     
     public STBSort(Delays delayOps, Highlights markOps, Reads readOps, Writes writeOps) {
         super(delayOps, markOps, readOps, writeOps);
         
-        this.setSortPromptID("Stupid Bitonic");
-        this.setRunAllID("Stupid Bitonic Sort");
-        this.setReportSortID("Stupid Bitonic Sort");
+        this.setSortPromptID("STB");
+        this.setRunAllID("STB Sort");
+        this.setReportSortID("STB Sort");
         this.setCategory("Concurrent Sorts");
         this.isComparisonBased(true);
         this.isBucketSort(false);
@@ -60,9 +59,8 @@ final public class STBSort extends CircleSorting {
 	            this.compare(A, i, i+m, dir);
 	        }
 
-		this.bitonicSort(A, lo + m, n - m, dir);
-	        this.bitonicMerge(A, lo, m, dir);
-		this.bitonicMerge(A, lo + m, n - m, dir);
+	        this.bitonicSort(A, lo, m, dir);
+	        this.bitonicMerge(A, lo + m, n - m, dir);
 	    }
 	}
 
@@ -72,7 +70,9 @@ final public class STBSort extends CircleSorting {
 	    {
 	        int m = n / 2;
 	        this.bitonicSort(A, lo, m, !dir);
-	        this.bitonicMerge(A, lo, n, dir);
+		this.bitonicSort(A, lo + m, n - m, dir);
+		this.bitonicMerge(A, lo, n, dir);
+		this.bitonicSort(A, lo, m, dir);
 	    }
 	}
 
@@ -81,21 +81,10 @@ final public class STBSort extends CircleSorting {
 	    else if(choice.equals("backward")) this.direction = false;
 	    else throw new Exception("Invalid direction for Bitonic Sort!");
 	}
+
 	
     @Override
     public void runSort(int[] array, int currentLength, int bucketCount) {
-        int iterations = 0;
-        int threshold = (int) (Math.log(currentLength) / Math.log(3)) / 2;
-        
-        this.bitonicSort(array, 0, currentLength, this.direction);
-        do {
-            iterations++;
-            
-            if(iterations >= threshold) {
-                BinaryInsertionSort binaryInserter = new BinaryInsertionSort(this.Delays, this.Highlights, this.Reads, this.Writes);
-                binaryInserter.customBinaryInsert(array, 0, currentLength, 0.1);
-                break;
-            }
-        } while (this.circleSortRoutine(array, 0, currentLength - 1, 0) != 0);
+        	this.bitonicSort(array, 0, currentLength, this.direction);
     }
 }
