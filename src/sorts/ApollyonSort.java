@@ -1,3 +1,6 @@
+///ApollyonSort is a modification of BitonicSort that replaces one operation with CircleSort, and then once the array is almost sorted to an extent, it uses an InsertionSort with a LinearSearch
+///It is usually just as fast as BitonicSort, if not 1 ms slower. It is made for real world data such as almost sorted arrays and backwards arrays. On these types of arrays ApollyonSort outperforms BitonicSort
+///Features: In-Place, Parallel, Recursive (can be modified to iterative), Unstable, Uses comparisons.
 package sorts;
 
 import templates.Sort;
@@ -90,8 +93,8 @@ final public class ApollyonSort extends CircleSorting {
             iterations++;
             
             if(iterations >= threshold) {
-                BinaryInsertionSort binaryInserter = new BinaryInsertionSort(this.Delays, this.Highlights, this.Reads, this.Writes);
-                binaryInserter.customBinaryInsert(array, 0, currentLength, 0.1);
+                InsertionSort linearInserter = new InsertionSort(this.Delays, this.Highlights, this.Reads, this.Writes);
+                linearInserter.customInsertSort(array, 0, currentLength, 0.1, false);
                 break;
             }
         } while (this.circleSortRoutine(array, 0, currentLength - 1, 0) != 0);
