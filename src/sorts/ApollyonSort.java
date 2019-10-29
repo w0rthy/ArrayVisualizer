@@ -59,7 +59,6 @@ final public class ApollyonSort extends CircleSorting {
 	        for (int i = lo; i < lo + n - m; i++) {
 	            this.compare(A, i, i+m, dir);
 	        }
-
 	        this.bitonicMerge(A, lo, m, dir);
 		this.bitonicMerge(A, lo + m, n - m, dir);
 	    }
@@ -84,7 +83,7 @@ final public class ApollyonSort extends CircleSorting {
     @Override
     public void runSort(int[] array, int currentLength, int bucketCount) {
         int iterations = 0;
-        int threshold = (int) (Math.log(currentLength) / Math.log(3)) / 2;
+        int threshold = (int) (Math.log(currentLength) / Math.log(2)) / 2;
         
         this.bitonicSort(array, 0, currentLength, this.direction);
         do {
