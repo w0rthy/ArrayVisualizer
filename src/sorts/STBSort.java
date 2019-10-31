@@ -1,10 +1,6 @@
-///ApollyonSort is a modification of BitonicSort that replaces one operation with CircleSort, and then once the array is almost sorted to an extent, it uses an InsertionSort with a LinearSearch
-///It is usually just as fast as BitonicSort, if not 1 ms slower. It is made for real world data such as almost sorted arrays and backwards arrays. On these types of arrays ApollyonSort outperforms BitonicSort
-///Features: In-Place, Parallel, Recursive (can be modified to iterative), Unstable, Uses comparisons.
 package sorts;
 
 import templates.Sort;
-import templates.CircleSorting;
 import utils.Delays;
 import utils.Highlights;
 import utils.Reads;
@@ -15,16 +11,16 @@ import utils.Writes;
  * http://www.inf.fh-flensburg.de/lang/algorithmen/sortieren/bitonic/oddn.htm
  */
 
-final public class ApollyonSort extends CircleSorting {
+final public class STBSort extends Sort {
     private boolean direction = true;
     
-    public ApollyonSort(Delays delayOps, Highlights markOps, Reads readOps, Writes writeOps) {
+    public STBSort(Delays delayOps, Highlights markOps, Reads readOps, Writes writeOps) {
         super(delayOps, markOps, readOps, writeOps);
         
-        this.setSortPromptID("Apollyon");
-        this.setRunAllID("Apollyon's Bitonic Sort");
-        this.setReportSortID("Apollyon's Bitonic Sort");
-        this.setCategory("Hybrid Sorts");
+        this.setSortPromptID("STB");
+        this.setRunAllID("STB Sort");
+        this.setReportSortID("STB Sort");
+        this.setCategory("Concurrent Sorts");
         this.isComparisonBased(true);
         this.isBucketSort(false);
         this.isRadixSort(false);
@@ -57,13 +53,14 @@ final public class ApollyonSort extends CircleSorting {
 	{
 	    if (n > 1)
 	    {
-	        int m = ApollyonSort.greatestPowerOfTwoLessThan(n);
+	        int m = STBSort.greatestPowerOfTwoLessThan(n);
 
 	        for (int i = lo; i < lo + n - m; i++) {
 	            this.compare(A, i, i+m, dir);
 	        }
-	        this.bitonicMerge(A, lo, m, dir);
-		this.bitonicMerge(A, lo + m, n - m, dir);
+
+	        this.bitonicSort(A, lo, m, dir);
+	        this.bitonicMerge(A, lo + m, n - m, dir);
 	    }
 	}
 
@@ -73,7 +70,9 @@ final public class ApollyonSort extends CircleSorting {
 	    {
 	        int m = n / 2;
 	        this.bitonicSort(A, lo, m, !dir);
-	        this.bitonicMerge(A, lo, n, dir);
+		this.bitonicSort(A, lo + m, n - m, dir);
+		this.bitonicMerge(A, lo, n, dir);
+		this.bitonicSort(A, lo, m, dir);
 	    }
 	}
 
@@ -82,21 +81,10 @@ final public class ApollyonSort extends CircleSorting {
 	    else if(choice.equals("backward")) this.direction = false;
 	    else throw new Exception("Invalid direction for Bitonic Sort!");
 	}
+
 	
     @Override
     public void runSort(int[] array, int currentLength, int bucketCount) {
-        int iterations = 0;
-        int threshold = (int) (Math.log(currentLength) / Math.log(2)) / 2;
-        
-        this.bitonicSort(array, 0, currentLength, this.direction);
-        do {
-            iterations++;
-            
-            if(iterations >= threshold) {
-                InsertionSort linearInserter = new InsertionSort(this.Delays, this.Highlights, this.Reads, this.Writes);
-                linearInserter.customInsertSort(array, 0, currentLength, 0.1, false);
-                break;
-            }
-        } while (this.circleSortRoutine(array, 0, currentLength - 1, 0) != 0);
+        	this.bitonicSort(array, 0, currentLength, this.direction);
     }
 }
