@@ -88,7 +88,7 @@ final public class FieldSort extends Sort {
     }
     
     private void introsortLoop (int[] a, int lo, int hi, int depthLimit) {
-        while (hi - lo > sizeThreshold) {
+        while (hi - lo >= sizeThreshold) {
             if (depthLimit == 0) {
                 heapSorter.customHeapSort2(a, lo, hi, 1);
                 return;
