@@ -32,15 +32,15 @@ final public class SnailSort extends Sort {
     public SnailSort(Delays delayOps, Highlights markOps, Reads readOps, Writes writeOps) {
         super(delayOps, markOps, readOps, writeOps);
         
-        this.setSortPromptID("Binary Insert");
-        this.setRunAllID("Binary Insertion Sort");
-        this.setReportSortID("Binary Insertsort");
-        this.setCategory("Insertion Sorts");
+        this.setSortPromptID("Snail");
+        this.setRunAllID("Snail Sort");
+        this.setReportSortID("Snailort");
+        this.setCategory("Exchange Sorts");
         this.isComparisonBased(true);
         this.isBucketSort(false);
         this.isRadixSort(false);
-        this.isUnreasonablySlow(false);
-        this.setUnreasonableLimit(0);
+        this.isUnreasonablySlow(true);
+        this.setUnreasonableLimit(512);
         this.isBogoSort(false);
     }
 
