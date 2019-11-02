@@ -38,6 +38,10 @@ final public class MaxHeapSort extends HeapSorting {
         this.heapSort(array, start, length, sleep, true);
     }
 
+    public void customHeapSort2(int[] array, int start, int length, double sleep) {
+        this.heapSort2(array, start, length, sleep, true);
+    }
+
     @Override
     public void runSort(int[] array, int length, int bucketCount) {
         this.heapSort(array, 0, length, 1, true);
