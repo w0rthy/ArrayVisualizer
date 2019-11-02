@@ -34,7 +34,7 @@ final public class SnailSort extends Sort {
         
         this.setSortPromptID("Snail");
         this.setRunAllID("Snail Sort");
-        this.setReportSortID("Snailort");
+        this.setReportSortID("Snailsort");
         this.setCategory("Exchange Sorts");
         this.isComparisonBased(true);
         this.isBucketSort(false);
