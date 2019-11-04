@@ -332,6 +332,81 @@ public abstract class MergeSorting extends Sort {
         }
     }
 
+    protected void merge2SortRuns(int[] array, int length, int limit, double compSleep, double writeSleep) {
+        int sequence = 0;
+        int[] stack = new int[(int) Math.floor(Math.log(length+0.0)/Math.log(2.0)+2.0)];
+        int stackend = 0;
+        int[] merge = new int[length/2];
+        int count = 0;
+        int i = 0;
+        int start = 0;
+        int test = start;
+        int start2 = start;
+        int end = length;
+        int flag = 0;
+        while (test < (end - 1)) {
+        count = 0;
+        i = test + 1;
+        start2 = test;
+        flag = 0;
+        while (i < end && flag == 0) {
+            int num = array[i];
+            int lo = start2, hi = i;
+            
+            while (lo < hi) {
+                int mid = lo + ((hi - lo) / 2); // avoid int overflow!
+                Highlights.markArray(2, mid);
+                
+                Delays.sleep(compSleep);
+                
+                if (Reads.compare(num, array[mid]) < 0) { // do NOT move equal elements to right of inserted element; this maintains stability!
+                    hi = mid;
+                }
+                else {
+                    lo = mid + 1;
+                }
+            }
+
+            // item has to go into position lo
+            count += (i - lo);
+            if (count > limit){
+            flag = 1;
+            }
+            else {
+            if (i > lo){
+            int j = i - 1;
+            
+            while (j >= lo)
+            {
+                Writes.write(array, j + 1, array[j], writeSleep, true, false);
+                j--;
+            }
+            Writes.write(array, lo, num, writeSleep, true, false);
+            
+            Highlights.clearAllMarks();
+            }
+            i++;
+            }
+            test = i;
+        }
+        sequence++;
+        stackend++;
+        Writes.write(stack, stackend, test, 0, false, true);
+        for (int r = 0; r < Integer.numberOfTrailingZeros(sequence); r++){
+            stackend--;
+            Writes.write(stack, stackend, stack[stackend + 1], 0, false, true);
+        }
+        }
+        if (stack[stackend] == (end - 1)){
+            stackend++;
+            Writes.write(stack, stackend, end, 0, false, true);;
+        }
+        while (stackend > 1){
+            stackend--;
+            Writes.write(stack, stackend, stack[stackend + 1], 0, false, true);
+        }
+    }
+
     protected void healySort(int[] array, int length, int limit, double compSleep, double writeSleep, int parameter1, int parameter2, int parameter3, int parameter4) {
         int length2 = 0;
         int sequence = 0;
@@ -470,17 +545,17 @@ public abstract class MergeSorting extends Sort {
         i = test + 1;
         start2 = test;
         flag = 0;
-        int dir = 1;
+        boolean dir = false;
         while (i < end && flag == 0) {
             if ((i - start2) == 16 && count > 90){
-                dir = -1;
+                dir = true;
                 Writes.reversal(array, start2, i-1, writeSleep, true, false);
                 count = 120 - count;
             }
             int num = array[i];
             int v = (2*count / (i - start2)) + 1; //I'VE SOLVED IT!!
             int lo = Math.max(i - v, start2), hi = i;
-            while ((lo >= start2) && (Reads.compare(array[lo], num) == dir)){
+            while ((lo >= start2) && ((Reads.compare(array[lo], num) == 1)^(dir))){
                 lo -= v;
                 hi -= v;
             }
@@ -494,7 +569,7 @@ public abstract class MergeSorting extends Sort {
                 
                 Delays.sleep(compSleep);
                 
-                if (Reads.compare(array[mid], num) == dir) { // do NOT move equal elements to right of inserted element; this maintains stability!
+                if ((Reads.compare(array[mid], num) == 1)^(dir)) { // forward: do NOT move equal elements to right of inserted element; this maintains stability! reverse: do NOT move equal elements to left of inserted element; this maintains stability!
                     hi = mid;
                 }
                 else {
@@ -525,7 +600,7 @@ public abstract class MergeSorting extends Sort {
             }
             test = i;
         }
-        if (dir == -1){
+        if (dir){
             Writes.reversal(array, start2, test-1, writeSleep, true, false);
         }
         sequence++;
@@ -548,4 +623,96 @@ public abstract class MergeSorting extends Sort {
         }
     }
 
+    protected void aMergeSortRuns(int[] array, int length, double compSleep, double writeSleep) {
+        int sequence = 0;
+        int[] stack = new int[(int) Math.floor(Math.log(length+0.0)/Math.log(2.0)+2.0)];
+        int stackend = 0;
+        int[] merge = new int[length/2];
+        int count = 0;
+        int i = 0;
+        int start = 0;
+        int test = start;
+        int start2 = start;
+        int end = length;
+        int flag = 0;
+        while (test < (end - 1)) {
+        count = 0;
+        i = test + 1;
+        start2 = test;
+        flag = 0;
+        boolean dir = false;
+        while (i < end && flag == 0) {
+            if ((i - start2) == 16 && count > 90){
+                dir = true;
+                Writes.reversal(array, start2, i-1, writeSleep, true, false);
+                count = 120 - count;
+            }
+            int num = array[i];
+            int v = (2*count / (i - start2)) + 1; //I'VE SOLVED IT!!
+            int lo = Math.max(i - v, start2), hi = i;
+            while ((lo >= start2) && ((Reads.compare(array[lo], num) == 1)^(dir))){
+                lo -= v;
+                hi -= v;
+            }
+            lo++;
+            if (lo < start2){
+                lo = start2;
+            }
+            while (lo < hi) {
+                int mid = lo + ((hi - lo) / 2); // avoid int overflow!
+                Highlights.markArray(2, mid);
+                
+                Delays.sleep(compSleep);
+                
+                if ((Reads.compare(array[mid], num) == 1)^(dir)) { // forward: do NOT move equal elements to right of inserted element; this maintains stability! reverse: do NOT move equal elements to left of inserted element; this maintains stability!
+                    hi = mid;
+                }
+                else {
+                    lo = mid + 1;
+                }
+            }
+
+            // item has to go into position lo
+            int limit = (int)((i - start2)*(Math.log((i - start2)+0.0)/Math.log(2.0))*1.5);
+            count += (i - lo);
+            if (count > limit && (i - start2) >= 16){
+            flag = 1;
+            }
+            else {
+            if (i > lo){
+            int j = i - 1;
+            
+            while (j >= lo)
+            {
+                Writes.write(array, j + 1, array[j], writeSleep, true, false);
+                j--;
+            }
+            Writes.write(array, lo, num, writeSleep, true, false);
+            
+            Highlights.clearAllMarks();
+            }
+            i++;
+            }
+            test = i;
+        }
+        if (dir){
+            Writes.reversal(array, start2, test-1, writeSleep, true, false);
+        }
+        sequence++;
+        stackend++;
+        Writes.write(stack, stackend, test, 0, false, true);
+        for (int r = 0; r < Integer.numberOfTrailingZeros(sequence); r++){
+            stackend--;
+            Writes.write(stack, stackend, stack[stackend + 1], 0, false, true);
+        }
+        }
+        if (stack[stackend] == (end - 1)){
+            stackend++;
+            Writes.write(stack, stackend, end, 0, false, true);;
+        }
+        while (stackend > 1){
+            stackend--;
+            Writes.write(stack, stackend, stack[stackend + 1], 0, false, true);
+        }
+    }
 }
