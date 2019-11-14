@@ -311,6 +311,22 @@ public enum Shuffles {
             }
         }
     },
+/*    TESTING2 {
+        @Override
+        public void shuffleArray(int[] array, ArrayVisualizer ArrayVisualizer, Delays Delays, Highlights Highlights, Writes Writes) {
+            int currentLen = ArrayVisualizer.getCurrentLength();
+            
+            for (int left = 0, right = currentLen - 1; left < right; left++, right--) {
+                // swap the values at the left and right indices
+                Writes.swap(array, left, right, 0, true, false);
+                
+                if(ArrayVisualizer.shuffleEnabled()) Delays.sleep(1);
+            }
+            for (int i = currentLen/3; i < 2*(currentLen/3); i++){
+                array[i] = currentLen/3;
+            }
+        }
+    },*/
     TESTING {
         @Override
         public void shuffleArray(int[] array, ArrayVisualizer ArrayVisualizer, Delays Delays, Highlights Highlights, Writes Writes) {
@@ -320,6 +336,105 @@ public enum Shuffles {
                 Writes.swap(array, i, i+(currentLen/2), 0, true, false);
                 
                 if(ArrayVisualizer.shuffleEnabled()) Delays.sleep(1);
+            }
+        }
+    },
+    BITREV {
+        @Override
+        public void shuffleArray(int[] array, ArrayVisualizer ArrayVisualizer, Delays Delays, Highlights Highlights, Writes Writes) {
+            int currentLen = ArrayVisualizer.getCurrentLength();
+            for(int i = 0; i < currentLen; i++) {
+                int j = 0;
+                int k = i;
+                for (int l = (int)(Math.ceil(Math.log(currentLen)/Math.log(2.0))); l > 0; l--){
+                    j *= 2;
+                    j += k % 2;
+                    k /= 2;
+                }
+                if (j > i){
+                    Writes.swap(array, i, j, 0, true, false);
+                    if(ArrayVisualizer.shuffleEnabled()) Delays.sleep(1);
+                }
+            }
+        }
+    },
+    SHUFCUBIC {
+        @Override
+        public void shuffleArray(int[] array, ArrayVisualizer ArrayVisualizer, Delays Delays, Highlights Highlights, Writes Writes) {
+            int currentLen = ArrayVisualizer.getCurrentLength();
+            for(int i = 0; i < currentLen; i++) {
+		array[i] = 3*(int)(((Math.pow((((i+0.0)/currentLen)*2.0)-1.0, 3)+1.0)/6.0)*currentLen);
+                Writes.swap(array, i, (int)(Math.random()*i), 0, true, false);
+                if(ArrayVisualizer.shuffleEnabled()) {
+                    Highlights.markArray(1, i);
+                    Delays.sleep(1);
+                }
+            }
+        }
+    },
+    SHUFQUINT {
+        @Override
+        public void shuffleArray(int[] array, ArrayVisualizer ArrayVisualizer, Delays Delays, Highlights Highlights, Writes Writes) {
+            int currentLen = ArrayVisualizer.getCurrentLength();
+            for(int i = 0; i < currentLen; i++) {
+		array[i] = 3*(int)(((Math.pow((((i+0.0)/currentLen)*2.0)-1.0, 5)+1.0)/6.0)*currentLen);
+                Writes.swap(array, i, (int)(Math.random()*i), 0, true, false);
+                if(ArrayVisualizer.shuffleEnabled()) {
+                    Highlights.markArray(1, i);
+                    Delays.sleep(1);
+                }
+            }
+        }
+    },
+    SORTCUBIC {
+        @Override
+        public void shuffleArray(int[] array, ArrayVisualizer ArrayVisualizer, Delays Delays, Highlights Highlights, Writes Writes) {
+            int currentLen = ArrayVisualizer.getCurrentLength();
+            for(int i = 0; i < currentLen; i++) {
+		array[i] = 3*(int)(((Math.pow((((i+0.0)/currentLen)*2.0)-1.0, 3)+1.0)/6.0)*currentLen);
+                if(ArrayVisualizer.shuffleEnabled()) {
+                    Highlights.markArray(1, i);
+                    Delays.sleep(1);
+                }
+            }
+        }
+    },
+    SORTQUINT {
+        @Override
+        public void shuffleArray(int[] array, ArrayVisualizer ArrayVisualizer, Delays Delays, Highlights Highlights, Writes Writes) {
+            int currentLen = ArrayVisualizer.getCurrentLength();
+            for(int i = 0; i < currentLen; i++) {
+		array[i] = 3*(int)(((Math.pow((((i+0.0)/currentLen)*2.0)-1.0, 5)+1.0)/6.0)*currentLen);
+                if(ArrayVisualizer.shuffleEnabled()) {
+                    Highlights.markArray(1, i);
+                    Delays.sleep(1);
+                }
+            }
+        }
+    },
+    REVCUBIC {
+        @Override
+        public void shuffleArray(int[] array, ArrayVisualizer ArrayVisualizer, Delays Delays, Highlights Highlights, Writes Writes) {
+            int currentLen = ArrayVisualizer.getCurrentLength();
+            for(int i = 0; i < currentLen; i++) {
+		array[i] = 3*(int)(((Math.pow((((currentLen-i-1.0)/currentLen)*2.0)-1.0, 3)+1.0)/6.0)*currentLen);
+                if(ArrayVisualizer.shuffleEnabled()) {
+                    Highlights.markArray(1, i);
+                    Delays.sleep(1);
+                }
+            }
+        }
+    },
+    REVQUINT {
+        @Override
+        public void shuffleArray(int[] array, ArrayVisualizer ArrayVisualizer, Delays Delays, Highlights Highlights, Writes Writes) {
+            int currentLen = ArrayVisualizer.getCurrentLength();
+            for(int i = 0; i < currentLen; i++) {
+		array[i] = 3*(int)(((Math.pow((((currentLen-i-1.0)/currentLen)*2.0)-1.0, 5)+1.0)/6.0)*currentLen);
+                if(ArrayVisualizer.shuffleEnabled()) {
+                    Highlights.markArray(1, i);
+                    Delays.sleep(1);
+                }
             }
         }
     };
