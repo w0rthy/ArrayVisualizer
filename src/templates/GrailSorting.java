@@ -126,7 +126,7 @@ public abstract class GrailSorting extends Sort {
                     right = mid;
                 } else left = mid;
             }
-            Highlights.markArray(1, mid);
+            Highlights.markArray(1, pos + mid);
         }
         return right;
     }
