@@ -127,6 +127,7 @@ public abstract class GrailSorting extends Sort {
                 } else left = mid;
             }
             Highlights.markArray(1, pos + mid);
+            Delays.sleep(0.025);
         }
         return right;
     }
