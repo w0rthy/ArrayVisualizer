@@ -58,7 +58,7 @@ final public class ItPairwiseSortingNetwork extends Sort {
         int d = 0;
         int e = 0;
         while (a < end){
-            b = a;
+            b = start+a;
             c = 0;
             while (b < end){
                 Delays.sleep(sleep);
@@ -80,7 +80,7 @@ final public class ItPairwiseSortingNetwork extends Sort {
         while (a > 0){
             d = e;
             while (d > 0){
-                b = ((d + 1) * a);
+                b = start+((d + 1) * a);
                 c = 0;
                 while (b < end){
                     Delays.sleep(sleep);
