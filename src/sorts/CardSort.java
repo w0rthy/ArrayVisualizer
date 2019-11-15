@@ -1,4 +1,4 @@
-public class cardSort {
+public class CardSort {
 	private static long startTime = System.currentTimeMillis();
 	public void sortCard(int arr []){
 		
@@ -23,7 +23,7 @@ public class cardSort {
     } 
 
 	public static void main(String[] args) {
-		cardSort ob = new cardSort();
+		CardSort ob = new CardSort();
 		 int arr[] = new int [10];
 	        for(int i=0; i<arr.length; i++) {
 	        	arr[i] = (int) (Math.floor(Math.random()*14)+2);

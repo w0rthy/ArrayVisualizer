@@ -1,4 +1,4 @@
-public class EnhancedBubbleSort {
+public class EBs {
 
 	public static void main(String[] args){
 		
