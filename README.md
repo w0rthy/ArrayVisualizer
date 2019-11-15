@@ -1,5 +1,4 @@
-# w0rthy's Array Visualizer, Revamped
-[![Donate](https://img.shields.io/badge/Donate-PayPal-green.svg)](https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=Q5QLCFZ8G7WY6&currency_code=USD&source=url)
+# w0rthy's Array Visualizer, Revamped (Double Fork by CPz)
 
 76 sorting algorithms demonstrated through 10 unique graphic designs
 
