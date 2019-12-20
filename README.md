@@ -1,4 +1,4 @@
-# w0rthy's Array Visualizer, Revamped (Double Fork by CPz)
+# w0rthy's Array Visualizer, Revamped (Re-Re-Forked by CPz)
 
 76 sorting algorithms demonstrated through 10 unique graphic designs
 
@@ -11,8 +11,8 @@ java -cp bin;lib/classgraph-4.8.47.jar main.ArrayVisualizer
 ```
 
 ### Features:
-- 40+ new sorting algorithms
-- Updated visuals and sound effects
+- 70+ new sorting algorithms
+- Updated visuals and sound effects 
 - You can select different array sizes now
 - New shuffle types, including reversed, mostly similar numbers, almost sorted, and already sorted
 - Skip Sort button
