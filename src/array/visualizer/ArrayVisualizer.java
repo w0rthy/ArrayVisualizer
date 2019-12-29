@@ -616,7 +616,7 @@ public class ArrayVisualizer {
         String tmp = heading;
         heading = "Shuffling...";
         for(int i = 0; i < array.length; i++){
-            swap(arrayController, i, (int)(Math.random()*array.length));
+            swap(arrayController, i, (int)(Math.random()*i+1));
             arrayController.aa-=2;
             if(SHUFFLEANIM)
                 sleep(1);
