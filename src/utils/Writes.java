@@ -104,8 +104,8 @@ final public class Writes {
             return "Over " + this.formatter.format(Long.MAX_VALUE);
         }
         else {
-            if(this.tempWrites == 1) return this.tempWrites + " Write to Auxillary Array(s)";
-            else                     return this.formatter.format(this.tempWrites) + " Writes to Auxillary Array(s)";
+            if(this.tempWrites == 1) return this.tempWrites + " Write to Auxiliary Array(s)";
+            else                     return this.formatter.format(this.tempWrites) + " Writes to Auxiliary Array(s)";
         }
     }
     
