@@ -57,16 +57,6 @@ public abstract class BogoSorting extends Sort {
         return true;
     }
     
-    protected boolean bogoIsSortedWithDelay(int[] array, int length, double sleep){
-        for(int i = 0; i < length - 1; i++) {
-            Highlights.markArray(1, i);
-            Delays.sleep(sleep);
-            if(Reads.compare(array[i], array[i + 1]) == 1) return false;
-        }
-        Highlights.clearMark(1);
-        return true;
-    }
-    
     protected boolean isMinSorted(int[] array, int length, int offset) {
         Highlights.clearAllMarks();
         

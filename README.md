@@ -24,15 +24,25 @@ java -cp bin;lib/classgraph-4.8.47.jar main.ArrayVisualizer
 - Refactored / optimized code
 
 ## 5/21/2020 - Version 3.0 is now released!
+- Sound effects are much more pleasant at slower speeds
 - Revamped "Run All Sorts" (It is now easier to create your own sequence of sorts!)
+- More accurate delay algorithm
+- Improved random shuffle algorithm (now with 0% bias!)
 - Cleaner statistics
 - Sort an array up to 16,384 (2^14) numbers!
+- The "green sweep" animation also verifies an array is properly sorted after watching a sort.
+  If a sort fails, a warning message pops up, highlighting where the first out-of-order item is.
+- Minor tweak to the sort time method. It should be a slight bit more accurate now.
+- Slowsort and Sillysort's comparisons are now shown.
+- Gravity Sort has a more detailed visual now
+- Pancake Sorting is fixed
 - Counting Sort is fixed
 - Holy Grail Sort is enabled, but just note that it's a mock algorithm; not finished yet.
-- Bug fixes
-- - Minor fixes to "Skip Sort" button
-- - Weird static line bug with linked dots squashed
-- - Other miscellaneous fixes here and there
+- "Auxillary" typo fixed; program now says 'Writes to Auxiliary Array(s)'
+- Bug fixes and minor tweaks
+  - Minor fixes to "Skip Sort" button
+  - Weird static line bug with linked dots squashed
+  - Other miscellaneous fixes and changes here and there
 
 ## 10/19/2019 - Version 2.1
 - Both Odd-Even Mergesorts now display comparisons
