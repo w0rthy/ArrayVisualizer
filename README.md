@@ -30,9 +30,9 @@ java -cp bin;lib/classgraph-4.8.47.jar main.ArrayVisualizer
 - Counting Sort is fixed
 - Holy Grail Sort is enabled, but just note that it's a mock algorithm; not finished yet.
 - Bug fixes
-- - Minor fixes to "Skip Sort" button
-- - Weird static line bug with linked dots squashed
-- - Other miscellaneous fixes here and there
+  - Minor fixes to "Skip Sort" button
+  - Weird static line bug with linked dots squashed
+  - Other miscellaneous fixes here and there
 
 ## 10/19/2019 - Version 2.1
 - Both Odd-Even Mergesorts now display comparisons
