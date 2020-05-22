@@ -23,6 +23,10 @@ java -cp bin;lib/classgraph-4.8.47.jar main.ArrayVisualizer
 - Toggle Timo Bingmann's "end sweep" animation
 - Refactored / optimized code
 
+## 5/22/2020 - Version 3.01
+- Quick bug fix to the "Linked Dots" visual;
+  The first line is no longer horizontal.
+
 ## 5/21/2020 - Version 3.0 is now released!
 - Sound effects are much more pleasant at slower speeds
 - Revamped "Run All Sorts" (It is now easier to create your own sequence of sorts!)

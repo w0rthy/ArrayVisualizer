@@ -39,9 +39,14 @@ final public class Pixels {
     
     public void drawVisual(int[] array, ArrayVisualizer ArrayVisualizer, Renderer Renderer, Graphics2D mainRender, Graphics2D extraRender, Highlights Highlights) {
         if(ArrayVisualizer.linesEnabled()) {
-            Renderer.setLineY((int) ((ArrayVisualizer.windowHeight() - 20) - (Math.max(array[0], 1) * Renderer.getYScale())));
+            Renderer.setLineY((int) ((ArrayVisualizer.windowHeight() - 20) - array[0] * Renderer.getYScale()));
             for(int i = 0; i < ArrayVisualizer.getCurrentLength(); i++) {
                 int y = (int) ((ArrayVisualizer.windowHeight() - 20) - (Math.max(array[i], 1) * Renderer.getYScale()));
+                
+                // Quick patch to fix the first line being horizontal for some reason
+                if(i == 0) y += ((ArrayVisualizer.windowHeight() - 20) - array[1] * Renderer.getYScale())
+                              - ((ArrayVisualizer.windowHeight() - 20) - array[2] * Renderer.getYScale());
+                
                 int width = (int) (Renderer.getXScale() * (i + 1)) - Renderer.getOffset();
 
                 if(width > 0) {
