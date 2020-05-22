@@ -6,12 +6,9 @@ import templates.Sort;
 import utils.Delays;
 import utils.Highlights;
 import utils.Reads;
-import utils.Shuffles;
 import utils.Writes;
 
 final public class FlashSort extends Sort {
-    private Shuffles currentShuffle;
-    
     public FlashSort(Delays delayOps, Highlights markOps, Reads readOps, Writes writeOps) {
         super(delayOps, markOps, readOps, writeOps);
         
@@ -25,10 +22,6 @@ final public class FlashSort extends Sort {
         this.isUnreasonablySlow(false);
         this.setUnreasonableLimit(0);
         this.isBogoSort(false);
-    }
-    
-    public void setCurrentShuffle(Shuffles choice) {
-        this.currentShuffle = choice;
     }
     
 	private static int indexOfIntArray(int[] array, int length, int key) {
@@ -273,30 +266,29 @@ final public class FlashSort extends Sort {
         //skip the K == m class because it is already sorted
         //since all of the elements have the same value
 
-        if(!currentShuffle.equals(Shuffles.SIMILAR)) {
-            for(K = m - 1; K >= 1; K--)
-            {
-                //determine the number of elments in the Kth class
-                int classSize = L[K + 1] - L[K];
+        for(K = m - 1; K >= 1; K--)
+        {
+            //determine the number of elments in the Kth class
+            int classSize = L[K + 1] - L[K];
 
-                //if the class size is larger than expected but not
-                //so small that insertion sort could make quick work
-                //of it then...
-                if(classSize > threshold && classSize > minElements)
-                {
-                    //...attempt to flashsort the class. This will work 
-                    //well if the elements inside the class are uniformly
-                    //distributed throughout the class otherwise it will 
-                    //perform badly, O(n^2) worst case, since we will have 
-                    //performed another classification and permutation step
-                    //and not succeeded in making the problem significantly
-                    //smaller for the next level of recursion. However,
-                    //progress is assured since at each level the elements
-                    //with the maximum value will get sorted.
-                    runSort(Arrays.copyOfRange(array, FlashSort.indexOfIntArray(array, length, L[K]), FlashSort.indexOfIntArray(array, length, L[K+1])), classSize, 0);
-                }
+            //if the class size is larger than expected but not
+            //so small that insertion sort could make quick work
+            //of it then...
+            if(classSize > threshold && classSize > minElements)
+            {
+                //...attempt to flashsort the class. This will work 
+                //well if the elements inside the class are uniformly
+                //distributed throughout the class otherwise it will 
+                //perform badly, O(n^2) worst case, since we will have 
+                //performed another classification and permutation step
+                //and not succeeded in making the problem significantly
+                //smaller for the next level of recursion. However,
+                //progress is assured since at each level the elements
+                //with the maximum value will get sorted.
+                runSort(Arrays.copyOfRange(array, L[K], L[K + 1]), classSize, 0);
             }
         }
+
         InsertionSort insertSorter = new InsertionSort(this.Delays, this.Highlights, this.Reads, this.Writes);
         insertSorter.customInsertSort(array, 0, length, 0.75, false);
     }

@@ -1,10 +1,7 @@
 package threads;
 
 import main.ArrayVisualizer;
-import sorts.InPlaceMergeSort;
-import sorts.LazyStableSort;
-import sorts.MergeSort;
-import sorts.RotateMergeSort;
+import sorts.PancakeSort;
 import templates.MultipleSortThread;
 import templates.Sort;
 
@@ -34,14 +31,14 @@ SOFTWARE.
  *
  */
 
-final public class RunMergeSorts extends MultipleSortThread {
-    public RunMergeSorts(ArrayVisualizer ArrayVisualizer) {
+final public class RunMiscellaneousSorts extends MultipleSortThread {
+    public RunMiscellaneousSorts(ArrayVisualizer ArrayVisualizer) {
         super(ArrayVisualizer);
-        this.sortCount = 4;
+        this.sortCount = 1;
         this.categoryCount = this.sortCount;
     }
 
-    public synchronized void ReportMergeSorts(int[] array) throws Exception {
+    public synchronized void ReportMiscellaneousSorts(int[] array) throws Exception {
         if(ArrayVisualizer.getSortingThread() != null && ArrayVisualizer.getSortingThread().isAlive())
             return;
 
@@ -50,23 +47,17 @@ final public class RunMergeSorts extends MultipleSortThread {
             @Override
             public void run() {
                 try{
-                    Sort MergeSort        = new        MergeSort(Delays, Highlights, Reads, Writes);
-                    Sort InPlaceMergeSort = new InPlaceMergeSort(Delays, Highlights, Reads, Writes);
-                    Sort LazyStableSort   = new   LazyStableSort(Delays, Highlights, Reads, Writes);
-                    Sort RotateMergeSort  = new  RotateMergeSort(Delays, Highlights, Reads, Writes);
+                    Sort PancakeSort = new PancakeSort(Delays, Highlights, Reads, Writes);
                     
-                    RunMergeSorts.this.sortNumber = 1;
+                    RunMiscellaneousSorts.this.sortNumber = 1;
 
                     ArrayManager.toggleMutableLength(false);
 
-                    ArrayVisualizer.setCategory("Merge Sorts");
+                    ArrayVisualizer.setCategory("Miscellaneous Sorts");
 
-                    RunMergeSorts.this.RunIndividualSort(MergeSort,        0, array, 2048, 1.5);
-                    RunMergeSorts.this.RunIndividualSort(InPlaceMergeSort, 0, array, 2048, 1.75);
-                    RunMergeSorts.this.RunIndividualSort(LazyStableSort,   0, array,  256, 0.2);
-                    RunMergeSorts.this.RunIndividualSort(RotateMergeSort,  0, array,  512, 0.2);
+                    RunMiscellaneousSorts.this.RunIndividualSort(PancakeSort, 0, array, 128, 0.015);
                     
-                    ArrayVisualizer.setCategory("Run Merge Sorts");
+                    ArrayVisualizer.setCategory("Run Miscellaneous Sorts");
                     ArrayVisualizer.setHeading("Done");
                     
                     ArrayManager.toggleMutableLength(true);
@@ -92,22 +83,16 @@ final public class RunMergeSorts extends MultipleSortThread {
             @Override
             public void run() {
                 try{
-                    Sort MergeSort        = new        MergeSort(Delays, Highlights, Reads, Writes);
-                    Sort InPlaceMergeSort = new InPlaceMergeSort(Delays, Highlights, Reads, Writes);
-                    Sort LazyStableSort   = new   LazyStableSort(Delays, Highlights, Reads, Writes);
-                    Sort RotateMergeSort  = new  RotateMergeSort(Delays, Highlights, Reads, Writes);
+                    Sort PancakeSort = new PancakeSort(Delays, Highlights, Reads, Writes);
                     
-                    RunMergeSorts.this.sortNumber = current;
-                    RunMergeSorts.this.sortCount = total;
+                    RunMiscellaneousSorts.this.sortNumber = current;
+                    RunMiscellaneousSorts.this.sortCount = total;
 
                     ArrayManager.toggleMutableLength(false);
 
-                    ArrayVisualizer.setCategory("Merge Sorts");
+                    ArrayVisualizer.setCategory("Miscellaneous Sorts");
 
-                    RunMergeSorts.this.RunIndividualSort(MergeSort,        0, array, 2048, 1.5);
-                    RunMergeSorts.this.RunIndividualSort(InPlaceMergeSort, 0, array, 2048, 1.75);
-                    RunMergeSorts.this.RunIndividualSort(LazyStableSort,   0, array,  256, 0.2);
-                    RunMergeSorts.this.RunIndividualSort(RotateMergeSort,  0, array,  512, 0.2);
+                    RunMiscellaneousSorts.this.RunIndividualSort(PancakeSort, 0, array, 128, 0.015);
                     
                     ArrayManager.toggleMutableLength(true);
                 }

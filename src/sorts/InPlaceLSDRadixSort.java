@@ -33,13 +33,12 @@ SOFTWARE.
  */
 
 final public class InPlaceLSDRadixSort extends Sort {
-    private int buckets = 2; // default choice
-    
     public InPlaceLSDRadixSort(Delays delayOps, Highlights markOps, Reads readOps, Writes writeOps) {
         super(delayOps, markOps, readOps, writeOps);
         
         this.setSortPromptID("In-Place LSD Radix");
-        this.setRunAllID("In-Place LSD Radix Sort, Base " + buckets);
+        //this.setRunAllID("In-Place LSD Radix Sort, Base 2");
+        this.setRunAllID("In-Place LSD Radix Sort, Base 10");
         this.setReportSortID("In-Place LSD Radix Sort");
         this.setCategory("Distributive Sorts");
         this.isComparisonBased(false);
@@ -52,12 +51,12 @@ final public class InPlaceLSDRadixSort extends Sort {
 
     @Override
     public void runSort(int[] array, int length, int bucketCount) {
-        this.buckets = bucketCount;
+        this.setRunAllID("In-Place LSD Radix Sort, Base " + bucketCount);
         
         int pos = 0;
         int[] vregs = new int[bucketCount-1];
         
-        int maxpower = Reads.analyzeMaxLog(array, length, bucketCount, 0.25, true);
+        int maxpower = Reads.analyzeMaxLog(array, length, bucketCount, 0.5, true);
         
         for(int p = 0; p <= maxpower; p++){
             for(int i = 0; i < vregs.length; i++) {
@@ -77,7 +76,7 @@ final public class InPlaceLSDRadixSort extends Sort {
                     for(int j = 0; j < vregs.length;j++)
                         Highlights.markArray(j + 1, vregs[j]);
                     
-                    Writes.multiSwap(array, pos, vregs[digit - 1], 0.00075, false, false);
+                    Writes.multiSwap(array, pos, vregs[digit - 1], bucketCount / 10000d, false, false);
                     
                     for(int j = digit - 1; j > 0; j--) {
                         Writes.write(vregs, j - 1, vregs[j - 1] - 1, 0, false, true);

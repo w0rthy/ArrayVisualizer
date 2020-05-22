@@ -38,6 +38,9 @@ SOFTWARE.
 final public class RunInsertionSorts extends MultipleSortThread {
     public RunInsertionSorts(ArrayVisualizer ArrayVisualizer) {
         super(ArrayVisualizer);
+        this.sortCount = 4;
+                       //5;
+        this.categoryCount = this.sortCount;
     }
 
     public synchronized void ReportInsertionSorts(int[] array) throws Exception {
@@ -51,22 +54,21 @@ final public class RunInsertionSorts extends MultipleSortThread {
                 try{
                     Sort InsertionSort       = new       InsertionSort(Delays, Highlights, Reads, Writes);
                     Sort BinaryInsertionSort = new BinaryInsertionSort(Delays, Highlights, Reads, Writes);
-                    Sort ShellSort           = new           ShellSort(Delays, Highlights, Reads, Writes);
+                    Sort ShellSort           = new           ShellSort(Delays, Highlights, Reads, Writes); 
                     Sort PatienceSort        = new        PatienceSort(Delays, Highlights, Reads, Writes);
-                    Sort TreeSort            = new            TreeSort(Delays, Highlights, Reads, Writes);
+                    //Sort TreeSort            = new            TreeSort(Delays, Highlights, Reads, Writes);
 
                     RunInsertionSorts.this.sortNumber = 1;
-                    RunInsertionSorts.this.sortCount  = 5;
 
                     ArrayManager.toggleMutableLength(false);
 
                     ArrayVisualizer.setCategory("Insertion Sorts");
 
-                    RunInsertionSorts.this.RunIndividualSort(InsertionSort,       0, array, 2);
-                    RunInsertionSorts.this.RunIndividualSort(BinaryInsertionSort, 0, array, 2);
-                    RunInsertionSorts.this.RunIndividualSort(ShellSort,           0, array, 3);
-                    RunInsertionSorts.this.RunIndividualSort(PatienceSort,        0, array, 2);
-                    RunInsertionSorts.this.RunIndividualSort(TreeSort,            0, array, 2);
+                    RunInsertionSorts.this.RunIndividualSort(InsertionSort,       0, array,  128, 0.005);
+                    RunInsertionSorts.this.RunIndividualSort(BinaryInsertionSort, 0, array,  128, 0.025);
+                    RunInsertionSorts.this.RunIndividualSort(ShellSort,           0, array,  256, 0.1);
+                    RunInsertionSorts.this.RunIndividualSort(PatienceSort,        0, array, 2048, 1);
+                    //RunInsertionSorts.this.RunIndividualSort(TreeSort,            0, array, 2048, 1);
                     
                     ArrayVisualizer.setCategory("Run Insertion Sorts");
                     ArrayVisualizer.setHeading("Done");
@@ -81,6 +83,47 @@ final public class RunInsertionSorts extends MultipleSortThread {
             }
         });
 
+        ArrayVisualizer.runSortingThread();
+    }
+
+    @Override
+    public void ReportAllSorts(int[] array, int current, int total) throws Exception {
+        if(ArrayVisualizer.getSortingThread() != null && ArrayVisualizer.getSortingThread().isAlive())
+            return;
+
+        Sounds.toggleSound(true);
+        ArrayVisualizer.setSortingThread(new Thread() {
+            @Override
+            public void run() {
+                try{
+                    Sort InsertionSort       = new       InsertionSort(Delays, Highlights, Reads, Writes);
+                    Sort BinaryInsertionSort = new BinaryInsertionSort(Delays, Highlights, Reads, Writes);
+                    Sort ShellSort           = new           ShellSort(Delays, Highlights, Reads, Writes); 
+                    Sort PatienceSort        = new        PatienceSort(Delays, Highlights, Reads, Writes);
+                    //Sort TreeSort            = new            TreeSort(Delays, Highlights, Reads, Writes);
+
+                    RunInsertionSorts.this.sortNumber = current;
+                    RunInsertionSorts.this.sortCount = total;
+                    
+                    ArrayManager.toggleMutableLength(false);
+
+                    ArrayVisualizer.setCategory("Insertion Sorts");
+
+                    RunInsertionSorts.this.RunIndividualSort(InsertionSort,       0, array,  128, 0.005);
+                    RunInsertionSorts.this.RunIndividualSort(BinaryInsertionSort, 0, array,  128, 0.025);
+                    RunInsertionSorts.this.RunIndividualSort(ShellSort,           0, array,  256, 0.1);
+                    RunInsertionSorts.this.RunIndividualSort(PatienceSort,        0, array, 2048, 1);
+                    //RunInsertionSorts.this.RunIndividualSort(TreeSort,            0, array, 2048, 1);
+                    
+                    ArrayManager.toggleMutableLength(true);
+                }
+                catch (Exception e) {
+                    e.printStackTrace();
+                }
+                Sounds.toggleSound(false);
+                ArrayVisualizer.setSortingThread(null);
+            }
+        });
         ArrayVisualizer.runSortingThread();
     }
 }

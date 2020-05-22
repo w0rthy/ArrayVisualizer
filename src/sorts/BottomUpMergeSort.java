@@ -11,7 +11,8 @@ final public class BottomUpMergeSort extends Sort {
         super(delayOps, markOps, readOps, writeOps);
         
         this.setSortPromptID("Bottom-Up Merge");
-        this.setRunAllID("Bottom-Up Merge Sort w/ Binary Insert (std::stable_sort)");
+        //this.setRunAllID("Bottom-Up Merge Sort w/ Binary Insert (std::stable_sort)");
+        this.setRunAllID("Bottom-Up Merge Sort [std::stable_sort]");
         this.setReportSortID("Bottom-Up Mergesort w/ Binary Insert");
         this.setCategory("Hybrid Sorts");
         this.isComparisonBased(true);

@@ -2,6 +2,7 @@ package utils;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Arrays;
 
 import javax.sound.midi.InvalidMidiDataException;
 import javax.sound.midi.MidiChannel;
@@ -50,12 +51,15 @@ final public class Sounds {
     private Synthesizer synth;
     private MidiChannel[] channels;
     
+    private volatile int noteDelay;
+    
     private volatile boolean SOUND;
     private boolean MIDI;
     private int NUMCHANNELS; //Number of Audio Channels
     private double PITCHMIN; //Minimum Pitch
     private double PITCHMAX; //Maximum Pitch
     private double SOUNDMUL;
+    private boolean SOFTERSOUNDS;
     
     final private int REVERB = 91;
     
@@ -70,6 +74,8 @@ final public class Sounds {
         this.PITCHMIN = 25d;
         this.PITCHMAX = 105d;
         this.SOUNDMUL = 1d;
+        
+        this.noteDelay = 1;
         
         try {
             MidiSystem.getSequencer(false);
@@ -89,6 +95,8 @@ final public class Sounds {
         
         for(int i = 0; i < this.NUMCHANNELS; i++) {
             this.channels[i] = this.synth.getChannels()[i];
+            //this.channels[i].programChange(this.synth.getLoadedInstruments()[197].getPatch().getProgram());
+            
             this.channels[i].programChange(this.synth.getLoadedInstruments()[16].getPatch().getProgram()); // MIDI Instrument 16 is a Rock Organ.
             this.channels[i].setChannelPressure(1);
         }
@@ -129,7 +137,7 @@ final public class Sounds {
                                 channels[voice].noteOn(pitchmajor, vel);
                                 channels[voice].setPitchBend(pitchminor);
                                 channels[voice].controlChange(REVERB, 10);
-
+                                
                                 if((++voice % Math.max(noteCount, 1)) == 0)
                                     break;
                             }
@@ -139,7 +147,9 @@ final public class Sounds {
                         }
                     }
                     try {
-                        sleep(1);
+                        for(int i = 0; i < Sounds.this.noteDelay; i++) {
+                            sleep(1);
+                        }
                     } catch(Exception e) {
                         e.printStackTrace();
                     }
@@ -156,11 +166,35 @@ final public class Sounds {
         this.MIDI = val;
     }
     
+    //Double check logic
+    public void toggleSofterSounds(boolean val) {
+        this.SOFTERSOUNDS = val;
+        
+        if(this.SOFTERSOUNDS) this.SOUNDMUL = 0.01;
+        else                  this.SOUNDMUL = 1;
+    }
+    
     public double getVolume() {
         return this.SOUNDMUL;
     }
     public void changeVolume(double val) {
         this.SOUNDMUL = val;
+    }
+    
+    public void changeNoteDelayAndFilter(int noteFactor) {
+        if(noteFactor != this.noteDelay) {
+            if(noteFactor > 1) {
+                this.noteDelay = noteFactor;
+                this.SOUNDMUL = 1d / noteFactor;
+            }
+            //Double check logic
+            else {
+                this.noteDelay = 1;
+                
+                if(this.SOFTERSOUNDS) this.SOUNDMUL = 0.01;
+                else                  this.SOUNDMUL = 1;
+            }
+        }
     }
     
     public void startAudioThread() {

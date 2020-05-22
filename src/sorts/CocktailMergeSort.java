@@ -57,7 +57,7 @@ public class CocktailMergeSort extends Sort {
             
             Highlights.clearAllMarks();
             
-            this.timSortInstance = new TimSorting(array, currentLength, this.Highlights, this.Reads, this.Writes);
+            this.timSortInstance = new TimSorting(array, currentLength, this.Delays, this.Highlights, this.Reads, this.Writes);
             TimSorting.sort(this.timSortInstance, array, currentLength);
         }
     }

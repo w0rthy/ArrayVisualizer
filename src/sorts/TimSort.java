@@ -47,7 +47,7 @@ public class TimSort extends Sort {
     
     @Override
     public void runSort(int[] array, int currentLength, int bucketCount) {
-        this.timSortInstance = new TimSorting(array, currentLength, this.Highlights, this.Reads, this.Writes);
+        this.timSortInstance = new TimSorting(array, currentLength, this.Delays, this.Highlights, this.Reads, this.Writes);
         
         TimSorting.sort(this.timSortInstance, array, currentLength);
     }

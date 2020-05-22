@@ -53,18 +53,22 @@ public abstract class ShellSorting extends Sort {
 
                         Highlights.markArray(1, j);
                         Highlights.markArray(2, j - h);
-                        
-                        Delays.sleep(0.2);
 
                         while (j >= h && Reads.compare(array[j - h], v) == 1)
                         {
-                            Highlights.markArray(1, j);
-                            Highlights.markArray(2, j - h);
-                            
-                            Writes.write(array, j, array[j - h], 0.5, false, false);
+                            Writes.write(array, j, array[j - h], 1, false, false);
                             j -= h;
+                            
+                            Highlights.markArray(1, j);
+                            
+                            if(j - h >= 0) {
+                                Highlights.markArray(2, j - h);
+                            }
+                            else {
+                                Highlights.clearMark(2);
+                            }
                         }
-                        Writes.write(array, j, v, 0.5, true, false);
+                        Writes.write(array, j, v, 1, true, false);
                     } 
                 }
             }
@@ -78,18 +82,22 @@ public abstract class ShellSorting extends Sort {
 
                         Highlights.markArray(1, j);
                         Highlights.markArray(2, j - h);
-                        
-                        Delays.sleep(0.2);
 
                         while (j >= h && Reads.compare(array[j - h], v) == 1)
                         {
-                            Highlights.markArray(1, j);
-                            Highlights.markArray(2, j - h);
-                            
-                            Writes.write(array, j, array[j - h], 0.5, false, false);
+                            Writes.write(array, j, array[j - h], 1, false, false);
                             j -= h;
+                            
+                            Highlights.markArray(1, j);
+                            
+                            if(j - h >= 0) {
+                                Highlights.markArray(2, j - h);
+                            }
+                            else {
+                                Highlights.clearMark(2);
+                            }
                         }
-                        Writes.write(array, j, v, 0.5, true, false);
+                        Writes.write(array, j, v, 1, true, false);
                     }
                 }
             }

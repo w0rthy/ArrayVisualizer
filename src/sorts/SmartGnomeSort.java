@@ -23,19 +23,25 @@ final public class SmartGnomeSort extends Sort {
     }
     
     // Taken from https://en.wikipedia.org/wiki/Gnome_sort
-    private void smartGnomeSort(int[] array, int upperBound) {
+    private void smartGnomeSort(int[] array, int upperBound, double sleep) {
         int pos = upperBound;
         
         while(pos > 0 && Reads.compare(array[pos - 1], array[pos]) == 1) {
-            Writes.swap(array, pos - 1, pos, 0.05, true, false);
+            Writes.swap(array, pos - 1, pos, sleep, true, false);
             pos--;
         }
     }
 
+    public void customSort(int[] array, int low, int high, double sleep) {
+        for(int i = low + 1; i < high; i++) {
+            smartGnomeSort(array, i, sleep);
+        }
+    }
+    
     @Override
     public void runSort(int[] array, int length, int bucketCount) {
         for(int i = 1; i < length; i++) {
-            smartGnomeSort(array, i);
+            smartGnomeSort(array, i, 0.05);
         }    
     }
 }

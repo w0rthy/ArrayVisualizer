@@ -9,9 +9,9 @@ import javax.swing.JFrame;
 import frames.UtilFrame;
 import main.ArrayVisualizer;
 import templates.Frame;
+import threads.RunAllSorts;
 import threads.RunComparisonSort;
 import threads.RunDistributionSort;
-import threads.RunSelectionSorts;
 
 /*
  * 
@@ -187,31 +187,8 @@ final public class SortPrompt extends javax.swing.JFrame implements Frame {
             @Override
             public void run(){
                 try {
-                    /*
-                    RunMergeSorts sortThread = new RunMergeSorts(ArrayVisualizer);
-                    sortThread.ReportMergeSorts(array);
-                    */
-                    
-                    RunSelectionSorts sortThread2 = new RunSelectionSorts(ArrayVisualizer);
-                    sortThread2.ReportSelectionSorts(array);
-                    
-                    
-                    /*
-                    RunExchangeSorts sortThread1 = new RunExchangeSorts(ArrayVisualizer);
-                    sortThread1.ReportExchangeSorts(array);
-                    while(ArrayVisualizer.getSortingThread() != null) {
-                        sleep(1000);
-                    }
-                    RunSelectionSorts sortThread2 = new RunSelectionSorts(ArrayVisualizer);
-                    sortThread2.ReportSelectionSorts(array);
-                    while(ArrayVisualizer.getSortingThread() != null) {
-                        sleep(1000);
-                    }
-                    RunInsertionSorts sortThread3 = new RunInsertionSorts(ArrayVisualizer);
-                    sortThread3.ReportInsertionSorts(array);
-                    */
-                    
-                    //RunAllSorts.RunAllSorts();
+                    RunAllSorts RunAllSorts = new RunAllSorts(ArrayVisualizer);
+                    RunAllSorts.ReportAllSorts(array, 0, 0);
                 } catch (Exception e) {
                     // TODO Auto-generated catch block
                     e.printStackTrace();

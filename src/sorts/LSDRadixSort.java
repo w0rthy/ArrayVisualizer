@@ -39,7 +39,7 @@ final public class LSDRadixSort extends Sort {
         super(delayOps, markOps, readOps, writeOps);
         
         this.setSortPromptID("LSD Radix");
-        this.setRunAllID("Least Significant Digit Radix Sort");
+        this.setRunAllID("Least Significant Digit Radix Sort, Base 4");
         this.setReportSortID("Least Significant Digit Radixsort");
         this.setCategory("Distributive Sorts");
         this.isComparisonBased(false);
@@ -52,7 +52,9 @@ final public class LSDRadixSort extends Sort {
 
     @Override
     public void runSort(int[] array, int length, int bucketCount) {
-        int highestpower = Reads.analyzeMaxLog(array, length, bucketCount, 0.25, true);
+        this.setRunAllID("Least Significant Digit Radix Sort, Base " + bucketCount);
+        
+        int highestpower = Reads.analyzeMaxLog(array, length, bucketCount, 0.5, true);
         
         @SuppressWarnings("unchecked")
         ArrayList<Integer>[] registers = new ArrayList[bucketCount];
@@ -67,20 +69,10 @@ final public class LSDRadixSort extends Sort {
                 int digit = Reads.getDigit(array[i], p, bucketCount);
                 registers[digit].add(array[i]);
                 
-                Writes.mockWrite(length, digit, array[i], 0.5);
+                Writes.mockWrite(length, digit, array[i], 1);
             }
 
-            double tempSleep = Delays.getSleepRatio();
-            
-            if(!Delays.skipped()) {    
-                Delays.setSleepRatio((Math.log(length) / Math.log(2)) / 4);
-            }
-
-            Writes.fancyTranscribe(array, length, registers);
-
-            if(!Delays.skipped()) {
-                Delays.setSleepRatio(tempSleep);
-            }
+            Writes.fancyTranscribe(array, length, registers, bucketCount * 0.8);
         }
     }
 }

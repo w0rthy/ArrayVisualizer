@@ -150,8 +150,7 @@ final public class TournamentSort extends Sort {
 		for (int i = 0; i < currentLen; i++) {
 			Integer selected = copy.get(i);
 			
-			Writes.write(arr, i, selected, 1, false, false);
-			Highlights.markArray(1, i);
+			Writes.write(arr, i, selected, 1, true, false);
 		}
 	}
 

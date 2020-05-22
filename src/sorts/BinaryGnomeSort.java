@@ -32,10 +32,10 @@ final public class BinaryGnomeSort extends Sort {
                 int mid = lo + ((hi - lo) / 2);
                 
                 Highlights.markArray(1, lo);
-                Highlights.markArray(2, mid);
-                Highlights.markArray(3, hi);
+                Highlights.markArray(3, mid);
+                Highlights.markArray(2, hi);
                 
-                Delays.sleep(0.025);
+                Delays.sleep(0.05);
                 
                 if (Reads.compare(num, array[mid]) < 0) { // do NOT shift equal elements past each other; this maintains stability!
                     hi = mid;
@@ -48,11 +48,11 @@ final public class BinaryGnomeSort extends Sort {
             // item has to go into position lo
 
             Highlights.clearMark(1);
-            Highlights.clearMark(3);
+            Highlights.clearMark(2);
             
             int j = i;
             while (j > lo) {   
-                Writes.swap(array, j, j - 1, 0.05, true, false);
+                Writes.swap(array, j, j - 1, 0.01, true, false);
                 j--;
             }
         }         

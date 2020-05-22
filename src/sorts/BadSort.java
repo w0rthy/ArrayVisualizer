@@ -31,7 +31,6 @@ final public class BadSort extends Sort {
     public void runSort(int[] array, int currentLen, int bucketCount) {
         for (int i = 0; i < currentLen; i++) {
             int shortest = i;
-            Highlights.markArray(3, shortest);
             Delays.sleep(0.05);
             
             for (int j = i; j < currentLen; j++) {
@@ -53,7 +52,7 @@ final public class BadSort extends Sort {
                     break;
                 }
             }
-            Writes.swap(array, i, shortest, 1, true, false);
+            Writes.swap(array, i, shortest, 0.05, true, false);
         }
     }
 }

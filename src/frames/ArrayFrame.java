@@ -90,7 +90,7 @@ final public class ArrayFrame extends javax.swing.JFrame {
     private void initComponents() {
 
         this.jLabel1 = new javax.swing.JLabel();
-        this.jSlider = new javax.swing.JSlider(SwingConstants.VERTICAL, 1, 12, 11);
+        this.jSlider = new javax.swing.JSlider(SwingConstants.VERTICAL, 1, 14, 11);
 
         jLabel1.setText("Array Size");
 
@@ -109,6 +109,8 @@ final public class ArrayFrame extends javax.swing.JFrame {
         labels.put(10, new JLabel("1024"));
         labels.put(11, new JLabel("2048"));
         labels.put(12, new JLabel("4096"));
+        labels.put(13, new JLabel("8192"));
+        labels.put(14, new JLabel("16384"));
 
         jSlider.setMajorTickSpacing(1);
         jSlider.setLabelTable(labels);
@@ -120,6 +122,7 @@ final public class ArrayFrame extends javax.swing.JFrame {
             public void stateChanged(ChangeEvent event) {
                 if(ArrayManager.isLengthMutable()) {
                     ArrayVisualizer.setCurrentLength((int) Math.pow(2, jSlider.getValue()));
+                    //ArrayVisualizer.setEqualItems((int) Math.pow(2, jSlider.getValue()));
                     ArrayManager.initializeArray(array);
                 }
                 else jSlider.setValue(ArrayVisualizer.getLogBaseTwoOfLength());

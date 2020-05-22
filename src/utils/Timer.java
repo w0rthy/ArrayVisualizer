@@ -82,10 +82,10 @@ final public class Timer {
             if(this.timerEnabled) return "0.000ms";
             else                  return "---ms";
         }
-        else if(this.realTimer < 0.001)      return "<0.001ms";
-        else if(this.realTimer >= 60000.000) return this.formatter.format((int) (this.realTimer / 60000)) + "m" + (int) ((this.realTimer % 60000) / 1000) + "s";
-        else if(this.realTimer >= 1000.000)  return this.formatter.format(this.realTimer / 1000) + "s";
-        else                                 return this.formatter.format(this.realTimer) + "ms";
+        else if(this.realTimer < 0.001)      return "< 0.001ms";
+        else if(this.realTimer >= 60000.000) return "~" + this.formatter.format((int) (this.realTimer / 60000)) + "m" + (int) ((this.realTimer % 60000) / 1000) + "s";
+        else if(this.realTimer >= 1000.000)  return "~" + this.formatter.format(this.realTimer / 1000) + "s";
+        else                                 return "~" + this.formatter.format(this.realTimer) + "ms";
     }   
     
     public void toggleRealTimer(boolean Bool) {
@@ -107,12 +107,12 @@ final public class Timer {
     }
     
     public void startLap() {
-        this.timeStart = System.nanoTime();
+        if(this.timerEnabled) this.timeStart = System.nanoTime();
     }
     
     public void stopLap() {
         this.timeStop = System.nanoTime();
-        this.realTimer += (timeStop - timeStart) / 1e+6;
+        if(this.timerEnabled) this.realTimer += (timeStop - timeStart) * 1e-6d;
     }
 
     void manualAddTime(long milliseconds) {

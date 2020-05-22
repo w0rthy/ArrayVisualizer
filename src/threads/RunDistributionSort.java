@@ -183,20 +183,11 @@ final public class RunDistributionSort {
                                 }   
                             }
                             else if(sort.getReportSortID().equals("Shatter Sort") || sort.getReportSortID().equals("Simple Shatter Sort")) {
-                                // Ugh. Not happy with this patch at all. For some reason, Shatter Sort does not work
-                                // for all distributions of data unless you only have two partitions/"shatters" **presumably**.
-                                
-                                // Specifically, an array that doesn't hold many unique values breaks Shatter Sort.
-                                if(ArrayManager.getShuffle().equals(Shuffles.SIMILAR)) {
-                                    bucketCount = 2;
+                                try {
+                                    bucketCount = Integer.parseInt(JEnhancedOptionPane.showInputDialog("Enter the size for each partition:", new Object[]{"Enter", "Use default"}));
                                 }
-                                else {
-                                    try {
-                                        bucketCount = Integer.parseInt(JEnhancedOptionPane.showInputDialog("Enter the size for each partition:", new Object[]{"Enter", "Use default"}));
-                                    }
-                                    catch(Exception e) {
-                                        bucketCount = ArrayVisualizer.getCurrentLength() / 16;
-                                    }
+                                catch(Exception e) {
+                                    bucketCount = ArrayVisualizer.getCurrentLength() / 16;
                                 }
                             }
                             else {
@@ -261,11 +252,6 @@ final public class RunDistributionSort {
                     }
                     else {
                         goAhead = true;
-                    }
-                    
-                    // Patch for Flashsort, fixes distribution for few unique numbers
-                    if(sort.getReportSortID().equals("Flashsort")) {
-                        ((FlashSort) sort).setCurrentShuffle(ArrayManager.getShuffle());
                     }
                     
                     if(sort.getReportSortID().equals("In-Place LSD Radix")) {

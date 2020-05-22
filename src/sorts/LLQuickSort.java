@@ -27,10 +27,12 @@ final public class LLQuickSort extends Sort {
         int i = lo;
         
         for(int j = lo; j < hi; j++) {
+            Highlights.markArray(1, j);
             if(Reads.compare(array[j], pivot) < 0) {
                 Writes.swap(array, i, j, 1, true, false);
                 i++;
             }
+            Delays.sleep(1);
         }
         Writes.swap(array, i, hi, 1, true, false);
         return i;

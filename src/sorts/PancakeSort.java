@@ -20,8 +20,8 @@ final public class PancakeSort extends Sort {
         super(delayOps, markOps, readOps, writeOps);
         
         this.setSortPromptID("Pancake");
-        this.setRunAllID("Pancake Sort");
-        this.setReportSortID("Pancake Sorting");
+        this.setRunAllID("Pancake Sorting");
+        this.setReportSortID("Pancake Sort");
         this.setCategory("Miscellaneous Sorts");
         this.isComparisonBased(true);
         this.isBucketSort(false);
@@ -32,7 +32,7 @@ final public class PancakeSort extends Sort {
     }
     
     private boolean sorted(int[] array, int length) {
-        for(int i = 0; i < length - 1; i++) {
+        for(int i = 0; i < length; i++) {
             Highlights.markArray(1, i);
             Delays.sleep(0.025);
             
@@ -49,6 +49,7 @@ final public class PancakeSort extends Sort {
             if (Reads.compare(arr[i], max) == 1) {
                 max = arr[i];
                 index = i;
+                Highlights.markArray(2, i);
             }
             
             Delays.sleep(0.025);
@@ -61,7 +62,6 @@ final public class PancakeSort extends Sort {
     public void runSort(int[] array, int length, int bucketCount) {
         for (int i = length - 1; i >= 0; i--) {
             if(!this.sorted(array, i)) {
-                if(i + 1 != length) Highlights.markArray(3, i + 1);
                 int index = this.findMax(array, i);
 
                 if(index == 0) {

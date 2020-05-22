@@ -49,7 +49,7 @@ public abstract class MergeSorting extends Sort {
             return;
         }
         else if(end - start == 32 && binary) {
-            binaryInserter.customBinaryInsert(array, start, end, 0.25);
+            binaryInserter.customBinaryInsert(array, start, end, 0.333);
         }
         else {
             int[] tmp = new int[end - start];
@@ -60,30 +60,28 @@ public abstract class MergeSorting extends Sort {
             for(int nxt = 0; nxt < tmp.length; nxt++){
                 if(low >= mid && high >= end) break;
                 
-                if(low < mid && high >= end){
-                    Writes.write(tmp, nxt, array[low++], 0, false, true);
-                }
-                else if(low >= mid && high < end){
-                    Writes.write(tmp, nxt, array[high++], 0, false, true);
-                }
-                else if(Reads.compare(array[low], array[high]) == -1){
-                    Writes.write(tmp, nxt, array[low++], 0, false, true);
-                }
-                else{
-                    Writes.write(tmp, nxt, array[high++], 0, false, true);
-                }
-                
                 Highlights.markArray(1, low);
                 Highlights.markArray(2, high);
                 
-                Delays.sleep(1);
+                if(low < mid && high >= end){
+                    Highlights.clearMark(2);
+                    Writes.write(tmp, nxt, array[low++], 1, false, true);
+                }
+                else if(low >= mid && high < end){
+                    Highlights.clearMark(1);
+                    Writes.write(tmp, nxt, array[high++], 1, false, true);
+                }
+                else if(Reads.compare(array[low], array[high]) == -1){
+                    Writes.write(tmp, nxt, array[low++], 1, false, true);
+                }
+                else{
+                    Writes.write(tmp, nxt, array[high++], 1, false, true);
+                }
             }
-            
             Highlights.clearMark(2);
             
             for(int i = 0; i < tmp.length; i++){
-                Writes.write(array, start + i, tmp[i], 1, false, false);
-                Highlights.markArray(1, start + i);
+                Writes.write(array, start + i, tmp[i], 1, true, false);
             }
         }
     }
@@ -92,7 +90,7 @@ public abstract class MergeSorting extends Sort {
         binaryInserter = new BinaryInsertionSort(this.Delays, this.Highlights, this.Reads, this.Writes);
         
         if(length < 32 && binary) {
-            binaryInserter.customBinaryInsert(array, 0, length, 0.25);
+            binaryInserter.customBinaryInsert(array, 0, length, 0.333);
             return;
         }
         

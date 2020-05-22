@@ -59,7 +59,8 @@ public class WikiSort extends Sort {
         super(delayOps, markOps, readOps, writeOps);
         
         this.setSortPromptID("Wiki");
-        this.setRunAllID("Wiki Sort (Block Merge Sort)");
+        //this.setRunAllID("Wiki Sort (Block Merge Sort)");
+        this.setRunAllID("Wiki Sort [Block Merge Sort]");
         this.setReportSortID("Wikisort");
         this.setCategory("Hybrid Sorts");
         this.isComparisonBased(true);
@@ -75,7 +76,7 @@ public class WikiSort extends Sort {
         this.cache = 0;
         
         this.insertionSort = new InsertionSort(this.Delays, this.Highlights, this.Reads, this.Writes);
-        this.wikiSortInstance = new WikiSorting(this.insertionSort, this.Highlights, this.Reads, this.Writes, this.cache);
+        this.wikiSortInstance = new WikiSorting(this.insertionSort, this.Delays, this.Highlights, this.Reads, this.Writes, this.cache);
         
         WikiSorting.sort(this.wikiSortInstance, array, currentLength);
     }

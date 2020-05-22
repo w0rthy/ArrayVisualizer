@@ -32,7 +32,7 @@ final public class GnomeSort extends Sort {
             {
                 i++;
                 Highlights.markArray(1, i);
-                Delays.sleep(0.02);
+                Delays.sleep(0.04);
             }
             else
             {
@@ -43,7 +43,7 @@ final public class GnomeSort extends Sort {
                 if (i > 1) {
                     i--;
                     Highlights.markArray(1, i);
-                    Delays.sleep(0.01);
+                    Delays.sleep(0.02);
                 }
             }
         }

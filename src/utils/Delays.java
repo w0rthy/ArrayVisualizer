@@ -1,5 +1,9 @@
 package utils;
 
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
+import java.text.NumberFormat;
+import java.util.Locale;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -37,18 +41,59 @@ final public class Delays {
     
     private double addamt;
     private double delay;
+    private double nanos;
     
-    public Delays() {
+    private volatile double currentDelay;
+    
+    private DecimalFormat formatter;
+    private DecimalFormatSymbols symbols;
+    
+    private Sounds Sounds;
+    
+    public Delays(ArrayVisualizer ArrayVisualizer) {
         this.SLEEPRATIO = 1.0;
         this.SKIPPED = false;
-        this.addamt = 0.0;
+        this.addamt = 0;
+        
+        this.formatter = (DecimalFormat) NumberFormat.getInstance(Locale.US);
+        this.symbols = this.formatter.getDecimalFormatSymbols();
+        
+        this.symbols.setGroupingSeparator(',');
+        this.formatter.setDecimalFormatSymbols(this.symbols);
+        
+        this.Sounds = ArrayVisualizer.getSounds();
     }
     
+    public String displayCurrentDelay() {
+        String currDelay = "";
+        
+        if(this.currentDelay == 0 || this.SKIPPED) {
+            currDelay = "0";
+        }
+        else if(this.currentDelay < 0.001) {
+            currDelay = "< 0.001";
+        }
+        else {
+            currDelay = formatter.format(this.currentDelay);
+        }
+        
+        return currDelay;
+    }
     public double getCurrentDelay() {
-        return this.delay;
+        return this.currentDelay;
     }
     public void setCurrentDelay(double value) {
         this.delay = value;
+    }
+    public void updateCurrentDelay(double oldRatio, double newRatio) {
+        this.delay = (this.delay * oldRatio) / newRatio;
+        this.currentDelay = this.delay;
+        this.Sounds.changeNoteDelayAndFilter((int) this.currentDelay);
+        this.addamt = 0;
+    
+        if(this.currentDelay < 0) {
+            this.delay = this.currentDelay = 0;
+        }
     }
     
     public double getSleepRatio() {
@@ -63,6 +108,7 @@ final public class Delays {
     }
     public void changeSkipped(boolean Bool) {
         this.SKIPPED = Bool;
+        if(this.SKIPPED) this.Sounds.changeNoteDelayAndFilter(1);
     }
     
     public void sleep(double millis){
@@ -70,22 +116,26 @@ final public class Delays {
             return;
         }
         
-        this.delay = (millis * (1 / this.SLEEPRATIO));
-        this.addamt += this.delay;
+        this.delay += (millis * (1 / this.SLEEPRATIO));
+        this.currentDelay = (millis * (1 / this.SLEEPRATIO));
         
-        long amt = (long) this.delay;
-        if(this.addamt >= 1){
-            amt += (int) this.addamt;
-            this.addamt -= (int) this.addamt;
-        }
+        this.Sounds.changeNoteDelayAndFilter((int) this.currentDelay);
         
         try {
             // With this for loop, you can change the speed of sorts without waiting for the current delay to finish.
-            for(int i = 0; i < amt / this.SLEEPRATIO; i++) {
-                Thread.sleep(1);
+            if(!this.SKIPPED) {
+                while(this.delay >= 1) {
+                    Thread.sleep(1);
+                    this.delay--;
+                }
+            }
+            else {
+                this.delay = 0;
             }
         } catch(Exception ex) {
             Logger.getLogger(ArrayVisualizer.class.getName()).log(Level.SEVERE, null, ex);
         }
+        
+        this.currentDelay = 0;
     }
 }

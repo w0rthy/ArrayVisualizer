@@ -30,7 +30,7 @@ final public class LessBogoSort extends BogoSorting {
             while(!this.isMinSorted(array, currentLen, iterator)) {
                 this.bogoSwap(array, currentLen, iterator);
             }
-            Highlights.markArray(1, iterator);
+            //Highlights.markArray(1, iterator);
             iterator++;
         }
     }

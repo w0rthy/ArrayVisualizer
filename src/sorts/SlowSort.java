@@ -25,13 +25,13 @@ final public class SlowSort extends Sort {
     }
     
 	private void slowSort(int[] A, int i, int j) {	
-		if (i >= j) {
+	    Delays.sleep(1);
+	    
+	    if (i >= j) {
 			return;
 		}
-	
+		
 	    int m = i + ((j - i) / 2);
-	    
-	    Highlights.markArray(3, m);
 	
 	    this.slowSort(A, i, m);
 	    this.slowSort(A, m + 1, j);

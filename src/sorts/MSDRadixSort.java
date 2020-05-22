@@ -39,7 +39,8 @@ final public class MSDRadixSort extends Sort {
         super(delayOps, markOps, readOps, writeOps);
         
         this.setSortPromptID("MSD Radix");
-        this.setRunAllID("Most Significant Digit Radix Sort");
+        //this.setRunAllID("Most Significant Digit Radix Sort");
+        this.setRunAllID("Most Significant Digit Radix Sort, Base 4");
         this.setReportSortID("Most Significant Digit Radixsort");
         this.setCategory("Distributive Sorts");
         this.isComparisonBased(false);
@@ -69,23 +70,13 @@ final public class MSDRadixSort extends Sort {
             int digit = Reads.getDigit(array[i], pow, radix);
             registers[digit].add(array[i]);
             
-            Writes.mockWrite(length, digit, array[i], 0.5);
+            Writes.mockWrite(length, digit, array[i], 1);
         }
         
         Highlights.clearMark(2);
         Highlights.clearMark(3);
         
-        double tempSleep = Delays.getSleepRatio();
-
-        if(!Delays.skipped()) {    
-            Delays.setSleepRatio((Math.log(length) / Math.log(2)) / 6);
-        }
-
-        Writes.transcribeMSD(array, registers, 0, min, true, false);
-
-        if(!Delays.skipped()) {
-            Delays.setSleepRatio(tempSleep);
-        }
+        Writes.transcribeMSD(array, registers, 0, min, 0.8, true, false);
         
         int sum = 0;
         for(int i = 0; i < registers.length; i++) {
@@ -99,7 +90,7 @@ final public class MSDRadixSort extends Sort {
     
     @Override
     public void runSort(int[] array, int length, int bucketCount) {
-        int highestpower = Reads.analyzeMaxLog(array, length, bucketCount, 0.25, true);
+        int highestpower = Reads.analyzeMaxLog(array, length, bucketCount, 0.5, true);
         
         radixMSD(array, length, 0, length, bucketCount, highestpower);
     }

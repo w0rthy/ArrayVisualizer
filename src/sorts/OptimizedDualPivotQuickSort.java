@@ -16,7 +16,8 @@ final public class OptimizedDualPivotQuickSort extends Sort {
         super(delayOps, markOps, readOps, writeOps);
         
         this.setSortPromptID("Opti. Dual-Pivot Quick");
-        this.setRunAllID("Optimized Dual-Pivot Quick Sort");
+        //this.setRunAllID("Optimized Dual-Pivot Quick Sort");
+        this.setRunAllID("Optimized Dual-Pivot Quick Sort [Arrays.sort]");
         this.setReportSortID("Optimized Dual-Pivot Quicksort");
         this.setCategory("Hybrid Sorts");
         this.isComparisonBased(true);
@@ -33,7 +34,7 @@ final public class OptimizedDualPivotQuickSort extends Sort {
         // insertion sort for tiny array
         if(length < 27) {
             Highlights.clearMark(2);
-            insertSorter.customInsertSort(array, left, right + 1, 0.75, false);
+            insertSorter.customInsertSort(array, left, right + 1, 1, false);
             return;
         }
         
@@ -74,8 +75,11 @@ final public class OptimizedDualPivotQuickSort extends Sort {
             else if(Reads.compare(array[k], pivot2) == 1) {
                 while(k < great && Reads.compare(array[great], pivot2) == 1) {
                     great--;
+                    Highlights.markArray(3, great);
+                    Delays.sleep(1);
                 }
                 Writes.swap(array, k, great--, 1, true, false);
+                Highlights.clearMark(3);
                 
                 if(Reads.compare(array[k], pivot1) == -1) {
                     Writes.swap(array, k, less++, 1, true, false);

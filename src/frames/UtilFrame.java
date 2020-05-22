@@ -383,9 +383,13 @@ final public class UtilFrame extends javax.swing.JFrame {
         
         if(speedPromptAllowed) {
             try{
-                Delays.setSleepRatio(Double.parseDouble(JOptionPane.showInputDialog(null, "Modify the visual's speed below (Ex. 10 = Ten times faster)", Delays.getSleepRatio())));
+                double oldRatio = Delays.getSleepRatio();
+                double newRatio = Double.parseDouble(JOptionPane.showInputDialog(null, "Modify the visual's speed below (Ex. 10 = Ten times faster)", oldRatio));
+                if(newRatio == 0) throw new Exception("Divide by zero!");
+                Delays.setSleepRatio(newRatio);
+                Delays.updateCurrentDelay(oldRatio, Delays.getSleepRatio());
             }
-            catch(Exception e) { //TODO: Disable exception on Dialog cancel
+            catch(Exception e) { //TODO: Display not a number instead of println
                 System.out.println("Not a number! (" + e.getMessage() + ")");
             }
         }
@@ -404,7 +408,6 @@ final public class UtilFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_jCheckBox3ActionPerformed
 
     private void jButton4ActionPerformed() {//GEN-FIRST:event_jButton4ActionPerformed
-        Delays.setSleepRatio(Double.MAX_VALUE);
         Delays.changeSkipped(true);
     }//GEN-LAST:event_jButton4ActionPerformed
 
@@ -418,10 +421,10 @@ final public class UtilFrame extends javax.swing.JFrame {
 
     private void jCheckBox5ActionPerformed() {//GEN-FIRST:event_jButton4ActionPerformed
         if(jCheckBox5.isSelected()) {
-            Sounds.changeVolume(0.01);
+            Sounds.toggleSofterSounds(true);
         }
         else {
-            Sounds.changeVolume(1);
+            Sounds.toggleSofterSounds(false);
         }
     }//GEN-LAST:event_jCheckBox5ActionPerformed
 

@@ -43,6 +43,8 @@ SOFTWARE.
 final public class RunSelectionSorts extends MultipleSortThread {
     public RunSelectionSorts(ArrayVisualizer ArrayVisualizer) {
         super(ArrayVisualizer);
+        this.sortCount = 10;
+        this.categoryCount = this.sortCount;
     }
 
     public synchronized void ReportSelectionSorts(int[] array) throws Exception {
@@ -66,25 +68,76 @@ final public class RunSelectionSorts extends MultipleSortThread {
                     Sort TournamentSort      = new      TournamentSort(Delays, Highlights, Reads, Writes);
 
                     RunSelectionSorts.this.sortNumber = 1;
-                    RunSelectionSorts.this.sortCount  = 10;
 
                     ArrayManager.toggleMutableLength(false);
 
                     ArrayVisualizer.setCategory("Selection Sorts");
 
-                    RunSelectionSorts.this.RunIndividualSort(SelectionSort,       0, array, 5);
-                    RunSelectionSorts.this.RunIndividualSort(DoubleSelectionSort, 0, array, 5);
-                    RunSelectionSorts.this.RunIndividualSort(CycleSort,           0, array, 3);
-                    RunSelectionSorts.this.RunIndividualSort(MaxHeapSort,         0, array, 1.25);
-                    RunSelectionSorts.this.RunIndividualSort(MinHeapSort,         0, array, 1.25);
-                    RunSelectionSorts.this.RunIndividualSort(WeakHeapSort,        0, array, 1.25);
-                    RunSelectionSorts.this.RunIndividualSort(TernaryHeapSort,     0, array, 1.25);
-                    RunSelectionSorts.this.RunIndividualSort(SmoothSort,          0, array, 2);
-                    RunSelectionSorts.this.RunIndividualSort(PoplarHeapSort,      0, array, 1);
-                    RunSelectionSorts.this.RunIndividualSort(TournamentSort,      0, array, 1.5);
+                    RunSelectionSorts.this.RunIndividualSort(SelectionSort,       0, array,  128, 0.01);
+                    RunSelectionSorts.this.RunIndividualSort(DoubleSelectionSort, 0, array,  128, 0.01);
+                    RunSelectionSorts.this.RunIndividualSort(CycleSort,           0, array,  128, 0.01);
+                    RunSelectionSorts.this.RunIndividualSort(MaxHeapSort,         0, array, 2048, 1.5);
+                    RunSelectionSorts.this.RunIndividualSort(MinHeapSort,         0, array, 2048, 1.5);
+                    RunSelectionSorts.this.RunIndividualSort(WeakHeapSort,        0, array, 2048, 1);
+                    RunSelectionSorts.this.RunIndividualSort(TernaryHeapSort,     0, array, 2048, 1);
+                    RunSelectionSorts.this.RunIndividualSort(SmoothSort,          0, array, 2048, 1.5);
+                    RunSelectionSorts.this.RunIndividualSort(PoplarHeapSort,      0, array, 2048, 1);
+                    RunSelectionSorts.this.RunIndividualSort(TournamentSort,      0, array, 2048, 1.5);
                     
                     ArrayVisualizer.setCategory("Run Selection Sorts");
                     ArrayVisualizer.setHeading("Done");
+                    
+                    ArrayManager.toggleMutableLength(true);
+                }
+                catch (Exception e) {
+                    e.printStackTrace();
+                }
+                Sounds.toggleSound(false);
+                ArrayVisualizer.setSortingThread(null);
+            }
+        });
+
+        ArrayVisualizer.runSortingThread();
+    }
+
+    @Override
+    public void ReportAllSorts(int[] array, int current, int total) throws Exception {
+        if(ArrayVisualizer.getSortingThread() != null && ArrayVisualizer.getSortingThread().isAlive())
+            return;
+
+        Sounds.toggleSound(true);
+        ArrayVisualizer.setSortingThread(new Thread() {
+            @Override
+            public void run() {
+                try{
+                    Sort SelectionSort       = new       SelectionSort(Delays, Highlights, Reads, Writes);
+                    Sort DoubleSelectionSort = new DoubleSelectionSort(Delays, Highlights, Reads, Writes);
+                    Sort CycleSort           = new           CycleSort(Delays, Highlights, Reads, Writes);
+                    Sort MaxHeapSort         = new         MaxHeapSort(Delays, Highlights, Reads, Writes);
+                    Sort MinHeapSort         = new         MinHeapSort(Delays, Highlights, Reads, Writes);
+                    Sort WeakHeapSort        = new        WeakHeapSort(Delays, Highlights, Reads, Writes);
+                    Sort TernaryHeapSort     = new     TernaryHeapSort(Delays, Highlights, Reads, Writes);
+                    Sort SmoothSort          = new          SmoothSort(Delays, Highlights, Reads, Writes);
+                    Sort PoplarHeapSort      = new      PoplarHeapSort(Delays, Highlights, Reads, Writes);
+                    Sort TournamentSort      = new      TournamentSort(Delays, Highlights, Reads, Writes);
+
+                    RunSelectionSorts.this.sortNumber = current;
+                    RunSelectionSorts.this.sortCount = total;
+
+                    ArrayManager.toggleMutableLength(false);
+
+                    ArrayVisualizer.setCategory("Selection Sorts");
+
+                    RunSelectionSorts.this.RunIndividualSort(SelectionSort,       0, array,  128, 0.01);
+                    RunSelectionSorts.this.RunIndividualSort(DoubleSelectionSort, 0, array,  128, 0.01);
+                    RunSelectionSorts.this.RunIndividualSort(CycleSort,           0, array,  128, 0.01);
+                    RunSelectionSorts.this.RunIndividualSort(MaxHeapSort,         0, array, 2048, 1.5);
+                    RunSelectionSorts.this.RunIndividualSort(MinHeapSort,         0, array, 2048, 1.5);
+                    RunSelectionSorts.this.RunIndividualSort(WeakHeapSort,        0, array, 2048, 1);
+                    RunSelectionSorts.this.RunIndividualSort(TernaryHeapSort,     0, array, 2048, 1);
+                    RunSelectionSorts.this.RunIndividualSort(SmoothSort,          0, array, 2048, 1.5);
+                    RunSelectionSorts.this.RunIndividualSort(PoplarHeapSort,      0, array, 2048, 1);
+                    RunSelectionSorts.this.RunIndividualSort(TournamentSort,      0, array, 2048, 1.5);
                     
                     ArrayManager.toggleMutableLength(true);
                 }

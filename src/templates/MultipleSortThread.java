@@ -22,6 +22,8 @@ public abstract class MultipleSortThread {
     protected volatile int sortCount;
     protected volatile int sortNumber;
     
+    protected volatile int categoryCount;
+    
     public MultipleSortThread(ArrayVisualizer ArrayVisualizer) {
         this.ArrayVisualizer = ArrayVisualizer;
         this.ArrayManager = ArrayVisualizer.getArrayManager();
@@ -33,8 +35,13 @@ public abstract class MultipleSortThread {
         this.Timer = ArrayVisualizer.getTimer();
     }
     
-    protected synchronized void RunIndividualSort(Sort sort, int bucketCount, int[] array, double speed) throws InterruptedException {
+    protected synchronized void RunIndividualSort(Sort sort, int bucketCount, int[] array, int length, double speed) throws InterruptedException {
         Delays.setSleepRatio(2.5);
+        
+        if(length != ArrayVisualizer.getCurrentLength()) {
+            ArrayVisualizer.setCurrentLength(length);
+        }
+        
         ArrayManager.refreshArray(array, ArrayVisualizer.getCurrentLength(), this.ArrayVisualizer);
         
         ArrayVisualizer.setHeading(sort.getRunAllID() + " (Sort " + this.sortNumber + " of " + this.sortCount + ")");
@@ -48,5 +55,15 @@ public abstract class MultipleSortThread {
         Thread.sleep(1000);
         
         this.sortNumber++;
+    }
+    
+    public abstract void ReportAllSorts(int[] array, int current, int total) throws Exception;
+    
+    public int getSortCount() {
+        return this.sortCount;
+    }
+    
+    public int getCategoryCount() {
+        return this.categoryCount;
     }
 }

@@ -57,25 +57,25 @@ final public class CountingSort extends Sort {
         int[] output = Arrays.copyOf(array, length);
         int[] counts = new int[max + 1];
         
-        for(int i = 0; i < length; i++){
-            Writes.write(counts, array[i], counts[array[i]] + 1, 0.5, false, true);
+        for (int i = 0; i < length; i++) { 
+            Writes.write(counts, array[i], counts[array[i]] + 1, 1, false, true);
             Highlights.markArray(1, i);
-        }
-        for (int i = 1; i <= max; i++) {
+        } 
+  
+        for (int i = 1; i < counts.length; i++) { 
             Writes.write(counts, i, counts[i] + counts[i - 1], 1, true, true);
+        } 
+  
+        for (int i = length - 1; i >= 0; i--) {
+            output[counts[array[i]] - 1] = array[i];
+            counts[array[i]]--;
         }
-        for(int i = length - 1; i >= 0; i--){
-            Writes.write(counts, array[i], counts[array[i]] - 1, 0, false, true);
-            Writes.write(output, counts[array[i]], array[i], 0, false, true);
-            
-            Writes.changeTempWrites(-2);
-        }
-        //Usually counting sort returns a sorted copy of the input array. The visualization pretends that happens here.
-        for(int i = length - 1; i >= 0; i--) {
-            Writes.write(array, i, output[i], 1, false, false);
-            
+        
+        // Extra loop to simulate the results from the "output" array being written
+        // to the visual array.
+        for (int i = length - 1; i >= 0; i--) {
+            Writes.write(array, i, counts[i], 1, true, false);
             Writes.changeTempWrites(1);
-            Highlights.markArray(1, i);
         }
     }
 }

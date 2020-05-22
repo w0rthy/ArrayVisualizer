@@ -57,7 +57,8 @@ final public class GrailSort extends GrailSorting {
         super(delayOps, markOps, readOps, writeOps);
         
         this.setSortPromptID("Grail");
-        this.setRunAllID("Grail Sort (Block Merge Sort)");
+        //this.setRunAllID("Grail Sort (Block Merge Sort)");
+        this.setRunAllID("Grail Sort [Block Merge Sort]");
         this.setReportSortID("Grailsort");
         this.setCategory("Hybrid Sorts");
         this.isComparisonBased(true);

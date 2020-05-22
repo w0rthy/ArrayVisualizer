@@ -46,6 +46,9 @@ SOFTWARE.
 final public class RunExchangeSorts extends MultipleSortThread {
     public RunExchangeSorts(ArrayVisualizer ArrayVisualizer) {
         super(ArrayVisualizer);
+        this.sortCount = 12;
+                       //13;
+        this.categoryCount = this.sortCount;
     }
 
     public synchronized void ReportExchangeSorts(int[] array) throws Exception {
@@ -63,7 +66,7 @@ final public class RunExchangeSorts extends MultipleSortThread {
                     Sort OddEvenSort        = new        OddEvenSort(Delays, Highlights, Reads, Writes);
                     Sort GnomeSort          = new          GnomeSort(Delays, Highlights, Reads, Writes);
                     Sort SmartGnomeSort     = new     SmartGnomeSort(Delays, Highlights, Reads, Writes);
-                    Sort BinaryGnomeSort    = new    BinaryGnomeSort(Delays, Highlights, Reads, Writes);
+                    //Sort BinaryGnomeSort    = new    BinaryGnomeSort(Delays, Highlights, Reads, Writes);
                     Sort CombSort           = new           CombSort(Delays, Highlights, Reads, Writes);
                     Sort CircleSort         = new         CircleSort(Delays, Highlights, Reads, Writes);
                     Sort LLQuickSort        = new        LLQuickSort(Delays, Highlights, Reads, Writes);
@@ -72,25 +75,24 @@ final public class RunExchangeSorts extends MultipleSortThread {
                     Sort StableQuickSort    = new    StableQuickSort(Delays, Highlights, Reads, Writes);
 
                     RunExchangeSorts.this.sortNumber = 1;
-                    RunExchangeSorts.this.sortCount = 13;
 
                     ArrayManager.toggleMutableLength(false);
 
                     ArrayVisualizer.setCategory("Exchange Sorts");
 
-                    RunExchangeSorts.this.RunIndividualSort(BubbleSort,         0, array, 25);
-                    RunExchangeSorts.this.RunIndividualSort(SmartBubbleSort,    0, array, 22);
-                    RunExchangeSorts.this.RunIndividualSort(CocktailShakerSort, 0, array, 22);
-                    RunExchangeSorts.this.RunIndividualSort(OddEvenSort,        0, array, 25);
-                    RunExchangeSorts.this.RunIndividualSort(GnomeSort,          0, array, 10);
-                    RunExchangeSorts.this.RunIndividualSort(SmartGnomeSort,     0, array, 10);
-                    RunExchangeSorts.this.RunIndividualSort(BinaryGnomeSort,    0, array, 10);
-                    RunExchangeSorts.this.RunIndividualSort(CombSort,           0, array,  2);
-                    RunExchangeSorts.this.RunIndividualSort(CircleSort,         0, array,  2.5);
-                    RunExchangeSorts.this.RunIndividualSort(LLQuickSort,        0, array,  1.25);
-                    RunExchangeSorts.this.RunIndividualSort(LRQuickSort,        0, array,  2);
-                    RunExchangeSorts.this.RunIndividualSort(DualPivotQuickSort, 0, array,  1.25);
-                    RunExchangeSorts.this.RunIndividualSort(StableQuickSort,    0, array,  1.5);
+                    RunExchangeSorts.this.RunIndividualSort(BubbleSort,         0, array,  512, 1.5);
+                    RunExchangeSorts.this.RunIndividualSort(SmartBubbleSort,    0, array,  512, 1.5);
+                    RunExchangeSorts.this.RunIndividualSort(CocktailShakerSort, 0, array,  512, 1.25);
+                    RunExchangeSorts.this.RunIndividualSort(OddEvenSort,        0, array,  512, 1);
+                    RunExchangeSorts.this.RunIndividualSort(GnomeSort,          0, array,  128, 0.025);
+                    RunExchangeSorts.this.RunIndividualSort(SmartGnomeSort,     0, array,  128, 0.025);
+                    //RunExchangeSorts.this.RunIndividualSort(BinaryGnomeSort,    0, array,  128, 0.002);
+                    RunExchangeSorts.this.RunIndividualSort(CombSort,           0, array, 1024, 1);
+                    RunExchangeSorts.this.RunIndividualSort(CircleSort,         0, array, 1024, 1);
+                    RunExchangeSorts.this.RunIndividualSort(LLQuickSort,        0, array, 2048, 1);
+                    RunExchangeSorts.this.RunIndividualSort(LRQuickSort,        0, array, 2048, 1);
+                    RunExchangeSorts.this.RunIndividualSort(DualPivotQuickSort, 0, array, 2048, 1);
+                    RunExchangeSorts.this.RunIndividualSort(StableQuickSort,    0, array, 2048, 1);
                     
                     ArrayVisualizer.setCategory("Run Exchange Sorts");
                     ArrayVisualizer.setHeading("Done");
@@ -104,7 +106,63 @@ final public class RunExchangeSorts extends MultipleSortThread {
                 ArrayVisualizer.setSortingThread(null);
             }
         });
+        ArrayVisualizer.runSortingThread();
+    }
+    
+    @Override
+    public synchronized void ReportAllSorts(int[] array, int current, int total) throws Exception {
+        if(ArrayVisualizer.getSortingThread() != null && ArrayVisualizer.getSortingThread().isAlive())
+            return;
 
+        Sounds.toggleSound(true);
+        ArrayVisualizer.setSortingThread(new Thread() {
+            @Override
+            public void run() {
+                try{
+                    Sort BubbleSort         = new         BubbleSort(Delays, Highlights, Reads, Writes);
+                    Sort SmartBubbleSort    = new    SmartBubbleSort(Delays, Highlights, Reads, Writes);
+                    Sort CocktailShakerSort = new CocktailShakerSort(Delays, Highlights, Reads, Writes);
+                    Sort OddEvenSort        = new        OddEvenSort(Delays, Highlights, Reads, Writes);
+                    Sort GnomeSort          = new          GnomeSort(Delays, Highlights, Reads, Writes);
+                    Sort SmartGnomeSort     = new     SmartGnomeSort(Delays, Highlights, Reads, Writes);
+                    //Sort BinaryGnomeSort    = new    BinaryGnomeSort(Delays, Highlights, Reads, Writes);
+                    Sort CombSort           = new           CombSort(Delays, Highlights, Reads, Writes);
+                    Sort CircleSort         = new         CircleSort(Delays, Highlights, Reads, Writes);
+                    Sort LLQuickSort        = new        LLQuickSort(Delays, Highlights, Reads, Writes);
+                    Sort LRQuickSort        = new        LRQuickSort(Delays, Highlights, Reads, Writes);
+                    Sort DualPivotQuickSort = new DualPivotQuickSort(Delays, Highlights, Reads, Writes);
+                    Sort StableQuickSort    = new    StableQuickSort(Delays, Highlights, Reads, Writes);
+
+                    RunExchangeSorts.this.sortNumber = current;
+                    RunExchangeSorts.this.sortCount = total;
+
+                    ArrayManager.toggleMutableLength(false);
+
+                    ArrayVisualizer.setCategory("Exchange Sorts");
+
+                    RunExchangeSorts.this.RunIndividualSort(BubbleSort,         0, array,  512, 1.5);
+                    RunExchangeSorts.this.RunIndividualSort(SmartBubbleSort,    0, array,  512, 1.5);
+                    RunExchangeSorts.this.RunIndividualSort(CocktailShakerSort, 0, array,  512, 1.25);
+                    RunExchangeSorts.this.RunIndividualSort(OddEvenSort,        0, array,  512, 1);
+                    RunExchangeSorts.this.RunIndividualSort(GnomeSort,          0, array,  128, 0.025);
+                    RunExchangeSorts.this.RunIndividualSort(SmartGnomeSort,     0, array,  128, 0.025);
+                    //RunExchangeSorts.this.RunIndividualSort(BinaryGnomeSort,    0, array,  128, 0.002);
+                    RunExchangeSorts.this.RunIndividualSort(CombSort,           0, array, 1024, 1);
+                    RunExchangeSorts.this.RunIndividualSort(CircleSort,         0, array, 1024, 1);
+                    RunExchangeSorts.this.RunIndividualSort(LLQuickSort,        0, array, 2048, 1.5);
+                    RunExchangeSorts.this.RunIndividualSort(LRQuickSort,        0, array, 2048, 1);
+                    RunExchangeSorts.this.RunIndividualSort(DualPivotQuickSort, 0, array, 2048, 1);
+                    RunExchangeSorts.this.RunIndividualSort(StableQuickSort,    0, array, 2048, 1);
+                    
+                    ArrayManager.toggleMutableLength(true);
+                }
+                catch (Exception e) {
+                    e.printStackTrace();
+                }
+                Sounds.toggleSound(false);
+                ArrayVisualizer.setSortingThread(null);
+            }
+        });
         ArrayVisualizer.runSortingThread();
     }
 }

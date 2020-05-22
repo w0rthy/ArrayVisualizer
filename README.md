@@ -1,7 +1,7 @@
 # w0rthy's Array Visualizer, Revamped
 [![Donate](https://img.shields.io/badge/Donate-PayPal-green.svg)](https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=Q5QLCFZ8G7WY6&currency_code=USD&source=url)
 
-76 sorting algorithms demonstrated through 10 unique graphic designs
+77 sorting algorithms animated with 10 unique graphic designs
 
 This new version of the program features additions inspired by Timo Bingmann's "The Sound of Sorting" and w0rthy's updates to the original visualizer.
 
@@ -22,6 +22,17 @@ java -cp bin;lib/classgraph-4.8.47.jar main.ArrayVisualizer
 - Toggle shuffle animation
 - Toggle Timo Bingmann's "end sweep" animation
 - Refactored / optimized code
+
+## 5/21/2020 - Version 3.0 is now released!
+- Revamped "Run All Sorts" (It is now easier to create your own sequence of sorts!)
+- Cleaner statistics
+- Sort an array up to 16,384 (2^14) numbers!
+- Counting Sort is fixed
+- Holy Grail Sort is enabled, but just note that it's a mock algorithm; not finished yet.
+- Bug fixes
+- - Minor fixes to "Skip Sort" button
+- - Weird static line bug with linked dots squashed
+- - Other miscellaneous fixes here and there
 
 ## 10/19/2019 - Version 2.1
 - Both Odd-Even Mergesorts now display comparisons
@@ -74,7 +85,6 @@ java -cp bin;lib/classgraph-4.8.47.jar main.ArrayVisualizer
 **KNOWN BUGS:**
 - Certain sorts (comb sort, radix sorts) cause the program to forget the current speed
 - Certain sorts do not work with the "Skip Sort" button
-- Linked Dots visual has an extra, static line
 - Missing soundfont
 - SkaSort and HolyGrailSort produce errors -- this is normal, they aren't finished yet
 - No circular pointer -- will be fixed soon
@@ -96,14 +106,12 @@ java -cp bin;lib/classgraph-4.8.47.jar main.ArrayVisualizer
 - Organize list of sorts into more categories
 - Run All Sorts in specific category
 - Subheadings for customizable sorts (e.g. display the number of buckets during a bucket sort)
-- Justified statistics(??)
-- Sort an array up to 16,384 (2^14) numbers
 - "Many Similar" distribution ((i/5) * 5, as an example)
+- "Pipe organ" distribution (half ascending, half descending)
 - Fixed circular pointer with much cleaner math
 - Toogle between pointer and black bar with circular visuals
 - Refactor/reorganize prompts and frames
 - Cleaner:
-  - Counting Sort
   - Tree Sort
   - getters/setters
   - method parameters

@@ -143,6 +143,7 @@ final public class AmericanFlagSort extends Sort {
         @Override
         public void runSort(int[] array, int currentLen, int bucketCount) {
             this.NUMBER_OF_BUCKETS = bucketCount;
+            this.setRunAllID("American Flag Sort, " + this.NUMBER_OF_BUCKETS + " Buckets");
             
             int numberOfDigits = this.getMaxNumberOfDigits(array, currentLen); // Max number of digits
             int max = 1;

@@ -54,6 +54,6 @@ final public class BinaryInsertionSort extends BinaryInsertionSorting {
     
     @Override
     public void runSort(int[] array, int currentLength, int bucketCount) {
-        this.binaryInsertSort(array, 0, currentLength, 0.05, 0.015);
+        this.binaryInsertSort(array, 0, currentLength, 1, 0.05);
     }
 }

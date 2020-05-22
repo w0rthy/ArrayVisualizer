@@ -69,7 +69,8 @@ final public class SqrtSort extends Sort {
         super(delayOps, markOps, readOps, writeOps);
         
         this.setSortPromptID("Sqrt");
-        this.setRunAllID("Square Root Sort (Block Merge Sort");
+        //this.setRunAllID("Square Root Sort (Block Merge Sort)");
+        this.setRunAllID("Square Root Sort [Block Merge Sort]");
         this.setReportSortID("Sqrtsort");
         this.setCategory("Hybrid Sorts");
         this.isComparisonBased(true);

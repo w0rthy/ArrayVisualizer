@@ -110,9 +110,7 @@ final public class PatienceSort extends Sort {
             Pile smallPile = heap.poll();
             
             Writes.mockWrite(length, smallPile.size(), 0, 0);
-            Writes.write(array, c, smallPile.pop(), 1, false, false);
-            
-            Highlights.markArray(1, c);
+            Writes.write(array, c, smallPile.pop(), 1, true, false);
             
             if (!smallPile.isEmpty()) {
                 Writes.mockWrite(length, heap.size(), smallPile.get(0), 0);

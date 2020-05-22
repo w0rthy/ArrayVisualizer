@@ -75,7 +75,7 @@ public abstract class CombSorting extends Sort {
                 //ArrayVisualizer.setCurrentGap(gap);
 
                 if(gap == 1)
-                    Delays.setSleepRatio(10);
+                    Delays.setSleepRatio(3);
             }
 
             swapped = false;

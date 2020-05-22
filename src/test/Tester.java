@@ -52,10 +52,10 @@ public class Tester {
 	    
         ArrayVisualizer av = new ArrayVisualizer();
         
-	    Delays = new Delays();
+	    Delays = new Delays(av);
 	    Delays.setSleepRatio(Double.MAX_VALUE);
 	    
-	    Highlights = new Highlights(testArr.length);
+	    Highlights = new Highlights(av, testArr.length);
 	    Highlights.toggleFancyFinishes(false);
 	    
 	    RealTimer = new Timer();

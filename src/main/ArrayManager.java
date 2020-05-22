@@ -65,9 +65,11 @@ final public class ArrayManager {
         this.MUTABLE = Bool;
     }
  
+    //TODO: Fix minimum to zero
     public void initializeArray(int[] array) {
+        int equalFactor = ArrayVisualizer.getEqualItems();
         for (int i = 0; i < array.length; i++) {
-            array[i] = i;
+            array[i] = (i / equalFactor) * equalFactor;
         }
     }
     
@@ -106,6 +108,8 @@ final public class ArrayManager {
             double sleepRatio;
             
             switch(ArrayVisualizer.getLogBaseTwoOfLength()) {
+            case 14: sleepRatio = 16d;  break;
+            case 13: sleepRatio = 8d;   break;
             case 12: sleepRatio = 4d;   break;
             case 11: sleepRatio = 2d;   break;
             case 10: sleepRatio = 3/2d; break;

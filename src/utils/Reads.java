@@ -69,7 +69,7 @@ final public class Reads {
         this.comparisons++;
     }
     
-    public String getComparisons() {
+    public String displayComparisons() {
         if(this.comparisons < 0) {
             this.comparisons = Long.MIN_VALUE;
             return "Over " + this.formatter.format(Long.MAX_VALUE);
@@ -80,18 +80,26 @@ final public class Reads {
         }
     }
     
+    public long getComparisons() {
+        return this.comparisons;
+    }
+    
+    public void setComparisons(long value) {
+        this.comparisons = value;
+    }
+    
     public int compare(int left, int right) {
         this.comparisons++;
         
         int cmpVal = 0;
         
-        if(Timer.timerEnabled()) Timer.startLap();
+        Timer.startLap();
 
         if(left > right)      cmpVal =  1;
         else if(left < right) cmpVal = -1;
         else                  cmpVal =  0;
 
-        if(Timer.timerEnabled()) Timer.stopLap();
+        Timer.stopLap();
         
         return cmpVal;
     }
@@ -102,11 +110,11 @@ final public class Reads {
         int max = 0;
 
         for(int i = 0; i < length; i++) {
-            if(Timer.timerEnabled()) Timer.startLap();
+            Timer.startLap();
             
             if(array[i] > max) max = array[i];
             
-            if(Timer.timerEnabled()) Timer.stopLap();
+            Timer.stopLap();
             
             if(mark) {
                 Highlights.markArray(1, i);
@@ -125,12 +133,13 @@ final public class Reads {
         int max = 0;
         
         for(int i = 0; i < length; i++) { 
-            if(Timer.timerEnabled()) Timer.startLap();
-            
             int log = (int) (Math.log(array[i]) / Math.log(base));
+            
+            Timer.startLap();
+            
             if(log > max) max = log;
             
-            if(Timer.timerEnabled()) Timer.stopLap();
+            Timer.stopLap();
             
             if(mark) {
                 Highlights.markArray(1, i);
@@ -150,20 +159,20 @@ final public class Reads {
         int max = 0;
         
         for(int i = 0; i < length; i++) {
-            if(Timer.timerEnabled()) Timer.startLap();
+            Timer.startLap();
             
             max = Math.max(max, array[i]);
             
-            if(Timer.timerEnabled()) Timer.stopLap();
+            Timer.stopLap();
             
             Highlights.markArray(1, i);
             Delays.sleep(0.75);
         }
-        if(Timer.timerEnabled()) Timer.startLap();
+        Timer.startLap();
         
         int analysis = 31 - Integer.numberOfLeadingZeros(max);
         
-        if(Timer.timerEnabled()) Timer.stopLap();
+        Timer.stopLap();
         
         ArrayVisualizer.toggleAnalysis(false);
         return analysis;

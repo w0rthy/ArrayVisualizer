@@ -247,7 +247,14 @@ final public class Renderer {
     //The longer the array length, the more bars marked. Makes the visual easier to see when bars are thinner.
     public void colorMarkedBars(int logOfLen, int index, Highlights Highlights, Graphics2D mainRender, boolean colorEnabled, boolean rainbowEnabled, boolean analysis) {
         switch(logOfLen) {
-        case 12: if(Highlights.containsPosition(index - 3))  markBar(mainRender, colorEnabled, rainbowEnabled, analysis);
+        case 14: if(Highlights.containsPosition(index - 10)
+                 || Highlights.containsPosition(index - 9)
+                 || Highlights.containsPosition(index - 8))  markBar(mainRender, colorEnabled, rainbowEnabled, analysis);
+        case 13: if(Highlights.containsPosition(index - 7)
+                 || Highlights.containsPosition(index - 6)
+                 || Highlights.containsPosition(index - 5))  markBar(mainRender, colorEnabled, rainbowEnabled, analysis);
+        case 12: if(Highlights.containsPosition(index - 4)
+                 || Highlights.containsPosition(index - 3))  markBar(mainRender, colorEnabled, rainbowEnabled, analysis);
         case 11: if(Highlights.containsPosition(index - 2))  markBar(mainRender, colorEnabled, rainbowEnabled, analysis);
         case 10: if(Highlights.containsPosition(index - 1))  markBar(mainRender, colorEnabled, rainbowEnabled, analysis);
         default: if(Highlights.containsPosition(index))      markBar(mainRender, colorEnabled, rainbowEnabled, analysis);
@@ -257,6 +264,8 @@ final public class Renderer {
     @SuppressWarnings("fallthrough")
     public void markHoops(int logOfLen, int index, Highlights Highlights, Graphics2D mainRender) {
         switch(logOfLen) {
+        case 14: if(Highlights.containsPosition(index - 13)) mainRender.setColor(Color.BLACK);
+        case 13: if(Highlights.containsPosition(index - 12)) mainRender.setColor(Color.BLACK);
         case 12: if(Highlights.containsPosition(index - 11)) mainRender.setColor(Color.BLACK);
         case 11: if(Highlights.containsPosition(index - 10)) mainRender.setColor(Color.BLACK);
         case 10: if(Highlights.containsPosition(index - 9))  mainRender.setColor(Color.BLACK);
@@ -275,6 +284,8 @@ final public class Renderer {
     @SuppressWarnings("fallthrough")
     public void drawFancyFinish(int logOfLen, int index, int position, Graphics2D mainRender, boolean colorEnabled, boolean rainbowEnabled) {
         switch(logOfLen) {
+        case 14: if(index == position - 13) markBarFancy(mainRender, colorEnabled, rainbowEnabled);
+        case 13: if(index == position - 12) markBarFancy(mainRender, colorEnabled, rainbowEnabled);
         case 12: if(index == position - 11) markBarFancy(mainRender, colorEnabled, rainbowEnabled);
         case 11: if(index == position - 10) markBarFancy(mainRender, colorEnabled, rainbowEnabled);
         case 10: if(index == position - 9)  markBarFancy(mainRender, colorEnabled, rainbowEnabled);
@@ -293,6 +304,8 @@ final public class Renderer {
     @SuppressWarnings("fallthrough")
     public void drawFancyFinishLine(int logOfLen, int index, int position, Graphics2D mainRender, double width, boolean colorEnabled) {
         switch(logOfLen) {
+        case 14: if(index == position - 13) lineMark(mainRender, width, colorEnabled, false);
+        case 13: if(index == position - 12) lineMark(mainRender, width, colorEnabled, false);
         case 12: if(index == position - 11) lineMark(mainRender, width, colorEnabled, false);
         case 11: if(index == position - 10) lineMark(mainRender, width, colorEnabled, false);
         case 10: if(index == position - 9)  lineMark(mainRender, width, colorEnabled, false);
@@ -311,6 +324,8 @@ final public class Renderer {
     @SuppressWarnings("fallthrough")
     public void drawFancyFinishHoops(int logOfLen, int index, int position, Graphics2D mainRender) {
         switch(logOfLen) {
+        case 14: if(index == position - 13) mainRender.setColor(Color.BLACK);
+        case 13: if(index == position - 12) mainRender.setColor(Color.BLACK);
         case 12: if(index == position - 11) mainRender.setColor(Color.BLACK);
         case 11: if(index == position - 10) mainRender.setColor(Color.BLACK);
         case 10: if(index == position - 9)  mainRender.setColor(Color.BLACK);

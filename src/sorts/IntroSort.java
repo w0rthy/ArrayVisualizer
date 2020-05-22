@@ -21,7 +21,8 @@ final public class IntroSort extends Sort {
         super(delayOps, markOps, readOps, writeOps);
         
         this.setSortPromptID("Intro");
-        this.setRunAllID("Introspective Sort (std::sort)");
+        //this.setRunAllID("Introspective Sort (std::sort)");
+        this.setRunAllID("Introspective Sort [std::sort]");
         this.setReportSortID("Introsort");
         this.setCategory("Hybrid Sorts");
         this.isComparisonBased(true);

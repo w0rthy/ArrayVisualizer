@@ -1,6 +1,6 @@
 package templates;
 
-import sorts.InsertionSort;
+import sorts.SmartGnomeSort;
 import utils.Delays;
 import utils.Highlights;
 import utils.Reads;
@@ -50,11 +50,11 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 /*                                                       */
 /*********************************************************/
 
-final class GrailState {
+final class GrailPair {
     private int leftOverLen;
     private int leftOverFrag;
     
-    protected GrailState(int len, int frag) {
+    protected GrailPair(int len, int frag) {
         this.leftOverLen = len;
         this.leftOverFrag = frag;
     }
@@ -69,7 +69,7 @@ final class GrailState {
 }
 
 public abstract class GrailSorting extends Sort {
-    private InsertionSort insertSorter;
+    private SmartGnomeSort grailInsertSorter;
     
     final private int grailStaticBufferLen = 32; //Buffer length changed due to less numbers in this program being sorted than what Mr. Astrelin used for testing.
     
@@ -84,7 +84,7 @@ public abstract class GrailSorting extends Sort {
     private void grailSwap(int[] arr, int a, int b) {
         Writes.swap(arr, a, b, 1, true, false);
     }
-
+    
     private void grailMultiSwap(int[] arr, int a, int b, int swapsLeft) {        
         while(swapsLeft != 0) { 
             this.grailSwap(arr, a++, b++);
@@ -107,7 +107,7 @@ public abstract class GrailSorting extends Sort {
     }
 
     private void grailInsertSort(int[] arr, int pos, int len) {
-        insertSorter.customInsertSort(arr, pos, len, 0.25, false);
+        grailInsertSorter.customSort(arr, pos, len, 0.75);
     }
 
     //boolean argument determines direction
@@ -126,7 +126,7 @@ public abstract class GrailSorting extends Sort {
                     right = mid;
                 } else left = mid;
             }
-            Highlights.markArray(1, mid);
+            Highlights.markArray(1, pos + mid);
         }
         return right;
     }
@@ -138,7 +138,7 @@ public abstract class GrailSorting extends Sort {
         while(dist < len && foundKeys < numKeys) {
             //Binary Search left
             int loc = this.grailBinSearch(arr, pos + firstKey, foundKeys, pos + dist, true);
-            if(loc == foundKeys || Reads.compare(arr[pos + dist], arr[pos + (firstKey + loc)]) != 0) {
+           if(loc == foundKeys || Reads.compare(arr[pos + dist], arr[pos + (firstKey + loc)]) != 0) {
                 this.grailRotate(arr, pos + firstKey, foundKeys, dist - (firstKey + foundKeys));
                 firstKey = dist - foundKeys;
                 this.grailRotate(arr, pos + (firstKey + loc), foundKeys - loc, 1);
@@ -218,11 +218,11 @@ public abstract class GrailSorting extends Sort {
                 leftOverLen = blockLen;
             } else {
                 if(havebuf) {
-                    GrailState results = this.grailSmartMergeWithBuffer(arr, pos + restToProcess, leftOverLen, leftOverFrag, blockLen);
+                    GrailPair results = this.grailSmartMergeWithBuffer(arr, pos + restToProcess, leftOverLen, leftOverFrag, blockLen);
                     leftOverLen = results.getLeftOverLen();
                     leftOverFrag = results.getLeftOverFrag();
                 } else {
-                    GrailState results = this.grailSmartMergeWithoutBuffer(arr, pos + restToProcess, leftOverLen, leftOverFrag, blockLen);
+                    GrailPair results = this.grailSmartMergeWithoutBuffer(arr, pos + restToProcess, leftOverLen, leftOverFrag, blockLen);
                     leftOverLen = results.getLeftOverLen();
                     leftOverFrag = results.getLeftOverFrag();
                 }
@@ -297,8 +297,8 @@ public abstract class GrailSorting extends Sort {
     }
 
     //returns the leftover length, then the leftover fragment
-    private GrailState grailSmartMergeWithoutBuffer(int[] arr, int pos, int leftOverLen, int leftOverFrag, int regBlockLen) {
-        if(regBlockLen == 0) return new GrailState(leftOverLen, leftOverFrag);
+    private GrailPair grailSmartMergeWithoutBuffer(int[] arr, int pos, int leftOverLen, int leftOverFrag, int regBlockLen) {
+        if(regBlockLen == 0) return new GrailPair(leftOverLen, leftOverFrag);
 
         int len1 = leftOverLen;
         int len2 = regBlockLen;
@@ -321,7 +321,7 @@ public abstract class GrailSorting extends Sort {
                     len2 -= foundLen;
                 }
                 if(len2 == 0) {
-                    return new GrailState(len1, leftOverFrag);
+                    return new GrailPair(len1, leftOverFrag);
                 }
                 do {
                     pos++;
@@ -329,11 +329,11 @@ public abstract class GrailSorting extends Sort {
                 } while(len1 != 0 && Reads.compare(arr[pos], arr[pos + len1]) - typeFrag < 0);
             }
         }
-        return new GrailState(len2, typeFrag);
+        return new GrailPair(len2, typeFrag);
     }
 
     //returns the leftover length, then the leftover fragment
-    private GrailState grailSmartMergeWithBuffer(int[] arr, int pos, int leftOverLen, int leftOverFrag, int blockLen) {
+    private GrailPair grailSmartMergeWithBuffer(int[] arr, int pos, int leftOverLen, int leftOverFrag, int blockLen) {
         int dist = 0 - blockLen, left = 0, right = leftOverLen, leftEnd = right, rightEnd = right + blockLen;
         int typeFrag = 1 - leftOverFrag;  // 1 if inverted
 
@@ -356,14 +356,14 @@ public abstract class GrailSorting extends Sort {
             length = rightEnd - right;
             fragment = typeFrag;
         }
-        return new GrailState(length, fragment);
+        return new GrailPair(length, fragment);
     }
 
 
     /***** Sort With Extra Buffer *****/
 
     //returns the leftover length, then the leftover fragment
-    private GrailState grailSmartMergeWithXBuf(int[] arr, int pos, int leftOverLen, int leftOverFrag, int blockLen) {
+    private GrailPair grailSmartMergeWithXBuf(int[] arr, int pos, int leftOverLen, int leftOverFrag, int blockLen) {
         int dist = 0 - blockLen, left = 0, right = leftOverLen, leftEnd = right, rightEnd = right + blockLen;
         int typeFrag = 1 - leftOverFrag;  // 1 if inverted
         
@@ -388,7 +388,7 @@ public abstract class GrailSorting extends Sort {
             length = rightEnd - right;
             fragment = typeFrag;
         }
-        return new GrailState(length, fragment);
+        return new GrailPair(length, fragment);
     }
 
     // arr[dist..-1] - free, arr[0, leftEnd - 1] ++ arr[leftEnd, leftEnd + rightEnd - 1]
@@ -448,7 +448,7 @@ public abstract class GrailSorting extends Sort {
                 restToProcess = processIndex;
                 leftOverLen = regBlockLen;
             } else {
-                GrailState results = this.grailSmartMergeWithXBuf(arr, pos + restToProcess, leftOverLen, leftOverFrag, regBlockLen);
+                GrailPair results = this.grailSmartMergeWithXBuf(arr, pos + restToProcess, leftOverLen, leftOverFrag, regBlockLen);
                 leftOverLen = results.getLeftOverLen(); 
                 leftOverFrag = results.getLeftOverFrag();
             }
@@ -581,7 +581,7 @@ public abstract class GrailSorting extends Sort {
 
                 for(int rightIndex = index; rightIndex < blockCount; rightIndex++) {
                     int rightComp = Reads.compare(arr[blockPos + leftIndex * regBlockLen],
-                            arr[blockPos + rightIndex * regBlockLen]);
+                                                  arr[blockPos + rightIndex * regBlockLen]);
                     if(rightComp > 0 || (rightComp == 0 && Reads.compare(arr[keyPos + leftIndex], arr[keyPos + rightIndex]) > 0)) {
                         leftIndex = rightIndex;
                     }
@@ -652,7 +652,7 @@ public abstract class GrailSorting extends Sort {
     }
 
     protected void grailCommonSort(int[] arr, int pos, int len, int[] buffer, int bufferPos, int bufferLen) {
-        insertSorter = new InsertionSort(this.Delays, this.Highlights, this.Reads, this.Writes);
+        this.grailInsertSorter = new SmartGnomeSort(Delays, Highlights, Reads, Writes);
         
         if(len <= 16) {
             this.grailInsertSort(arr, pos, len);

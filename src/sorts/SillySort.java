@@ -28,11 +28,11 @@ final public class SillySort extends Sort {
     private void sillySort(int[] array, int i, int j) {
 		int m;
 		
+		Delays.sleep(1);
+		
 		if (i < j) {
 		    /* find the middle of the array */
 		    m = i + ((j - i) / 2);
-		    
-		    Highlights.markArray(3, m);
 		    
 		    /* 
 		     * use this function (recursively) to find put the minimum elements of 

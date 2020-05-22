@@ -49,7 +49,8 @@ final public class RotateMergeSort extends GrailSorting {
         super(delayOps, markOps, readOps, writeOps);
         
         this.setSortPromptID("Rotate Merge");
-        this.setRunAllID("In-Place Merge Sort with Rotations");
+        this.setRunAllID("Rotate Merge Sort");
+        //this.setRunAllID("In-Place Merge Sort with Rotations");
         this.setReportSortID("In-Place Rotate Mergesort");
         this.setCategory("Merge Sorts");
         this.isComparisonBased(true);

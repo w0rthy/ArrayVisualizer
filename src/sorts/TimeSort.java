@@ -46,7 +46,8 @@ final public class TimeSort extends Sort {
         super(delayOps, markOps, readOps, writeOps);
         
         this.setSortPromptID("Time");
-        this.setRunAllID("Time Sort");
+        //this.setRunAllID("Time Sort");
+        this.setRunAllID("Time Sort, Mul 10");
         this.setReportSortID("Timesort");
         this.setCategory("Distributive Sorts");
         this.isComparisonBased(false);

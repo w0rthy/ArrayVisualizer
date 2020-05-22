@@ -104,8 +104,8 @@ final public class Writes {
             return "Over " + this.formatter.format(Long.MAX_VALUE);
         }
         else {
-            if(this.tempWrites == 1) return this.tempWrites + " Write to Auxillary Array(s)";
-            else                     return this.formatter.format(this.tempWrites) + " Writes to Auxillary Array(s)";
+            if(this.tempWrites == 1) return this.tempWrites + " Write to Auxiliary Array(s)";
+            else                     return this.formatter.format(this.tempWrites) + " Writes to Auxiliary Array(s)";
         }
     }
     
@@ -142,13 +142,13 @@ final public class Writes {
     public void swap(int[] array, int a, int b, double pause, boolean mark, boolean auxwrite) {
         if(mark) this.markSwap(a, b);
 
-        if(Timer.timerEnabled()) Timer.startLap();
+        Timer.startLap();
 
         int temp = array[a];
         array[a] = array[b];
         array[b] = temp;
 
-        if(Timer.timerEnabled()) Timer.stopLap();
+        Timer.stopLap();
 
         this.updateSwap(auxwrite);
         Delays.sleep(pause);
@@ -183,11 +183,11 @@ final public class Writes {
         if(auxwrite) tempWrites++;
         else             writes++;
         
-        if(Timer.timerEnabled()) Timer.startLap();
+        Timer.startLap();
         
         array[at] = equals;
 
-        if(Timer.timerEnabled()) Timer.stopLap();
+        Timer.stopLap();
         
         Delays.sleep(pause);
     }
@@ -198,11 +198,11 @@ final public class Writes {
         if(auxwrite) tempWrites++;
         else             writes++;
 
-        if(Timer.timerEnabled()) Timer.startLap();
+        Timer.startLap();
         
         array[x][y] = equals;
 
-        if(Timer.timerEnabled()) Timer.stopLap();
+        Timer.stopLap();
         
         Delays.sleep(pause);
     }
@@ -213,11 +213,11 @@ final public class Writes {
         
         this.tempWrites++;
 
-        if(Timer.timerEnabled()) Timer.startLap();
+        Timer.startLap();
         
         mockArray[pos] = val;
 
-        if(Timer.timerEnabled()) Timer.stopLap();
+        Timer.stopLap();
         
         Delays.sleep(pause);
     }
@@ -234,7 +234,7 @@ final public class Writes {
         }
     }
 
-    public void transcribeMSD(int[] array, ArrayList<Integer>[] registers, int start, int min, boolean mark, boolean auxwrite) {
+    public void transcribeMSD(int[] array, ArrayList<Integer>[] registers, int start, int min, double sleep, boolean mark, boolean auxwrite) {
         int total = start;
         int temp = 0;
 
@@ -245,12 +245,12 @@ final public class Writes {
         for(int index = registers.length - 1; index >= 0; index--) {
             for(int i = registers[index].size() - 1; i >= 0; i--) {
                 this.write(array, total + min - temp++ - 1, registers[index].get(i), 0, mark, auxwrite);
-                if(mark) Delays.sleep(1 + (2 / registers[index].size()));
+                if(mark) Delays.sleep(sleep);
             }
         }
     }
 
-    public void fancyTranscribe(int[] array, int length, ArrayList<Integer>[] registers) {
+    public void fancyTranscribe(int[] array, int length, ArrayList<Integer>[] registers, double sleep) {
         int[] tempArray = new int[length];
         boolean[] tempWrite = new boolean[length];
         int radix = registers.length;
@@ -260,7 +260,7 @@ final public class Writes {
 
         for(int i = 0; i < length; i++) {
             int register = i % radix;
-            int pos = (int) ((register * (length / radix)) + (i / radix));
+            int pos = (register * (length / radix)) + (i / radix);
             
             if(!tempWrite[pos]) {
                 this.write(array, pos, tempArray[pos], 0, false, false);
@@ -268,7 +268,7 @@ final public class Writes {
             }
             
             Highlights.markArray(register, pos);
-            if(register == 0) Delays.sleep(radix);
+            if(register == 0) Delays.sleep(sleep);
         }
         for(int i = 0; i < length; i++) {
             if(!tempWrite[i]){
@@ -282,23 +282,24 @@ final public class Writes {
     //Methods mocking System.arraycopy (reversearraycopy is for TimSort's MergeHi and BinaryInsert, and WikiSort's Rotate)
     public void arraycopy(int[] src, int srcPos, int[] dest, int destPos, int length, double sleep, boolean mark, boolean temp) {
         for(int i = 0; i < length; i++) {
-            this.write(dest, destPos + i, src[srcPos + i], sleep, false, temp);
-            
             if(mark) {
                 if(temp) Highlights.markArray(1, srcPos  + i);
                 else     Highlights.markArray(1, destPos + i);
             }
+            
+            //TODO: Handle order of Delays in write method better
+            this.write(dest, destPos + i, src[srcPos + i], sleep, false, temp);
         }
     }
     
     public void reversearraycopy(int[] src, int srcPos, int[] dest, int destPos, int length, double sleep, boolean mark, boolean temp) {
         for(int i = length - 1; i >= 0; i--) {
-            this.write(dest, destPos + i, src[srcPos + i], sleep, false, temp);
-            
             if(mark) {
                 if(temp) Highlights.markArray(1, srcPos  + i);
                 else     Highlights.markArray(1, destPos + i);
             }
+            
+            this.write(dest, destPos + i, src[srcPos + i], sleep, false, temp);
         }
     }
     

@@ -38,15 +38,13 @@ final public class Pixels {
     private boolean drawRect;
     
     public void drawVisual(int[] array, ArrayVisualizer ArrayVisualizer, Renderer Renderer, Graphics2D mainRender, Graphics2D extraRender, Highlights Highlights) {
-        //TODO: Fix zeroth line approaching infinity
         if(ArrayVisualizer.linesEnabled()) {
+            Renderer.setLineY((int) ((ArrayVisualizer.windowHeight() - 20) - (Math.max(array[0], 1) * Renderer.getYScale())));
             for(int i = 0; i < ArrayVisualizer.getCurrentLength(); i++) {
-                int y = 0;
+                int y = (int) ((ArrayVisualizer.windowHeight() - 20) - (Math.max(array[i], 1) * Renderer.getYScale()));
                 int width = (int) (Renderer.getXScale() * (i + 1)) - Renderer.getOffset();
 
                 if(width > 0) {
-                    y = (int) ((ArrayVisualizer.windowHeight() - 20) - (Math.max(array[i], 1) * Renderer.getYScale()));
-                    
                     if(i > 0) {
                         if(Highlights.fancyFinishActive()) {
                             if(i < Highlights.getFancyFinishPosition()) {
@@ -60,7 +58,7 @@ final public class Pixels {
                             Renderer.lineMark(mainRender, ArrayVisualizer.currentWidth(), ArrayVisualizer.colorEnabled(), ArrayVisualizer.analysisEnabled());
                         }
                         else Renderer.lineClear(mainRender, ArrayVisualizer.colorEnabled(), array, i, ArrayVisualizer.getCurrentLength(), ArrayVisualizer.currentWidth());
-
+                        
                         mainRender.drawLine(Renderer.getOffset() + 20, y, Renderer.getLineX() + 20, Renderer.getLineY());
                     }
                     Renderer.setLineX(Renderer.getOffset());

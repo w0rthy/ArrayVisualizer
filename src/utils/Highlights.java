@@ -2,6 +2,8 @@ package utils;
 
 import java.util.Arrays;
 
+import main.ArrayVisualizer;
+
 /*
  * 
 MIT License
@@ -53,7 +55,11 @@ final public class Highlights {
     private volatile boolean fancyFinish;
     private volatile int trackFinish;
     
-    public Highlights(int maximumLength) {
+    private ArrayVisualizer ArrayVisualizer;
+    
+    public Highlights(ArrayVisualizer ArrayVisualizer, int maximumLength) {
+        this.ArrayVisualizer = ArrayVisualizer;
+        
         this.Highlights = new int[maximumLength];
         this.FANCYFINISH = true;
         this.maxIndexMarked = 0;
@@ -84,6 +90,11 @@ final public class Highlights {
     }
     public void resetFancyFinish() {
         this.trackFinish = -1; // Magic number that clears the green sweep animation
+    }
+    
+    //TODO: Move Analysis to Highlights
+    public void toggleAnalysis(boolean Bool) {
+        this.ArrayVisualizer.toggleAnalysis(Bool);
     }
     
     public int getMaxIndex() {

@@ -1,6 +1,7 @@
 package templates;
 
 import sorts.InsertionSort;
+import utils.Delays;
 import utils.Highlights;
 import utils.Reads;
 import utils.Writes;
@@ -147,6 +148,8 @@ final public class WikiSorting {
     // just keep in mind that making it too small ruins the point (nothing will fit into it),
     // and making it too large also ruins the point (so much for "low memory"!)
     private InsertionSort InsertSort;
+    
+    private Delays Delays;
     private Highlights Highlights;
     private Reads Reads;
     private Writes Writes;
@@ -167,8 +170,10 @@ final public class WikiSorting {
     // 0 – if the system simply cannot allocate any extra memory whatsoever, no memory works just fine
 
     
-    public WikiSorting(InsertionSort insertionSort, Highlights markOps, Reads readOps, Writes writeOps, int cacheChoice) {
+    public WikiSorting(InsertionSort insertionSort, Delays delayOps, Highlights markOps, Reads readOps, Writes writeOps, int cacheChoice) {
         this.InsertSort = insertionSort;
+        
+        this.Delays = delayOps;
         this.Highlights = markOps;
         this.Reads = readOps;
         this.Writes = writeOps;
@@ -261,7 +266,7 @@ final public class WikiSorting {
 
     // n^2 sorting algorithm used to sort tiny chunks of the full array
     void InsertionSort(int[] array, Range range) {
-        InsertSort.customInsertSort(array, range.start, range.end, 0.25, false);
+        InsertSort.customInsertSort(array, range.start, range.end, 0.5, false);
     }
 
     // reverse a range of values within the array
@@ -368,6 +373,8 @@ final public class WikiSorting {
 
         if (B.length() > 0 && A.length() > 0) {
             while (true) {
+                Highlights.markArray(3, A_index);
+                Highlights.markArray(4, B_index);
                 if (Reads.compare(array[B_index], cache[A_index]) >= 0) {
                     Writes.write(array, insert_index, cache[A_index], 1, true, false);
                     A_index++;
@@ -381,7 +388,9 @@ final public class WikiSorting {
                 }
             }
         }
-
+        Highlights.clearMark(3);
+        Highlights.clearMark(4);
+        
         // copy the remainder of A into the final array
         if (cache != null) {
             Writes.arraycopy(cache, A_index, array, insert_index, A_last - A_index, 1, true, false);
@@ -397,19 +406,24 @@ final public class WikiSorting {
         if (B.length() > 0 && A.length() > 0) {
             while (true) {
                 if (Reads.compare(array[B.start + B_count], array[buffer.start + A_count]) >= 0) {
-                    Writes.swap(array, A.start + insert, buffer.start + A_count, 1, true, false);
+                    Highlights.markArray(3, buffer.start + A_count);
+                    Delays.sleep(1);
+                    Writes.swap(array, A.start + insert, buffer.start + A_count, 0, true, false);
                     A_count++;
                     insert++;
                     if (A_count >= A.length()) break;
                 } else {
-                    Writes.swap(array, A.start + insert, B.start + B_count, 1, true, false);
+                    Highlights.markArray(3, B.start + B_count);
+                    Delays.sleep(1);
+                    Writes.swap(array, A.start + insert, B.start + B_count, 0, true, false);
                     B_count++;
                     insert++;
                     if (B_count >= B.length()) break;
                 }
             }
         }
-
+        Highlights.clearMark(3);
+        
         // swap the remainder of A into the final array
         BlockSwap(array, buffer.start + A_count, A.start + insert, A.length() - A_count);
     }

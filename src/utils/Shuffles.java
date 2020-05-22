@@ -30,12 +30,18 @@ SOFTWARE.
 
 public enum Shuffles {
     RANDOM {
+        // If you want to learn why the random shuffle was changed,
+        // I highly encourage you read this. It's quite fascinating:
+        // http://datagenetics.com/blog/november42014/index.html
+            
         @Override
         public void shuffleArray(int[] array, ArrayVisualizer ArrayVisualizer, Delays Delays, Highlights Highlights, Writes Writes) {
             int currentLen = ArrayVisualizer.getCurrentLength();
             
+            //TODO: Consider separate method
             for(int i = 0; i < currentLen; i++){
-                Writes.swap(array, i, (int)(Math.random()*currentLen), 0, true, false);
+                int randomIndex = (int) (Math.random() * (currentLen - i)) + i;
+                Writes.swap(array, i, randomIndex, 0, true, false);
                 
                 if(ArrayVisualizer.shuffleEnabled()) Delays.sleep(1);
             }
@@ -70,7 +76,8 @@ public enum Shuffles {
                 if(ArrayVisualizer.shuffleEnabled()) Delays.sleep(1);
             }
             for(int i = 0; i < currentLen; i++){
-                Writes.swap(array, i, (int)(Math.random()*currentLen), 0, true, false);
+                int randomIndex = (int) (Math.random() * (currentLen - i)) + i;
+                Writes.swap(array, i, randomIndex, 0, true, false);
                 
                 if(ArrayVisualizer.shuffleEnabled()) Delays.sleep(1);
             }
@@ -80,10 +87,15 @@ public enum Shuffles {
         @Override
         public void shuffleArray(int[] array, ArrayVisualizer ArrayVisualizer, Delays Delays, Highlights Highlights, Writes Writes) {
             int currentLen = ArrayVisualizer.getCurrentLength();
+            int step = (int) Math.sqrt(currentLen);
             
-            for(int i = 0; i < Math.max(currentLen / 20, 1); i++){
-                Writes.swap(array, (int)(Math.random()*currentLen), (int)(Math.random()*currentLen), 0, true, false);
-                
+            //TODO: *Strongly* consider randomSwap method
+            for(int i = 0; i < currentLen; i += step){
+                int randomIndex = (int) (Math.random() * step);
+                randomIndex = Math.max(randomIndex, 1);
+                randomIndex = Math.min(randomIndex, currentLen - i - 1);
+                Writes.swap(array, i, i + randomIndex, 0, true, false);
+
                 if(ArrayVisualizer.shuffleEnabled()) Delays.sleep(2);
             }
         }

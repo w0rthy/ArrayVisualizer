@@ -43,7 +43,9 @@ public abstract class BinaryInsertionSorting extends Sort {
             
             while (lo < hi) {
                 int mid = lo + ((hi - lo) / 2); // avoid int overflow!
+                Highlights.markArray(1, lo);
                 Highlights.markArray(2, mid);
+                Highlights.markArray(3, hi);
                 
                 Delays.sleep(compSleep);
                 
@@ -55,6 +57,8 @@ public abstract class BinaryInsertionSorting extends Sort {
                 }
             }
 
+            Highlights.clearMark(3);
+            
             // item has to go into position lo
 
             int j = i - 1;

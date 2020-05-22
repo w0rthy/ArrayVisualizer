@@ -39,12 +39,12 @@ final public class CocktailBogoSort extends BogoSorting {
             }
             
             if(minSorted) {
-                Highlights.markArray(1, minIterator);
+                //Highlights.markArray(1, minIterator);
                 minIterator++;
                 minSorted = false;
             }
             if(maxSorted) {
-                Highlights.markArray(2, maxIterator);
+                //Highlights.markArray(2, maxIterator);
                 maxIterator--;
                 maxSorted = false;
             }

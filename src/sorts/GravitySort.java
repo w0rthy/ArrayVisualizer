@@ -37,7 +37,8 @@ final public class GravitySort extends Sort {
         super(delayOps, markOps, readOps, writeOps);
         
         this.setSortPromptID("Gravity");
-        this.setRunAllID("Gravity (Bead) Sort");
+        this.setRunAllID("Gravity Sort");
+        //this.setRunAllID("Gravity (Bead) Sort");
         this.setReportSortID("Beadsort");
         this.setCategory("Distributive Sorts");
         this.isComparisonBased(false);
@@ -50,7 +51,7 @@ final public class GravitySort extends Sort {
 
     @Override
     public void runSort(int[] array, int length, int bucketCount) {
-        int max = Reads.analyzeMax(array, length, 0.25, true);
+        int max = Reads.analyzeMax(array, length, 1, true);
         int[][] abacus = new int[length][max];
         
         for(int i = 0; i < length; i++) {
@@ -60,14 +61,18 @@ final public class GravitySort extends Sort {
         }
         
         //apply gravity
-        for(int i = 0; i < abacus[0].length; i++) {
+        for(int i = 0; i < abacus[0].length; i++) { 
             for(int j = 0; j < abacus.length; j++) {
-                if(abacus[j][i] == 1) {
+                Highlights.markArray(1, j);
+                if(abacus[j][i] == 1) {                 
                     //Drop it
                     int dropPos = j;
                     
-                    while(dropPos + 1 < abacus.length && abacus[dropPos][i] == 1)
+                    Writes.startLap();
+                    while(dropPos + 1 < abacus.length && abacus[dropPos][i] == 1) {   
                         dropPos++;
+                    }
+                    Writes.stopLap();
                     
                     if(abacus[dropPos][i] == 0) {
                         Writes.multiDimWrite(abacus, j, i, 0, 0, true, true);
@@ -80,13 +85,15 @@ final public class GravitySort extends Sort {
             for(int x = 0; x < abacus.length; x++){
                 count = 0;
                 
-                for(int y = 0; y < abacus[0].length; y++)
+                Writes.startLap();
+                for(int y = 0; y < abacus[0].length; y++) {
                     count += abacus[x][y];
+                }
+                Writes.stopLap();
                 
-                Writes.write(array, x, count, 0.002, true, false);
+                Writes.write(array, x, count, 0.001, true, false);
             }
             Highlights.markArray(2, length - i - 1);
-            Delays.sleep(0.001);
         }
     }
 }

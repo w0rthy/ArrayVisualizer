@@ -59,7 +59,7 @@ final public class CocktailShakerSort extends Sort {
                 Highlights.markArray(1, j);
                 Highlights.markArray(2, j + 1);
                 
-                Delays.sleep(0.01);
+                Delays.sleep(sleep / 2);
             }
             for(int j = end + start - i - 1; j > i; j--){
                 if(Reads.compare(array[j], array[j - 1]) == -1) {
@@ -69,7 +69,7 @@ final public class CocktailShakerSort extends Sort {
                 Highlights.markArray(1, j);
                 Highlights.markArray(2, j - 1);
                 
-                Delays.sleep(0.01);
+                Delays.sleep(sleep / 2);
             }
             
             i++;
@@ -82,6 +82,6 @@ final public class CocktailShakerSort extends Sort {
     
     @Override
     public void runSort(int[] array, int length, int bucketCount) {
-        this.cocktailShaker(array, 0, length, 0.0875);
+        this.cocktailShaker(array, 0, length, 0.1);
     }
 }

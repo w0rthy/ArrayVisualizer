@@ -57,11 +57,21 @@ public abstract class BogoSorting extends Sort {
         return true;
     }
     
+    protected boolean bogoIsSortedWithDelay(int[] array, int length, double sleep){
+        for(int i = 0; i < length - 1; i++) {
+            Highlights.markArray(1, i);
+            Delays.sleep(sleep);
+            if(Reads.compare(array[i], array[i + 1]) == 1) return false;
+        }
+        Highlights.clearMark(1);
+        return true;
+    }
+    
     protected boolean isMinSorted(int[] array, int length, int offset) {
         Highlights.clearAllMarks();
         
-        Highlights.markArray(2, offset);
-        Highlights.markArray(3, length);
+        //Highlights.markArray(2, offset);
+        //Highlights.markArray(3, length);
         
         for(int i = offset + 1; i < length; i++) {
             Highlights.markArray(1, i);
@@ -77,8 +87,8 @@ public abstract class BogoSorting extends Sort {
     protected boolean isMaxSorted(int[] array, int minIterator, int maxIterator) {
         Highlights.clearAllMarks();
         
-        Highlights.markArray(2, minIterator);
-        Highlights.markArray(3, maxIterator);
+        //Highlights.markArray(2, minIterator);
+        //Highlights.markArray(3, maxIterator);
         
         for(int i = maxIterator; i >= minIterator; i--) {
             Highlights.markArray(1, i);

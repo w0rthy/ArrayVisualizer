@@ -2,6 +2,7 @@ package main;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
+import java.awt.Dialog;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
@@ -9,12 +10,14 @@ import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.Stroke;
 import java.awt.Toolkit;
+import java.awt.Window;
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.text.NumberFormat;
 import java.util.Locale;
 
+import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
@@ -35,16 +38,15 @@ import visuals.VisualStyles;
  * - CLEAN UP GETTERS AND SETTERS
  * - CLEAN UP METHOD PARAMETERS
  * - SHOW/HIDE BASIC SORTS, ADVANCED SORTS, AND OBSCURE SORTS
+ * - GIVE COMPARE METHODS DELAY AND MARK ARGUMENTS
  * - Implement:
  * - - Entering in your own set of data
- * - - Justified statistics?
- * - - Up to 2^14 numbers.
+ * - - Pass ArrayVisualizer as "observer object" to sorts
+ * - - Pass formatter/symbols from ArrayVisualizer into utils
  * - Fix:
  * - - Circular pointer
  * - - Combsort / Radix Sorts not complying with "Skip Sort"
  * - - "Skip Sort" / changing array size saving previous speed
- * - - Counting Sort
- * - - "0th" Linked Dot
  * - - .dls file in soundfont dir
  * - - 1080p in OBS(?)
  * - Create:
@@ -66,11 +68,10 @@ import visuals.VisualStyles;
  * - - run all sorts in specific category
  * - - option for custom parts for intro sorts
  * - - option for simple shatter rate???
- * - - Timo Bingmann's green sweep also *verify* a sorted array
  * - Finish:
  * - - SkaSort
  * - - HolyGrailSort
- * - - Run All/Run All Sorts in Category
+ * - - Run All Sorts in Category
  * - Cleanup:
  * - - Treesort
  */
@@ -133,15 +134,16 @@ final public class ArrayVisualizer {
     final boolean OBS = false; // Change to true if you want 1080p for recording with OBS
     
     final private int MIN_ARRAY_VAL = 2;
-    final private int MAX_ARRAY_VAL = 4096;
+    final private int MAX_ARRAY_VAL = 16384;
 
     final int[] array = new int[this.MAX_ARRAY_VAL];
     
-    private String[][] ComparisonSorts;     //First row of Comparison/DistributionSorts arrays consists of class names
-    private String[][] DistributionSorts;   //Second row consists of user-friendly names
+    private String[][] ComparisonSorts;     // First row of Comparison/DistributionSorts arrays consists of class names
+    private String[][] DistributionSorts;   // Second row consists of user-friendly names
     private String[] InvalidSorts;
     
     private volatile int currentLen;
+    private volatile int equalItems;
     
     private ArrayManager ArrayManager;
     private SortAnalyzer SortAnalyzer;
@@ -195,10 +197,11 @@ final public class ArrayVisualizer {
 
     public ArrayVisualizer() {
         this.currentLen = 2048;
+        this.equalItems = 1;
         
-        this.Delays = new Delays();
-        this.Highlights = new Highlights(this.MAX_ARRAY_VAL);
+        this.Highlights = new Highlights(this, this.MAX_ARRAY_VAL);
         this.Sounds = new Sounds(this.array, this);
+        this.Delays = new Delays(this);
         this.Timer = new Timer();
         this.Reads = new Reads(this);
         this.Renderer = new Renderer(this);
@@ -244,35 +247,38 @@ final public class ArrayVisualizer {
 
         ArrayManager.initializeArray(this.array);
         
+        //TODO: Overhaul visual code to properly reflect Swing (JavaFX?) style and conventions
+        
         //DRAW THREAD
         this.visualsThread = new Thread() {
             @Override
             public void run() {
                 Renderer.initializeVisuals(ArrayVisualizer.this, ArrayVisualizer.this.VisualStyles);
                 
+                Graphics background = window.getGraphics();
+                background.setColor(Color.BLACK);
+                int coltmp = 255;
+                
                 while(true) {
                     Renderer.updateVisuals(ArrayVisualizer.this);
                     Renderer.drawVisual(ArrayVisualizer.this.VisualStyles, array, ArrayVisualizer.this, mainRender, extraRender, Highlights);
-
-                    int coltmp = 255;
+                    
                     mainRender.setColor(new Color(coltmp,coltmp,coltmp));
                     if(TEXTDRAW) {
                         Font f = mainRender.getFont();
                         mainRender.setFont(typeFace);
-                        mainRender.drawString(category + ": " + heading, 15, (int)(cw/1280.0*40)+30);
-                        mainRender.drawString(formatter.format(currentLen) + " Numbers", 15, (int)(cw/1280.0*65)+30);
-                        mainRender.drawString(String.format("Delay: " + formatter.format(Delays.getCurrentDelay()) + "ms"), 15, (int)(cw/1280.0*105)+30);
-                        mainRender.drawString(String.format("Visual Time: " + Timer.getVisualTime()), 15, (int)(cw/1280.0*130)+30);
-                        mainRender.drawString(String.format("Estimated Real Time: " + Timer.getRealTime()), 15, (int)(cw/1280.0*155)+30);
-                        mainRender.drawString(Reads.getComparisons(), 15, (int)(cw/1280.0*195)+30);
-                        mainRender.drawString(Writes.getSwaps(), 15, (int)(cw/1280.0*220)+30);
-                        mainRender.drawString(Writes.getReversals(), 15, (int)(cw/1280.0*245)+30);
-                        mainRender.drawString(Writes.getWrites(), 15, (int)(cw/1280.0*270)+30);
-                        mainRender.drawString(Writes.getTempWrites(), 15, (int)(cw/1280.0*295)+30);
+                        mainRender.drawString(category + ": " + heading, 15, (int)(cw/1280.0*30)+30);
+                        mainRender.drawString(formatter.format(currentLen) + " Numbers", 15, (int)(cw/1280.0*55)+30);
+                        mainRender.drawString(String.format("Delay: " + Delays.displayCurrentDelay() + "ms"), 15, (int)(cw/1280.0*95)+30);
+                        mainRender.drawString(String.format("Visual Time: " + Timer.getVisualTime()), 15, (int)(cw/1280.0*120)+30);
+                        mainRender.drawString(String.format("Sort Time: " + Timer.getRealTime()), 15, (int)(cw/1280.0*145)+30);
+                        mainRender.drawString(Reads.displayComparisons(), 15, (int)(cw/1280.0*185)+30);
+                        mainRender.drawString(Writes.getSwaps(), 15, (int)(cw/1280.0*210)+30);
+                        mainRender.drawString(Writes.getReversals(), 15, (int)(cw/1280.0*235)+30);
+                        mainRender.drawString(Writes.getWrites(), 15, (int)(cw/1280.0*275)+30);
+                        mainRender.drawString(Writes.getTempWrites(), 15, (int)(cw/1280.0*300)+30);
                         mainRender.setFont(f);
                     }
-                    Graphics background = window.getGraphics();
-                    background.setColor(Color.BLACK);
                     background.drawImage(img, 0, 0, null);
                 }}};
         
@@ -342,12 +348,19 @@ final public class ArrayVisualizer {
         Timer.manualSetTime(0);
     }
     
-    // These next three methods should be part of ArrayManager
+    // These next five methods should be part of ArrayManager
     public int getCurrentLength() {
         return this.currentLen;
     }
     public void setCurrentLength(int newLength) {
         this.currentLen = newLength;
+    }
+    
+    public int getEqualItems() {
+        return this.equalItems;
+    }
+    public void setEqualItems(int newCount) {
+        this.equalItems = newCount;
     }
     
     public int getLogBaseTwoOfLength() {
@@ -472,7 +485,7 @@ final public class ArrayVisualizer {
         return (this.currentLen / 2);
     }
     
-    public synchronized void fancyFinish() {
+    public synchronized void verifySortAndSweep() {
         Highlights.toggleFancyFinish(true);
         Highlights.resetFancyFinish();
 
@@ -481,29 +494,66 @@ final public class ArrayVisualizer {
         double sleepRatio = 0;
         
         switch(this.getLogBaseTwoOfLength()) {
-        case 12: sleepRatio =  1; break;
-        case 11: sleepRatio =  2; break;
-        case 10: sleepRatio =  4; break;
-        case 9:  sleepRatio =  6; break;
-        case 8:  sleepRatio =  8; break;
-        case 7:  sleepRatio = 16; break;
-        case 6:  sleepRatio = 24; break;
+        case 14: sleepRatio =  0.25; break;
+        case 13: sleepRatio =   0.5; break;
+        case 12: sleepRatio =     1; break;
+        case 11: sleepRatio =     2; break;
+        case 10: sleepRatio =     4; break;
+        case 9:  sleepRatio =     6; break;
+        case 8:  sleepRatio =     8; break;
+        case 7:  sleepRatio =    16; break;
+        case 6:  sleepRatio =    24; break;
         case 5:
-        case 4:  sleepRatio = 32; break;
+        case 4:  sleepRatio =   32; break;
         case 3:
         case 2:
         default: sleepRatio = 64;
         }
         
+        long tempComps = Reads.getComparisons();
+        Reads.setComparisons(0);
+        
+        String temp = this.heading;
+        this.heading = "Verifying sort...";
+        
         for(int i = 0; i < this.currentLen + this.getLogBaseTwoOfLength(); i++) {
             if(i < this.currentLen) Highlights.markArray(1, i);
             Highlights.incrementFancyFinishPosition();
             
-            Delays.sleep(sleepRatio / this.getLogBaseTwoOfLength());
+            if(i < this.currentLen - 1) {
+                if(Reads.compare(array[i], array[i + 1]) == 1) {
+                    Highlights.clearMark(1);
+                    
+                    Sounds.toggleSound(false);
+                    Highlights.toggleFancyFinish(false);
+                    
+                    for(int j = i + 1; j < this.currentLen; j++) {
+                        Highlights.markArray(j, j);
+                        Delays.sleep(sleepRatio / this.getLogBaseTwoOfLength());
+                    }
+                    
+                    JOptionPane.showMessageDialog(window, "The sort was unsuccessful;\nIndices " + i + " and " + (i + 1) + " are out of order!", "Error", JOptionPane.OK_OPTION, null);
+                    
+                    Highlights.clearAllMarks();
+                    
+                    i = this.currentLen + this.getLogBaseTwoOfLength();
+                    
+                    Sounds.toggleSound(true);
+                }
+            }
+            
+            if(Highlights.fancyFinishEnabled()) {
+                Delays.sleep(sleepRatio / this.getLogBaseTwoOfLength());
+            }
         }
         Highlights.clearMark(1);
 
-        Highlights.toggleFancyFinish(false);
+        this.heading = temp;
+        Reads.setComparisons(tempComps);
+        
+        if(Highlights.fancyFinishActive()) {
+            Highlights.toggleFancyFinish(false);
+        }
         Highlights.resetFancyFinish();
     }
 
@@ -511,13 +561,12 @@ final public class ArrayVisualizer {
         Timer.disableRealTimer();
         Highlights.clearAllMarks();
 
-        if(Highlights.fancyFinishEnabled()) {
-            double speed = Delays.getSleepRatio(); 
-            this.fancyFinish();
-            Delays.setSleepRatio(speed);
-            
-            Highlights.clearAllMarks();
-        }
+        double speed = Delays.getSleepRatio(); 
+        this.verifySortAndSweep();
+        Delays.setSleepRatio(speed);
+        Delays.changeSkipped(false);
+
+        Highlights.clearAllMarks();
     }
     
     public void togglePointer(boolean Bool) {
@@ -622,7 +671,7 @@ final public class ArrayVisualizer {
             for(int i = 0; i < InvalidSorts.length; i++) {
                 output += InvalidSorts[i] + "\n";
             }
-            JOptionPane.showMessageDialog(window, "The following algorithms were not loaded due to errors:\n" + output);
+            JOptionPane.showMessageDialog(window, "The following algorithms were not loaded due to errors:\n" + output, "Warning", JOptionPane.WARNING_MESSAGE);
         }
     }
     

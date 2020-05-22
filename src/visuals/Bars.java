@@ -1,7 +1,9 @@
 package visuals;
 
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.Stroke;
 
 import main.ArrayVisualizer;
 import utils.Highlights;
@@ -57,7 +59,14 @@ final public class Bars {
                     Renderer.colorMarkedBars(ArrayVisualizer.getLogBaseTwoOfLength(), i, Highlights, mainRender, ArrayVisualizer.colorEnabled(), ArrayVisualizer.rainbowEnabled(), ArrayVisualizer.analysisEnabled());
                 }
             }
-
+            /*
+            int markHeight = 0;
+            Color currentColor = mainRender.getColor();
+            if(currentColor == Color.BLACK || currentColor == Color.RED || currentColor == Color.BLUE) {
+                markHeight = 5;
+            }
+            */
+            
             int y = 0;
             int width = (int) (Renderer.getXScale() * (i + 1)) - Renderer.getOffset();
 
@@ -70,10 +79,25 @@ final public class Bars {
             }
             else {
                 if(width > 0) {
-                    y = (int) (((ArrayVisualizer.windowHeight() - 20)) - array[i] * Renderer.getYScale());
-                    mainRender.fillRect(Renderer.getOffset() + 20, y, width, (int) Math.max(array[i] * Renderer.getYScale(), 1));
+                    /*
+                    int gap = 0;
+                    if(width > 5) {
+                        gap = 5;
+                    }
+                    */
+                    
+                    y = (int) (((ArrayVisualizer.windowHeight() - 20)) - (array[i] + 1) * Renderer.getYScale());
+                    mainRender.fillRect(Renderer.getOffset() + 20, y /*- markHeight*/, width /*- gap*/, (int) ((array[i] + 1) * Renderer.getYScale()) /*+ markHeight*/);
+                    
+                    /*
+                    double thickness = 1;
+                    Stroke oldStroke = mainRender.getStroke();
+                    mainRender.setStroke(new BasicStroke((float) thickness));
+                    mainRender.setColor(Color.BLACK);
+                    mainRender.drawLine(Renderer.getOffset() + 20, y, Renderer.getOffset() + 20, (int) Math.max(array[i] * Renderer.getYScale()-1, 1) + y);
+                    mainRender.setStroke(oldStroke);
+                    */
                 }
-                
                 Renderer.setOffset(Renderer.getOffset() + width);
             }
         }
