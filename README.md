@@ -24,7 +24,7 @@ java -cp bin;lib/classgraph-4.8.47.jar main.ArrayVisualizer
 - Refactored / optimized code
 
 ## 5/21/2020 - Version 3.0 is now released!
-- Sound effects are much more pleasant
+- Sound effects are much more pleasant at slower speeds
 - Revamped "Run All Sorts" (It is now easier to create your own sequence of sorts!)
 - Cleaner statistics
 - Sort an array up to 16,384 (2^14) numbers!
