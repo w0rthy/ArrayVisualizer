@@ -14,6 +14,7 @@ import sorts.OddEvenSort;
 import sorts.SmartBubbleSort;
 import sorts.SmartGnomeSort;
 import sorts.StableQuickSort;
+import templates.JErrorPane;
 import templates.MultipleSortThread;
 import templates.Sort;
 
@@ -100,7 +101,7 @@ final public class RunExchangeSorts extends MultipleSortThread {
                     ArrayManager.toggleMutableLength(true);
                 }
                 catch (Exception e) {
-                    e.printStackTrace();
+                    JErrorPane.invokeErrorMessage(e);
                 }
                 Sounds.toggleSound(false);
                 ArrayVisualizer.setSortingThread(null);
@@ -157,7 +158,7 @@ final public class RunExchangeSorts extends MultipleSortThread {
                     ArrayManager.toggleMutableLength(true);
                 }
                 catch (Exception e) {
-                    e.printStackTrace();
+                    JErrorPane.invokeErrorMessage(e);
                 }
                 Sounds.toggleSound(false);
                 ArrayVisualizer.setSortingThread(null);

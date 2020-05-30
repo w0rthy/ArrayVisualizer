@@ -382,15 +382,26 @@ final public class UtilFrame extends javax.swing.JFrame {
         }
         
         if(speedPromptAllowed) {
-            try{
-                double oldRatio = Delays.getSleepRatio();
-                double newRatio = Double.parseDouble(JOptionPane.showInputDialog(null, "Modify the visual's speed below (Ex. 10 = Ten times faster)", oldRatio));
-                if(newRatio == 0) throw new Exception("Divide by zero!");
-                Delays.setSleepRatio(newRatio);
-                Delays.updateCurrentDelay(oldRatio, Delays.getSleepRatio());
-            }
-            catch(Exception e) { //TODO: Display not a number instead of println
-                System.out.println("Not a number! (" + e.getMessage() + ")");
+            boolean showPrompt = true;
+            while(showPrompt) {
+                try {
+                    double oldRatio = Delays.getSleepRatio();
+                    String userInput = JOptionPane.showInputDialog(null, "Modify the visual's speed below (Ex. 10 = Ten times faster)", oldRatio);
+                    if(userInput == null) {
+                        showPrompt = false;
+                    }
+                    else {
+                        double newRatio = Double.parseDouble(userInput);
+                        if(newRatio == 0) throw new Exception("Divide by zero");
+                        Delays.setSleepRatio(newRatio);
+                        Delays.updateCurrentDelay(oldRatio, Delays.getSleepRatio());
+                        showPrompt = false;
+                    }
+                }
+                catch(Exception e) {
+                    showPrompt = true;
+                    JOptionPane.showMessageDialog(null, "Not a number! (" + e.getMessage() + ")", "Error", JOptionPane.ERROR_MESSAGE);
+                }
             }
         }
     }//GEN-LAST:event_jButton3ActionPerformed

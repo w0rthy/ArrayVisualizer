@@ -1,5 +1,7 @@
 package threads;
 
+import javax.swing.JOptionPane;
+
 import main.ArrayVisualizer;
 import sorts.IterativeBitonicSort;
 import sorts.IterativeOddEvenMergeSort;
@@ -7,6 +9,7 @@ import sorts.IterativePairwiseSort;
 import sorts.RecursiveBitonicSort;
 import sorts.RecursiveOddEvenMergeSort;
 import sorts.RecursivePairwiseSort;
+import templates.JErrorPane;
 import templates.MultipleSortThread;
 import templates.Sort;
 
@@ -78,7 +81,7 @@ final public class RunConcurrentSorts extends MultipleSortThread {
                     ArrayManager.toggleMutableLength(true);
                 }
                 catch (Exception e) {
-                    e.printStackTrace();
+                    JErrorPane.invokeErrorMessage(e);
                 }
                 Sounds.toggleSound(false);
                 ArrayVisualizer.setSortingThread(null);
@@ -122,7 +125,7 @@ final public class RunConcurrentSorts extends MultipleSortThread {
                     ArrayManager.toggleMutableLength(true);
                 }
                 catch (Exception e) {
-                    e.printStackTrace();
+                    JErrorPane.invokeErrorMessage(e);
                 }
                 Sounds.toggleSound(false);
                 ArrayVisualizer.setSortingThread(null);

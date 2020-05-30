@@ -5,10 +5,12 @@
 package prompts;
 
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 
 import frames.UtilFrame;
 import main.ArrayManager;
 import templates.Frame;
+import templates.JErrorPane;
 import utils.Shuffles;
 
 /*
@@ -108,7 +110,7 @@ final public class ShufflePrompt extends javax.swing.JFrame implements Frame {
                 try {
                     jList1ValueChanged(evt);
                 } catch (Exception e) {
-                    e.printStackTrace();
+                    JErrorPane.invokeErrorMessage(e);
                 }
             }
         });

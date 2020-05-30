@@ -10,6 +10,7 @@ import sorts.LessBogoSort;
 import sorts.SillySort;
 import sorts.SlowSort;
 import sorts.StoogeSort;
+import templates.JErrorPane;
 import templates.MultipleSortThread;
 import templates.Sort;
 
@@ -91,7 +92,7 @@ final public class RunImpracticalSorts extends MultipleSortThread {
                     ArrayManager.toggleMutableLength(true);
                 }
                 catch (Exception e) {
-                    e.printStackTrace();
+                    JErrorPane.invokeErrorMessage(e);
                 }
                 Sounds.toggleSound(false);
                 ArrayVisualizer.setSortingThread(null);
@@ -145,7 +146,7 @@ final public class RunImpracticalSorts extends MultipleSortThread {
                     ArrayManager.toggleMutableLength(true);
                 }
                 catch (Exception e) {
-                    e.printStackTrace();
+                    JErrorPane.invokeErrorMessage(e);
                 }
                 Sounds.toggleSound(false);
                 ArrayVisualizer.setSortingThread(null);

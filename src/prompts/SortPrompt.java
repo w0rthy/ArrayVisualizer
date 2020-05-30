@@ -5,10 +5,12 @@
 package prompts;
 
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 
 import frames.UtilFrame;
 import main.ArrayVisualizer;
 import templates.Frame;
+import templates.JErrorPane;
 import threads.RunAllSorts;
 import threads.RunComparisonSort;
 import threads.RunDistributionSort;
@@ -190,8 +192,7 @@ final public class SortPrompt extends javax.swing.JFrame implements Frame {
                     RunAllSorts RunAllSorts = new RunAllSorts(ArrayVisualizer);
                     RunAllSorts.ReportAllSorts(array, 0, 0);
                 } catch (Exception e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
+                    JErrorPane.invokeErrorMessage(e);
                 }
             }
         }.start();
@@ -209,8 +210,7 @@ final public class SortPrompt extends javax.swing.JFrame implements Frame {
                     RunDistributionSort sortThread = new RunDistributionSort(ArrayVisualizer);
                     sortThread.ReportDistributiveSort(array, selection);
                 } catch (Exception e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
+                    JErrorPane.invokeErrorMessage(e);
                 }
             }
         }.start();

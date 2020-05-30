@@ -6,6 +6,7 @@ import sorts.InsertionSort;
 import sorts.PatienceSort;
 import sorts.ShellSort;
 import sorts.TreeSort;
+import templates.JErrorPane;
 import templates.MultipleSortThread;
 import templates.Sort;
 
@@ -76,7 +77,7 @@ final public class RunInsertionSorts extends MultipleSortThread {
                     ArrayManager.toggleMutableLength(true);
                 }
                 catch (Exception e) {
-                    e.printStackTrace();
+                    JErrorPane.invokeErrorMessage(e);
                 }
                 Sounds.toggleSound(false);
                 ArrayVisualizer.setSortingThread(null);
@@ -118,7 +119,7 @@ final public class RunInsertionSorts extends MultipleSortThread {
                     ArrayManager.toggleMutableLength(true);
                 }
                 catch (Exception e) {
-                    e.printStackTrace();
+                    JErrorPane.invokeErrorMessage(e);
                 }
                 Sounds.toggleSound(false);
                 ArrayVisualizer.setSortingThread(null);

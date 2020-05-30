@@ -1,5 +1,8 @@
 package main;
 
+import javax.swing.JOptionPane;
+
+import templates.JErrorPane;
 import utils.Delays;
 import utils.Highlights;
 import utils.Shuffles;
@@ -139,7 +142,7 @@ final public class ArrayManager {
         try {
             Thread.sleep(1000);
         } catch (InterruptedException e) {
-            e.printStackTrace();
+            JErrorPane.invokeErrorMessage(e);
         }
         
         ArrayVisualizer.resetAllStatistics();
@@ -153,7 +156,7 @@ final public class ArrayManager {
         try {
             Thread.sleep(500);
         } catch (InterruptedException e) {
-            e.printStackTrace();
+            JErrorPane.invokeErrorMessage(e);
         }
         
         ArrayVisualizer.resetAllStatistics();

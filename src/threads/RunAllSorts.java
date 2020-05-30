@@ -2,7 +2,10 @@ package threads;
 
 import java.util.ArrayList;
 
+import javax.swing.JOptionPane;
+
 import main.ArrayVisualizer;
+import templates.JErrorPane;
 import templates.MultipleSortThread;
 
 /*
@@ -63,7 +66,7 @@ final public class RunAllSorts extends MultipleSortThread {
                 currentSort += thread.getCategoryCount();
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            JErrorPane.invokeErrorMessage(e);
         }
         
         this.ArrayVisualizer.setCategory("Run All Sorts");

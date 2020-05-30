@@ -56,6 +56,7 @@ import visuals.VisualStyles;
  * - - options to choose timsort minrun
  * - - subheadings for sort customizations (e.g. number of buckets for all bucket sorts)
  * - - toggle between pointer and black bar
+ * - - SINE WAVE VISUAL!!!
  * - Make:
  * - - "Many Similar" distribution ((i / 5) * 5, as an example)
  * - - Better names/clean up code in frames/prompts

@@ -15,6 +15,7 @@ import sorts.SqrtSort;
 import sorts.TimSort;
 import sorts.WeaveMergeSort;
 import sorts.WikiSort;
+import templates.JErrorPane;
 import templates.MultipleSortThread;
 import templates.Sort;
 
@@ -102,7 +103,7 @@ final public class RunHybridSorts extends MultipleSortThread {
                     ArrayManager.toggleMutableLength(true);
                 }
                 catch (Exception e) {
-                    e.printStackTrace();
+                    JErrorPane.invokeErrorMessage(e);
                 }
                 Sounds.toggleSound(false);
                 ArrayVisualizer.setSortingThread(null);
@@ -162,7 +163,7 @@ final public class RunHybridSorts extends MultipleSortThread {
                     ArrayManager.toggleMutableLength(true);
                 }
                 catch (Exception e) {
-                    e.printStackTrace();
+                    JErrorPane.invokeErrorMessage(e);
                 }
                 Sounds.toggleSound(false);
                 ArrayVisualizer.setSortingThread(null);

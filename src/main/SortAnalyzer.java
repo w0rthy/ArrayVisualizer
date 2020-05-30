@@ -4,10 +4,12 @@ import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.JOptionPane;
+
 import io.github.classgraph.ClassGraph;
 import io.github.classgraph.ClassInfo;
 import io.github.classgraph.ScanResult;
-
+import templates.JErrorPane;
 import templates.Sort;
 import utils.Delays;
 import utils.Highlights;
@@ -71,7 +73,7 @@ final public class SortAnalyzer {
                     Class<?> sortClass = Class.forName(sortFiles.get(i).getName());
                     Constructor<?> newSort = sortClass.getConstructor(new Class[] {Delays.class, Highlights.class, Reads.class, Writes.class});
                     Sort sort = (Sort) newSort.newInstance(this.Delays, this.Highlights, this.Reads, this.Writes);
-
+                    
                     try {
                         if(verifySort(sort)) {
                             if(sort.comparisonBased()) {
@@ -95,10 +97,8 @@ final public class SortAnalyzer {
                     e.printStackTrace();
                 }
             }
-        } catch (SecurityException e) {
-            e.printStackTrace();
-        } catch (IllegalArgumentException e) {
-            e.printStackTrace();
+        } catch (SecurityException | IllegalArgumentException e) {
+            JErrorPane.invokeErrorMessage(e);
         }
     }
     

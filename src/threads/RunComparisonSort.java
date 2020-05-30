@@ -1,11 +1,14 @@
 package threads;
 
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.lang.reflect.Constructor;
 
 import javax.swing.JOptionPane;
 
 import main.ArrayManager;
 import main.ArrayVisualizer;
+import templates.JErrorPane;
 import templates.Sort;
 import utils.Delays;
 import utils.Highlights;
@@ -123,13 +126,12 @@ final public class RunComparisonSort {
                     else {
                         ArrayManager.initializeArray(array);
                     }
-                    
-                    ArrayVisualizer.endSort();
-                    ArrayManager.toggleMutableLength(true);
                 }
                 catch(Exception e) {
-                    e.printStackTrace();
+                    JErrorPane.invokeErrorMessage(e);
                 }
+                ArrayVisualizer.endSort();
+                ArrayManager.toggleMutableLength(true);
                 Sounds.toggleSound(false);
             }
         });

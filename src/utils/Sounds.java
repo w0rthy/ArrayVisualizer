@@ -1,10 +1,7 @@
 package utils;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.Arrays;
+import java.io.InputStream;
 
-import javax.sound.midi.InvalidMidiDataException;
 import javax.sound.midi.MidiChannel;
 import javax.sound.midi.MidiSystem;
 import javax.sound.midi.MidiUnavailableException;
@@ -12,6 +9,9 @@ import javax.sound.midi.Synthesizer;
 import javax.swing.JOptionPane;
 
 import main.ArrayVisualizer;
+import soundfont.SFXFetcher;
+import soundfont.SFXFetcher;
+import templates.JErrorPane;
 
 /*
  * 
@@ -82,21 +82,28 @@ final public class Sounds {
             this.synth = MidiSystem.getSynthesizer();
             this.synth.open();
         } catch (MidiUnavailableException e) {
-            JOptionPane.showMessageDialog(null, "The MIDI device is unavailable, possibly because it is already being used by another application. Sound is disabled.");
-            e.printStackTrace();
+            JOptionPane.showMessageDialog(null, e.getMessage() + ": The MIDI device is unavailable, possibly because it is already being used by another application. Sound is disabled.");
         }
         
+        SFXFetcher sfxFetcher = new SFXFetcher();
+        InputStream stream = sfxFetcher.getSFXFile();
         try {
-            this.synth.loadAllInstruments(MidiSystem.getSoundbank(new File("soundfont/sfx.dls")));
-        } catch (InvalidMidiDataException | IOException e1) {
-            e1.printStackTrace();
+            this.synth.loadAllInstruments(MidiSystem.getSoundbank(stream));
+        } catch (Exception e) {
+            JErrorPane.invokeErrorMessage(e);
+        }
+        finally {
+            try {
+                stream.close();
+            } catch (Exception e) {
+                JErrorPane.invokeErrorMessage(e);
+            }
         }
         this.channels = new MidiChannel[this.NUMCHANNELS];
         
         for(int i = 0; i < this.NUMCHANNELS; i++) {
             this.channels[i] = this.synth.getChannels()[i];
             //this.channels[i].programChange(this.synth.getLoadedInstruments()[197].getPatch().getProgram());
-            
             this.channels[i].programChange(this.synth.getLoadedInstruments()[16].getPatch().getProgram()); // MIDI Instrument 16 is a Rock Organ.
             this.channels[i].setChannelPressure(1);
         }
@@ -111,7 +118,7 @@ final public class Sounds {
                     for(MidiChannel channel : channels) {
                         channel.allNotesOff();
                     }
-                    if(SOUND == false || MIDI == false) {
+                    if(SOUND == false || MIDI == false || JErrorPane.errorMessageActive) {
                         continue;
                     }
 
@@ -143,7 +150,7 @@ final public class Sounds {
                             }
                         }
                         catch (Exception e) {
-                            e.printStackTrace();
+                            JErrorPane.invokeErrorMessage(e);
                         }
                     }
                     try {
@@ -151,7 +158,7 @@ final public class Sounds {
                             sleep(1);
                         }
                     } catch(Exception e) {
-                        e.printStackTrace();
+                        JErrorPane.invokeErrorMessage(e);
                     }
                 }
             }

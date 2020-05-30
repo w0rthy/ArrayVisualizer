@@ -87,6 +87,13 @@ public enum Shuffles {
         @Override
         public void shuffleArray(int[] array, ArrayVisualizer ArrayVisualizer, Delays Delays, Highlights Highlights, Writes Writes) {
             int currentLen = ArrayVisualizer.getCurrentLength();
+            
+            for(int i = 0; i < Math.max(currentLen / 20, 1); i++){
+                Writes.swap(array, (int)(Math.random()*currentLen), (int)(Math.random()*currentLen), 0, true, false);
+                if(ArrayVisualizer.shuffleEnabled()) Delays.sleep(2);
+            }
+            
+            /*
             int step = (int) Math.sqrt(currentLen);
             
             //TODO: *Strongly* consider randomSwap method
@@ -98,6 +105,7 @@ public enum Shuffles {
 
                 if(ArrayVisualizer.shuffleEnabled()) Delays.sleep(2);
             }
+            */
         }
     },
     ALREADY {

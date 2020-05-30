@@ -8,6 +8,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import main.ArrayVisualizer;
+import templates.JErrorPane;
 
 /*
  * 
@@ -133,7 +134,7 @@ final public class Delays {
                 this.delay = 0;
             }
         } catch(Exception ex) {
-            Logger.getLogger(ArrayVisualizer.class.getName()).log(Level.SEVERE, null, ex);
+            JErrorPane.invokeErrorMessage(ex);
         }
         
         this.currentDelay = 0;

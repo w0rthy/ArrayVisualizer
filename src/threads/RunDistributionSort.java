@@ -1,20 +1,17 @@
 package threads;
 
-import java.awt.HeadlessException;
 import java.lang.reflect.Constructor;
 
-import javax.swing.JDialog;
 import javax.swing.JOptionPane;
-import javax.swing.UIManager;
 
 import main.ArrayManager;
 import main.ArrayVisualizer;
-import sorts.FlashSort;
+import templates.JEnhancedOptionPane;
+import templates.JErrorPane;
 import templates.Sort;
 import utils.Delays;
 import utils.Highlights;
 import utils.Reads;
-import utils.Shuffles;
 import utils.Sounds;
 import utils.Timer;
 import utils.Writes;
@@ -44,31 +41,6 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
  *
  */
-
-// Many thanks to Freek de Bruijn on StackOverflow for providing a custom JOptionPane.
-// https://stackoverflow.com/questions/14407804/how-to-change-the-default-text-of-buttons-in-joptionpane-showinputdialog?noredirect=1&lq=1
-final class JEnhancedOptionPane extends JOptionPane {
-    /**
-     * 
-     */
-    private static final long serialVersionUID = 1L;
-
-    public static String showInputDialog(final Object message, final Object[] options) throws HeadlessException {
-        final JOptionPane pane = new JOptionPane(message, QUESTION_MESSAGE,
-                                                 OK_CANCEL_OPTION, null,
-                                                 options, null);
-        pane.setWantsInput(true);
-        pane.setComponentOrientation((getRootFrame()).getComponentOrientation());
-        pane.setMessageType(QUESTION_MESSAGE);
-        pane.selectInitialValue();
-        final String title = UIManager.getString("OptionPane.inputDialogTitle", null);
-        final JDialog dialog = pane.createDialog(null, title);
-        dialog.setVisible(true);
-        dialog.dispose();
-        final Object value = pane.getInputValue();
-        return (value == UNINITIALIZED_VALUE) ? null : (String) value;
-    }
-}
 
 final public class RunDistributionSort {
     private ArrayManager ArrayManager;
@@ -267,13 +239,12 @@ final public class RunDistributionSort {
                     else {
                         ArrayManager.initializeArray(array);
                     }
-                    
-                    ArrayVisualizer.endSort();
-                    ArrayManager.toggleMutableLength(true);
                 }
                 catch(Exception e) {
-                    e.printStackTrace();
+                    JErrorPane.invokeErrorMessage(e);
                 }
+                ArrayVisualizer.endSort();
+                ArrayManager.toggleMutableLength(true);
                 Sounds.changeVolume(storeVol);
                 Sounds.toggleSound(false);
             }
