@@ -45,7 +45,7 @@ SOFTWARE.
 final public class RunSelectionSorts extends MultipleSortThread {
     public RunSelectionSorts(ArrayVisualizer ArrayVisualizer) {
         super(ArrayVisualizer);
-        this.sortCount = 10;
+        this.sortCount = 11;
         this.categoryCount = this.sortCount;
     }
 

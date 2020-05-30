@@ -1,7 +1,7 @@
 # w0rthy's Array Visualizer, Revamped
 [![Donate](https://img.shields.io/badge/Donate-PayPal-green.svg)](https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=Q5QLCFZ8G7WY6&currency_code=USD&source=url)
 
-77 sorting algorithms animated with 10 unique graphic designs
+78 sorting algorithms animated with 10 unique graphic designs
 
 This new version of the program features additions inspired by Timo Bingmann's "The Sound of Sorting" and w0rthy's updates to the original visualizer.
 
@@ -26,6 +26,7 @@ java -cp bin;lib/classgraph-4.8.47.jar main.ArrayVisualizer
 ## 5/30/2020 - Version 3.1
 - Error messages with detailed information will now appear within the program!
 - Sound effects are now consistent on all platforms
+- New sort: "Flipped Min Heap Sort" by 'trashbunny jr.'!
 - Minor changes to code organization
 
 ## 5/22/2020 - Version 3.01
