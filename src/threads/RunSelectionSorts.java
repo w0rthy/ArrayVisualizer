@@ -5,6 +5,7 @@ import sorts.CycleSort;
 import sorts.DoubleSelectionSort;
 import sorts.MaxHeapSort;
 import sorts.MinHeapSort;
+import sorts.FlippedMinHeapSort;
 import sorts.PoplarHeapSort;
 import sorts.SelectionSort;
 import sorts.SmoothSort;
@@ -62,6 +63,7 @@ final public class RunSelectionSorts extends MultipleSortThread {
                     Sort CycleSort           = new           CycleSort(Delays, Highlights, Reads, Writes);
                     Sort MaxHeapSort         = new         MaxHeapSort(Delays, Highlights, Reads, Writes);
                     Sort MinHeapSort         = new         MinHeapSort(Delays, Highlights, Reads, Writes);
+                    Sort FlippedMinHeapSort  = new  FlippedMinHeapSort(Delays, Highlights, Reads, Writes);
                     Sort WeakHeapSort        = new        WeakHeapSort(Delays, Highlights, Reads, Writes);
                     Sort TernaryHeapSort     = new     TernaryHeapSort(Delays, Highlights, Reads, Writes);
                     Sort SmoothSort          = new          SmoothSort(Delays, Highlights, Reads, Writes);
@@ -79,6 +81,7 @@ final public class RunSelectionSorts extends MultipleSortThread {
                     RunSelectionSorts.this.RunIndividualSort(CycleSort,           0, array,  128, 0.01);
                     RunSelectionSorts.this.RunIndividualSort(MaxHeapSort,         0, array, 2048, 1.5);
                     RunSelectionSorts.this.RunIndividualSort(MinHeapSort,         0, array, 2048, 1.5);
+                    RunSelectionSorts.this.RunIndividualSort(FlippedMinHeapSort,  0, array, 2048, 1.5);
                     RunSelectionSorts.this.RunIndividualSort(WeakHeapSort,        0, array, 2048, 1);
                     RunSelectionSorts.this.RunIndividualSort(TernaryHeapSort,     0, array, 2048, 1);
                     RunSelectionSorts.this.RunIndividualSort(SmoothSort,          0, array, 2048, 1.5);
@@ -116,6 +119,7 @@ final public class RunSelectionSorts extends MultipleSortThread {
                     Sort CycleSort           = new           CycleSort(Delays, Highlights, Reads, Writes);
                     Sort MaxHeapSort         = new         MaxHeapSort(Delays, Highlights, Reads, Writes);
                     Sort MinHeapSort         = new         MinHeapSort(Delays, Highlights, Reads, Writes);
+                    Sort FlippedMinHeapSort  = new  FlippedMinHeapSort(Delays, Highlights, Reads, Writes);
                     Sort WeakHeapSort        = new        WeakHeapSort(Delays, Highlights, Reads, Writes);
                     Sort TernaryHeapSort     = new     TernaryHeapSort(Delays, Highlights, Reads, Writes);
                     Sort SmoothSort          = new          SmoothSort(Delays, Highlights, Reads, Writes);
@@ -134,6 +138,7 @@ final public class RunSelectionSorts extends MultipleSortThread {
                     RunSelectionSorts.this.RunIndividualSort(CycleSort,           0, array,  128, 0.01);
                     RunSelectionSorts.this.RunIndividualSort(MaxHeapSort,         0, array, 2048, 1.5);
                     RunSelectionSorts.this.RunIndividualSort(MinHeapSort,         0, array, 2048, 1.5);
+                    RunSelectionSorts.this.RunIndividualSort(FlippedMinHeapSort,  0, array, 2048, 1.5);
                     RunSelectionSorts.this.RunIndividualSort(WeakHeapSort,        0, array, 2048, 1);
                     RunSelectionSorts.this.RunIndividualSort(TernaryHeapSort,     0, array, 2048, 1);
                     RunSelectionSorts.this.RunIndividualSort(SmoothSort,          0, array, 2048, 1.5);
