@@ -26,7 +26,7 @@ java -cp bin;lib/classgraph-4.8.47.jar main.ArrayVisualizer
 ## 5/30/2020 - Version 3.1
 - Error messages with detailed information will now appear within the program!
 - Sound effects are now consistent on all platforms
-- New sort: "Flipped Min Heap Sort" by 'trashbunny jr.'!
+- New sort: "Flipped Min Heap Sort" by 'landfillbaby'!
 - Minor changes to code organization
 
 ## 5/22/2020 - Version 3.01
