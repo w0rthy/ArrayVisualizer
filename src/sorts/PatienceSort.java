@@ -81,7 +81,7 @@ final public class PatienceSort extends Sort {
             Pile newPile = new Pile();
             
             Highlights.markArray(2, x);
-            Writes.mockWrite(length, newPile.size(), array[x], 1);
+            Writes.mockWrite(length, Math.min(newPile.size(), length - 1), array[x], 1);
             
             newPile.push(array[x]);
             
@@ -91,11 +91,11 @@ final public class PatienceSort extends Sort {
             }
             if (i < 0) i = ~i;
             if (i != piles.size()) {
-                Writes.mockWrite(length, piles.get(i).size(), array[x], 0);
+                Writes.mockWrite(length, Math.min(piles.get(i).size(), length - 1), array[x], 0);
                 piles.get(i).push(array[x]);
             }
             else {
-                Writes.mockWrite(length, piles.size(), newPile.get(0), 0);   
+                Writes.mockWrite(length, Math.min(piles.size(), length - 1), newPile.get(0), 0);   
                 piles.add(newPile);
             }
         }
@@ -106,14 +106,14 @@ final public class PatienceSort extends Sort {
         PriorityQueue<Pile> heap = new PriorityQueue<>(piles);
         
         for (int c = 0; c < length; c++) {
-            Writes.mockWrite(length, heap.size(), 0, 0);
+            Writes.mockWrite(length, Math.min(heap.size(), length - 1), 0, 0);
             Pile smallPile = heap.poll();
             
-            Writes.mockWrite(length, smallPile.size(), 0, 0);
+            Writes.mockWrite(length, Math.min(smallPile.size(), length - 1), 0, 0);
             Writes.write(array, c, smallPile.pop(), 1, true, false);
             
             if (!smallPile.isEmpty()) {
-                Writes.mockWrite(length, heap.size(), smallPile.get(0), 0);
+                Writes.mockWrite(length, Math.min(heap.size(), length - 1), smallPile.get(0), 0);
                 heap.offer(smallPile);
             }
         }

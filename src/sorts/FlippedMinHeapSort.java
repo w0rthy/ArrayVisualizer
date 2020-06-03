@@ -22,7 +22,7 @@ Free Documentation License".
 modified by Lucy Phipps from ../templates/HeapSorting.java and MinHeapSort.java
 the only real changes are subtracting every array access from (length - 1)
 and removing the Writes.reverse() at the end
-the rest is just compacting tbe code a bit
+the rest is just compacting the code a bit
 */
 
 final public class FlippedMinHeapSort extends Sort {
@@ -45,8 +45,11 @@ final public class FlippedMinHeapSort extends Sort {
             if (leaf < dist && Reads.compare(array[length - leaf], array[length - leaf - 1]) == 1) {
                 leaf++;
             }
+            Highlights.markArray(1, length - root);
+            Highlights.markArray(2, length - leaf);
+            Delays.sleep(1);
             if (Reads.compare(array[length - root], array[length - leaf]) == 1) {
-                Writes.swap(array, length - root, length - leaf, 1, true, false);
+                Writes.swap(array, length - root, length - leaf, 0, true, false);
                 root = leaf;
             } else break;
         }

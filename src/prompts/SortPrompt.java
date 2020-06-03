@@ -14,6 +14,7 @@ import templates.JErrorPane;
 import threads.RunAllSorts;
 import threads.RunComparisonSort;
 import threads.RunDistributionSort;
+import threads.RunHybridSorts;
 
 /*
  * 

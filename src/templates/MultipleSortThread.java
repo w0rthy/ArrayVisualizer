@@ -5,6 +5,7 @@ import main.ArrayVisualizer;
 import utils.Delays;
 import utils.Highlights;
 import utils.Reads;
+import utils.Shuffles;
 import utils.Sounds;
 import utils.Timer;
 import utils.Writes;

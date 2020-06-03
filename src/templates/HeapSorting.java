@@ -33,8 +33,11 @@ public abstract class HeapSorting extends Sort {
             if (leaf < dist && Reads.compare(array[start + leaf - 1], array[start + leaf]) == compareVal) {
                 leaf++;
             }
+            Highlights.markArray(1, start + root - 1);
+            Highlights.markArray(2, start + leaf - 1);
+            Delays.sleep(sleep);
             if (Reads.compare(array[start + root - 1], array[start + leaf - 1]) == compareVal) {
-                Writes.swap(array, start + root - 1, start + leaf - 1, sleep, true, false);
+                Writes.swap(array, start + root - 1, start + leaf - 1, 0, true, false);
                 root = leaf;
             }
             else break;
