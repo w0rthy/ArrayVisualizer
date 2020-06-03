@@ -5,7 +5,6 @@
 package prompts;
 
 import javax.swing.JFrame;
-import javax.swing.JOptionPane;
 
 import frames.UtilFrame;
 import main.ArrayVisualizer;
@@ -14,7 +13,6 @@ import templates.JErrorPane;
 import threads.RunAllSorts;
 import threads.RunComparisonSort;
 import threads.RunDistributionSort;
-import threads.RunHybridSorts;
 
 /*
  * 
