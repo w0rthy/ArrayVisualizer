@@ -24,7 +24,9 @@ java -cp bin;lib/classgraph-4.8.47.jar main.ArrayVisualizer
 - Refactored / optimized code
 
 ## 6/3/2020 - Version 3.12
-_changelog coming soon_
+- Counting Sort fixed
+- Optimized Bubblesort now optimized for already sorted inputs
+- Speeds for Quicksorts and Weave Merge during "Run All Sorts" improved
 
 ## 6/2/2020 - Version 3.11
 - Minor update to MIT license
