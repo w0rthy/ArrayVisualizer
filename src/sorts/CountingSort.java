@@ -74,7 +74,7 @@ final public class CountingSort extends Sort {
         // Extra loop to simulate the results from the "output" array being written
         // to the visual array.
         for (int i = length - 1; i >= 0; i--) {
-            Writes.write(array, i, counts[i], 1, true, false);
+            Writes.write(array, i, output[i], 1, true, false);
             Writes.changeTempWrites(1);
         }
     }

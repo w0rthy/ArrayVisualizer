@@ -50,16 +50,19 @@ final public class SmartBubbleSort extends Sort {
     
     @Override
     public void runSort(int[] array, int length, int bucketCount) {
-        for(int i = length - 1; i > 0; i--){
+        for(int i = length - 1; i > 0; i--) {
+            boolean sorted = true;
             for(int j = 0; j < i; j++) {
                 if(Reads.compare(array[j], array[j + 1]) == 1){
                     Writes.swap(array, j, j + 1, 0.075, true, false);
+                    sorted = false;
                 }
                 
                 Highlights.markArray(1, j);
                 Highlights.markArray(2, j + 1);
                 Delays.sleep(0.025);
             }
+            if(sorted) break;
         }
     }
 }

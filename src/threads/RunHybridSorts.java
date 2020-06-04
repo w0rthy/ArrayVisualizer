@@ -85,7 +85,7 @@ final public class RunHybridSorts extends MultipleSortThread {
                     RunHybridSorts.this.RunIndividualSort(HybridCombSort,              0, array, 1024, 1);
                     RunHybridSorts.this.RunIndividualSort(IntroCircleSort,             0, array, 1024, 1);
                     RunHybridSorts.this.RunIndividualSort(BinaryMergeSort,             0, array, 2048, 1);
-                    RunHybridSorts.this.RunIndividualSort(WeaveMergeSort,              0, array, 2048, ArrayManager.getShuffle() == ArrayManager.getShuffle().REVERSE ? 12.5 : 1.25);
+                    RunHybridSorts.this.RunIndividualSort(WeaveMergeSort,              0, array, 2048, ArrayManager.getShuffle() == ArrayManager.getShuffle().RANDOM ? 1.25 : 75);
                     RunHybridSorts.this.RunIndividualSort(TimSort,                     0, array, 2048, 1);
                     RunHybridSorts.this.RunIndividualSort(CocktailMergeSort,           0, array, 2048, 1);
                     RunHybridSorts.this.RunIndividualSort(WikiSort,                    0, array, 2048, 1);
@@ -148,7 +148,7 @@ final public class RunHybridSorts extends MultipleSortThread {
                     RunHybridSorts.this.RunIndividualSort(HybridCombSort,              0, array, 1024, 1);
                     RunHybridSorts.this.RunIndividualSort(IntroCircleSort,             0, array, 1024, 1);
                     RunHybridSorts.this.RunIndividualSort(BinaryMergeSort,             0, array, 2048, 1);
-                    RunHybridSorts.this.RunIndividualSort(WeaveMergeSort,              0, array, 2048, ArrayManager.getShuffle() == ArrayManager.getShuffle().REVERSE ? 12.5 : 1.25);
+                    RunHybridSorts.this.RunIndividualSort(WeaveMergeSort,              0, array, 2048, ArrayManager.getShuffle() == ArrayManager.getShuffle().RANDOM ? 1.25 : 75);
                     RunHybridSorts.this.RunIndividualSort(TimSort,                     0, array, 2048, 1);
                     RunHybridSorts.this.RunIndividualSort(CocktailMergeSort,           0, array, 2048, 1);
                     RunHybridSorts.this.RunIndividualSort(WikiSort,                    0, array, 2048, 1);

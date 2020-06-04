@@ -10,39 +10,33 @@
     <property name="source" value="1.8"/>
     <path id="ArrayVisualizer-master.classpath">
         <pathelement location="bin"/>
+        <pathelement location="lib/classgraph-4.8.47.jar"/>
         <pathelement location="lib/classgraph-4.8.47-javadoc.jar"/>
         <pathelement location="lib/classgraph-4.8.47-sources.jar"/>
-        <pathelement location="lib/classgraph-4.8.47.jar"/>
     </path>
     <path id="run.ArrayVisualizer.classpath">
         <path refid="ArrayVisualizer-master.classpath"/>
+        <pathelement location="lib/classgraph-4.8.47.jar"/>
         <pathelement location="lib/classgraph-4.8.47-javadoc.jar"/>
         <pathelement location="lib/classgraph-4.8.47-sources.jar"/>
-        <pathelement location="lib/classgraph-4.8.47.jar"/>
     </path>
+    <path id="org.eclipse.m2e.MAVEN2_CLASSPATH_CONTAINER.libraryclasspath"/>
     <path id="run.Main.classpath">
         <path refid="ArrayVisualizer-master.classpath"/>
-        <pathelement location="lib/classgraph-4.8.47-javadoc.jar"/>
-        <pathelement location="lib/classgraph-4.8.47-sources.jar"/>
-        <pathelement location="lib/classgraph-4.8.47.jar"/>
+        <path refid="org.eclipse.m2e.MAVEN2_CLASSPATH_CONTAINER.libraryclasspath"/>
     </path>
     <path id="run.Tester (2).classpath">
         <path refid="ArrayVisualizer-master.classpath"/>
-        <pathelement location="lib/classgraph-4.8.47-javadoc.jar"/>
-        <pathelement location="lib/classgraph-4.8.47-sources.jar"/>
-        <pathelement location="lib/classgraph-4.8.47.jar"/>
+        <path refid="org.eclipse.m2e.MAVEN2_CLASSPATH_CONTAINER.libraryclasspath"/>
     </path>
     <path id="run.Tester.classpath">
         <path refid="ArrayVisualizer-master.classpath"/>
-        <pathelement location="lib/classgraph-4.8.47-javadoc.jar"/>
-        <pathelement location="lib/classgraph-4.8.47-sources.jar"/>
-        <pathelement location="lib/classgraph-4.8.47.jar"/>
+        <path refid="org.eclipse.m2e.MAVEN2_CLASSPATH_CONTAINER.libraryclasspath"/>
     </path>
     <target name="init">
         <mkdir dir="bin"/>
         <copy includeemptydirs="false" todir="bin">
             <fileset dir="src">
-                <exclude name="**/*.launch"/>
                 <exclude name="**/*.java"/>
             </fileset>
         </copy>

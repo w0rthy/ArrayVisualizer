@@ -23,12 +23,16 @@ java -cp bin;lib/classgraph-4.8.47.jar main.ArrayVisualizer
 - Toggle Timo Bingmann's "end sweep" animation
 - Refactored / optimized code
 
+## 6/3/2020 - Version 3.12
+_changelog coming soon_
+
 ## 6/2/2020 - Version 3.11
 - Minor update to MIT license
 - Fixed typo in Flipped Min Heapsort
 - Improved highlights on Heapsorts (Already sorted heaps now display redundant comparisons)
 - Bug fix for Patiencesort on reversed arrays
 - Quicksorts exhibiting worst-case behavior during "Run All Sorts" run much faster
+- Same tweak as above to Weave Merge Sort
 
 ## 5/30/2020 - Version 3.1
 - Error messages with detailed information will now appear within the program!
