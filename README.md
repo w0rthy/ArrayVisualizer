@@ -24,7 +24,11 @@ java -cp bin;lib/classgraph-4.8.47.jar main.ArrayVisualizer
 - Refactored / optimized code
 
 ## 6/4/2020 - Version 3.2
-_changelog coming soon_
+- New sort: Optimized Cocktail Shaker Sort
+- Significant refactoring for MultipleSortThreads and RunAllSorts
+- "Run All" button approx. time simplified
+- Modified delays for Binary Gnomesort
+- Documentation of GCC's median-of-three pivot selection in Introsort
 
 ## 6/3/2020 - Version 3.12
 - Counting Sort fixed
