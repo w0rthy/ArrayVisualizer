@@ -48,8 +48,6 @@ public abstract class BogoSorting extends Sort {
     
     protected boolean bogoIsSorted(int[] array, int length){
         for(int i = 0; i < length - 1; i++) {
-            Highlights.markArray(1, i);
-            Delays.sleep(1);
             if(Reads.compare(array[i], array[i + 1]) == 1) {
                 Highlights.markArray(1, i);
                 return false;
