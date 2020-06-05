@@ -8,6 +8,7 @@ import utils.Writes;
 
 /* translated from Richard Cookman's original MIT licensed C++ implementation
  * https://github.com/ceorron/stable-inplace-sorting-algorithms#zip_sort
+ * by Lucy Phipps
  */
 
 final public class HybridZipSort extends ZipSorting {
@@ -15,7 +16,7 @@ final public class HybridZipSort extends ZipSorting {
         super(delayOps, markOps, readOps, writeOps);
         this.setSortPromptID("Hybrid Zip");
         this.setRunAllID("Hybrid Zip Sort");
-        this.setReportSortID("Hybrid Zip Sort");
+        this.setReportSortID("Hybrid Zipsort");
         this.setCategory("Hybrid Sorts");
         this.isComparisonBased(true);
         this.isBucketSort(false);

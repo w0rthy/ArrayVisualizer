@@ -8,6 +8,7 @@ import utils.Writes;
 
 /* translated from Richard Cookman's original MIT licensed C++ implementation
  * https://github.com/ceorron/stable-inplace-sorting-algorithms#zip_sort
+ * by Lucy Phipps
  */
 
 public abstract class ZipSorting extends Sort {
@@ -128,7 +129,7 @@ public abstract class ZipSorting extends Sort {
             //sort small runs with insertion sort before doing merge
             int insert_count = 16;
             {
-                int len = insert_count;
+                len = insert_count;
                 int count = 0;
                 for(int bg = beg; bg != end; count+=len) {
                     int ed = (count + len > sze ? end : bg + len);
@@ -138,8 +139,6 @@ public abstract class ZipSorting extends Sort {
             }
             if(sze <= insert_count)
                 return;
-
-            len = insert_count;
         }
 
         //go through all of the lengths starting at 1 doubling
