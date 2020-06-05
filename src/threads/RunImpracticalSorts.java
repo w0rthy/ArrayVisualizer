@@ -41,69 +41,49 @@ SOFTWARE.
  */
 
 final public class RunImpracticalSorts extends MultipleSortThread {
+    private Sort BadSort;
+    private Sort StoogeSort;
+    private Sort SillySort;
+    private Sort SlowSort;
+    private Sort ExchangeBogoSort;
+    private Sort BubbleBogoSort;
+    private Sort LessBogoSort;
+    private Sort CocktailBogoSort;
+    private Sort BogoSort;
+    
     public RunImpracticalSorts(ArrayVisualizer ArrayVisualizer) {
         super(ArrayVisualizer);
         this.sortCount = 9;
         this.categoryCount = this.sortCount;
-    }
-
-    public synchronized void ReportImpracticalSorts(int[] array) throws Exception {
-        if(ArrayVisualizer.getSortingThread() != null && ArrayVisualizer.getSortingThread().isAlive())
-            return;
-
-        Sounds.toggleSound(true);
-        ArrayVisualizer.setSortingThread(new Thread() {
-            @Override
-            public void run() {
-                try{
-                    Sort BadSort          = new          BadSort(Delays, Highlights, Reads, Writes);
-                    Sort StoogeSort       = new       StoogeSort(Delays, Highlights, Reads, Writes);
-                    Sort SillySort        = new        SillySort(Delays, Highlights, Reads, Writes);
-                    Sort SlowSort         = new         SlowSort(Delays, Highlights, Reads, Writes);
-                    Sort ExchangeBogoSort = new ExchangeBogoSort(Delays, Highlights, Reads, Writes);
-                    Sort BubbleBogoSort   = new   BubbleBogoSort(Delays, Highlights, Reads, Writes);
-                    Sort LessBogoSort     = new     LessBogoSort(Delays, Highlights, Reads, Writes);
-                    Sort CocktailBogoSort = new CocktailBogoSort(Delays, Highlights, Reads, Writes);
-                    Sort BogoSort         = new         BogoSort(Delays, Highlights, Reads, Writes);
-
-                    RunImpracticalSorts.this.sortNumber = 1;
-
-                    ArrayManager.toggleMutableLength(false);
-
-                    ArrayVisualizer.setCategory("Impractical Sorts");
-
-                    RunImpracticalSorts.this.RunIndividualSort(BadSort,          0, array, 64,  0.0075);
-                    RunImpracticalSorts.this.RunIndividualSort(StoogeSort,       0, array, 64,  0.005);
-                    RunImpracticalSorts.this.RunIndividualSort(SillySort,        0, array, 64, 10);
-                    RunImpracticalSorts.this.RunIndividualSort(SlowSort,         0, array, 64, 10);
-                    Sounds.toggleSofterSounds(true);
-                    RunImpracticalSorts.this.RunIndividualSort(ExchangeBogoSort, 0, array, 32,  0.01);
-                    RunImpracticalSorts.this.RunIndividualSort(BubbleBogoSort,   0, array, 32,  0.01);
-                    RunImpracticalSorts.this.RunIndividualSort(LessBogoSort,     0, array, 16,  0.0025);
-                    RunImpracticalSorts.this.RunIndividualSort(CocktailBogoSort, 0, array, 16,  0.0025);
-                    RunImpracticalSorts.this.RunIndividualSort(BogoSort,         0, array,  8,  1);
-                    Sounds.toggleSofterSounds(false);
-                    
-                    Thread.sleep(3000);
-                    
-                    ArrayVisualizer.setCategory("Run Impractical Sorts");
-                    ArrayVisualizer.setHeading("Done");
-                    
-                    ArrayManager.toggleMutableLength(true);
-                }
-                catch (Exception e) {
-                    JErrorPane.invokeErrorMessage(e);
-                }
-                Sounds.toggleSound(false);
-                ArrayVisualizer.setSortingThread(null);
-            }
-        });
-
-        ArrayVisualizer.runSortingThread();
+        
+        BadSort          = new          BadSort(Delays, Highlights, Reads, Writes);
+        StoogeSort       = new       StoogeSort(Delays, Highlights, Reads, Writes);
+        SillySort        = new        SillySort(Delays, Highlights, Reads, Writes);
+        SlowSort         = new         SlowSort(Delays, Highlights, Reads, Writes);
+        ExchangeBogoSort = new ExchangeBogoSort(Delays, Highlights, Reads, Writes);
+        BubbleBogoSort   = new   BubbleBogoSort(Delays, Highlights, Reads, Writes);
+        LessBogoSort     = new     LessBogoSort(Delays, Highlights, Reads, Writes);
+        CocktailBogoSort = new CocktailBogoSort(Delays, Highlights, Reads, Writes);
+        BogoSort         = new         BogoSort(Delays, Highlights, Reads, Writes);
     }
 
     @Override
-    public void ReportAllSorts(int[] array, int current, int total) throws Exception {
+    protected synchronized void executeSortList(int[] array) throws Exception {
+        RunImpracticalSorts.this.runIndividualSort(BadSort,          0, array, 64,  0.0075);
+        RunImpracticalSorts.this.runIndividualSort(StoogeSort,       0, array, 64,  0.005);
+        RunImpracticalSorts.this.runIndividualSort(SillySort,        0, array, 64, 10);
+        RunImpracticalSorts.this.runIndividualSort(SlowSort,         0, array, 64, 10);
+        Sounds.toggleSofterSounds(true);
+        RunImpracticalSorts.this.runIndividualSort(ExchangeBogoSort, 0, array, 32,  0.01);
+        RunImpracticalSorts.this.runIndividualSort(BubbleBogoSort,   0, array, 32,  0.01);
+        RunImpracticalSorts.this.runIndividualSort(LessBogoSort,     0, array, 16,  0.0025);
+        RunImpracticalSorts.this.runIndividualSort(CocktailBogoSort, 0, array, 16,  0.0025);
+        RunImpracticalSorts.this.runIndividualSort(BogoSort,         0, array,  8,  1);
+        Sounds.toggleSofterSounds(false);
+    }
+    
+    @Override
+    protected synchronized void runThread(int[] array, int current, int total, boolean runAllActive) throws Exception {
         if(ArrayVisualizer.getSortingThread() != null && ArrayVisualizer.getSortingThread().isAlive())
             return;
 
@@ -112,37 +92,28 @@ final public class RunImpracticalSorts extends MultipleSortThread {
             @Override
             public void run() {
                 try{
-                    Sort BadSort          = new          BadSort(Delays, Highlights, Reads, Writes);
-                    Sort StoogeSort       = new       StoogeSort(Delays, Highlights, Reads, Writes);
-                    Sort SillySort        = new        SillySort(Delays, Highlights, Reads, Writes);
-                    Sort SlowSort         = new         SlowSort(Delays, Highlights, Reads, Writes);
-                    Sort ExchangeBogoSort = new ExchangeBogoSort(Delays, Highlights, Reads, Writes);
-                    Sort BubbleBogoSort   = new   BubbleBogoSort(Delays, Highlights, Reads, Writes);
-                    Sort LessBogoSort     = new     LessBogoSort(Delays, Highlights, Reads, Writes);
-                    Sort CocktailBogoSort = new CocktailBogoSort(Delays, Highlights, Reads, Writes);
-                    Sort BogoSort         = new         BogoSort(Delays, Highlights, Reads, Writes);
-
-                    RunImpracticalSorts.this.sortNumber = current;
-                    RunImpracticalSorts.this.sortCount = total;
-
+                    if(runAllActive) {
+                        RunImpracticalSorts.this.sortNumber = current;
+                        RunImpracticalSorts.this.sortCount = total;
+                    }
+                    else {
+                        RunImpracticalSorts.this.sortNumber = 1;
+                    }
+                    
                     ArrayManager.toggleMutableLength(false);
 
                     ArrayVisualizer.setCategory("Impractical Sorts");
 
-                    RunImpracticalSorts.this.RunIndividualSort(BadSort,          0, array, 64,  0.0075);
-                    RunImpracticalSorts.this.RunIndividualSort(StoogeSort,       0, array, 64,  0.005);
-                    RunImpracticalSorts.this.RunIndividualSort(SillySort,        0, array, 64, 10);
-                    RunImpracticalSorts.this.RunIndividualSort(SlowSort,         0, array, 64, 10);
-                    Sounds.toggleSofterSounds(true);
-                    RunImpracticalSorts.this.RunIndividualSort(ExchangeBogoSort, 0, array, 32,  0.01);
-                    RunImpracticalSorts.this.RunIndividualSort(BubbleBogoSort,   0, array, 32,  0.01);
-                    RunImpracticalSorts.this.RunIndividualSort(LessBogoSort,     0, array, 16,  0.0025);
-                    RunImpracticalSorts.this.RunIndividualSort(CocktailBogoSort, 0, array, 16,  0.0025);
-                    RunImpracticalSorts.this.RunIndividualSort(BogoSort,         0, array,  8,  1);
-                    Sounds.toggleSofterSounds(false);
+                    RunImpracticalSorts.this.executeSortList(array);
                     
-                    Thread.sleep(3000);
-                             
+                    if(runAllActive) {
+                        Thread.sleep(3000);
+                    }
+                    else {
+                        ArrayVisualizer.setCategory("Run Impractical Sorts");
+                        ArrayVisualizer.setHeading("Done");
+                    }
+                    
                     ArrayManager.toggleMutableLength(true);
                 }
                 catch (Exception e) {
@@ -153,5 +124,15 @@ final public class RunImpracticalSorts extends MultipleSortThread {
             }
         });
         ArrayVisualizer.runSortingThread();
+    }
+    
+    @Override
+    public synchronized void reportCategorySorts(int[] array) throws Exception {
+        this.runThread(array, 0, 0, false);
+    }
+    
+    @Override
+    public synchronized void reportAllSorts(int[] array, int current, int total) throws Exception {
+        this.runThread(array, current, total, true);
     }
 }

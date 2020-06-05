@@ -12,11 +12,13 @@ import sorts.LLQuickSort;
 import sorts.LRQuickSort;
 import sorts.OddEvenSort;
 import sorts.SmartBubbleSort;
+import sorts.SmartCocktailSort;
 import sorts.SmartGnomeSort;
 import sorts.StableQuickSort;
 import templates.JErrorPane;
 import templates.MultipleSortThread;
 import templates.Sort;
+import utils.Shuffles;
 
 /*
  * 
@@ -45,14 +47,62 @@ SOFTWARE.
  */
 
 final public class RunExchangeSorts extends MultipleSortThread {
+    private Sort BubbleSort;
+    private Sort SmartBubbleSort;
+    private Sort CocktailShakerSort;
+    private Sort SmartCocktailSort;
+    private Sort OddEvenSort;
+    private Sort GnomeSort;
+    private Sort SmartGnomeSort;
+    private Sort BinaryGnomeSort;
+    private Sort CombSort;
+    private Sort CircleSort;
+    private Sort LLQuickSort;
+    private Sort LRQuickSort;
+    private Sort DualPivotQuickSort;
+    private Sort StableQuickSort;
+    
     public RunExchangeSorts(ArrayVisualizer ArrayVisualizer) {
         super(ArrayVisualizer);
-        this.sortCount = 12;
-                       //13;
+        this.sortCount = 14;
         this.categoryCount = this.sortCount;
+        
+        BubbleSort         = new         BubbleSort(Delays, Highlights, Reads, Writes);
+        SmartBubbleSort    = new    SmartBubbleSort(Delays, Highlights, Reads, Writes);
+        CocktailShakerSort = new CocktailShakerSort(Delays, Highlights, Reads, Writes);
+        SmartCocktailSort  = new  SmartCocktailSort(Delays, Highlights, Reads, Writes);
+        OddEvenSort        = new        OddEvenSort(Delays, Highlights, Reads, Writes);
+        GnomeSort          = new          GnomeSort(Delays, Highlights, Reads, Writes);
+        SmartGnomeSort     = new     SmartGnomeSort(Delays, Highlights, Reads, Writes);
+        BinaryGnomeSort    = new    BinaryGnomeSort(Delays, Highlights, Reads, Writes);
+        CombSort           = new           CombSort(Delays, Highlights, Reads, Writes);
+        CircleSort         = new         CircleSort(Delays, Highlights, Reads, Writes);
+        LLQuickSort        = new        LLQuickSort(Delays, Highlights, Reads, Writes);
+        LRQuickSort        = new        LRQuickSort(Delays, Highlights, Reads, Writes);
+        DualPivotQuickSort = new DualPivotQuickSort(Delays, Highlights, Reads, Writes);
+        StableQuickSort    = new    StableQuickSort(Delays, Highlights, Reads, Writes);
     }
 
-    public synchronized void ReportExchangeSorts(int[] array) throws Exception {
+    @Override
+    protected synchronized void executeSortList(int[] array) throws Exception {
+        RunExchangeSorts.this.runIndividualSort(BubbleSort,         0, array,  512, 1.5);
+        RunExchangeSorts.this.runIndividualSort(SmartBubbleSort,    0, array,  512, 1.5);
+        RunExchangeSorts.this.runIndividualSort(CocktailShakerSort, 0, array,  512, 1.25);
+        RunExchangeSorts.this.runIndividualSort(SmartCocktailSort,  0, array,  512, 1.25);
+        RunExchangeSorts.this.runIndividualSort(OddEvenSort,        0, array,  512, 1);
+        RunExchangeSorts.this.runIndividualSort(GnomeSort,          0, array,  128, 0.025);
+        RunExchangeSorts.this.runIndividualSort(SmartGnomeSort,     0, array,  128, 0.025);
+        RunExchangeSorts.this.runIndividualSort(BinaryGnomeSort,    0, array,  128, 0.025);
+        RunExchangeSorts.this.runIndividualSort(CombSort,           0, array, 1024, 1);
+        RunExchangeSorts.this.runIndividualSort(CircleSort,         0, array, 1024, 1);
+        RunExchangeSorts.this.runIndividualSort(LLQuickSort,        0, array, 2048, ArrayManager.getShuffle() == Shuffles.RANDOM ? 1.5 : 65);
+        RunExchangeSorts.this.runIndividualSort(LRQuickSort,        0, array, 2048, 1);
+        RunExchangeSorts.this.runIndividualSort(DualPivotQuickSort, 0, array, 2048, ArrayManager.getShuffle() == Shuffles.RANDOM ? 1 : 50);
+        RunExchangeSorts.this.runIndividualSort(StableQuickSort,    0, array, 2048, ArrayManager.getShuffle() == Shuffles.RANDOM ? 1 : 50);
+    }
+    
+    @Override
+    protected synchronized void runThread(int[] array, int current, int total, boolean runAllActive) throws Exception {
         if(ArrayVisualizer.getSortingThread() != null && ArrayVisualizer.getSortingThread().isAlive())
             return;
 
@@ -61,42 +111,24 @@ final public class RunExchangeSorts extends MultipleSortThread {
             @Override
             public void run() {
                 try{
-                    Sort BubbleSort         = new         BubbleSort(Delays, Highlights, Reads, Writes);
-                    Sort SmartBubbleSort    = new    SmartBubbleSort(Delays, Highlights, Reads, Writes);
-                    Sort CocktailShakerSort = new CocktailShakerSort(Delays, Highlights, Reads, Writes);
-                    Sort OddEvenSort        = new        OddEvenSort(Delays, Highlights, Reads, Writes);
-                    Sort GnomeSort          = new          GnomeSort(Delays, Highlights, Reads, Writes);
-                    Sort SmartGnomeSort     = new     SmartGnomeSort(Delays, Highlights, Reads, Writes);
-                    //Sort BinaryGnomeSort    = new    BinaryGnomeSort(Delays, Highlights, Reads, Writes);
-                    Sort CombSort           = new           CombSort(Delays, Highlights, Reads, Writes);
-                    Sort CircleSort         = new         CircleSort(Delays, Highlights, Reads, Writes);
-                    Sort LLQuickSort        = new        LLQuickSort(Delays, Highlights, Reads, Writes);
-                    Sort LRQuickSort        = new        LRQuickSort(Delays, Highlights, Reads, Writes);
-                    Sort DualPivotQuickSort = new DualPivotQuickSort(Delays, Highlights, Reads, Writes);
-                    Sort StableQuickSort    = new    StableQuickSort(Delays, Highlights, Reads, Writes);
-
-                    RunExchangeSorts.this.sortNumber = 1;
-
+                    if(runAllActive) {
+                        RunExchangeSorts.this.sortNumber = current;
+                        RunExchangeSorts.this.sortCount = total;
+                    }
+                    else {
+                        RunExchangeSorts.this.sortNumber = 1;
+                    }
+                    
                     ArrayManager.toggleMutableLength(false);
 
                     ArrayVisualizer.setCategory("Exchange Sorts");
 
-                    RunExchangeSorts.this.RunIndividualSort(BubbleSort,         0, array,  512, 1.5);
-                    RunExchangeSorts.this.RunIndividualSort(SmartBubbleSort,    0, array,  512, 1.5);
-                    RunExchangeSorts.this.RunIndividualSort(CocktailShakerSort, 0, array,  512, 1.25);
-                    RunExchangeSorts.this.RunIndividualSort(OddEvenSort,        0, array,  512, 1);
-                    RunExchangeSorts.this.RunIndividualSort(GnomeSort,          0, array,  128, 0.025);
-                    RunExchangeSorts.this.RunIndividualSort(SmartGnomeSort,     0, array,  128, 0.025);
-                    //RunExchangeSorts.this.RunIndividualSort(BinaryGnomeSort,    0, array,  128, 0.002);
-                    RunExchangeSorts.this.RunIndividualSort(CombSort,           0, array, 1024, 1);
-                    RunExchangeSorts.this.RunIndividualSort(CircleSort,         0, array, 1024, 1);
-                    RunExchangeSorts.this.RunIndividualSort(LLQuickSort,        0, array, 2048, ArrayManager.getShuffle() == ArrayManager.getShuffle().RANDOM ? 1.5 : 65);
-                    RunExchangeSorts.this.RunIndividualSort(LRQuickSort,        0, array, 2048, 1);
-                    RunExchangeSorts.this.RunIndividualSort(DualPivotQuickSort, 0, array, 2048, ArrayManager.getShuffle() == ArrayManager.getShuffle().RANDOM ? 1 : 50);
-                    RunExchangeSorts.this.RunIndividualSort(StableQuickSort,    0, array, 2048, ArrayManager.getShuffle() == ArrayManager.getShuffle().RANDOM ? 1 : 50);
+                    RunExchangeSorts.this.executeSortList(array);
                     
-                    ArrayVisualizer.setCategory("Run Exchange Sorts");
-                    ArrayVisualizer.setHeading("Done");
+                    if(!runAllActive) {
+                        ArrayVisualizer.setCategory("Run Exchange Sorts");
+                        ArrayVisualizer.setHeading("Done");
+                    }
                     
                     ArrayManager.toggleMutableLength(true);
                 }
@@ -111,59 +143,12 @@ final public class RunExchangeSorts extends MultipleSortThread {
     }
     
     @Override
-    public synchronized void ReportAllSorts(int[] array, int current, int total) throws Exception {
-        if(ArrayVisualizer.getSortingThread() != null && ArrayVisualizer.getSortingThread().isAlive())
-            return;
-
-        Sounds.toggleSound(true);
-        ArrayVisualizer.setSortingThread(new Thread() {
-            @Override
-            public void run() {
-                try{
-                    Sort BubbleSort         = new         BubbleSort(Delays, Highlights, Reads, Writes);
-                    Sort SmartBubbleSort    = new    SmartBubbleSort(Delays, Highlights, Reads, Writes);
-                    Sort CocktailShakerSort = new CocktailShakerSort(Delays, Highlights, Reads, Writes);
-                    Sort OddEvenSort        = new        OddEvenSort(Delays, Highlights, Reads, Writes);
-                    Sort GnomeSort          = new          GnomeSort(Delays, Highlights, Reads, Writes);
-                    Sort SmartGnomeSort     = new     SmartGnomeSort(Delays, Highlights, Reads, Writes);
-                    //Sort BinaryGnomeSort    = new    BinaryGnomeSort(Delays, Highlights, Reads, Writes);
-                    Sort CombSort           = new           CombSort(Delays, Highlights, Reads, Writes);
-                    Sort CircleSort         = new         CircleSort(Delays, Highlights, Reads, Writes);
-                    Sort LLQuickSort        = new        LLQuickSort(Delays, Highlights, Reads, Writes);
-                    Sort LRQuickSort        = new        LRQuickSort(Delays, Highlights, Reads, Writes);
-                    Sort DualPivotQuickSort = new DualPivotQuickSort(Delays, Highlights, Reads, Writes);
-                    Sort StableQuickSort    = new    StableQuickSort(Delays, Highlights, Reads, Writes);
-
-                    RunExchangeSorts.this.sortNumber = current;
-                    RunExchangeSorts.this.sortCount = total;
-
-                    ArrayManager.toggleMutableLength(false);
-
-                    ArrayVisualizer.setCategory("Exchange Sorts");
-
-                    RunExchangeSorts.this.RunIndividualSort(BubbleSort,         0, array,  512, 1.5);
-                    RunExchangeSorts.this.RunIndividualSort(SmartBubbleSort,    0, array,  512, 1.5);
-                    RunExchangeSorts.this.RunIndividualSort(CocktailShakerSort, 0, array,  512, 1.25);
-                    RunExchangeSorts.this.RunIndividualSort(OddEvenSort,        0, array,  512, 1);
-                    RunExchangeSorts.this.RunIndividualSort(GnomeSort,          0, array,  128, 0.025);
-                    RunExchangeSorts.this.RunIndividualSort(SmartGnomeSort,     0, array,  128, 0.025);
-                    //RunExchangeSorts.this.RunIndividualSort(BinaryGnomeSort,    0, array,  128, 0.002);
-                    RunExchangeSorts.this.RunIndividualSort(CombSort,           0, array, 1024, 1);
-                    RunExchangeSorts.this.RunIndividualSort(CircleSort,         0, array, 1024, 1);
-                    RunExchangeSorts.this.RunIndividualSort(LLQuickSort,        0, array, 2048, ArrayManager.getShuffle() == ArrayManager.getShuffle().RANDOM ? 1.5 : 65);
-                    RunExchangeSorts.this.RunIndividualSort(LRQuickSort,        0, array, 2048, 1);
-                    RunExchangeSorts.this.RunIndividualSort(DualPivotQuickSort, 0, array, 2048, ArrayManager.getShuffle() == ArrayManager.getShuffle().RANDOM ? 1 : 50);
-                    RunExchangeSorts.this.RunIndividualSort(StableQuickSort,    0, array, 2048, ArrayManager.getShuffle() == ArrayManager.getShuffle().RANDOM ? 1 : 50);
-                    
-                    ArrayManager.toggleMutableLength(true);
-                }
-                catch (Exception e) {
-                    JErrorPane.invokeErrorMessage(e);
-                }
-                Sounds.toggleSound(false);
-                ArrayVisualizer.setSortingThread(null);
-            }
-        });
-        ArrayVisualizer.runSortingThread();
+    public synchronized void reportCategorySorts(int[] array) throws Exception {
+        this.runThread(array, 0, 0, false);
+    }
+    
+    @Override
+    public synchronized void reportAllSorts(int[] array, int current, int total) throws Exception {
+        this.runThread(array, current, total, true);
     }
 }

@@ -1,7 +1,5 @@
 package threads;
 
-import javax.swing.JOptionPane;
-
 import main.ArrayVisualizer;
 import sorts.IterativeBitonicSort;
 import sorts.IterativeOddEvenMergeSort;
@@ -40,59 +38,38 @@ SOFTWARE.
  */
 
 final public class RunConcurrentSorts extends MultipleSortThread {
+    private Sort RecursiveBitonicSort;
+    private Sort RecursiveOddEvenMergeSort;
+    private Sort RecursivePairwiseSort;
+    private Sort IterativeBitonicSort;
+    private Sort IterativeOddEvenMergeSort;
+    private Sort IterativePairwiseSort;
+    
     public RunConcurrentSorts(ArrayVisualizer ArrayVisualizer) {
         super(ArrayVisualizer);
         this.sortCount = 6;
         this.categoryCount = this.sortCount;
-    }
-
-    public synchronized void ReportConcurrentSorts(int[] array) throws Exception {
-        if(ArrayVisualizer.getSortingThread() != null && ArrayVisualizer.getSortingThread().isAlive())
-            return;
-
-        Sounds.toggleSound(true);
-        ArrayVisualizer.setSortingThread(new Thread() {
-            @Override
-            public void run() {
-                try{
-                    Sort RecursiveBitonicSort      = new      RecursiveBitonicSort(Delays, Highlights, Reads, Writes);
-                    Sort RecursiveOddEvenMergeSort = new RecursiveOddEvenMergeSort(Delays, Highlights, Reads, Writes);
-                    Sort RecursivePairwiseSort     = new     RecursivePairwiseSort(Delays, Highlights, Reads, Writes);
-                    Sort IterativeBitonicSort      = new      IterativeBitonicSort(Delays, Highlights, Reads, Writes);
-                    Sort IterativeOddEvenMergeSort = new IterativeOddEvenMergeSort(Delays, Highlights, Reads, Writes);
-                    Sort IterativePairwiseSort     = new     IterativePairwiseSort(Delays, Highlights, Reads, Writes);
-                    
-                    RunConcurrentSorts.this.sortNumber = 1;
-
-                    ArrayManager.toggleMutableLength(false);
-
-                    ArrayVisualizer.setCategory("Concurrent Sorts");
-
-                    RunConcurrentSorts.this.RunIndividualSort(RecursiveBitonicSort,      0, array, 1024, 0.6667);
-                    RunConcurrentSorts.this.RunIndividualSort(RecursiveOddEvenMergeSort, 0, array, 1024, 1);
-                    RunConcurrentSorts.this.RunIndividualSort(RecursivePairwiseSort,     0, array, 1024, 1);
-                    RunConcurrentSorts.this.RunIndividualSort(IterativeBitonicSort,      0, array, 1024, 0.3333);
-                    RunConcurrentSorts.this.RunIndividualSort(IterativeOddEvenMergeSort, 0, array, 1024, 1);
-                    RunConcurrentSorts.this.RunIndividualSort(IterativePairwiseSort,     0, array, 1024, 0.8);
-                    
-                    ArrayVisualizer.setCategory("Run Concurrent Sorts");
-                    ArrayVisualizer.setHeading("Done");
-                    
-                    ArrayManager.toggleMutableLength(true);
-                }
-                catch (Exception e) {
-                    JErrorPane.invokeErrorMessage(e);
-                }
-                Sounds.toggleSound(false);
-                ArrayVisualizer.setSortingThread(null);
-            }
-        });
-
-        ArrayVisualizer.runSortingThread();
+        
+        RecursiveBitonicSort      = new      RecursiveBitonicSort(Delays, Highlights, Reads, Writes);
+        RecursiveOddEvenMergeSort = new RecursiveOddEvenMergeSort(Delays, Highlights, Reads, Writes);
+        RecursivePairwiseSort     = new     RecursivePairwiseSort(Delays, Highlights, Reads, Writes);
+        IterativeBitonicSort      = new      IterativeBitonicSort(Delays, Highlights, Reads, Writes);
+        IterativeOddEvenMergeSort = new IterativeOddEvenMergeSort(Delays, Highlights, Reads, Writes);
+        IterativePairwiseSort     = new     IterativePairwiseSort(Delays, Highlights, Reads, Writes);
     }
 
     @Override
-    public void ReportAllSorts(int[] array, int current, int total) throws Exception {
+    protected synchronized void executeSortList(int[] array) throws Exception {
+        RunConcurrentSorts.this.runIndividualSort(RecursiveBitonicSort,      0, array, 1024, 0.6667);
+        RunConcurrentSorts.this.runIndividualSort(RecursiveOddEvenMergeSort, 0, array, 1024, 1);
+        RunConcurrentSorts.this.runIndividualSort(RecursivePairwiseSort,     0, array, 1024, 1);
+        RunConcurrentSorts.this.runIndividualSort(IterativeBitonicSort,      0, array, 1024, 0.3333);
+        RunConcurrentSorts.this.runIndividualSort(IterativeOddEvenMergeSort, 0, array, 1024, 1);
+        RunConcurrentSorts.this.runIndividualSort(IterativePairwiseSort,     0, array, 1024, 0.8);
+    }
+    
+    @Override
+    protected synchronized void runThread(int[] array, int current, int total, boolean runAllActive) throws Exception {
         if(ArrayVisualizer.getSortingThread() != null && ArrayVisualizer.getSortingThread().isAlive())
             return;
 
@@ -101,26 +78,24 @@ final public class RunConcurrentSorts extends MultipleSortThread {
             @Override
             public void run() {
                 try{
-                    Sort RecursiveBitonicSort      = new      RecursiveBitonicSort(Delays, Highlights, Reads, Writes);
-                    Sort RecursiveOddEvenMergeSort = new RecursiveOddEvenMergeSort(Delays, Highlights, Reads, Writes);
-                    Sort RecursivePairwiseSort     = new     RecursivePairwiseSort(Delays, Highlights, Reads, Writes);
-                    Sort IterativeBitonicSort      = new      IterativeBitonicSort(Delays, Highlights, Reads, Writes);
-                    Sort IterativeOddEvenMergeSort = new IterativeOddEvenMergeSort(Delays, Highlights, Reads, Writes);
-                    Sort IterativePairwiseSort     = new     IterativePairwiseSort(Delays, Highlights, Reads, Writes);
-                    
-                    RunConcurrentSorts.this.sortNumber = current;
-                    RunConcurrentSorts.this.sortCount = total;
+                    if(runAllActive) {
+                        RunConcurrentSorts.this.sortNumber = current;
+                        RunConcurrentSorts.this.sortCount = total;
+                    }
+                    else {
+                        RunConcurrentSorts.this.sortNumber = 1;
+                    }
 
                     ArrayManager.toggleMutableLength(false);
 
                     ArrayVisualizer.setCategory("Concurrent Sorts");
 
-                    RunConcurrentSorts.this.RunIndividualSort(RecursiveBitonicSort,      0, array, 1024, 0.6667);
-                    RunConcurrentSorts.this.RunIndividualSort(RecursiveOddEvenMergeSort, 0, array, 1024, 1);
-                    RunConcurrentSorts.this.RunIndividualSort(RecursivePairwiseSort,     0, array, 1024, 1);
-                    RunConcurrentSorts.this.RunIndividualSort(IterativeBitonicSort,      0, array, 1024, 0.3333);
-                    RunConcurrentSorts.this.RunIndividualSort(IterativeOddEvenMergeSort, 0, array, 1024, 1);
-                    RunConcurrentSorts.this.RunIndividualSort(IterativePairwiseSort,     0, array, 1024, 0.8);
+                    RunConcurrentSorts.this.executeSortList(array);
+                    
+                    if(!runAllActive) {
+                        ArrayVisualizer.setCategory("Run Concurrent Sorts");
+                        ArrayVisualizer.setHeading("Done");
+                    }
                     
                     ArrayManager.toggleMutableLength(true);
                 }
@@ -131,6 +106,17 @@ final public class RunConcurrentSorts extends MultipleSortThread {
                 ArrayVisualizer.setSortingThread(null);
             }
         });
+
         ArrayVisualizer.runSortingThread();
+    }
+    
+    @Override
+    public synchronized void reportCategorySorts(int[] array) throws Exception {
+        this.runThread(array, 0, 0, false);
+    }
+    
+    @Override
+    public synchronized void reportAllSorts(int[] array, int current, int total) throws Exception {
+        this.runThread(array, current, total, true);
     }
 }

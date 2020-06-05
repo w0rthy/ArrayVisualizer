@@ -5,7 +5,6 @@ import main.ArrayVisualizer;
 import utils.Delays;
 import utils.Highlights;
 import utils.Reads;
-import utils.Shuffles;
 import utils.Sounds;
 import utils.Timer;
 import utils.Writes;
@@ -36,7 +35,7 @@ public abstract class MultipleSortThread {
         this.Timer = ArrayVisualizer.getTimer();
     }
     
-    protected synchronized void RunIndividualSort(Sort sort, int bucketCount, int[] array, int length, double speed) throws InterruptedException {
+    protected synchronized void runIndividualSort(Sort sort, int bucketCount, int[] array, int length, double speed) throws InterruptedException {
         Delays.setSleepRatio(2.5);
         
         if(length != ArrayVisualizer.getCurrentLength()) {
@@ -58,7 +57,10 @@ public abstract class MultipleSortThread {
         this.sortNumber++;
     }
     
-    public abstract void ReportAllSorts(int[] array, int current, int total) throws Exception;
+    protected abstract void executeSortList(int[] array) throws Exception;
+    protected abstract void runThread(int[] array, int current, int total, boolean runAllActive) throws Exception;
+    public abstract void reportCategorySorts(int[] array) throws Exception;
+    public abstract void reportAllSorts(int[] array, int current, int total) throws Exception;
     
     public int getSortCount() {
         return this.sortCount;

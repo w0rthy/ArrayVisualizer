@@ -33,49 +33,23 @@ SOFTWARE.
  */
 
 final public class RunMiscellaneousSorts extends MultipleSortThread {
+    private Sort PancakeSort;
+    
     public RunMiscellaneousSorts(ArrayVisualizer ArrayVisualizer) {
         super(ArrayVisualizer);
         this.sortCount = 1;
         this.categoryCount = this.sortCount;
-    }
-
-    public synchronized void ReportMiscellaneousSorts(int[] array) throws Exception {
-        if(ArrayVisualizer.getSortingThread() != null && ArrayVisualizer.getSortingThread().isAlive())
-            return;
-
-        Sounds.toggleSound(true);
-        ArrayVisualizer.setSortingThread(new Thread() {
-            @Override
-            public void run() {
-                try{
-                    Sort PancakeSort = new PancakeSort(Delays, Highlights, Reads, Writes);
-                    
-                    RunMiscellaneousSorts.this.sortNumber = 1;
-
-                    ArrayManager.toggleMutableLength(false);
-
-                    ArrayVisualizer.setCategory("Miscellaneous Sorts");
-
-                    RunMiscellaneousSorts.this.RunIndividualSort(PancakeSort, 0, array, 128, 0.015);
-                    
-                    ArrayVisualizer.setCategory("Run Miscellaneous Sorts");
-                    ArrayVisualizer.setHeading("Done");
-                    
-                    ArrayManager.toggleMutableLength(true);
-                }
-                catch (Exception e) {
-                    JErrorPane.invokeErrorMessage(e);
-                }
-                Sounds.toggleSound(false);
-                ArrayVisualizer.setSortingThread(null);
-            }
-        });
-
-        ArrayVisualizer.runSortingThread();
+        
+        PancakeSort = new PancakeSort(Delays, Highlights, Reads, Writes);
     }
 
     @Override
-    public void ReportAllSorts(int[] array, int current, int total) throws Exception {
+    protected synchronized void executeSortList(int[] array) throws Exception {
+        RunMiscellaneousSorts.this.runIndividualSort(PancakeSort, 0, array, 128, 0.015);
+    }
+    
+    @Override
+    protected synchronized void runThread(int[] array, int current, int total, boolean runAllActive) throws Exception {
         if(ArrayVisualizer.getSortingThread() != null && ArrayVisualizer.getSortingThread().isAlive())
             return;
 
@@ -84,16 +58,24 @@ final public class RunMiscellaneousSorts extends MultipleSortThread {
             @Override
             public void run() {
                 try{
-                    Sort PancakeSort = new PancakeSort(Delays, Highlights, Reads, Writes);
+                    if(runAllActive) {
+                        RunMiscellaneousSorts.this.sortNumber = current;
+                        RunMiscellaneousSorts.this.sortCount = total;
+                    }
+                    else {
+                        RunMiscellaneousSorts.this.sortNumber = 1;
+                    }
                     
-                    RunMiscellaneousSorts.this.sortNumber = current;
-                    RunMiscellaneousSorts.this.sortCount = total;
-
                     ArrayManager.toggleMutableLength(false);
 
                     ArrayVisualizer.setCategory("Miscellaneous Sorts");
 
-                    RunMiscellaneousSorts.this.RunIndividualSort(PancakeSort, 0, array, 128, 0.015);
+                    RunMiscellaneousSorts.this.executeSortList(array);
+                    
+                    if(!runAllActive) {
+                        ArrayVisualizer.setCategory("Run Miscellaneous Sorts");
+                        ArrayVisualizer.setHeading("Done");
+                    }
                     
                     ArrayManager.toggleMutableLength(true);
                 }
@@ -104,7 +86,16 @@ final public class RunMiscellaneousSorts extends MultipleSortThread {
                 ArrayVisualizer.setSortingThread(null);
             }
         });
-
         ArrayVisualizer.runSortingThread();
+    }
+    
+    @Override
+    public synchronized void reportCategorySorts(int[] array) throws Exception {
+        this.runThread(array, 0, 0, false);
+    }
+    
+    @Override
+    public synchronized void reportAllSorts(int[] array, int current, int total) throws Exception {
+        this.runThread(array, current, total, true);
     }
 }

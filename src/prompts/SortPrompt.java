@@ -139,8 +139,7 @@ final public class SortPrompt extends javax.swing.JFrame implements Frame {
 
         jScrollPane2.setViewportView(this.jList1);
 
-        //TODO: Better time estimate
-        jButton1.setText("Run All (approx. " + (int) Math.max(Math.ceil(30 * (ArrayVisualizer.getCurrentLength() / 2048d)), 2) + " minutes)");
+        jButton1.setText("Run All (approx. 30-60 minutes)");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             @Override
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -189,7 +188,7 @@ final public class SortPrompt extends javax.swing.JFrame implements Frame {
             public void run(){
                 try {
                     RunAllSorts RunAllSorts = new RunAllSorts(ArrayVisualizer);
-                    RunAllSorts.ReportAllSorts(array, 0, 0);
+                    RunAllSorts.reportAllSorts(array);
                 } catch (Exception e) {
                     JErrorPane.invokeErrorMessage(e);
                 }

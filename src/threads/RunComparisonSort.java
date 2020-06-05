@@ -1,7 +1,5 @@
 package threads;
 
-import java.io.PrintWriter;
-import java.io.StringWriter;
 import java.lang.reflect.Constructor;
 
 import javax.swing.JOptionPane;

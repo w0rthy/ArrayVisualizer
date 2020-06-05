@@ -35,7 +35,7 @@ final public class BinaryGnomeSort extends Sort {
                 Highlights.markArray(3, mid);
                 Highlights.markArray(2, hi);
                 
-                Delays.sleep(0.05);
+                Delays.sleep(1);
                 
                 if (Reads.compare(num, array[mid]) < 0) { // do NOT shift equal elements past each other; this maintains stability!
                     hi = mid;
@@ -52,7 +52,7 @@ final public class BinaryGnomeSort extends Sort {
             
             int j = i;
             while (j > lo) {   
-                Writes.swap(array, j, j - 1, 0.01, true, false);
+                Writes.swap(array, j, j - 1, 0.05, true, false);
                 j--;
             }
         }         

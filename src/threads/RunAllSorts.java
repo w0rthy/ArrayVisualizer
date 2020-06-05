@@ -2,8 +2,6 @@ package threads;
 
 import java.util.ArrayList;
 
-import javax.swing.JOptionPane;
-
 import main.ArrayVisualizer;
 import templates.JErrorPane;
 import templates.MultipleSortThread;
@@ -34,12 +32,13 @@ SOFTWARE.
  *
  */
 
-final public class RunAllSorts extends MultipleSortThread {
+final public class RunAllSorts {
+    private ArrayVisualizer ArrayVisualizer;
     private ArrayList<MultipleSortThread> allSortThreads;
     
     public RunAllSorts(ArrayVisualizer ArrayVisualizer) {
-        super(ArrayVisualizer);
-        this.allSortThreads = new ArrayList<MultipleSortThread>();
+        this.ArrayVisualizer = ArrayVisualizer;
+        this.allSortThreads = new ArrayList<>();
         this.allSortThreads.add(new RunExchangeSorts(ArrayVisualizer));
         this.allSortThreads.add(new RunSelectionSorts(ArrayVisualizer));
         this.allSortThreads.add(new RunInsertionSorts(ArrayVisualizer));
@@ -51,8 +50,7 @@ final public class RunAllSorts extends MultipleSortThread {
         this.allSortThreads.add(new RunImpracticalSorts(ArrayVisualizer));
     }
 
-    @Override
-    public void ReportAllSorts(int[] array, int current, int total) throws Exception {
+    public void reportAllSorts(int[] array) throws Exception {
         int totalSortCount = 0;
         for(MultipleSortThread category : this.allSortThreads) {
             totalSortCount += category.getSortCount();
@@ -61,7 +59,7 @@ final public class RunAllSorts extends MultipleSortThread {
         try {
             int currentSort = 1;
             for(MultipleSortThread thread : this.allSortThreads) {
-                thread.ReportAllSorts(array, currentSort, totalSortCount);
+                thread.reportAllSorts(array, currentSort, totalSortCount);
                 this.ArrayVisualizer.getSortingThread().join();
                 currentSort += thread.getCategoryCount();
             }
