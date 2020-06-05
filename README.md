@@ -1,7 +1,7 @@
 # w0rthy's Array Visualizer, Revamped
 [![Donate](https://img.shields.io/badge/Donate-PayPal-green.svg)](https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=Q5QLCFZ8G7WY6&currency_code=USD&source=url)
 
-78 sorting algorithms animated with 10 unique graphic designs
+Over 75 sorting algorithms animated with 10 unique graphic designs
 
 This new version of the program features additions inspired by Timo Bingmann's "The Sound of Sorting" and w0rthy's updates to the original visualizer.
 
