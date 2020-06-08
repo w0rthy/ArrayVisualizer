@@ -5,11 +5,13 @@ Over 75 sorting algorithms animated with 10 unique graphic designs
 
 This new version of the program features additions inspired by Timo Bingmann's "The Sound of Sorting" and w0rthy's updates to the original visualizer.
 
-To build (After -cp, use ";" with Windows and ":" with Mac/Linux):
+To compile (After -cp, use ";" with Windows and ":" with Mac/Linux):
 ```
 ant
 java -cp bin;lib/classgraph-4.8.47.jar main.ArrayVisualizer
 ```
+
+To build a runnable jar, simply run Apache Ant inside the 'dist' directory!
 
 ### Features:
 - 40+ new sorting algorithms
