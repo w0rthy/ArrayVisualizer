@@ -1,9 +1,9 @@
 package visuals;
 
 import java.awt.Color;
-import java.awt.Graphics2D;
 
 import main.ArrayVisualizer;
+import templates.Visual;
 import utils.Highlights;
 import utils.Renderer;
 
@@ -33,12 +33,48 @@ SOFTWARE.
  *
  */
 
-final public class Mesh {
-    public void drawVisual(int[] array, ArrayVisualizer ArrayVisualizer, Renderer Renderer, Graphics2D mainRender, Graphics2D extraRender, Highlights Highlights) {
-        int trih = Renderer.getTriangleHeight(ArrayVisualizer.getCurrentLength(), ArrayVisualizer.windowHeight() / 20); //Height of triangles to use, Width will be scaled accordingly
+final public class Mesh extends Visual {
+    public Mesh(ArrayVisualizer ArrayVisualizer) {
+        super(ArrayVisualizer);
+    }
+
+    //TODO: Change these to be more consistent between array lengths. These heights and counts are a bit random.
+    public static int getTriangleHeight(int length, double height) {
+        switch(length) {
+        case 2:   height *= 20;   break;
+        case 4:   height *= 13;   break;
+        case 8:   height *= 8;    break;
+        case 16:
+        case 32:  height *= 4.4;  break; 
+        case 64:  height *= 2.3;  break;
+        case 128: height *= 2.35; break;
+        case 256: height *= 1.22; break;
+        default:  height *= 1;
+        }
+        
+        return (int) height;
+    }
+    
+    public static int getTrianglesPerRow(int length, int trianglesPerColumn) {
+        int trianglesPerRow;
+        
+        switch(length) {
+        case 32: 
+        case 64:  trianglesPerRow = 4; break;
+        case 128:
+        case 256: trianglesPerRow = 8; break;
+        default:  trianglesPerRow = Math.max(length / trianglesPerColumn, 2); 
+        }
+        
+        return trianglesPerRow;
+    }
+    
+    @Override
+    public void drawVisual(int[] array, ArrayVisualizer ArrayVisualizer, Renderer Renderer, Highlights Highlights) {
+        int trih = getTriangleHeight(ArrayVisualizer.getCurrentLength(), ArrayVisualizer.windowHeight() / 20); //Height of triangles to use, Width will be scaled accordingly
 
         int tripercol = (ArrayVisualizer.windowHeight() / trih) * 2; //Triangles per column
-        int triperrow = Renderer.getTrianglesPerRow(ArrayVisualizer.getCurrentLength(), tripercol); //Triangles per row
+        int triperrow = getTrianglesPerRow(ArrayVisualizer.getCurrentLength(), tripercol); //Triangles per row
 
         double triw = (double) ArrayVisualizer.windowWidth() / triperrow; //Width of triangles to use
 
@@ -50,15 +86,15 @@ final public class Mesh {
 
         for(int i = 0; i < ArrayVisualizer.getCurrentLength(); i++){
             if(Highlights.containsPosition(i) && ArrayVisualizer.getCurrentLength() != 2) {
-                if(ArrayVisualizer.analysisEnabled()) mainRender.setColor(Color.WHITE);
-                else                                  mainRender.setColor(Color.BLACK);
+                if(ArrayVisualizer.analysisEnabled()) this.mainRender.setColor(Color.WHITE);
+                else                                  this.mainRender.setColor(Color.BLACK);
             }
             else {
                 //TODO: Clean up this visual trick
                 if(Highlights.fancyFinishActive() && (i < Highlights.getFancyFinishPosition() && i > Highlights.getFancyFinishPosition() - ArrayVisualizer.getLogBaseTwoOfLength())) {
-                    mainRender.setColor(Color.GREEN);
+                    this.mainRender.setColor(Color.GREEN);
                 }
-                else mainRender.setColor(Renderer.getIntColor(array[i], ArrayVisualizer.getCurrentLength()));
+                else this.mainRender.setColor(getIntColor(array[i], ArrayVisualizer.getCurrentLength()));
             }
             //If i/triperrow is even, then triangle points right, else left
             boolean direction = false;
@@ -89,7 +125,7 @@ final public class Mesh {
             }
 
             //Draw it
-            mainRender.fillPolygon(triptsx, triptsy, triptsx.length);
+            this.mainRender.fillPolygon(triptsx, triptsy, triptsx.length);
 
             //If at the end of a row, reset curx
             //(i != 0 || i != currentLen - 1)

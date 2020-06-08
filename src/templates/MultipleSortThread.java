@@ -59,8 +59,14 @@ public abstract class MultipleSortThread {
     
     protected abstract void executeSortList(int[] array) throws Exception;
     protected abstract void runThread(int[] array, int current, int total, boolean runAllActive) throws Exception;
-    public abstract void reportCategorySorts(int[] array) throws Exception;
-    public abstract void reportAllSorts(int[] array, int current, int total) throws Exception;
+
+    public synchronized void reportCategorySorts(int[] array) throws Exception {
+        this.runThread(array, 0, 0, false);
+    }
+    
+    public synchronized void reportAllSorts(int[] array, int current, int total) throws Exception {
+        this.runThread(array, current, total, true);
+    }
     
     public int getSortCount() {
         return this.sortCount;

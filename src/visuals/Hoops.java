@@ -5,6 +5,7 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 
 import main.ArrayVisualizer;
+import templates.Visual;
 import utils.Highlights;
 import utils.Renderer;
 
@@ -34,11 +35,56 @@ SOFTWARE.
  *
  */
 
-final public class Hoops {
+final public class Hoops extends Visual {
+    public Hoops(ArrayVisualizer ArrayVisualizer) {
+        super(ArrayVisualizer);
+    }
+
+    @SuppressWarnings("fallthrough")
+    public static void markHoops(int logOfLen, int index, Highlights Highlights, Graphics2D mainRender) {
+        switch(logOfLen) {
+        case 14: if(Highlights.containsPosition(index - 13)) mainRender.setColor(Color.BLACK);
+        case 13: if(Highlights.containsPosition(index - 12)) mainRender.setColor(Color.BLACK);
+        case 12: if(Highlights.containsPosition(index - 11)) mainRender.setColor(Color.BLACK);
+        case 11: if(Highlights.containsPosition(index - 10)) mainRender.setColor(Color.BLACK);
+        case 10: if(Highlights.containsPosition(index - 9))  mainRender.setColor(Color.BLACK);
+        case 9:  if(Highlights.containsPosition(index - 8))  mainRender.setColor(Color.BLACK);
+        case 8:  if(Highlights.containsPosition(index - 7))  mainRender.setColor(Color.BLACK);
+        case 7:  if(Highlights.containsPosition(index - 6))  mainRender.setColor(Color.BLACK);
+        case 6:  if(Highlights.containsPosition(index - 5))  mainRender.setColor(Color.BLACK);
+        case 5:  if(Highlights.containsPosition(index - 4))  mainRender.setColor(Color.BLACK);
+        case 4:  if(Highlights.containsPosition(index - 3))  mainRender.setColor(Color.BLACK);
+        case 3:  if(Highlights.containsPosition(index - 2))  mainRender.setColor(Color.BLACK);
+        case 2:  if(Highlights.containsPosition(index - 1))  mainRender.setColor(Color.BLACK);
+        default: if(Highlights.containsPosition(index))      mainRender.setColor(Color.BLACK);
+        }
+    }
+    
+    @SuppressWarnings("fallthrough")
+    public static void drawFancyFinishHoops(int logOfLen, int index, int position, Graphics2D mainRender) {
+        switch(logOfLen) {
+        case 14: if(index == position - 13) mainRender.setColor(Color.BLACK);
+        case 13: if(index == position - 12) mainRender.setColor(Color.BLACK);
+        case 12: if(index == position - 11) mainRender.setColor(Color.BLACK);
+        case 11: if(index == position - 10) mainRender.setColor(Color.BLACK);
+        case 10: if(index == position - 9)  mainRender.setColor(Color.BLACK);
+        case 9:  if(index == position - 8)  mainRender.setColor(Color.BLACK);
+        case 8:  if(index == position - 7)  mainRender.setColor(Color.BLACK);
+        case 7:  if(index == position - 6)  mainRender.setColor(Color.BLACK);
+        case 6:  if(index == position - 5)  mainRender.setColor(Color.BLACK);
+        case 5:  if(index == position - 4)  mainRender.setColor(Color.BLACK);
+        case 4:  if(index == position - 3)  mainRender.setColor(Color.BLACK);
+        case 3:  if(index == position - 2)  mainRender.setColor(Color.BLACK);
+        case 2:  if(index == position - 1)  mainRender.setColor(Color.BLACK);
+        default: if(index == position)      mainRender.setColor(Color.BLACK);
+        }
+    }
+    
     //TODO: Fix scaling to ensure Hoops close at the center
     //TODO: Too many rings highlighted at once!!
-    public void drawVisual(int[] array, ArrayVisualizer ArrayVisualizer, Renderer Renderer, Graphics2D mainRender, Graphics2D extraRender, Highlights Highlights) {
-        mainRender.setStroke(new BasicStroke(1.0f)); //thin strokes significantly increased performance
+    @Override
+    public void drawVisual(int[] array, ArrayVisualizer ArrayVisualizer, Renderer Renderer, Highlights Highlights) {
+        this.mainRender.setStroke(new BasicStroke(1.0f)); //thin strokes significantly increased performance
         
                                                      //This StackOverflow thread may be related: https://stackoverflow.com/questions/47102734/performances-issue-when-drawing-dashed-line-in-java
 
@@ -48,23 +94,23 @@ final public class Hoops {
         for(int i = 0; i < ArrayVisualizer.getCurrentLength(); i++) {
             if(Highlights.fancyFinishActive()) {
                 if(i < Highlights.getFancyFinishPosition()) {
-                    mainRender.setColor(Color.GREEN);
+                    this.mainRender.setColor(Color.GREEN);
                 }
-                else mainRender.setColor(Renderer.getIntColor(array[i], ArrayVisualizer.getCurrentLength()));
+                else this.mainRender.setColor(getIntColor(array[i], ArrayVisualizer.getCurrentLength()));
 
-                Renderer.drawFancyFinishHoops(ArrayVisualizer.getLogBaseTwoOfLength(), i, Highlights.getFancyFinishPosition(), mainRender);
+                drawFancyFinishHoops(ArrayVisualizer.getLogBaseTwoOfLength(), i, Highlights.getFancyFinishPosition(), this.mainRender);
             }
             else {
-                mainRender.setColor(Renderer.getIntColor(array[i], ArrayVisualizer.getCurrentLength()));
+                this.mainRender.setColor(getIntColor(array[i], ArrayVisualizer.getCurrentLength()));
             }
             
             if(ArrayVisualizer.getCurrentLength() != 2) {
-                Renderer.markHoops(ArrayVisualizer.getLogBaseTwoOfLength(), i, Highlights, mainRender);
+                markHoops(ArrayVisualizer.getLogBaseTwoOfLength(), i, Highlights, this.mainRender);
             }
 
             int radius = (int) (diameter / 2.0);
 
-            mainRender.drawOval(ArrayVisualizer.windowHalfWidth()  - radius,
+            this.mainRender.drawOval(ArrayVisualizer.windowHalfWidth()  - radius,
                                 ArrayVisualizer.windowHalfHeight() - radius + 12,
                                 (int) diameter,
                                 (int) diameter);

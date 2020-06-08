@@ -10,6 +10,10 @@ import frames.UtilFrame;
 import main.ArrayVisualizer;
 import templates.Frame;
 import visuals.VisualStyles;
+import javax.swing.JButton;
+import javax.swing.GroupLayout.Alignment;
+import javax.swing.GroupLayout;
+import javax.swing.LayoutStyle.ComponentPlacement;
 
 /*
  * 
@@ -81,6 +85,8 @@ final public class ViewPrompt extends javax.swing.JFrame implements Frame {
         this.spiralDots= new javax.swing.JButton();
         this.rainbow = new javax.swing.JButton();
         this.hoops = new javax.swing.JButton();
+        this.sineWave = new javax.swing.JButton();
+        this.waveDots = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
@@ -166,58 +172,77 @@ final public class ViewPrompt extends javax.swing.JFrame implements Frame {
                 spiralDotsActionPerformed(evt);
             }
         });
-
+        
+        sineWave.setText("Sine Wave");
+        sineWave.addActionListener(new java.awt.event.ActionListener() {
+            @Override
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                sineWaveActionPerformed(evt);
+            }
+        });
+        waveDots.setText("Wave Dots");
+        waveDots.addActionListener(new java.awt.event.ActionListener() {
+            @Override
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                waveDotsActionPerformed(evt);
+            }
+        });
+        
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
-                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER, true)
-                .addGroup(layout.createSequentialGroup()
-                        .addGap(18, 18, 18)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, true)
-                                .addComponent(this.barGraph, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(this.rainbow, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(this.colorCircle, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(this.disparity, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(this.disparityDots, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, true)
-                                .addComponent(this.dotGraph, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(this.triangleMesh, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(this.spiral, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(this.hoops, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(this.spiralDots, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addGap(18, 18, 18))
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER, true)
-                        .addComponent(this.jLabel1))
-                );
+            layout.createParallelGroup(Alignment.CENTER)
+                .addComponent(jLabel1)
+                .addGroup(Alignment.LEADING, layout.createSequentialGroup()
+                    .addGap(18)
+                    .addGroup(layout.createParallelGroup(Alignment.LEADING)
+                        .addComponent(barGraph, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 105, Short.MAX_VALUE)
+                        .addComponent(rainbow, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 105, Short.MAX_VALUE)
+                        .addComponent(colorCircle, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 105, Short.MAX_VALUE)
+                        .addComponent(disparity, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(disparityDots, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 105, Short.MAX_VALUE)
+                        .addComponent(sineWave, GroupLayout.DEFAULT_SIZE, 105, Short.MAX_VALUE))
+                    .addPreferredGap(ComponentPlacement.RELATED)
+                    .addGroup(layout.createParallelGroup(Alignment.LEADING)
+                        .addComponent(waveDots, GroupLayout.DEFAULT_SIZE, 101, Short.MAX_VALUE)
+                        .addComponent(dotGraph, GroupLayout.DEFAULT_SIZE, 101, Short.MAX_VALUE)
+                        .addComponent(triangleMesh, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(spiral, GroupLayout.DEFAULT_SIZE, 101, Short.MAX_VALUE)
+                        .addComponent(hoops, GroupLayout.DEFAULT_SIZE, 101, Short.MAX_VALUE)
+                        .addComponent(spiralDots, GroupLayout.DEFAULT_SIZE, 101, Short.MAX_VALUE))
+                    .addGap(18))
+        );
         layout.setVerticalGroup(
-                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER, true)
+            layout.createParallelGroup(Alignment.CENTER)
                 .addGroup(layout.createSequentialGroup()
-                        .addGap(7, 7, 7)
-                        .addComponent(this.jLabel1)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE, true)
-                                .addComponent(this.barGraph, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(this.dotGraph, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE, true)
-                                .addComponent(this.rainbow, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(this.triangleMesh, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE, true)
-                                .addComponent(this.colorCircle, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(this.hoops, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE, true)
-                                .addComponent(this.disparity, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(this.spiral, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE, true)
-                                .addComponent(this.disparityDots, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(this.spiralDots, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addContainerGap(18, Short.MAX_VALUE))
-                );
+                    .addGap(7)
+                    .addComponent(jLabel1)
+                    .addPreferredGap(ComponentPlacement.UNRELATED)
+                    .addGroup(layout.createParallelGroup(Alignment.BASELINE)
+                        .addComponent(barGraph)
+                        .addComponent(dotGraph))
+                    .addPreferredGap(ComponentPlacement.UNRELATED)
+                    .addGroup(layout.createParallelGroup(Alignment.BASELINE)
+                        .addComponent(rainbow)
+                        .addComponent(triangleMesh))
+                    .addPreferredGap(ComponentPlacement.UNRELATED)
+                    .addGroup(layout.createParallelGroup(Alignment.BASELINE)
+                        .addComponent(colorCircle)
+                        .addComponent(hoops))
+                    .addPreferredGap(ComponentPlacement.UNRELATED)
+                    .addGroup(layout.createParallelGroup(Alignment.BASELINE)
+                        .addComponent(disparity)
+                        .addComponent(spiral))
+                    .addPreferredGap(ComponentPlacement.UNRELATED)
+                    .addGroup(layout.createParallelGroup(Alignment.BASELINE)
+                        .addComponent(disparityDots)
+                        .addComponent(spiralDots))
+                    .addPreferredGap(ComponentPlacement.UNRELATED)
+                    .addGroup(layout.createParallelGroup(Alignment.LEADING)
+                        .addComponent(sineWave)
+                        .addComponent(waveDots))
+                    .addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        getContentPane().setLayout(layout);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -228,6 +253,7 @@ final public class ViewPrompt extends javax.swing.JFrame implements Frame {
         ArrayVisualizer.togglePixels(false);
         ArrayVisualizer.toggleRainbow(false);
         ArrayVisualizer.toggleSpiral(false);
+        ArrayVisualizer.toggleWave(false);
     }
 
     private void barGraphActionPerformed(java.awt.event.ActionEvent evt) {
@@ -306,6 +332,21 @@ final public class ViewPrompt extends javax.swing.JFrame implements Frame {
         UtilFrame.jButton2ResetText();
         dispose();
     }
+    private void sineWaveActionPerformed(java.awt.event.ActionEvent evt) {
+        setAllFieldsFalse();
+        ArrayVisualizer.setVisual(VisualStyles.BARS);
+        ArrayVisualizer.toggleWave(true);
+        UtilFrame.jButton2ResetText();
+        dispose();
+    }
+    private void waveDotsActionPerformed(java.awt.event.ActionEvent evt) {
+        setAllFieldsFalse();
+        ArrayVisualizer.setVisual(VisualStyles.PIXELS);
+        ArrayVisualizer.togglePixels(true);
+        ArrayVisualizer.toggleWave(true);
+        UtilFrame.jButton2ResetText();
+        dispose();
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton barGraph;
@@ -318,7 +359,7 @@ final public class ViewPrompt extends javax.swing.JFrame implements Frame {
     private javax.swing.JButton disparityDots;
     private javax.swing.JButton rainbow;
     private javax.swing.JButton hoops;
+    private javax.swing.JButton sineWave;
+    private javax.swing.JButton waveDots;
     private javax.swing.JLabel jLabel1;
-    // End of variables declaration//GEN-END:variables
-
 }

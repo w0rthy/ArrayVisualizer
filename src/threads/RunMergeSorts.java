@@ -100,14 +100,4 @@ final public class RunMergeSorts extends MultipleSortThread {
         });
         ArrayVisualizer.runSortingThread();
     }
-    
-    @Override
-    public synchronized void reportCategorySorts(int[] array) throws Exception {
-        this.runThread(array, 0, 0, false);
-    }
-    
-    @Override
-    public synchronized void reportAllSorts(int[] array, int current, int total) throws Exception {
-        this.runThread(array, current, total, true);
-    }
 }

@@ -37,12 +37,12 @@ public abstract class BogoSorting extends Sort {
     }
     
     private static int randomPosition(int length, int offset) {
-        return (int) ((Math.random() * (length - offset)) + offset);
+        return (int) (Math.random() * (length - offset));
     }
     
     protected void bogoSwap(int[] array, int length, int offset){
         for(int i = offset; i < length; i++) {
-            Writes.swap(array, i, BogoSorting.randomPosition(length, offset), 0, true, false);
+            Writes.swap(array, i, BogoSorting.randomPosition(length, i) + i, 0, true, false);
         }
     }
     

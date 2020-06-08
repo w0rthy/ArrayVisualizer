@@ -1,7 +1,5 @@
 package visuals;
 
-import java.awt.Graphics2D;
-
 import main.ArrayVisualizer;
 import utils.Highlights;
 import utils.Renderer;
@@ -33,45 +31,40 @@ SOFTWARE.
  */
 
 public enum VisualStyles {
+    BARS {
+        @Override
+        public void drawVisual(int[] array, ArrayVisualizer ArrayVisualizer, Renderer Renderer, Highlights Highlights) {
+            ArrayVisualizer.getVisuals()[0].drawVisual(array, ArrayVisualizer, Renderer, Highlights);
+        }
+    },
     CIRCULAR {
         @Override
-        public void drawVisual(int[] array, ArrayVisualizer ArrayVisualizer, Renderer Renderer,
-                               Graphics2D mainRender, Graphics2D extraRender, Highlights Highlights) {
-            Renderer.drawCircle(array, ArrayVisualizer, mainRender, extraRender, Highlights);
+        public void drawVisual(int[] array, ArrayVisualizer ArrayVisualizer, Renderer Renderer, Highlights Highlights) {
+            ArrayVisualizer.getVisuals()[1].drawVisual(array, ArrayVisualizer, Renderer, Highlights);
         }
     },
     HOOPS {
         @Override
-        public void drawVisual(int[] array, ArrayVisualizer ArrayVisualizer, Renderer Renderer,
-                               Graphics2D mainRender, Graphics2D extraRender, Highlights Highlights) {
-            Renderer.drawHoops(array, ArrayVisualizer, mainRender, extraRender, Highlights);
+        public void drawVisual(int[] array, ArrayVisualizer ArrayVisualizer, Renderer Renderer, Highlights Highlights) {
+            ArrayVisualizer.getVisuals()[2].drawVisual(array, ArrayVisualizer, Renderer, Highlights);
         }
     },
     MESH {
         @Override
-        public void drawVisual(int[] array, ArrayVisualizer ArrayVisualizer, Renderer Renderer,
-                               Graphics2D mainRender, Graphics2D extraRender, Highlights Highlights) {
-            Renderer.drawMesh(array, ArrayVisualizer, mainRender, extraRender, Highlights);
-        }
-    },
-    BARS {
-        @Override
-        public void drawVisual(int[] array, ArrayVisualizer ArrayVisualizer, Renderer Renderer,
-                               Graphics2D mainRender, Graphics2D extraRender, Highlights Highlights) {
-            Renderer.drawBars(array, ArrayVisualizer, mainRender, extraRender, Highlights);
+        public void drawVisual(int[] array, ArrayVisualizer ArrayVisualizer, Renderer Renderer, Highlights Highlights) {
+            ArrayVisualizer.getVisuals()[3].drawVisual(array, ArrayVisualizer, Renderer, Highlights);
         }
     },
     PIXELS {
         @Override
-        public void drawVisual(int[] array, ArrayVisualizer ArrayVisualizer, Renderer Renderer,
-                               Graphics2D mainRender, Graphics2D extraRender, Highlights Highlights) {
-            Renderer.drawPixels(array, ArrayVisualizer, mainRender, extraRender, Highlights);
+        public void drawVisual(int[] array, ArrayVisualizer ArrayVisualizer, Renderer Renderer, Highlights Highlights) {
+            ArrayVisualizer.getVisuals()[4].drawVisual(array, ArrayVisualizer, Renderer, Highlights);
         }
     };
     
-    public VisualStyles getVisual() {
+    public VisualStyles getCurrentVisual() {
         return this;
     }
 
-    public abstract void drawVisual(int[] array, ArrayVisualizer ArrayVisualizer, Renderer Renderer, Graphics2D mainRender, Graphics2D extraRender, Highlights Highlights);
+    public abstract void drawVisual(int[] array, ArrayVisualizer ArrayVisualizer, Renderer Renderer, Highlights Highlights);
 }

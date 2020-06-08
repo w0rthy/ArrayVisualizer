@@ -2,7 +2,6 @@ package main;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
-import java.awt.Dialog;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
@@ -10,26 +9,30 @@ import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.Stroke;
 import java.awt.Toolkit;
-import java.awt.Window;
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.text.NumberFormat;
 import java.util.Locale;
 
-import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
 import frames.ArrayFrame;
 import frames.UtilFrame;
+import templates.Visual;
 import utils.Delays;
-import utils.Renderer;
 import utils.Highlights;
 import utils.Reads;
+import utils.Renderer;
 import utils.Sounds;
 import utils.Timer;
 import utils.Writes;
+import visuals.Bars;
+import visuals.Circular;
+import visuals.Hoops;
+import visuals.Mesh;
+import visuals.Pixels;
 import visuals.VisualStyles;
 
 /* TO-DO LIST:
@@ -152,6 +155,8 @@ final public class ArrayVisualizer {
     private UtilFrame UtilFrame;
     private ArrayFrame ArrayFrame;
     
+    private Visual[] visualClasses;
+    
     private Thread sortingThread;
     private Thread visualsThread;
     
@@ -176,6 +181,7 @@ final public class ArrayVisualizer {
     private volatile boolean PIXELDRAW;
     private volatile boolean RAINBOW;
     private volatile boolean SPIRALDRAW;
+    private volatile boolean WAVEDRAW;
     
     private volatile int cx;
     private volatile int cy;
@@ -211,23 +217,23 @@ final public class ArrayVisualizer {
         this.ArrayManager = new ArrayManager(this);
         this.SortAnalyzer = new SortAnalyzer(this);
         
-        SortAnalyzer.analyzeSorts();
-        this.ComparisonSorts = SortAnalyzer.getComparisonSorts();
-        this.DistributionSorts = SortAnalyzer.getDistributionSorts();
-        this.InvalidSorts = SortAnalyzer.getInvalidSorts();
+        this.SortAnalyzer.analyzeSorts();
+        this.ComparisonSorts = this.SortAnalyzer.getComparisonSorts();
+        this.DistributionSorts = this.SortAnalyzer.getDistributionSorts();
+        this.InvalidSorts = this.SortAnalyzer.getInvalidSorts();
         
         this.category = "";
         this.heading = "";
         this.typeFace = new Font("Times New Roman", Font.PLAIN, (int) (640 / (1280.0 * 25)));
         this.formatter = (DecimalFormat) NumberFormat.getInstance(Locale.US);
-        this.symbols = formatter.getDecimalFormatSymbols();
+        this.symbols = this.formatter.getDecimalFormatSymbols();
         
         this.formatter.setRoundingMode(RoundingMode.HALF_UP);
         
         this.UtilFrame = new UtilFrame(this.array, this);
         this.ArrayFrame = new ArrayFrame(this.array, this);
        
-        UtilFrame.reposition(this.ArrayFrame);
+        this.UtilFrame.reposition(this.ArrayFrame);
         
         this.SHUFFLEANIM = true;
         this.ANALYZE = false;
@@ -246,7 +252,7 @@ final public class ArrayVisualizer {
         this.ch = 0;
         this.cw = 0;
 
-        ArrayManager.initializeArray(this.array);
+        this.ArrayManager.initializeArray(this.array);
         
         //TODO: Overhaul visual code to properly reflect Swing (JavaFX?) style and conventions
         
@@ -254,36 +260,43 @@ final public class ArrayVisualizer {
         this.visualsThread = new Thread() {
             @Override
             public void run() {
-                Renderer.initializeVisuals(ArrayVisualizer.this, ArrayVisualizer.this.VisualStyles);
+                utils.Renderer.initializeVisuals(ArrayVisualizer.this);
                 
-                Graphics background = window.getGraphics();
+                Graphics background = ArrayVisualizer.this.window.getGraphics();
                 background.setColor(Color.BLACK);
                 int coltmp = 255;
                 
+                ArrayVisualizer.this.visualClasses = new Visual[5];
+                ArrayVisualizer.this.visualClasses[0] = new Bars(ArrayVisualizer.this);
+                ArrayVisualizer.this.visualClasses[1] = new Circular(ArrayVisualizer.this);
+                ArrayVisualizer.this.visualClasses[2] = new Hoops(ArrayVisualizer.this);
+                ArrayVisualizer.this.visualClasses[3] = new Mesh(ArrayVisualizer.this);
+                ArrayVisualizer.this.visualClasses[4] = new Pixels(ArrayVisualizer.this);
+                
                 while(true) {
-                    Renderer.updateVisuals(ArrayVisualizer.this);
-                    Renderer.drawVisual(ArrayVisualizer.this.VisualStyles, array, ArrayVisualizer.this, mainRender, extraRender, Highlights);
+                    ArrayVisualizer.this.Renderer.updateVisuals(ArrayVisualizer.this);
+                    ArrayVisualizer.this.Renderer.drawVisual(ArrayVisualizer.this.VisualStyles, ArrayVisualizer.this.array, ArrayVisualizer.this, ArrayVisualizer.this.Highlights);
                     
-                    mainRender.setColor(new Color(coltmp,coltmp,coltmp));
-                    if(TEXTDRAW) {
-                        Font f = mainRender.getFont();
-                        mainRender.setFont(typeFace);
-                        mainRender.drawString(category + ": " + heading, 15, (int)(cw/1280.0*30)+30);
-                        mainRender.drawString(formatter.format(currentLen) + " Numbers", 15, (int)(cw/1280.0*55)+30);
-                        mainRender.drawString(String.format("Delay: " + Delays.displayCurrentDelay() + "ms"), 15, (int)(cw/1280.0*95)+30);
-                        mainRender.drawString(String.format("Visual Time: " + Timer.getVisualTime()), 15, (int)(cw/1280.0*120)+30);
-                        mainRender.drawString(String.format("Sort Time: " + Timer.getRealTime()), 15, (int)(cw/1280.0*145)+30);
-                        mainRender.drawString(Reads.displayComparisons(), 15, (int)(cw/1280.0*185)+30);
-                        mainRender.drawString(Writes.getSwaps(), 15, (int)(cw/1280.0*210)+30);
-                        mainRender.drawString(Writes.getReversals(), 15, (int)(cw/1280.0*235)+30);
-                        mainRender.drawString(Writes.getWrites(), 15, (int)(cw/1280.0*275)+30);
-                        mainRender.drawString(Writes.getTempWrites(), 15, (int)(cw/1280.0*300)+30);
-                        mainRender.setFont(f);
+                    ArrayVisualizer.this.mainRender.setColor(new Color(coltmp, coltmp, coltmp));
+                    if(ArrayVisualizer.this.TEXTDRAW) {
+                        Font f = ArrayVisualizer.this.mainRender.getFont();
+                        ArrayVisualizer.this.mainRender.setFont(ArrayVisualizer.this.typeFace);
+                        ArrayVisualizer.this.mainRender.drawString(ArrayVisualizer.this.category + ": " + ArrayVisualizer.this.heading, 15, (int)(ArrayVisualizer.this.cw/1280.0*30)+30);
+                        ArrayVisualizer.this.mainRender.drawString(ArrayVisualizer.this.formatter.format(ArrayVisualizer.this.currentLen) + " Numbers", 15, (int)(ArrayVisualizer.this.cw/1280.0*55)+30);
+                        ArrayVisualizer.this.mainRender.drawString(String.format("Delay: " + ArrayVisualizer.this.Delays.displayCurrentDelay() + "ms"), 15, (int)(ArrayVisualizer.this.cw/1280.0*95)+30);
+                        ArrayVisualizer.this.mainRender.drawString(String.format("Visual Time: " + ArrayVisualizer.this.Timer.getVisualTime()), 15, (int)(ArrayVisualizer.this.cw/1280.0*120)+30);
+                        ArrayVisualizer.this.mainRender.drawString(String.format("Sort Time: " + ArrayVisualizer.this.Timer.getRealTime()), 15, (int)(ArrayVisualizer.this.cw/1280.0*145)+30);
+                        ArrayVisualizer.this.mainRender.drawString(ArrayVisualizer.this.Reads.displayComparisons(), 15, (int)(ArrayVisualizer.this.cw/1280.0*185)+30);
+                        ArrayVisualizer.this.mainRender.drawString(ArrayVisualizer.this.Writes.getSwaps(), 15, (int)(ArrayVisualizer.this.cw/1280.0*210)+30);
+                        ArrayVisualizer.this.mainRender.drawString(ArrayVisualizer.this.Writes.getReversals(), 15, (int)(ArrayVisualizer.this.cw/1280.0*235)+30);
+                        ArrayVisualizer.this.mainRender.drawString(ArrayVisualizer.this.Writes.getWrites(), 15, (int)(ArrayVisualizer.this.cw/1280.0*275)+30);
+                        ArrayVisualizer.this.mainRender.drawString(ArrayVisualizer.this.Writes.getTempWrites(), 15, (int)(ArrayVisualizer.this.cw/1280.0*300)+30);
+                        ArrayVisualizer.this.mainRender.setFont(f);
                     }
-                    background.drawImage(img, 0, 0, null);
+                    background.drawImage(ArrayVisualizer.this.img, 0, 0, null);
                 }}};
         
-        Sounds.startAudioThread();
+        this.Sounds.startAudioThread();
         this.drawWindows();
     }
     
@@ -315,6 +328,10 @@ final public class ArrayVisualizer {
         return this.Writes;
     }
     
+    public Visual[] getVisuals() {
+        return this.visualClasses;
+    }
+    
     public UtilFrame getUtilFrame() {
         return this.UtilFrame;
     }
@@ -333,7 +350,7 @@ final public class ArrayVisualizer {
         this.sortingThread = thread;
     }
     public void runSortingThread() {
-        sortingThread.start();
+        this.sortingThread.start();
     }
     
     public int getMinimumLength() {
@@ -344,9 +361,9 @@ final public class ArrayVisualizer {
     }
     
     public void resetAllStatistics() {
-        Reads.resetStatistics();
-        Writes.resetStatistics();
-        Timer.manualSetTime(0);
+        this.Reads.resetStatistics();
+        this.Writes.resetStatistics();
+        this.Timer.manualSetTime(0);
     }
     
     // These next five methods should be part of ArrayManager
@@ -394,10 +411,10 @@ final public class ArrayVisualizer {
     }
     
     public void setWindowHeight() {
-        this.ch = window.getHeight();
+        this.ch = this.window.getHeight();
     }
     public void setWindowWidth() {
-        this.cw = window.getWidth();
+        this.cw = this.window.getWidth();
     }
     
     // TODO:
@@ -405,16 +422,16 @@ final public class ArrayVisualizer {
     // AND WINDOW HEIGHT/WIDTH/X/Y SHOULD CORRESPOND TO WINDOW FIELD
     
     public int currentHeight() {
-        return window.getHeight();
+        return this.window.getHeight();
     }
     public int currentWidth() {
-        return window.getWidth();
+        return this.window.getWidth();
     }
     public int currentX() {
-        return window.getX();
+        return this.window.getX();
     }
     public int currentY() {
-        return window.getY();
+        return this.window.getY();
     }
     
     public int windowHeight() {
@@ -437,7 +454,7 @@ final public class ArrayVisualizer {
     }
     
     public void createVolatileImage() {
-        this.img = window.createVolatileImage(cw, ch);
+        this.img = this.window.createVolatileImage(this.cw, this.ch);
     }
     public void setThickStroke(Stroke stroke) {
         this.thickStroke = stroke;
@@ -448,28 +465,39 @@ final public class ArrayVisualizer {
     public Stroke getDefaultStroke() {
         return new BasicStroke(3f * (this.currentWidth() / 1280f));
     }
+    public Graphics2D getMainRender() {
+        return this.mainRender;
+    }
+    public Graphics2D getExtraRender() {
+        return this.extraRender;
+    }
     public void setMainRender() {
-        this.mainRender = (Graphics2D) img.getGraphics();
+        this.mainRender = (Graphics2D) this.img.getGraphics();
     }
     public void setExtraRender() {
-        this.extraRender = (Graphics2D) img.getGraphics();
+        this.extraRender = (Graphics2D) this.img.getGraphics();
+    }
+    public void updateVisuals() {
+        for(Visual visual : this.visualClasses) {
+            visual.updateRender(this);
+        }
     }
     public void resetMainStroke() {
-        mainRender.setStroke(this.getDefaultStroke());
+        this.mainRender.setStroke(this.getDefaultStroke());
     }
     
     public void renderBackground() {
-        mainRender.setColor(new Color(0, 0, 0)); // Pure black
-        mainRender.fillRect(0, 0, img.getWidth(null), img.getHeight(null));
+        this.mainRender.setColor(new Color(0, 0, 0)); // Pure black
+        this.mainRender.fillRect(0, 0, this.img.getWidth(null), this.img.getHeight(null));
     }
     
     public void updateCoordinates() {
-        this.cx = window.getX();
-        this.cy = window.getY();
+        this.cx = this.window.getX();
+        this.cy = this.window.getY();
     }
     public void updateDimensions() {
-        this.cw = window.getWidth();
-        this.ch = window.getHeight();
+        this.cw = this.window.getWidth();
+        this.ch = this.window.getHeight();
     }
     public void updateFontSize() {
         this.typeFace = new Font("Times New Roman",Font.PLAIN,(int)(this.cw/1280.0*25));
@@ -486,11 +514,12 @@ final public class ArrayVisualizer {
         return (this.currentLen / 2);
     }
     
+    //TODO: This method is *way* too long. Break it apart.
     public synchronized void verifySortAndSweep() {
-        Highlights.toggleFancyFinish(true);
-        Highlights.resetFancyFinish();
+        this.Highlights.toggleFancyFinish(true);
+        this.Highlights.resetFancyFinish();
 
-        Delays.setSleepRatio(1);
+        this.Delays.setSleepRatio(1);
 
         double sleepRatio = 0;
         
@@ -511,63 +540,63 @@ final public class ArrayVisualizer {
         default: sleepRatio = 64;
         }
         
-        long tempComps = Reads.getComparisons();
-        Reads.setComparisons(0);
+        long tempComps = this.Reads.getComparisons();
+        this.Reads.setComparisons(0);
         
         String temp = this.heading;
         this.heading = "Verifying sort...";
         
         for(int i = 0; i < this.currentLen + this.getLogBaseTwoOfLength(); i++) {
-            if(i < this.currentLen) Highlights.markArray(1, i);
-            Highlights.incrementFancyFinishPosition();
+            if(i < this.currentLen) this.Highlights.markArray(1, i);
+            this.Highlights.incrementFancyFinishPosition();
             
             if(i < this.currentLen - 1) {
-                if(Reads.compare(array[i], array[i + 1]) == 1) {
-                    Highlights.clearMark(1);
+                if(this.Reads.compare(this.array[i], this.array[i + 1]) == 1) {
+                    this.Highlights.clearMark(1);
                     
-                    Sounds.toggleSound(false);
-                    Highlights.toggleFancyFinish(false);
+                    this.Sounds.toggleSound(false);
+                    this.Highlights.toggleFancyFinish(false);
                     
                     for(int j = i + 1; j < this.currentLen; j++) {
-                        Highlights.markArray(j, j);
-                        Delays.sleep(sleepRatio / this.getLogBaseTwoOfLength());
+                        this.Highlights.markArray(j, j);
+                        this.Delays.sleep(sleepRatio / this.getLogBaseTwoOfLength());
                     }
                     
-                    JOptionPane.showMessageDialog(window, "The sort was unsuccessful;\nIndices " + i + " and " + (i + 1) + " are out of order!", "Error", JOptionPane.OK_OPTION, null);
+                    JOptionPane.showMessageDialog(this.window, "The sort was unsuccessful;\nIndices " + i + " and " + (i + 1) + " are out of order!", "Error", JOptionPane.OK_OPTION, null);
                     
-                    Highlights.clearAllMarks();
+                    this.Highlights.clearAllMarks();
                     
                     i = this.currentLen + this.getLogBaseTwoOfLength();
                     
-                    Sounds.toggleSound(true);
+                    this.Sounds.toggleSound(true);
                 }
             }
             
-            if(Highlights.fancyFinishEnabled()) {
-                Delays.sleep(sleepRatio / this.getLogBaseTwoOfLength());
+            if(this.Highlights.fancyFinishEnabled()) {
+                this.Delays.sleep(sleepRatio / this.getLogBaseTwoOfLength());
             }
         }
-        Highlights.clearMark(1);
+        this.Highlights.clearMark(1);
 
         this.heading = temp;
-        Reads.setComparisons(tempComps);
+        this.Reads.setComparisons(tempComps);
         
-        if(Highlights.fancyFinishActive()) {
-            Highlights.toggleFancyFinish(false);
+        if(this.Highlights.fancyFinishActive()) {
+            this.Highlights.toggleFancyFinish(false);
         }
-        Highlights.resetFancyFinish();
+        this.Highlights.resetFancyFinish();
     }
 
     public void endSort() {
-        Timer.disableRealTimer();
-        Highlights.clearAllMarks();
+        this.Timer.disableRealTimer();
+        this.Highlights.clearAllMarks();
 
-        double speed = Delays.getSleepRatio(); 
+        double speed = this.Delays.getSleepRatio(); 
         this.verifySortAndSweep();
-        Delays.setSleepRatio(speed);
-        Delays.changeSkipped(false);
+        this.Delays.setSleepRatio(speed);
+        this.Delays.changeSkipped(false);
 
-        Highlights.clearAllMarks();
+        this.Highlights.clearAllMarks();
     }
     
     public void togglePointer(boolean Bool) {
@@ -594,6 +623,9 @@ final public class ArrayVisualizer {
     public void toggleColor(boolean Bool) {
         this.COLOR = Bool;
     }
+    public void toggleWave(boolean Bool) {
+        this.WAVEDRAW = Bool;
+    }
     
     public void setVisual(VisualStyles choice) {
         this.VisualStyles = choice;
@@ -607,8 +639,8 @@ final public class ArrayVisualizer {
     }
     
     public void repositionFrames() {
-        ArrayFrame.reposition();
-        UtilFrame.reposition(ArrayFrame);
+        this.ArrayFrame.reposition();
+        this.UtilFrame.reposition(this.ArrayFrame);
     }
     
     public boolean rainbowEnabled() {
@@ -629,6 +661,9 @@ final public class ArrayVisualizer {
     public boolean linesEnabled() {
         return this.LINEDRAW;
     }
+    public boolean waveEnabled() {
+        return this.WAVEDRAW;
+    }
     
     public DecimalFormat getNumberFormat() {
         return this.formatter;
@@ -639,40 +674,40 @@ final public class ArrayVisualizer {
         this.category = "Select a Sort";
         
         // For recording with OBS (don't ask where these numbers came from. I don't get it myself)
-        if(OBS) {
+        if(this.OBS) {
             int x = (int) (1920 * (double) (1920 / 1916));
             int y = (int) (1080 * (double) (1080 / 1020));
-            window.setSize(new Dimension(x, y));        
+            this.window.setSize(new Dimension(x, y));        
         }
         else { // Consider changing back to discrete 16:9 dimension
             Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-            window.setSize((int) (screenSize.getWidth() / 2d), (int) (screenSize.getHeight() / 2d));    
+            this.window.setSize((int) (screenSize.getWidth() / 2d), (int) (screenSize.getHeight() / 2d));    
         }
         
-        window.setLocation(0, 0);
-        window.setVisible(true);
-        window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        window.setTitle("w0rthy's Array Visualizer - " + (ComparisonSorts[0].length + DistributionSorts[0].length) + " Sorting Algorithms with 10 Different Visual Styles");
-        window.setBackground(Color.BLACK);
+        this.window.setLocation(0, 0);
+        this.window.setVisible(true);
+        this.window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.window.setTitle("w0rthy's Array Visualizer - " + (this.ComparisonSorts[0].length + this.DistributionSorts[0].length) + " Sorting Algorithms with 12 Different Visual Styles");
+        this.window.setBackground(Color.BLACK);
 
-        symbols.setGroupingSeparator(',');
-        formatter.setDecimalFormatSymbols(symbols);
+        this.symbols.setGroupingSeparator(',');
+        this.formatter.setDecimalFormatSymbols(this.symbols);
         
         //TODO: Consider removing insets from window size
-        this.cw = window.getWidth();
-        this.ch = window.getHeight();
+        this.cw = this.window.getWidth();
+        this.ch = this.window.getHeight();
         
-        visualsThread.start();
+        this.visualsThread.start();
         
-        UtilFrame.setVisible(true);
-        ArrayFrame.setVisible(true);
+        this.UtilFrame.setVisible(true);
+        this.ArrayFrame.setVisible(true);
         
         if(this.InvalidSorts != null) {
             String output = "";
-            for(int i = 0; i < InvalidSorts.length; i++) {
-                output += InvalidSorts[i] + "\n";
+            for(int i = 0; i < this.InvalidSorts.length; i++) {
+                output += this.InvalidSorts[i] + "\n";
             }
-            JOptionPane.showMessageDialog(window, "The following algorithms were not loaded due to errors:\n" + output, "Warning", JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(this.window, "The following algorithms were not loaded due to errors:\n" + output, "Warning", JOptionPane.WARNING_MESSAGE);
         }
     }
     

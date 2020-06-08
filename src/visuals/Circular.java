@@ -2,10 +2,10 @@ package visuals;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
-import java.awt.Graphics2D;
 import java.awt.Polygon;
 
 import main.ArrayVisualizer;
+import templates.Visual;
 import utils.Highlights;
 import utils.Renderer;
 
@@ -35,11 +35,13 @@ SOFTWARE.
  *
  */
 
-final public class Circular {
-    final private double CIRC_HEIGHT_RATIO = (9/6.0843731432) * (16/9d);
-    final private double CIRC_WIDTH_RATIO = (16/6.0843731432) * (16/9d);
+final public class Circular extends Visual {
+    final private static double CIRC_HEIGHT_RATIO = (9/6.0843731432) * (16/9d);
+    final private static double CIRC_WIDTH_RATIO = (16/6.0843731432) * (16/9d);
     
-    private boolean drawRect;
+    public Circular(ArrayVisualizer ArrayVisualizer) {
+        super(ArrayVisualizer);
+    }
     
     // The reason we use cosine with height (expressed in terms of y) and sine with width (expressed in terms of x) is because our circles are rotated 90 degrees.
     // After that rotation, sine is on the x-axis and cosine is on the y-axis.
@@ -55,27 +57,29 @@ final public class Circular {
         return Math.cos((d * Math.PI) / halfCirc);
     }
     
-    public void drawVisual(int[] array, ArrayVisualizer ArrayVisualizer, Renderer Renderer, Graphics2D mainRender, Graphics2D extraRender, Highlights Highlights) {
+    @Override
+    public void drawVisual(int[] array, ArrayVisualizer ArrayVisualizer, Renderer Renderer, Highlights Highlights) {
         for(int i = 0; i < ArrayVisualizer.getCurrentLength(); i++){
             if(i < Highlights.getFancyFinishPosition()) {
-                mainRender.setColor(Color.getHSBColor((1f/3f), 1f, 0.8f));
+                this.mainRender.setColor(Color.getHSBColor((1f/3f), 1f, 0.8f));
             }
             else if(!ArrayVisualizer.colorEnabled() && (ArrayVisualizer.spiralEnabled() || ArrayVisualizer.distanceEnabled() || ArrayVisualizer.pixelsEnabled())) {
-                mainRender.setColor(Color.WHITE);
+                this.mainRender.setColor(Color.WHITE);
             }
-            else mainRender.setColor(Renderer.getIntColor(array[i], ArrayVisualizer.getCurrentLength()));
+            else this.mainRender.setColor(getIntColor(array[i], ArrayVisualizer.getCurrentLength()));
             
             if(Highlights.fancyFinishActive()) {
-                Renderer.drawFancyFinish(ArrayVisualizer.getLogBaseTwoOfLength(), i, Highlights.getFancyFinishPosition(), mainRender, ArrayVisualizer.rainbowEnabled(), ArrayVisualizer.colorEnabled());
+                drawFancyFinish(ArrayVisualizer.getLogBaseTwoOfLength(), i, Highlights.getFancyFinishPosition(), this.mainRender, ArrayVisualizer.rainbowEnabled(), ArrayVisualizer.colorEnabled());
             }
             else {
+                /*
                 if(ArrayVisualizer.pointerActive()) {
                     if(Highlights.containsPosition(i)) {
                         if(ArrayVisualizer.analysisEnabled()) {
-                            extraRender.setColor(Color.GRAY);
+                            this.extraRender.setColor(Color.GRAY);
                         }
                         else {
-                            extraRender.setColor(Color.WHITE);
+                            this.extraRender.setColor(Color.WHITE);
                         }
 
                         //Create new Polygon for the pointer
@@ -114,14 +118,14 @@ final public class Circular {
                             pointer.addPoint(pointerXValues[j], pointerYValues[j]);
                         }
                                                 
-                        extraRender.fillPolygon(pointer);                        
+                        this.extraRender.fillPolygon(pointer);                        
                     }
                 }
-                else if(ArrayVisualizer.getCurrentLength() != 2){
-                    Renderer.colorMarkedBars(ArrayVisualizer.getLogBaseTwoOfLength(), i, Highlights, mainRender, ArrayVisualizer.rainbowEnabled(), ArrayVisualizer.colorEnabled(), ArrayVisualizer.analysisEnabled());
+                else */ if(ArrayVisualizer.getCurrentLength() != 2){
+                    colorMarkedBars(ArrayVisualizer.getLogBaseTwoOfLength(), i, Highlights, this.mainRender, ArrayVisualizer.rainbowEnabled(), ArrayVisualizer.colorEnabled(), ArrayVisualizer.analysisEnabled());
                 }
             }
-
+                
             if(ArrayVisualizer.distanceEnabled()) {
                 //TODO: Rewrite this abomination
                 double len = ((ArrayVisualizer.getCurrentLength() / 2d) - Math.min(Math.min(Math.abs(i - array[i]), Math.abs(i - array[i] + ArrayVisualizer.getCurrentLength())), Math.abs(i - array[i] - ArrayVisualizer.getCurrentLength()))) / (ArrayVisualizer.getCurrentLength() / 2d);
@@ -134,43 +138,43 @@ final public class Circular {
                         if(i > 0) {
                             if(Highlights.fancyFinishActive()) {
                                 if(i < Highlights.getFancyFinishPosition()) {
-                                    Renderer.lineFancy(mainRender, ArrayVisualizer.currentWidth());
+                                    lineFancy(this.mainRender, ArrayVisualizer.currentWidth());
                                 }
                                 else {
-                                    Renderer.lineClear(mainRender, ArrayVisualizer.colorEnabled(), array, i, ArrayVisualizer.getCurrentLength(), ArrayVisualizer.currentWidth());
+                                    lineClear(this.mainRender, ArrayVisualizer.colorEnabled(), array, i, ArrayVisualizer.getCurrentLength(), ArrayVisualizer.currentWidth());
                                 }
 
-                                Renderer.drawFancyFinishLine(ArrayVisualizer.getLogBaseTwoOfLength(), i, Highlights.getFancyFinishPosition(), mainRender, ArrayVisualizer.currentWidth(), ArrayVisualizer.colorEnabled());
+                                drawFancyFinishLine(ArrayVisualizer.getLogBaseTwoOfLength(), i, Highlights.getFancyFinishPosition(), this.mainRender, ArrayVisualizer.currentWidth(), ArrayVisualizer.colorEnabled());
                             }
                             else {
                                 if(Highlights.containsPosition(i)) {
-                                    Renderer.lineMark(mainRender, ArrayVisualizer.currentWidth(), ArrayVisualizer.colorEnabled(), ArrayVisualizer.analysisEnabled());
+                                    lineMark(this.mainRender, ArrayVisualizer.currentWidth(), ArrayVisualizer.colorEnabled(), ArrayVisualizer.analysisEnabled());
                                 }
-                                else Renderer.lineClear(mainRender, ArrayVisualizer.colorEnabled(), array, i, ArrayVisualizer.getCurrentLength(), ArrayVisualizer.currentWidth());
+                                else lineClear(this.mainRender, ArrayVisualizer.colorEnabled(), array, i, ArrayVisualizer.getCurrentLength(), ArrayVisualizer.currentWidth());
                             }
-                            mainRender.drawLine(linkedpixX, linkedpixY, Renderer.getLineX(), Renderer.getLineY());
+                            this.mainRender.drawLine(linkedpixX, linkedpixY, Renderer.getLineX(), Renderer.getLineY());
                         }
                         Renderer.setLineX(linkedpixX);
                         Renderer.setLineY(linkedpixY);
                     }
                     else {
+                        boolean drawRect = false;
                         if(Highlights.containsPosition(i)) {
-                            Renderer.setRectColor(extraRender, ArrayVisualizer.colorEnabled(), ArrayVisualizer.analysisEnabled());
+                            setRectColor(this.extraRender, ArrayVisualizer.colorEnabled(), ArrayVisualizer.analysisEnabled());
                             drawRect = true;
                         }
-                        else drawRect = false;
 
                         if(drawRect) {
-                            extraRender.setStroke(ArrayVisualizer.getThickStroke());
+                            this.extraRender.setStroke(ArrayVisualizer.getThickStroke());
                             if(Highlights.fancyFinishActive()) {
-                                extraRender.fillRect((linkedpixX - Renderer.getDotWidth() / 2) - 10, (linkedpixY - Renderer.getDotHeight() / 2) - 10, Renderer.getDotWidth() + 20, Renderer.getDotHeight() + 20);
+                                this.extraRender.fillRect((linkedpixX - Renderer.getDotWidth() / 2) - 10, (linkedpixY - Renderer.getDotHeight() / 2) - 10, Renderer.getDotWidth() + 20, Renderer.getDotHeight() + 20);
                             }
                             else {
-                                extraRender.drawRect((linkedpixX - Renderer.getDotWidth() / 2) - 10, (linkedpixY - Renderer.getDotHeight() / 2) - 10, Renderer.getDotWidth() + 20, Renderer.getDotHeight() + 20);
+                                this.extraRender.drawRect((linkedpixX - Renderer.getDotWidth() / 2) - 10, (linkedpixY - Renderer.getDotHeight() / 2) - 10, Renderer.getDotWidth() + 20, Renderer.getDotHeight() + 20);
                             }
-                            extraRender.setStroke(new BasicStroke(3f * (ArrayVisualizer.currentWidth() / 1280f)));
+                            this.extraRender.setStroke(new BasicStroke(3f * (ArrayVisualizer.currentWidth() / 1280f)));
                         }
-                        mainRender.fillRect(linkedpixX - Renderer.getDotWidth() / 2, linkedpixY - Renderer.getDotHeight() / 2, Renderer.getDotWidth(), Renderer.getDotHeight());
+                        this.mainRender.fillRect(linkedpixX - Renderer.getDotWidth() / 2, linkedpixY - Renderer.getDotHeight() / 2, Renderer.getDotWidth(), Renderer.getDotHeight());
                     }
                 }
                 else {
@@ -185,7 +189,7 @@ final public class Circular {
                     p.addPoint(ArrayVisualizer.windowHalfWidth()  + (int) (Circular.getSinOfDegrees(i + 1, ArrayVisualizer.halfCircle()) * (((ArrayVisualizer.currentWidth()  - 64) / CIRC_WIDTH_RATIO)  * len)),
                                ArrayVisualizer.windowHalfHeight() - (int) (Circular.getCosOfDegrees(i + 1, ArrayVisualizer.halfCircle()) * (((ArrayVisualizer.currentHeight() - 96) / CIRC_HEIGHT_RATIO) * len)));
                     
-                    mainRender.fillPolygon(p);
+                    this.mainRender.fillPolygon(p);
                 }
             }
             else if(ArrayVisualizer.spiralEnabled()) {
@@ -194,19 +198,19 @@ final public class Circular {
                         if(i > 0) {
                             if(Highlights.fancyFinishActive()) {
                                 if(i < Highlights.getFancyFinishPosition()) {
-                                    Renderer.lineFancy(mainRender, ArrayVisualizer.currentWidth());
+                                    lineFancy(this.mainRender, ArrayVisualizer.currentWidth());
                                 }
-                                else Renderer.lineClear(mainRender, ArrayVisualizer.colorEnabled(), array, i, ArrayVisualizer.getCurrentLength(), ArrayVisualizer.currentWidth());
+                                else lineClear(this.mainRender, ArrayVisualizer.colorEnabled(), array, i, ArrayVisualizer.getCurrentLength(), ArrayVisualizer.currentWidth());
 
-                                Renderer.drawFancyFinishLine(ArrayVisualizer.getLogBaseTwoOfLength(), i, Highlights.getFancyFinishPosition(), mainRender, ArrayVisualizer.currentWidth(), ArrayVisualizer.colorEnabled());
+                                drawFancyFinishLine(ArrayVisualizer.getLogBaseTwoOfLength(), i, Highlights.getFancyFinishPosition(), this.mainRender, ArrayVisualizer.currentWidth(), ArrayVisualizer.colorEnabled());
                             }
                             else {
                                 if(Highlights.containsPosition(i)) {
-                                    Renderer.lineMark(mainRender, ArrayVisualizer.currentWidth(), ArrayVisualizer.colorEnabled(), ArrayVisualizer.analysisEnabled());
+                                    lineMark(this.mainRender, ArrayVisualizer.currentWidth(), ArrayVisualizer.colorEnabled(), ArrayVisualizer.analysisEnabled());
                                 }
-                                else Renderer.lineClear(mainRender, ArrayVisualizer.colorEnabled(), array, i, ArrayVisualizer.getCurrentLength(), ArrayVisualizer.currentWidth());
+                                else lineClear(this.mainRender, ArrayVisualizer.colorEnabled(), array, i, ArrayVisualizer.getCurrentLength(), ArrayVisualizer.currentWidth());
                             }
-                            mainRender.drawLine(ArrayVisualizer.windowHalfWidth()  + (int) (Circular.getSinOfDegrees(i, ArrayVisualizer.halfCircle()) * ((((ArrayVisualizer.windowWidth()  - 64) / 3.0) * array[i]) / ArrayVisualizer.getCurrentLength())), 
+                            this.mainRender.drawLine(ArrayVisualizer.windowHalfWidth()  + (int) (Circular.getSinOfDegrees(i, ArrayVisualizer.halfCircle()) * ((((ArrayVisualizer.windowWidth()  - 64) / 3.0) * array[i]) / ArrayVisualizer.getCurrentLength())), 
                                                 ArrayVisualizer.windowHalfHeight() - (int) (Circular.getCosOfDegrees(i, ArrayVisualizer.halfCircle()) * ((((ArrayVisualizer.windowHeight() - 96) / 2.0) * array[i]) / ArrayVisualizer.getCurrentLength())), 
                                                 Renderer.getLineX(),
                                                 Renderer.getLineY());
@@ -215,32 +219,32 @@ final public class Circular {
                         Renderer.setLineY(ArrayVisualizer.windowHalfHeight() - (int) (Circular.getCosOfDegrees(i, ArrayVisualizer.halfCircle()) * ((((ArrayVisualizer.windowHeight() - 96) / 2.0) * array[i]) / ArrayVisualizer.getCurrentLength())));      
                     }
                     else {
+                        boolean drawRect = false;
                         if(Highlights.containsPosition(i)) {
-                            Renderer.setRectColor(extraRender, ArrayVisualizer.colorEnabled(), ArrayVisualizer.analysisEnabled());
+                            setRectColor(this.extraRender, ArrayVisualizer.colorEnabled(), ArrayVisualizer.analysisEnabled());
                             drawRect = true;
                         }
-                        else drawRect = false;
 
                         int rectx = ArrayVisualizer.windowHalfWidth()  + (int) (Circular.getSinOfDegrees(i, ArrayVisualizer.halfCircle()) * (((((ArrayVisualizer.windowWidth()  - 64) / 3.0) * array[i]) / ArrayVisualizer.getCurrentLength())));
                         int recty = ArrayVisualizer.windowHalfHeight() - (int) (Circular.getCosOfDegrees(i, ArrayVisualizer.halfCircle()) * (((((ArrayVisualizer.windowHeight() - 96) / 2.0) * array[i]) / ArrayVisualizer.getCurrentLength())));
 
-                        mainRender.fillRect(rectx, recty, Renderer.getDotWidth(), Renderer.getDotHeight());
+                        this.mainRender.fillRect(rectx, recty, Renderer.getDotWidth(), Renderer.getDotHeight());
 
                         if(drawRect) {
-                            extraRender.setStroke(ArrayVisualizer.getThickStroke());
+                            this.extraRender.setStroke(ArrayVisualizer.getThickStroke());
                             if(Highlights.fancyFinishActive()) {
-                                extraRender.fillRect(rectx - 10, recty - 10, Renderer.getDotWidth() + 20, Renderer.getDotHeight() + 20);
+                                this.extraRender.fillRect(rectx - 10, recty - 10, Renderer.getDotWidth() + 20, Renderer.getDotHeight() + 20);
                             }
                             else {
-                                extraRender.drawRect(rectx - 10, recty - 10, Renderer.getDotWidth() + 20, Renderer.getDotHeight() + 20);
+                                this.extraRender.drawRect(rectx - 10, recty - 10, Renderer.getDotWidth() + 20, Renderer.getDotHeight() + 20);
                             }
-                            extraRender.setStroke(new BasicStroke(3f * (ArrayVisualizer.currentWidth() / 1280f)));
+                            this.extraRender.setStroke(new BasicStroke(3f * (ArrayVisualizer.currentWidth() / 1280f)));
                         }
                     }
                 }
                 else {
                     if(Highlights.containsPosition(i)) {
-                        Renderer.markBar(mainRender, ArrayVisualizer.colorEnabled(), ArrayVisualizer.rainbowEnabled(), ArrayVisualizer.analysisEnabled());
+                        markBar(this.mainRender, ArrayVisualizer.colorEnabled(), ArrayVisualizer.rainbowEnabled(), ArrayVisualizer.analysisEnabled());
                     }
 
                     Polygon p = new Polygon();
@@ -254,7 +258,7 @@ final public class Circular {
                     p.addPoint(ArrayVisualizer.windowHalfWidth()  + (int) (Circular.getSinOfDegrees(i + 1, ArrayVisualizer.halfCircle()) * ((((ArrayVisualizer.windowWidth()  - 64) / 3.0) * array[Math.min(i + 1, ArrayVisualizer.getCurrentLength() - 1)]) / ArrayVisualizer.getCurrentLength())),
                                ArrayVisualizer.windowHalfHeight() - (int) (Circular.getCosOfDegrees(i + 1, ArrayVisualizer.halfCircle()) * ((((ArrayVisualizer.windowHeight() - 96) / 2.0) * array[Math.min(i + 1, ArrayVisualizer.getCurrentLength() - 1)]) / ArrayVisualizer.getCurrentLength())));
                     
-                    mainRender.fillPolygon(p);
+                    this.mainRender.fillPolygon(p);
                 }
             }
             else {
@@ -269,7 +273,7 @@ final public class Circular {
                 p.addPoint(ArrayVisualizer.windowHalfWidth()  + (int) (Circular.getSinOfDegrees(i + 1, ArrayVisualizer.halfCircle()) * ((ArrayVisualizer.windowWidth()  - 64) / CIRC_WIDTH_RATIO)),
                            ArrayVisualizer.windowHalfHeight() - (int) (Circular.getCosOfDegrees(i + 1, ArrayVisualizer.halfCircle()) * ((ArrayVisualizer.windowHeight() - 96) / CIRC_HEIGHT_RATIO)));
                 
-                mainRender.fillPolygon(p);
+                this.mainRender.fillPolygon(p);
             }
         }
     }   

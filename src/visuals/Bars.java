@@ -1,11 +1,9 @@
 package visuals;
 
-import java.awt.BasicStroke;
 import java.awt.Color;
-import java.awt.Graphics2D;
-import java.awt.Stroke;
 
 import main.ArrayVisualizer;
+import templates.Visual;
 import utils.Highlights;
 import utils.Renderer;
 
@@ -35,28 +33,33 @@ SOFTWARE.
  *
  */
 
-final public class Bars {
-    public void drawVisual(int[] array, ArrayVisualizer ArrayVisualizer, Renderer Renderer, Graphics2D mainRender, Graphics2D extraRender, Highlights Highlights) {
+final public class Bars extends Visual {
+    public Bars(ArrayVisualizer ArrayVisualizer) {
+        super(ArrayVisualizer);
+    }
+
+    @Override
+    public void drawVisual(int[] array, ArrayVisualizer ArrayVisualizer, Renderer Renderer, Highlights Highlights) {
         for(int i = 0; i < ArrayVisualizer.getCurrentLength(); i++){
             if(Highlights.fancyFinishActive()) {
                 if(i < Highlights.getFancyFinishPosition()) {
-                    mainRender.setColor(Color.GREEN);
+                    this.mainRender.setColor(Color.GREEN);
                 }
                 else if(ArrayVisualizer.rainbowEnabled() || ArrayVisualizer.colorEnabled()) { 
-                    mainRender.setColor(Renderer.getIntColor(array[i], ArrayVisualizer.getCurrentLength()));
+                    this.mainRender.setColor(getIntColor(array[i], ArrayVisualizer.getCurrentLength()));
                 }
-                else mainRender.setColor(Color.WHITE);
+                else this.mainRender.setColor(Color.WHITE);
 
-                Renderer.drawFancyFinish(ArrayVisualizer.getLogBaseTwoOfLength(), i, Highlights.getFancyFinishPosition(), mainRender, ArrayVisualizer.colorEnabled(), ArrayVisualizer.rainbowEnabled());
+                drawFancyFinish(ArrayVisualizer.getLogBaseTwoOfLength(), i, Highlights.getFancyFinishPosition(), this.mainRender, ArrayVisualizer.colorEnabled(), ArrayVisualizer.rainbowEnabled());
             }
             else {
                 if(ArrayVisualizer.rainbowEnabled() || ArrayVisualizer.colorEnabled()) {
-                    mainRender.setColor(Renderer.getIntColor(array[i], ArrayVisualizer.getCurrentLength()));
+                    this.mainRender.setColor(getIntColor(array[i], ArrayVisualizer.getCurrentLength()));
                 }
-                else mainRender.setColor(Color.WHITE);
+                else this.mainRender.setColor(Color.WHITE);
 
                 if(ArrayVisualizer.getCurrentLength() != 2) {
-                    Renderer.colorMarkedBars(ArrayVisualizer.getLogBaseTwoOfLength(), i, Highlights, mainRender, ArrayVisualizer.colorEnabled(), ArrayVisualizer.rainbowEnabled(), ArrayVisualizer.analysisEnabled());
+                    colorMarkedBars(ArrayVisualizer.getLogBaseTwoOfLength(), i, Highlights, this.mainRender, ArrayVisualizer.colorEnabled(), ArrayVisualizer.rainbowEnabled(), ArrayVisualizer.analysisEnabled());
                 }
             }
             /*
@@ -72,9 +75,16 @@ final public class Bars {
 
             if(ArrayVisualizer.rainbowEnabled()) {
                 if(width > 0) {
-                    mainRender.fillRect(Renderer.getOffset() + 20, 0, width, ArrayVisualizer.windowHeight());
+                    this.mainRender.fillRect(Renderer.getOffset() + 20, 0, width, ArrayVisualizer.windowHeight());
                 }
                 
+                Renderer.setOffset(Renderer.getOffset() + width);
+            }
+            else if(ArrayVisualizer.waveEnabled()) {
+                if(width > 0) {
+                    y = (int) ((ArrayVisualizer.windowHeight() / 4) * Math.sin((2 * Math.PI * ((double) array[i] / ArrayVisualizer.getCurrentLength()))) + ArrayVisualizer.windowHalfHeight());
+                    this.mainRender.fillRect(Renderer.getOffset() + 20, y, width, 20);
+                }
                 Renderer.setOffset(Renderer.getOffset() + width);
             }
             else {
@@ -85,9 +95,11 @@ final public class Bars {
                         gap = 5;
                     }
                     */
-                    
+
                     y = (int) (((ArrayVisualizer.windowHeight() - 20)) - (array[i] + 1) * Renderer.getYScale());
-                    mainRender.fillRect(Renderer.getOffset() + 20, y /*- markHeight*/, width /*- gap*/, (int) ((array[i] + 1) * Renderer.getYScale()) /*+ markHeight*/);
+                    mainRender.fillRect(Renderer.getOffset() + 20, y, width, (int) ((array[i] + 1) * Renderer.getYScale()));
+                    
+                    //mainRender.fillRect(Renderer.getOffset() + 20, y /*- markHeight*/, width /*- gap*/, (int) ((array[i] + 1) * Renderer.getYScale()) /*+ markHeight*/);
                     
                     /*
                     double thickness = 1;

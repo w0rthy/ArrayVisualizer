@@ -25,6 +25,9 @@ To build a runnable jar, simply run Apache Ant inside the 'dist' directory!
 - Toggle Timo Bingmann's "end sweep" animation
 - Refactored / optimized code
 
+## 6/8/2020 - Version 3.5
+_changelog coming soon_
+
 ## 6/4/2020 - Version 3.2
 - New sort: Optimized Cocktail Shaker Sort
 - Significant refactoring for MultipleSortThreads and RunAllSorts
