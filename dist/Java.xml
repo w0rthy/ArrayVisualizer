@@ -16,6 +16,7 @@
             </manifest>
             <zipfileset src="jar-in-jar-loader.zip"/>
             <fileset dir="${dir.workspace}/ArrayVisualizer-master/bin"/>
+            <fileset dir="${dir.workspace}/ArrayVisualizer-master/src" includes="soundfont/sfx.sf2,*.form"/>
             <zipfileset dir="${dir.workspace}/ArrayVisualizer-master/lib" includes="classgraph-4.8.47.jar"/>
             <zipfileset dir="${dir.workspace}/ArrayVisualizer-master/lib" includes="classgraph-4.8.47-javadoc.jar"/>
             <zipfileset dir="${dir.workspace}/ArrayVisualizer-master/lib" includes="classgraph-4.8.47-sources.jar"/>
