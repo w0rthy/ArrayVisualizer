@@ -1,17 +1,15 @@
 # w0rthy's Array Visualizer, Revamped
 [![Donate](https://img.shields.io/badge/Donate-PayPal-green.svg)](https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=Q5QLCFZ8G7WY6&currency_code=USD&source=url)
 
-Over 75 sorting algorithms animated with 10 unique graphic designs
+Over 75 sorting algorithms animated with 12 unique graphic designs
 
 This new version of the program features additions inspired by Timo Bingmann's "The Sound of Sorting" and w0rthy's updates to the original visualizer.
 
-To compile (After -cp, use ";" with Windows and ":" with Mac/Linux):
+To build (After -cp, use ";" with Windows and ":" with Mac/Linux):
 ```
 ant
 java -cp bin;lib/classgraph-4.8.47.jar main.ArrayVisualizer
 ```
-
-To build a runnable jar, simply run Apache Ant inside the 'dist' directory!
 
 ### Features:
 - 40+ new sorting algorithms
@@ -26,7 +24,11 @@ To build a runnable jar, simply run Apache Ant inside the 'dist' directory!
 - Refactored / optimized code
 
 ## 6/8/2020 - Version 3.5
-_changelog coming soon_
+- NEW VISUALS: Sine Wave and Wave Dots!!
+- New sort: Bogobogosort
+- The bogo shuffle method is now unbiased
+- MultipleSortThreads further refactored
+- Visuals, VisualStyles enum, and Renderer significantly refactored (more to come!)
 
 ## 6/4/2020 - Version 3.2
 - New sort: Optimized Cocktail Shaker Sort
