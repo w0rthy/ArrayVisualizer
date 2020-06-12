@@ -264,7 +264,6 @@ final public class ArrayVisualizer {
                 
                 Graphics background = ArrayVisualizer.this.window.getGraphics();
                 background.setColor(Color.BLACK);
-                int coltmp = 255;
                 
                 ArrayVisualizer.this.visualClasses = new Visual[5];
                 ArrayVisualizer.this.visualClasses[0] = new Bars(ArrayVisualizer.this);
@@ -277,10 +276,21 @@ final public class ArrayVisualizer {
                     ArrayVisualizer.this.Renderer.updateVisuals(ArrayVisualizer.this);
                     ArrayVisualizer.this.Renderer.drawVisual(ArrayVisualizer.this.VisualStyles, ArrayVisualizer.this.array, ArrayVisualizer.this, ArrayVisualizer.this.Highlights);
                     
-                    ArrayVisualizer.this.mainRender.setColor(new Color(coltmp, coltmp, coltmp));
                     if(ArrayVisualizer.this.TEXTDRAW) {
                         Font f = ArrayVisualizer.this.mainRender.getFont();
                         ArrayVisualizer.this.mainRender.setFont(ArrayVisualizer.this.typeFace);
+						ArrayVisualizer.this.mainRender.setColor(Color.BLACK);
+						ArrayVisualizer.this.mainRender.drawString(ArrayVisualizer.this.category + ": " + ArrayVisualizer.this.heading, 17, (int)(ArrayVisualizer.this.cw/1280.0*30)+32);
+                        ArrayVisualizer.this.mainRender.drawString(ArrayVisualizer.this.formatter.format(ArrayVisualizer.this.currentLen) + " Numbers", 17, (int)(ArrayVisualizer.this.cw/1280.0*55)+32);
+                        ArrayVisualizer.this.mainRender.drawString(String.format("Delay: " + ArrayVisualizer.this.Delays.displayCurrentDelay() + "ms"), 17, (int)(ArrayVisualizer.this.cw/1280.0*95)+32);
+                        ArrayVisualizer.this.mainRender.drawString(String.format("Visual Time: " + ArrayVisualizer.this.Timer.getVisualTime()), 17, (int)(ArrayVisualizer.this.cw/1280.0*120)+32);
+                        ArrayVisualizer.this.mainRender.drawString(String.format("Sort Time: " + ArrayVisualizer.this.Timer.getRealTime()), 17, (int)(ArrayVisualizer.this.cw/1280.0*145)+32);
+                        ArrayVisualizer.this.mainRender.drawString(ArrayVisualizer.this.Reads.displayComparisons(), 17, (int)(ArrayVisualizer.this.cw/1280.0*185)+32);
+                        ArrayVisualizer.this.mainRender.drawString(ArrayVisualizer.this.Writes.getSwaps(), 17, (int)(ArrayVisualizer.this.cw/1280.0*210)+32);
+                        ArrayVisualizer.this.mainRender.drawString(ArrayVisualizer.this.Writes.getReversals(), 17, (int)(ArrayVisualizer.this.cw/1280.0*235)+32);
+                        ArrayVisualizer.this.mainRender.drawString(ArrayVisualizer.this.Writes.getWrites(), 17, (int)(ArrayVisualizer.this.cw/1280.0*275)+32);
+                        ArrayVisualizer.this.mainRender.drawString(ArrayVisualizer.this.Writes.getTempWrites(), 17, (int)(ArrayVisualizer.this.cw/1280.0*300)+32);
+                        ArrayVisualizer.this.mainRender.setColor(Color.WHITE);
                         ArrayVisualizer.this.mainRender.drawString(ArrayVisualizer.this.category + ": " + ArrayVisualizer.this.heading, 15, (int)(ArrayVisualizer.this.cw/1280.0*30)+30);
                         ArrayVisualizer.this.mainRender.drawString(ArrayVisualizer.this.formatter.format(ArrayVisualizer.this.currentLen) + " Numbers", 15, (int)(ArrayVisualizer.this.cw/1280.0*55)+30);
                         ArrayVisualizer.this.mainRender.drawString(String.format("Delay: " + ArrayVisualizer.this.Delays.displayCurrentDelay() + "ms"), 15, (int)(ArrayVisualizer.this.cw/1280.0*95)+30);
@@ -291,7 +301,7 @@ final public class ArrayVisualizer {
                         ArrayVisualizer.this.mainRender.drawString(ArrayVisualizer.this.Writes.getReversals(), 15, (int)(ArrayVisualizer.this.cw/1280.0*235)+30);
                         ArrayVisualizer.this.mainRender.drawString(ArrayVisualizer.this.Writes.getWrites(), 15, (int)(ArrayVisualizer.this.cw/1280.0*275)+30);
                         ArrayVisualizer.this.mainRender.drawString(ArrayVisualizer.this.Writes.getTempWrites(), 15, (int)(ArrayVisualizer.this.cw/1280.0*300)+30);
-                        ArrayVisualizer.this.mainRender.setFont(f);
+						ArrayVisualizer.this.mainRender.setFont(f);
                     }
                     background.drawImage(ArrayVisualizer.this.img, 0, 0, null);
                 }}};
