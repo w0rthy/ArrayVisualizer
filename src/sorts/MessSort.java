@@ -32,49 +32,54 @@ SOFTWARE.
  *
  */
 
-final public class mergetest extends Sort {
-    public mergetest(Delays delayOps, Highlights markOps, Reads readOps, Writes writeOps) {
+final public class MessSort extends Sort {
+    public MessSort(Delays delayOps, Highlights markOps, Reads readOps, Writes writeOps) {
         super(delayOps, markOps, readOps, writeOps);
         
-        this.setSortPromptID("mergetest");
-        this.setRunAllID("mergetest");
-        this.setReportSortID("mergetest");
-        this.setCategory("Merge Sorts");
+        this.setSortPromptID("Mess");
+        this.setRunAllID("Mess Sort");
+        this.setReportSortID("Mess Sort");
+        this.setCategory("Infinite Sorts");
         this.isComparisonBased(true);
         this.isBucketSort(false);
         this.isRadixSort(false);
-        this.isUnreasonablySlow(false);
-        this.setUnreasonableLimit(0);
+        this.isUnreasonablySlow(true);
+        this.setUnreasonableLimit(2);
         this.isBogoSort(false);
     }
 
-    private void mergetest(int[] array, int start, int end, double sleep) {
-        if (start == end-1){
-            return;
-        }
-        this.mergetest(array, start, (start + end)/2, sleep);
-        this.mergetest(array, (start + end)/2, end, sleep);
-        int a = start;
-        for (int i = start; i < (end - 1); i++){
-            a = i;
-            for (int j = (i + 1); j < end; j++){
-                if (array[j] < array[a]){
-                    a = j;
+    private int compare(int[] array, int start, int end, double sleep, int dir) {
+int flag = 0;
+                if((dir != 0) ? (Reads.compare(array[start], array[end]) == 1) : (Reads.compare(array[start], array[end]) == -1)) {
+                    Writes.swap(array, start, end, sleep, true, false);
+flag = 1;
                 }
-            }
-            Delays.sleep(sleep);
-            if(Reads.compare(array[i], array[a]) == 1) {
-                Writes.swap(array, i, a, sleep, true, false);
+                
+                Highlights.markArray(1, start);
+                Highlights.markArray(2, end);
+                
+                Delays.sleep(sleep);
+return flag;
+    }
+
+    private void messsort(int[] array, int start, int end, double sleep) {
+        int counter = 1;
+        while(counter > 0){
+            counter = 0;
+            for(int i=0; i<end-start-1; i++){
+                counter++;
+                int random = (int)(Math.random()*(end-start-1))+start+1;
+                compare(array, random-1, random, sleep, 1);
             }
         }
     }
     
     public void customSort(int[] array, int start, int end) {
-        this.mergetest(array, start, end, 1);
+        this.messsort(array, start, end, 1);
     }
     
     @Override
     public void runSort(int[] array, int length, int bucketCount) {
-        this.mergetest(array, 0, length, 1);
+        this.messsort(array, 0, length, 0.0875);
     }
 }
