@@ -36,6 +36,7 @@ SOFTWARE.
 
 final public class Hoops {
     //TODO: Fix scaling to ensure Hoops close at the center
+    //TODO: Too many rings highlighted at once!!
     public void drawVisual(int[] array, ArrayVisualizer ArrayVisualizer, Renderer Renderer, Graphics2D mainRender, Graphics2D extraRender, Highlights Highlights) {
         mainRender.setStroke(new BasicStroke(1.0f)); //thin strokes significantly increased performance
         

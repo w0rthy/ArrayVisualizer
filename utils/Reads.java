@@ -6,6 +6,7 @@ import java.text.NumberFormat;
 import java.util.Locale;
 
 import main.ArrayVisualizer;
+import utils.Sounds;
 
 /*
  * 
@@ -68,7 +69,11 @@ final public class Reads {
     public void addComparison() {
         this.comparisons++;
     }
-    
+        
+    public void subtractComparison() {
+        this.comparisons--;
+    }
+
     public String getComparisons() {
         if(this.comparisons < 0) {
             this.comparisons = Long.MIN_VALUE;
@@ -80,7 +85,27 @@ final public class Reads {
         }
     }
     
+        private int readsarray[] = {0, 0};
+        private static Sounds sound;
+
+    public void loadsound(){
+        sound = new Sounds(readsarray, ArrayVisualizer);
+        sound.loadsounds();
+    }
+
+    public static void play(int item){
+        sound.realtimeplay(item);
+    }
+
+    public static void play2(int item1, int item2){
+        sound.realtimeplay(item1);
+        sound.realtimeplay(item2);
+    }
+
     public int compare(int left, int right) {
+        
+        sound.realtimeplay(left);
+        sound.realtimeplay(right);
         this.comparisons++;
         
         int cmpVal = 0;
@@ -95,6 +120,25 @@ final public class Reads {
         
         return cmpVal;
     }
+
+    public int compare2(int left, int right) {
+        
+        sound.realtimeplay(left);
+        sound.realtimeplay(right);
+        
+        int cmpVal = 0;
+        
+        if(Timer.timerEnabled()) Timer.startLap();
+
+        if(left > right)      cmpVal =  1;
+        else if(left < right) cmpVal = -1;
+        else                  cmpVal =  0;
+
+        if(Timer.timerEnabled()) Timer.stopLap();
+        
+        return cmpVal;
+    }
+
 
     public int analyzeMax(int[] array, int length, double sleep, boolean mark) {
         ArrayVisualizer.toggleAnalysis(true);

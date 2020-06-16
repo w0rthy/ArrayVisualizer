@@ -33,13 +33,14 @@ SOFTWARE.
 
 final public class Delays {
     private volatile double SLEEPRATIO;
+    private volatile double temp;
     private volatile boolean SKIPPED;
     
     private double addamt;
     private double delay;
-    
+
     public Delays() {
-        this.SLEEPRATIO = 1.0;
+        this.SLEEPRATIO = 0.25;
         this.SKIPPED = false;
         this.addamt = 0.0;
     }
@@ -54,6 +55,15 @@ final public class Delays {
     public double getSleepRatio() {
         return this.SLEEPRATIO;
     }
+
+    public void storeSleepRatio() {
+        this.temp = this.SLEEPRATIO;
+    }
+
+    public void retrieveSleepRatio() {
+        this.SLEEPRATIO = this.temp;
+    }
+
     public void setSleepRatio(double sleepRatio) {
         this.SLEEPRATIO = sleepRatio;
     }

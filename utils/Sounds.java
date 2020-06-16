@@ -1,9 +1,9 @@
 package utils;
 
+import java.io.InputStream;
+import javax.sound.sampled.*;
 import java.io.File;
-import java.io.IOException;
 
-import javax.sound.midi.InvalidMidiDataException;
 import javax.sound.midi.MidiChannel;
 import javax.sound.midi.MidiSystem;
 import javax.sound.midi.MidiUnavailableException;
@@ -11,6 +11,9 @@ import javax.sound.midi.Synthesizer;
 import javax.swing.JOptionPane;
 
 import main.ArrayVisualizer;
+import soundfont.SFXFetcher;
+import soundfont.SFXFetcher;
+import templates.JErrorPane;
 
 /*
  * 
@@ -50,45 +53,96 @@ final public class Sounds {
     private Synthesizer synth;
     private MidiChannel[] channels;
     
-    private volatile boolean SOUND;
+    private volatile int noteDelay;
+    
+    private static volatile boolean SOUND;
     private boolean MIDI;
     private int NUMCHANNELS; //Number of Audio Channels
     private double PITCHMIN; //Minimum Pitch
     private double PITCHMAX; //Maximum Pitch
     private double SOUNDMUL;
+    private boolean SOFTERSOUNDS;
     
     final private int REVERB = 91;
-    
+
+    private File[] soundsarray = new File[65];
+    private DataLine.Info[] info = new DataLine.Info[65];
+    private AudioFormat[] format = new AudioFormat[65];
+    private AudioInputStream[] stream = new AudioInputStream[65];
+    private Clip[] clip = new Clip[65];
+
+    public void loadsounds(){
+        for(int i=0; i<=64; i++){
+    try
+    {
+            soundsarray[i] = new File("bin/utils/sound/" + Integer.toString(i) + ".wav");
+            stream[i] = AudioSystem.getAudioInputStream(soundsarray[i]);
+            format[i] = stream[i].getFormat();
+            info[i] = new DataLine.Info(Clip.class, format[i]);
+            clip[i] = (Clip) AudioSystem.getLine(info[i]);
+            clip[i].open(stream[i]);
+    }
+    catch (Exception exc)
+    {
+        exc.printStackTrace(System.out);
+    }
+        }
+    }
+
+    public void realtimeplay(int left){ if(this.SOUND == false) return;
+    try
+    {
+int i = (int)Math.round(((double)left/(double)ArrayVisualizer.getCurrentLength())*64);
+    clip[i].setFramePosition(0);
+    clip[i].start();
+    }
+    catch (Exception exc)
+    {
+        exc.printStackTrace(System.out);
+    }
+    }
+
     public Sounds(int[] array, ArrayVisualizer arrayVisualizer) {
         this.array = array;
         this.ArrayVisualizer = arrayVisualizer;
         this.Highlights = ArrayVisualizer.getHighlights();
         
         this.SOUND = true;
-        this.MIDI = true;
+        this.MIDI = false;
         this.NUMCHANNELS = 16;
-        this.PITCHMIN = 25d;
-        this.PITCHMAX = 105d;
+        this.PITCHMIN = 47d;
+        this.PITCHMAX = 88d;
         this.SOUNDMUL = 1d;
+        
+        this.noteDelay = 1;
         
         try {
             MidiSystem.getSequencer(false);
             this.synth = MidiSystem.getSynthesizer();
             this.synth.open();
         } catch (MidiUnavailableException e) {
-            JOptionPane.showMessageDialog(null, "The MIDI device is unavailable, possibly because it is already being used by another application. Sound is disabled.");
-            e.printStackTrace();
+            JOptionPane.showMessageDialog(null, e.getMessage() + ": The MIDI device is unavailable, possibly because it is already being used by another application. Sound is disabled.");
         }
         
+        SFXFetcher sfxFetcher = new SFXFetcher();
+        InputStream stream = sfxFetcher.getSFXFile();
         try {
-            this.synth.loadAllInstruments(MidiSystem.getSoundbank(new File("soundfont/sfx.dls")));
-        } catch (InvalidMidiDataException | IOException e1) {
-            e1.printStackTrace();
+            this.synth.loadAllInstruments(MidiSystem.getSoundbank(stream));
+        } catch (Exception e) {
+            JErrorPane.invokeErrorMessage(e);
+        }
+        finally {
+            try {
+                stream.close();
+            } catch (Exception e) {
+                JErrorPane.invokeErrorMessage(e);
+            }
         }
         this.channels = new MidiChannel[this.NUMCHANNELS];
         
         for(int i = 0; i < this.NUMCHANNELS; i++) {
             this.channels[i] = this.synth.getChannels()[i];
+            //this.channels[i].programChange(this.synth.getLoadedInstruments()[197].getPatch().getProgram());
             this.channels[i].programChange(this.synth.getLoadedInstruments()[16].getPatch().getProgram()); // MIDI Instrument 16 is a Rock Organ.
             this.channels[i].setChannelPressure(1);
         }
@@ -99,20 +153,25 @@ final public class Sounds {
         this.AudioThread = new Thread() {
             @Override
             public void run() {
+                int voice = 0;
                 while(true) {
-                    for(MidiChannel channel : channels) {
-                        channel.allNotesOff();
-                    }
-                    if(SOUND == false || MIDI == false) {
+                    if(MIDI == false || JErrorPane.errorMessageActive) {
+                        for(int i=0; i<15; i++){channels[(voice%15+10)%16].allNotesOff();
+                        ++voice;}
                         continue;
                     }
 
                     int noteCount = Math.min(Highlights.getMarkCount(), NUMCHANNELS);
-                    int voice = 0;
-
+                    if(Highlights.getMarkCount() == 0){
+                        channels[(voice%15+10)%16].allNotesOff();
+                        ++voice;
+                    }
+                    else{
+                        
                     for(int i : Highlights.highlightList()) {
                         try {
                             if(i != -1) {
+                                int initvoice = voice;
                                 int currentLen = ArrayVisualizer.getCurrentLength();
 
                                 //PITCH
@@ -125,23 +184,27 @@ final public class Sounds {
                                 if(SOUNDMUL >= 1 && vel < 256) {
                                     vel *= vel;
                                 }
-
-                                channels[voice].noteOn(pitchmajor, vel);
-                                channels[voice].setPitchBend(pitchminor);
-                                channels[voice].controlChange(REVERB, 10);
-
-                                if((++voice % Math.max(noteCount, 1)) == 0)
+                                channels[(voice%15+10)%16].allNotesOff();
+                                channels[(voice%15+10)%16].noteOn(pitchmajor, vel);
+                                channels[(voice%15+10)%16].setPitchBend(pitchminor);
+                                channels[(voice%15+10)%16].controlChange(REVERB, 10);
+                                if(((++voice - initvoice) % Math.max(noteCount, 1)) == 0){
                                     break;
+                                }
                             }
                         }
                         catch (Exception e) {
-                            e.printStackTrace();
+                            JErrorPane.invokeErrorMessage(e);
                         }
                     }
+                    
+                    }
                     try {
-                        sleep(1);
+                        for(int i = 0; i < Sounds.this.noteDelay; i++) {
+                            sleep(1);
+                        }
                     } catch(Exception e) {
-                        e.printStackTrace();
+                        JErrorPane.invokeErrorMessage(e);
                     }
                 }
             }
@@ -156,11 +219,35 @@ final public class Sounds {
         this.MIDI = val;
     }
     
+    //Double check logic
+    public void toggleSofterSounds(boolean val) {
+        this.SOFTERSOUNDS = val;
+        
+        if(this.SOFTERSOUNDS) this.SOUNDMUL = 0.01;
+        else                  this.SOUNDMUL = 1;
+    }
+    
     public double getVolume() {
         return this.SOUNDMUL;
     }
     public void changeVolume(double val) {
         this.SOUNDMUL = val;
+    }
+    
+    public void changeNoteDelayAndFilter(int noteFactor) {
+        if(noteFactor != this.noteDelay) {
+            if(noteFactor > 1) {
+                this.noteDelay = noteFactor;
+                this.SOUNDMUL = 1d / noteFactor;
+            }
+            //Double check logic
+            else {
+                this.noteDelay = 1;
+                
+                if(this.SOFTERSOUNDS) this.SOUNDMUL = 0.01;
+                else                  this.SOUNDMUL = 1;
+            }
+        }
     }
     
     public void startAudioThread() {
