@@ -1,25 +1,35 @@
-# w0rthy's Array Visualizer, Revamped (Re-Re-Forked by CPz)
+# A newer, better Array Visualizer
 
-76 sorting algorithms demonstrated through 10 unique graphic designs
+Welcome to the recent update!
 
-This new version of the program features additions inspired by Timo Bingmann's "The Sound of Sorting" and w0rthy's updates to the original visualizer.
+We have the following to choose from:
+* 4096 array lengths
+* 121 sorting algorithms
+* 25 shuffles
+* 10 different visual styles
 
-To build (After -cp, use ";" with Windows and ":" with Mac/Linux):
+This new version of the program features additions inspired by Timo Bingmann's "The Sound of Sorting" and w0rthy's updates to the original visualizer. We kept the legacy MIDI mode but the default is the outstanding WAV mode!
+
+Use the following Command Prompt script to compile. Be sure to replace the filenames with your Array Visualizer path, your JDK path, your ant path and your Java runtime path respectively.
 ```
-ant
-java -cp bin;lib/classgraph-4.8.47.jar main.ArrayVisualizer
+cd /d "C:\Users\Piotr Grochowski\Downloads\ArrayVisualizer-master(1)\ArrayVisualizer-master"
+set JAVA_HOME=D:\Program Files\Java\jdk-12
+"D:\Users\Robert\Downloads\apache-ant-1.10.7-bin\apache-ant-1.10.7\bin\ant.bat"
+"D:\Program Files\Java\jre1.8.0_241\bin\java.exe" -cp bin;lib/classgraph-4.8.47.jar main.ArrayVisualizer
+
 ```
 
 ### Features:
 - 70+ new sorting algorithms
-- Updated visuals and sound effects 
-- You can select different array sizes now
-- New shuffle types, including reversed, mostly similar numbers, almost sorted, and already sorted
-- Skip Sort button
-- Softer sounds toggle
+- 4000+ new array lengths
+- Updated visuals and sound effects — new WAV mode
+- You can select over four thousand different array sizes now
+- New shuffle types, including reversed, mostly similar numbers, almost sorted, and already sorted, etc.
+- Skip Sort button (now restores the selected speed)
+- Softer sounds toggle filters out MIDI sounds randomly
 - A real time in milliseconds estimate
 - Toggle shuffle animation
-- Toggle Timo Bingmann's "end sweep" animation
+- Toggle Timo Bingmann's "end sweep" animation (now properly checks if sorted)
 - Refactored / optimized code
 
 ## 10/19/2019 - Version 2.1
