@@ -90,25 +90,14 @@ final public class ArrayFrame extends javax.swing.JFrame {
     private void initComponents() {
 
         this.jLabel1 = new javax.swing.JLabel();
-        this.jSlider = new javax.swing.JSlider(SwingConstants.VERTICAL, 1, 12, 11);
+        this.jSlider = new javax.swing.JSlider(SwingConstants.VERTICAL, 1, 4096, 512);
 
         jLabel1.setText("Array Size");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
 
         Hashtable<Integer, JLabel> labels = new Hashtable<>();
-        labels.put(1, new JLabel("2"));
-        labels.put(2, new JLabel("4"));
-        labels.put(3, new JLabel("8"));
-        labels.put(4, new JLabel("16"));
-        labels.put(5, new JLabel("32"));
-        labels.put(6, new JLabel("64"));
-        labels.put(7, new JLabel("128"));
-        labels.put(8, new JLabel("256"));
-        labels.put(9, new JLabel("512"));
-        labels.put(10, new JLabel("1024"));
-        labels.put(11, new JLabel("2048"));
-        labels.put(12, new JLabel("4096"));
+        for(int i=1; i<=4096; i++) labels.put(i, new JLabel(Integer.toString((i))));
 
         jSlider.setMajorTickSpacing(1);
         jSlider.setLabelTable(labels);
@@ -119,7 +108,7 @@ final public class ArrayFrame extends javax.swing.JFrame {
             @Override
             public void stateChanged(ChangeEvent event) {
                 if(ArrayManager.isLengthMutable()) {
-                    ArrayVisualizer.setCurrentLength((int) Math.pow(2, jSlider.getValue()));
+                    ArrayVisualizer.setCurrentLength((/*int) Math.pow(2, */jSlider.getValue()));
                     ArrayManager.initializeArray(array);
                 }
                 else jSlider.setValue(ArrayVisualizer.getLogBaseTwoOfLength());

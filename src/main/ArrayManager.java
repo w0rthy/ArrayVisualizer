@@ -34,7 +34,7 @@ SOFTWARE.
 final public class ArrayManager {
     private int[] presortedArray;
     private utils.Shuffles[] shuffleTypes;
-    private String[] shuffleIDs = {"Shuffle 1", "Shuffle 2", "Wrong Shuffle", "Almost R.", "Almost2 R.", "Nearly R.", "Reverse", "n-c Equal", "Almost Sorted", "Almost 2", "Nearly Sorted", "Already Sorted", "Few Unique 2", "Few Unique 4", "Few Unique 8", "Few Unique 16", "test utility", "bitreverse", "shuffledcubic", "shuffledquintic", "sortedcubic", "sortedquintic", "reversedcubic", "reversedquintic"};
+    private String[] shuffleIDs = {"Shuffle", "Shuffle 1", "Shuffle 2", "Wrong Shuffle", "Almost R.", "Almost2 R.", "Nearly R.", "Reverse", "n-c Equal", "Almost Sorted", "Almost 2", "Nearly Sorted", "Already Sorted", "Few Unique 2", "Few Unique 4", "Few Unique 8", "Few Unique 16", "test utility", "bitreverse", "shuffledcubic", "shuffledquintic", "sortedcubic", "sortedquintic", "reversedcubic", "reversedquintic"};
     
     private volatile boolean MUTABLE;
 
@@ -106,15 +106,15 @@ final public class ArrayManager {
             double sleepRatio;
             
             switch(ArrayVisualizer.getLogBaseTwoOfLength()) {
-            case 12: sleepRatio = 4d;   break;
-            case 11: sleepRatio = 2d;   break;
-            case 10: sleepRatio = 3/2d; break;
-            case 9:  sleepRatio = 1d;   break;
-            case 8:  sleepRatio = 3/4d; break;
-            case 7:  sleepRatio = 1/2d; break;
-            case 6:  sleepRatio = 1/3d; break;
+            case 12: sleepRatio = 2d;   break;
+            case 11: sleepRatio = 1d;   break;
+            case 10: sleepRatio = 3/4d; break;
+            case 9:  sleepRatio = 1/2d;   break;
+            case 8:  sleepRatio = 3/8d; break;
+            case 7:  sleepRatio = 1/4d; break;
+            case 6:  sleepRatio = 1/6d; break;
             case 5:
-            case 4:  sleepRatio = 1/4d; break;
+            case 4:  sleepRatio = 1/8d; break;
             case 3:
             case 2:
             default: sleepRatio = 1/8d;

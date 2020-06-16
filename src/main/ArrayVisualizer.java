@@ -132,7 +132,7 @@ final public class ArrayVisualizer {
     
     final boolean OBS = false; // Change to true if you want 1080p for recording with OBS
     
-    final private int MIN_ARRAY_VAL = 2;
+    final private int MIN_ARRAY_VAL = 1;
     final private int MAX_ARRAY_VAL = 4096;
 
     final int[] array = new int[this.MAX_ARRAY_VAL];
@@ -142,6 +142,7 @@ final public class ArrayVisualizer {
     private String[] InvalidSorts;
     
     private volatile int currentLen;
+    private volatile int equalItems;
     
     private ArrayManager ArrayManager;
     private SortAnalyzer SortAnalyzer;
@@ -194,13 +195,15 @@ final public class ArrayVisualizer {
     private Writes Writes;
 
     public ArrayVisualizer() {
-        this.currentLen = 2048;
+        this.currentLen = 512;
+        this.equalItems = 1;
         
         this.Delays = new Delays();
         this.Highlights = new Highlights(this.MAX_ARRAY_VAL);
         this.Sounds = new Sounds(this.array, this);
         this.Timer = new Timer();
         this.Reads = new Reads(this);
+        Reads.loadsound();
         this.Renderer = new Renderer(this);
         this.Writes = new Writes(this);
         
@@ -214,7 +217,7 @@ final public class ArrayVisualizer {
         
         this.category = "";
         this.heading = "";
-        this.typeFace = new Font("Times New Roman", Font.PLAIN, (int) (640 / (1280.0 * 25)));
+        this.typeFace = new Font("DMCA Sans Serif 10.0 dev1", Font.PLAIN, (int) (640 / (1280.0 * 25)));
         this.formatter = (DecimalFormat) NumberFormat.getInstance(Locale.US);
         this.symbols = formatter.getDecimalFormatSymbols();
         
@@ -458,7 +461,7 @@ final public class ArrayVisualizer {
         this.ch = window.getHeight();
     }
     public void updateFontSize() {
-        this.typeFace = new Font("Times New Roman",Font.PLAIN,(int)(this.cw/1280.0*25));
+        this.typeFace = new Font("DMCA Sans Serif 10.0 dev1",Font.PLAIN,(int)(this.cw/1280.0*25));
     }
     
     public void toggleAnalysis(boolean Bool) {
@@ -495,13 +498,15 @@ final public class ArrayVisualizer {
         default: sleepRatio = 64;
         }
         
-        for(int i = 0; i < this.currentLen + this.getLogBaseTwoOfLength(); i++) {
-            if(i < this.currentLen) Highlights.markArray(1, i);
+        for(int i = 1; i < this.currentLen + this.getLogBaseTwoOfLength(); i++) {
+            if(i < this.currentLen) Highlights.markArray(1, i-1); Highlights.markArray(2, i); if(Reads.compare2(array[i-1], array[i]) == 1) {
+        Highlights.resetFancyFinish();JOptionPane.showMessageDialog(null, "Result of sorting algorithm is incorrect!"); break;}
             Highlights.incrementFancyFinishPosition();
             
             Delays.sleep(sleepRatio / this.getLogBaseTwoOfLength());
         }
         Highlights.clearMark(1);
+        Highlights.clearMark(2);
 
         Highlights.toggleFancyFinish(false);
         Highlights.resetFancyFinish();
@@ -628,5 +633,15 @@ final public class ArrayVisualizer {
     
     public static void main(String[] args) {
         new ArrayVisualizer();
+    }
+
+    public int getEqualItems() {
+        return this.equalItems;
+    }
+    public Graphics2D getMainRender() {
+        return this.mainRender;
+    }
+    public Graphics2D getExtraRender() {
+        return this.extraRender;
     }
 }
