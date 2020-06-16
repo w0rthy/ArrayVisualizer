@@ -39,22 +39,33 @@ final public class RecursiveOddEvenMergeSort extends Sort {
      *  n is the length of the piece to be merged,
      *  r is the distance of the elements to be compared
      */
-    private void oddEvenMerge(int[] array, int lo, int n, int r) {
+    private void oddEvenMerge(int[] array, int lo, int m2, int n, int r) {
         int m = r * 2;
         if (m < n) {
-            this.oddEvenMerge(array, lo, n, m);      // even subsequence
-            this.oddEvenMerge(array, lo+r, n, m);    // odd subsequence
+		if(((n)/r)%2 != 0){
+            oddEvenMerge(array, lo, (m2+1)/2, n+r, m);      // even subsequence
+            oddEvenMerge(array, lo+r, m2/2, n-r, m);    // odd subsequence
+		}
+		else{
+            oddEvenMerge(array, lo, (m2+1)/2, n, m);      // even subsequence
+            oddEvenMerge(array, lo+r, m2/2, n, m);    // odd subsequence
+		}
             
-            for (int i = lo + r; i + r < lo + n; i += m) {
-                Highlights.markArray(1, i);
-                Highlights.markArray(2, i + r);
-                this.oddEvenMergeCompare(array, i, i + r);
+		if(m2%2 != 0){
+            for (int i = lo; i + r < lo + n; i += m) {
+                oddEvenMergeCompare(array, i, i + r);
             }
+		}
+		else{
+            for (int i = lo + r; i + r < lo + n; i += m) {
+                oddEvenMergeCompare(array, i, i + r);
+            }
+		}
         }
         else {
-            Highlights.markArray(1, lo + r);
-            Highlights.markArray(2, lo);
-            this.oddEvenMergeCompare(array, lo, lo+r);
+		if(n > r){
+            oddEvenMergeCompare(array, lo, lo+r);
+		}
         }
     }
     
@@ -62,8 +73,8 @@ final public class RecursiveOddEvenMergeSort extends Sort {
 		if (n > 1) {
 			int m = n / 2;
 			this.oddEvenMergeSort(array, lo, m);
-			this.oddEvenMergeSort(array, lo + m, m);
-			this.oddEvenMerge(array, lo, n, 1);
+			this.oddEvenMergeSort(array, lo + m, n-m);
+			this.oddEvenMerge(array, lo, m, n, 1);
 		}
 	}
 
