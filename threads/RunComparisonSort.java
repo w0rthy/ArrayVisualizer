@@ -65,12 +65,13 @@ final public class RunComparisonSort {
         if(ArrayVisualizer.getSortingThread() != null && ArrayVisualizer.getSortingThread().isAlive())
             return;
 
+        //TODO: This code is fixed! It no longer causes the program to forget the sleep ratio specified by the user!
         if(delayOps.skipped()) {
-            delayOps.setSleepRatio(1);
+            delayOps.retrieveSleepRatio();
             delayOps.changeSkipped(false);
         }
 
-        Sounds.toggleSound(true);
+        //Sounds.toggleSound(true);
         ArrayVisualizer.setSortingThread(new Thread() {
             @Override
             public void run() {
@@ -129,7 +130,7 @@ final public class RunComparisonSort {
                 catch(Exception e) {
                     e.printStackTrace();
                 }
-                Sounds.toggleSound(false);
+                //Sounds.toggleSound(false);
             }
         });
        

@@ -142,8 +142,9 @@ final public class RunDistributionSort {
         if(ArrayVisualizer.getSortingThread() != null && ArrayVisualizer.getSortingThread().isAlive())
             return;
 
+        //TODO: This code is fixed! It no longer causes the program to forget the sleep ratio specified by the user!
         if(delayOps.skipped()) {
-            delayOps.setSleepRatio(1);
+            delayOps.retrieveSleepRatio();
             delayOps.changeSkipped(false);
         }
 
@@ -151,7 +152,7 @@ final public class RunDistributionSort {
         
         ArrayVisualizer.setCategory("Distributive Sorts");
         
-        Sounds.toggleSound(true);
+        //Sounds.toggleSound(true);
         ArrayVisualizer.setSortingThread(new Thread() {
             @SuppressWarnings("unused")
             @Override
@@ -288,7 +289,7 @@ final public class RunDistributionSort {
                     e.printStackTrace();
                 }
                 Sounds.changeVolume(storeVol);
-                Sounds.toggleSound(false);
+                //Sounds.toggleSound(false);
             }
         });
         

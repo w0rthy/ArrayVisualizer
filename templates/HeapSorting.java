@@ -62,4 +62,46 @@ public abstract class HeapSorting extends Sort {
             Writes.reversal(arr, start, start + length - 1, 1, true, false);
         }
     }
+    protected void heapSort2(int[] array, int start, int length, double sleep, boolean isMax) {
+        if ((length - start) >= 5){
+            heapify(array, start, length, sleep, true);
+         
+            for (int i = length - start; i > 4; i--) {
+                Writes.swap(array, start, start + i - 1, sleep, true, false);
+                siftDown(array, 1, i - 1, start, sleep, true);
+            }
+            for (int i = start; i < (start + 3); i++) {
+                int lowestindex = i;
+                
+                for (int j = i + 1; j < (start+4); j++) {
+                    Highlights.markArray(2, j);
+                    Delays.sleep(sleep);
+                    
+                    if (Reads.compare(array[j], array[lowestindex]) == -1){
+                        lowestindex = j;
+                        Highlights.markArray(1, lowestindex);
+                        Delays.sleep(sleep);
+                    }
+                }
+                Writes.swap(array, i, lowestindex, sleep, true, false);
+            }
+        }
+        else{
+            for (int i = start; i < length - 1; i++) {
+                int lowestindex = i;
+                
+                for (int j = i + 1; j < length; j++) {
+                    Highlights.markArray(2, j);
+                    Delays.sleep(sleep);
+                    
+                    if (Reads.compare(array[j], array[lowestindex]) == -1){
+                        lowestindex = j;
+                        Highlights.markArray(1, lowestindex);
+                        Delays.sleep(sleep);
+                    }
+                }
+                Writes.swap(array, i, lowestindex, sleep, true, false);
+            }
+        }
+    }
 }

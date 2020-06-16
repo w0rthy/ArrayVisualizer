@@ -124,32 +124,6 @@ public abstract class ShellSorting extends Sort {
         int incs[] = MarshmallowLevels;
         
         for (int k = 0; k < incs.length; k++) {
-            if(incs == PowersOfThreeGaps) {
-                if(incs[k] < length/3) {
-                    for (int h = incs[k], i = h; i < length; i++) {
-                        //ArrayVisualizer.setCurrentGap(incs[k]);
-                        
-                        int v = array[i];
-                        int j = i;
-
-                        Highlights.markArray(1, j);
-                        Highlights.markArray(2, j - h);
-                        
-                        Delays.sleep(0.2);
-
-                        while (j >= h && Reads.compare(array[j - h], v) == 1)
-                        {
-                            Highlights.markArray(1, j);
-                            Highlights.markArray(2, j - h);
-                            
-                            Writes.write(array, j, array[j - h], 0.5, false, false);
-                            j -= h;
-                        }
-                        Writes.write(array, j, v, 0.5, true, false);
-                    } 
-                }
-            }
-            else {
                 if(incs[k] < length) {
                     for (int h = incs[k], i = h; i < length; i++) {
                         //ArrayVisualizer.setCurrentGap(incs[k]);
@@ -173,7 +147,6 @@ public abstract class ShellSorting extends Sort {
                         Writes.write(array, j, v, 0.5, true, false);
                     }
                 }
-            }
 
         }
         int gap = 4;
@@ -186,9 +159,6 @@ public abstract class ShellSorting extends Sort {
             if (gap > 1) {
                 gap = (int) ((float) gap - 1);
                 //ArrayVisualizer.setCurrentGap(gap);
-
-                if(gap == 1)
-                    Delays.setSleepRatio(10);
             }
 
 
