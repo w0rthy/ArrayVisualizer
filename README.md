@@ -2,6 +2,12 @@
 
 Welcome to the recent update! This is the true, modern Array Visualizer. It is currently over 100 commits ahead of MusicTheorist's branch. Welcome to the most immersive sorting visualization and audibilization experience.
 
+We have the following features to interfere:
+
+1. the ability to stop algorithms in the middle of their execution.
+2. the ability to start algorithms on an array left behind by the previous sort.
+3. the ability to replace arrays in the middle of sorting.
+
 We have the following to choose from:
 * 4096 array lengths
 * 121 sorting algorithms
