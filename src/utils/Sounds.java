@@ -55,8 +55,8 @@ final public class Sounds {
     
     private volatile int noteDelay;
     
-    private static volatile boolean SOUND;
-    private boolean MIDI;
+    public static volatile boolean SOUND;
+    public static volatile boolean MIDI;
     private int NUMCHANNELS; //Number of Audio Channels
     private double PITCHMIN; //Minimum Pitch
     private double PITCHMAX; //Maximum Pitch

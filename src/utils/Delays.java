@@ -4,6 +4,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import main.ArrayVisualizer;
+import main.ArrayManager;
 
 /*
  * 
@@ -36,6 +37,7 @@ final public class Delays {
     private volatile double temp;
     private volatile boolean SKIPPED;
     
+    public static int cancel;
     private double addamt;
     private double delay;
 
@@ -43,11 +45,18 @@ final public class Delays {
         this.SLEEPRATIO = 0.25;
         this.SKIPPED = false;
         this.addamt = 0.0;
+        this.cancel = 0;
     }
     
+    public void cancel(ArrayManager ArrayManager) {
+        cancel = 1;
+        ArrayManager.unrunsort();
+    }
+
     public double getCurrentDelay() {
         return this.delay;
     }
+
     public void setCurrentDelay(double value) {
         this.delay = value;
     }
