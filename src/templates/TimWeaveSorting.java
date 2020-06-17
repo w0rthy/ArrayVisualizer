@@ -425,41 +425,38 @@ final public class TimWeaveSorting {
         int base2 = this.runBase[i + 1];
         int len2 = this.runLen[i + 1];
         
-        /*
-         * Record the length of the combined runs; if i is the 3rd-last
-         * run now, also slide over the last run (which isn't involved
-         * in this merge).  The current run (i+1) goes away in any case.
-         */
         this.runLen[i] = len1 + len2;
         if (i == this.stackSize - 3) {
             this.runBase[i + 1] = this.runBase[i + 2];
             this.runLen[i + 1] = this.runLen[i + 2];
         }
         this.stackSize--;
-        
-        /*
-         * Find where the first element of run2 goes in run1. Prior elements
-         * in run1 can be ignored (because they're already in place).
-         */
-        int k = gallopRight(this, this.a[base2], this.a, base1, len1, 0);
-        base1 += k;
-        len1 -= k;
-        if (len1 == 0)
-            return;
-        
-        /*
-         * Find where the last element of run1 goes in run2. Subsequent elements
-         * in run2 can be ignored (because they're already in place).
-         */
-        len2 = gallopLeft(this, this.a[base1 + len1 - 1], this.a, base2, len2, len2 - 1);
-        if (len2 == 0)
-            return;
-        
-        // Merge remaining runs, using tmp array with min(len1, len2) elements
-        if (len1 <= len2)
-            mergeLo(this, base1, len1, base2, len2);
-        else
-            mergeHi(this, base1, len1, base2, len2);
+    int min = base1;
+    int max = base2+len2;
+    int mid = base1+len1;
+            double factor = ((double)(len1+len2))/((double)(len2));
+	    i = 0;
+	    int target = (max - mid);
+	    
+	    while(i < target) {
+	        Writes.multiSwap(a, mid+i, (int)(min + (i * factor)), 0.05, true, false);
+	        i++;
+	    }
+	    
+
+        int pos;
+        int start = base1; int end = base2+len2;
+        for(int j = start; j < end; j++){
+            pos = j;
+            
+            Highlights.markArray(1, j);
+            Highlights.clearMark(2);
+            
+            while(pos > start && Reads.compare(a[pos], a[pos - 1]) < 1) {
+                Writes.swap(a, pos, pos - 1, 0.2, true, false);
+                pos--;
+            }
+        }
     }
     
     /**
