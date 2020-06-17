@@ -331,6 +331,10 @@ final public class ArrayVisualizer {
     public void runSortingThread() {
         sortingThread.start();
     }
+    public void endSortingThread() {
+        sortingThread.stop();
+        Highlights.clearAllMarks();
+    }
     
     public int getMinimumLength() {
         return this.MIN_ARRAY_VAL;
@@ -390,7 +394,7 @@ final public class ArrayVisualizer {
     }
     
     // TODO:
-    // CURRENT HEIGHT/WIDTH/X/Y SHOULD CORRESPOND TO "C" VARIABLES
+    // CURRENT HEIGHT/WIDTH/X/Y SHOULD CORRESPOND TO "C" VARIABLES (AS OPPOSED TO "JAVA" VARIABLES)
     // AND WINDOW HEIGHT/WIDTH/X/Y SHOULD CORRESPOND TO WINDOW FIELD
     
     public int currentHeight() {
@@ -499,8 +503,8 @@ final public class ArrayVisualizer {
         }
         
         for(int i = 1; i < this.currentLen + this.getLogBaseTwoOfLength(); i++) {
-            if(i < this.currentLen) Highlights.markArray(1, i-1); Highlights.markArray(2, i); if(Reads.compare2(array[i-1], array[i]) == 1) {
-        Highlights.resetFancyFinish();JOptionPane.showMessageDialog(null, "Result of sorting algorithm is incorrect!"); break;}
+            if(i < this.currentLen){ Highlights.markArray(1, i-1); Highlights.markArray(2, i); if(Reads.compare2(array[i-1], array[i]) == 1) {
+        Highlights.resetFancyFinish();JOptionPane.showMessageDialog(null, "Result of sorting algorithm is incorrect!"); break;}}
             Highlights.incrementFancyFinishPosition();
             
             Delays.sleep(sleepRatio / this.getLogBaseTwoOfLength());
@@ -516,7 +520,7 @@ final public class ArrayVisualizer {
         Timer.disableRealTimer();
         Highlights.clearAllMarks();
 
-        if(Highlights.fancyFinishEnabled()) {
+        if(Highlights.fancyFinishEnabled() && getSortingThread() != null) {
             double speed = Delays.getSleepRatio(); 
             this.fancyFinish();
             Delays.setSleepRatio(speed);

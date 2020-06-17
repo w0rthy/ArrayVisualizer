@@ -83,7 +83,8 @@ final public class RunComparisonSort {
                     boolean goAhead;
                     
                     ArrayManager.toggleMutableLength(false);
-                    ArrayManager.refreshArray(array, ArrayVisualizer.getCurrentLength(), ArrayVisualizer);
+                    if(Delays.cancel == 0) ArrayManager.refreshArray(array, ArrayVisualizer.getCurrentLength(), ArrayVisualizer);
+                    Delays.cancel = 0;
                     
                     if(sort.getUnreasonablySlow() && ArrayVisualizer.getCurrentLength() >= sort.getUnreasonableLimit()) {
                         goAhead = false;

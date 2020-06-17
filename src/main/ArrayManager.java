@@ -90,9 +90,6 @@ final public class ArrayManager {
     public Shuffles getShuffle() {
         return this.Shuffles;
     }
-    public void setShuffle(Shuffles choice) {
-        this.Shuffles = choice;
-    }
     
     public void shuffleArray(int[] array, int currentLen, ArrayVisualizer ArrayVisualizer) {
         this.initializeArray(array);
@@ -131,6 +128,24 @@ final public class ArrayManager {
         ArrayVisualizer.setHeading(tmp);
     }
     
+    public int sortrunning(){
+if(ArrayVisualizer.getSortingThread() != null && ArrayVisualizer.getSortingThread().isAlive()) return 1; else return 0;
+    }
+
+    public void unrunsort(){
+        ArrayVisualizer.endSortingThread();
+    }
+
+    public void setShuffle(Shuffles choice) {
+        this.Shuffles = choice;
+        if(ArrayVisualizer.getSortingThread() != null && ArrayVisualizer.getSortingThread().isAlive()){
+   int temp = ArrayVisualizer.shuffleEnabled() ? 1 : 0;
+ArrayVisualizer.toggleShuffleAnimation(false);
+shuffleArray(ArrayVisualizer.array, ArrayVisualizer.getCurrentLength(), ArrayVisualizer);
+ArrayVisualizer.toggleShuffleAnimation(temp != 0);
+}
+    }
+
     public void refreshArray(int[] array, int currentLen, ArrayVisualizer ArrayVisualizer) {
         try {
             Thread.sleep(1000);

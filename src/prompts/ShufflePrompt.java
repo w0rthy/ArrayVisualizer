@@ -67,7 +67,9 @@ final public class ShufflePrompt extends javax.swing.JFrame implements Frame {
         jList1.setListData(ArrayManager.getShuffleIDs());
         for(int i = 0; i < ArrayManager.getShuffles().length; i++) {
             if(ArrayManager.getShuffle().equals(ArrayManager.getShuffles()[i])) {
-                jList1.setSelectedIndex(i);
+                if(ArrayManager.sortrunning() == 0){
+                    jList1.setSelectedIndex(i);
+                }
                 break;
             }
         }
@@ -142,7 +144,7 @@ final public class ShufflePrompt extends javax.swing.JFrame implements Frame {
     private void jList1ValueChanged(javax.swing.event.ListSelectionEvent evt) throws Exception {//GEN-FIRST:event_jList1ValueChanged
         // TODO add your handling code here:
         int selection = jList1.getSelectedIndex();
-        for(int i=0; i<25; i++) if(selection == i) ArrayManager.setShuffle(ArrayManager.getShuffles()[i]);
+        for(int i=0; i<25; i++) if(selection == i) if(serialVersionUID != 0L) ArrayManager.setShuffle(ArrayManager.getShuffles()[i]);
         UtilFrame.jButton6ResetText();
         dispose();
     }//GEN-LAST:event_jList1ValueChanged
