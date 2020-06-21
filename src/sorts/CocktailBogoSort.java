@@ -13,8 +13,8 @@ final public class CocktailBogoSort extends BogoSorting {
         this.setSortPromptID("Cocktail Bogo");
         this.setRunAllID("Cocktail Bogo Sort");
         this.setReportSortID("Cocktail Bogosort");
-        this.setCategory("Distributive Sorts");
-        this.isComparisonBased(false); //Comparisons are not used to swap elements
+        this.setCategory("Impractical Sorts");
+        this.isComparisonBased(true); //Comparisons are the only way the item values are evaluated
         this.isBucketSort(false);
         this.isRadixSort(false);
         this.isUnreasonablySlow(true);
