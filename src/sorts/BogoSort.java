@@ -56,8 +56,10 @@ final public class BogoSort extends Sort {
 
     private int checkifsorted(int[] array, int start, int end, double sleep, int dir) {
         int flag = 0;
-        for(int i=start+1; i<end; i++)
-if((dir != 0) ? (Reads.compare(array[i-1], array[i]) == 1) : (Reads.compare(array[i-1], array[i]) == -1)) flag=1;
+        for(int i=start+1; i<end; i++){
+                Highlights.markArray(1, i-1);
+                Highlights.markArray(2, i);
+if((dir != 0) ? (Reads.compare(array[i-1], array[i]) == 1) : (Reads.compare(array[i-1], array[i]) == -1)){ flag=1; break;}}
         return flag;
     }
 

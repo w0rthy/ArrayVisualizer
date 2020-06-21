@@ -65,7 +65,7 @@ final public class SnailSort extends Sort {
             Highlights.markArray(2, m + 1);
             i++;
         }
-        if (Reads.compare(array[currentLength - 2], array[currentLength] - 1) == 1){
+        if (Reads.compare(array[currentLength - 2], array[currentLength - 1]) == 1){
             Writes.swap(array, currentLength - 2, currentLength - 1, 1, true, false);
         }
     }
