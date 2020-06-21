@@ -120,10 +120,12 @@ final public class BottomUpMergeSort extends Sort {
           // Sort a[0:n-1] using merge sort.
           int   s = 16;      // segment size
           int[] b = new int [n];
+		  int i;
           
-          for(int i = 0; i <= n - 16; i += 16) {
+          for(i = 0; i <= n - 16; i += 16) {
               binaryInserter.customBinaryInsert(a, i, i + 16, 0.35);
           }
+		  binaryInserter.customBinaryInsert(a, i, n, 0.35);
           
           while (s < n)
           {
