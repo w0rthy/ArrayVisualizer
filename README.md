@@ -1,8 +1,8 @@
 # A newer, better Array Visualizer
 
-**Update: Do not use any Array Visualizer. Move on with your life.**
-
 Welcome to the recent update! This is the true, modern Array Visualizer. It is currently over 100 commits ahead of MusicTheorist's branch. Welcome to the most immersive sorting visualization and audibilization experience.
+
+Demonstration: https://www.youtube.com/watch?v=RYiF7lv-D2I
 
 We have the following features to interfere:
 
