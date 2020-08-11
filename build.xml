@@ -46,9 +46,8 @@
     <target depends="init" name="build-project">
         <echo message="${ant.project.name}: ${ant.file}"/>
         <javac debug="true" debuglevel="${debuglevel}" destdir="bin" includeantruntime="false" source="${source}" target="${target}">
-            <src path="src">
-                <exclude name="**/*_disabled.java"/>
-            </src>
+            <src path="src"/>
+            <exclude name="**/*_disabled.java"/>
             <classpath refid="ArrayVisualizer-master.classpath"/>
         </javac>
     </target>
