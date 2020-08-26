@@ -71,7 +71,7 @@ public abstract class MergeSorting extends Sort {
                     Highlights.clearMark(1);
                     Writes.write(tmp, nxt, array[high++], 1, false, true);
                 }
-                else if(Reads.compare(array[low], array[high]) == -1){
+                else if(Reads.compare(array[low], array[high]) <= 0){
                     Writes.write(tmp, nxt, array[low++], 1, false, true);
                 }
                 else{
