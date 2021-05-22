@@ -1,3 +1,2 @@
-*.jar
 *.class
-
+/bin/
