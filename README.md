@@ -1,6 +1,9 @@
 # w0rthy's Array Visualizer, Revamped
 [![Donate](https://img.shields.io/badge/Donate-PayPal-green.svg)](https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=Q5QLCFZ8G7WY6&currency_code=USD&source=url)
 
+**DEPRECATED** - Visit the new home of ArrayV over here where I'll be contributing from time to time! https://github.com/Gaming32/ArrayV-v4.0
+I'll be working on a brand new algorithm visualizer of my own over the next few months, so stay tuned... Visit our community Discord for updates!!
+
 Over 75 sorting algorithms animated with 12 unique graphic designs
 
 Follow the project's development behind-the-scenes in our Discord: https://discord.com/invite/2xGkKC2
