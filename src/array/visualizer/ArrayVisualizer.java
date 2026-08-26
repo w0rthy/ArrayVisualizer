@@ -660,6 +660,7 @@ public class ArrayVisualizer {
                             new BinaryQuickSort(),
                             new RadixLSDInPlace(2),
                             new RadixLSDInPlace(10)}
+                            new BitonicRadix(4)}
                         )
                     {
                         chan.allNotesOff();
@@ -778,7 +779,9 @@ public class ArrayVisualizer {
                     sort = new TimeSort(base);break;
                 case 8:
                     sort = new BogoSort();break;
-                case 9: "Bitonic Radix":runSort(new BitonicRadixSort(this));break;
+                case 9:
+                    sort = new BitonicRadixSort(base);break;
+
    
                 default:
                     sort = null; break;
