@@ -777,12 +777,10 @@ public class ArrayVisualizer {
                     sort = new CountingSort();break;
                 case 7:
                     sort = new TimeSort(base);break;
-                case 8:
-                    sort = new BogoSort();break;
-                case 9:
-                    sort = new BitonicRadixSort(base);break;
-
-   
+        case 8:
+            sort = new BogoSort();break;
+        case 9:
+            sort = new BitonicRadixSort(base);break;   
                 default:
                     sort = null; break;
             }
