@@ -778,6 +778,8 @@ public class ArrayVisualizer {
                     sort = new TimeSort(base);break;
                 case 8:
                     sort = new BogoSort();break;
+                case 9: "Bitonic Radix":runSort(new BitonicRadixSort(this));break;
+   
                 default:
                     sort = null; break;
             }
