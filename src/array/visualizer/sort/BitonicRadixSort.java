@@ -17,7 +17,6 @@ public class BitonicRadixSort extends Sort {
         }
         for (int size = chunkSize; size < length; size *= 2) {
             for (int i = 0; i < length; i += size * 2) {
-                // Merge adjacent chunks in alternating up/down directions
                 bitonicMerge(arr, i, size * 2, 1);
             }
         }
