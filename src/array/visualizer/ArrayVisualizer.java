@@ -66,7 +66,7 @@ public class ArrayVisualizer {
     static ArrayList<Color> COLORSTRAT2cols = new ArrayList<Color>();
     
     static String[] ComparativeSorts = "Selection!Bubble!Insertion!Double Selection!Cocktail Shaker!Quick!Merge!Merge OOP!Weave Merge!Max Heap!Shell".split("!");
-    static String[] DistributiveSorts = "Radix LSD!Radix MSD!Radix LSD In-Place!Binary Quicksort!Gravity!Shatter!Counting!Time!Bogo".split("!");
+    static String[] DistributiveSorts = "Radix LSD!Radix MSD!Radix LSD In-Place!Binary Quicksort!Gravity!Shatter!Counting!Time!Bogo!Bitonic Radix".split("!");
     
     static int cx = 0;
     static int cy = 0;
@@ -660,6 +660,7 @@ public class ArrayVisualizer {
                             new BinaryQuickSort(),
                             new RadixLSDInPlace(2),
                             new RadixLSDInPlace(10)}
+                            new BitonicRadix(4)}
                         )
                     {
                         chan.allNotesOff();
@@ -776,8 +777,10 @@ public class ArrayVisualizer {
                     sort = new CountingSort();break;
                 case 7:
                     sort = new TimeSort(base);break;
-                case 8:
-                    sort = new BogoSort();break;
+        case 8:
+            sort = new BogoSort();break;
+        case 9:
+            sort = new BitonicRadixSort(base);break;   
                 default:
                     sort = null; break;
             }
